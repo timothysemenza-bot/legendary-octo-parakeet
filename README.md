@@ -116,3 +116,24 @@ npm start
 
 - `data/` is ignored by `.gitignore` so proposal records stay local per deployment.
 - Keep client branding and image libraries in versioned files (e.g., `content-library.json`) and mount client-specific runtime directories via env vars.
+
+## Enforcing “GitHub-only” changes
+
+To make sure all production changes come only from GitHub:
+
+- Set `main` as the default branch.
+- Enable branch protection on `main`:
+  - Require pull requests before merging.
+  - Require status checks from `CI` to pass.
+  - Disable force pushes.
+  - Do not allow deletion.
+
+Example day-to-day flow:
+
+1. Create a branch for your work:
+   - `git checkout -b feat/new-change`
+2. Push branch and open a PR to `main`.
+3. Merge only after CI is green.
+4. The `Deploy package` workflow builds a deployment artifact from GitHub push to `main`.
+
+Because CI runs in GitHub Actions and deployment artifacts are produced only from `push` events on `main`, local-only edits remain local until merged and pushed.
