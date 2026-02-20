@@ -1,0 +1,479 @@
+﻿{
+  "industryGraphics": {
+    "Corporate office": [
+      {
+        "id": "corp-reception-exec",
+        "label": "Lobby reception and executive floor",
+        "title": "Industry visual - Corporate office",
+        "description": "Lobby, reception desk, and executive floor workflow.",
+        "source": "/assets/industry-graphics/corporate-lobby-reception-exec-floor.png"
+      },
+      {
+        "id": "corp-access",
+        "label": "Badge access and escorts",
+        "title": "Industry visual - Corporate office",
+        "description": "Badge readers and escorted visitor routing.",
+        "source": "/assets/industry-graphics/corporate-badge-access.png"
+      }
+    ],
+    "Warehouse": [
+      {
+        "id": "warehouse-perimeter",
+        "label": "Warehouse perimeter coverage",
+        "title": "Industry visual - Warehouse",
+        "description": "Perimeter checkpoint and storage block overview.",
+        "source": "/assets/industry-graphics/warehouse-perimeter.png"
+      },
+      {
+        "id": "warehouse-dock",
+        "label": "Loading dock sweep",
+        "title": "Industry visual - Warehouse",
+        "description": "Loading dock and yard gate flow.",
+        "source": "/assets/industry-graphics/warehouse-loading-dock.png"
+      }
+    ],
+    "Retail chain": [
+      {
+        "id": "retail-store-front",
+        "label": "Store front security",
+        "title": "Industry visual - Retail chain",
+        "description": "Store front and back-of-house support.",
+        "source": "/assets/industry-graphics/retail-store-front.png"
+      },
+      {
+        "id": "retail-incident",
+        "label": "Retail incident flow",
+        "title": "Industry visual - Retail chain",
+        "description": "Incident escalation and handling flow.",
+        "source": "/assets/industry-graphics/retail-incident-flow.png"
+      }
+    ],
+    "Hospitality": [
+      {
+        "id": "hospitality-lobby",
+        "label": "Lobby and parking",
+        "title": "Industry visual - Hospitality",
+        "description": "Guest entry and patrol handoff at parking.",
+        "source": "/assets/industry-graphics/hospitality-lobby-parking.png"
+      },
+      {
+        "id": "hospitality-events",
+        "label": "Event coverage",
+        "title": "Industry visual - Hospitality",
+        "description": "Event-ready visitor and staff support.",
+        "source": "/assets/industry-graphics/hospitality-event-coverage.png"
+      }
+    ],
+    "Education": [
+      {
+        "id": "education-front-door",
+        "label": "Visitor and classroom flow",
+        "title": "Industry visual - Education",
+        "description": "Primary entry and controlled access flow.",
+        "source": "/assets/industry-graphics/education-entry-flow.png"
+      },
+      {
+        "id": "education-activities",
+        "label": "After-hours monitoring",
+        "title": "Industry visual - Education",
+        "description": "After-hours activity and controlled access zones.",
+        "source": "/assets/industry-graphics/education-after-hours.png"
+      }
+    ],
+    "Other": [
+      {
+        "id": "custom-overview",
+        "label": "Custom deployment map",
+        "title": "Industry visual - Custom",
+        "description": "Tailored plan map for custom environments.",
+        "source": "/assets/industry-graphics/custom-overview.png"
+      }
+    ]
+  },
+  "geography": {
+    "Default": {
+      "title": "Regional context",
+      "summary": "Proposal language is adapted for {geography} operations and response expectations in {location}.",
+      "scopeBullets": [
+        "Local response assumptions reflect typical operating characteristics in {geography}.",
+        "Deployment planning uses standard contact and handoff practices for {region}.",
+        "Timeline and escalation assumptions can be fine-tuned during kickoff."
+      ],
+      "timeline": [
+        "Regional follow-up for local compliance and permit verification during week 1."
+      ],
+      "exclusions": [
+        "Local permitting or municipal compliance requirements are validated during kickoff."
+      ]
+    },
+    "US Northeast": {
+      "title": "Northeast security context",
+      "summary": "In the Northeast region, service design prioritizes weather resilience, transit adjacency, and dense urban access flow in {location}.",
+      "scopeBullets": [
+        "Prioritize access controls for dense urban or mixed-use environments.",
+        "Include transit-adjacent access and pickup/dropoff risk mitigations for {location}.",
+        "Schedule escalation checks that account for seasonal weather-related disruption."
+      ],
+      "timeline": [
+        "Weather- and transit-aware onboarding checkpoint added in week 2 for Northeast operations."
+      ],
+      "exclusions": [
+        "Additional overtime for severe weather response is billed separately."
+      ]
+    },
+    "US Southeast": {
+      "title": "Southeast security context",
+      "summary": "In the Southeast profile, proposal language and sequencing emphasize heat-related staffing windows and event-driven demand around {location}.",
+      "scopeBullets": [
+        "Plan for high-traffic seasonal periods and community event spikes in {location}.",
+        "Document access flow for campus and parking in warm-weather operating conditions."
+      ],
+      "timeline": [
+        "Heat and staffing continuity readiness is reviewed in week 1 for Southeast operations."
+      ],
+      "exclusions": [
+        "Additional hardening for weather and utility interruption windows is a separate line item."
+      ]
+    },
+    "US Midwest": {
+      "title": "Midwest security context",
+      "summary": "For Midwest locations, the proposal reflects manufacturing, logistics, and rural-to-urban travel distances around {location}.",
+      "scopeBullets": [
+        "Coordinate patrol loops around facility miles and shift transfer points in {location}.",
+        "Include logistics touchpoints when loading or route-sensitive workflows exist."
+      ],
+      "timeline": [
+        "Route and logistics coordination checkpoint added in week 2 for Midwest facilities."
+      ],
+      "exclusions": [
+        "Extended logistics route support is billed separately if distances increase materially."
+      ]
+    },
+    "US Southwest": {
+      "title": "Southwest security context",
+      "summary": "For Southwest operations, this proposal adjusts communication and deployment cadence for wide-area coverage around {location}.",
+      "scopeBullets": [
+        "Strengthen site-to-site check timing for wide footprint coverage around {location}.",
+        "Address heat and remote access considerations for gate and perimeter controls."
+      ],
+      "timeline": [
+        "Coverage continuity planning for high-temperature windows in week 3."
+      ],
+      "exclusions": [
+        "Climate adaptation equipment and additional sensors are quoted separately."
+      ]
+    },
+    "US West": {
+      "title": "West region context",
+      "summary": "West-region proposals prioritize geography-specific commuting, event density, and multi-site response sequencing in {location}.",
+      "scopeBullets": [
+        "Tailor patrol and escalation timing for remote-site spread and traffic windows in {location}.",
+        "Include incident communication cadence compatible with multiple time zones and teams."
+      ],
+      "timeline": [
+        "Cross-site coordination and communication checks in week 2 for West sites."
+      ],
+      "exclusions": [
+        "Dedicated cross-border coordination beyond normal operating areas is a separate scope item."
+      ]
+    },
+    "US International": {
+      "title": "International context",
+      "summary": "International deployments use globally aware operational language while still mirroring core policy and reporting expectations in {location}.",
+      "scopeBullets": [
+        "Use location-specific escalation owners and authority mapping during onboarding in {location}.",
+        "Maintain core service standards while honoring local security and reporting requirements."
+      ],
+      "timeline": [
+        "Regional compliance and authority alignment reviewed in week 1 for international operations."
+      ],
+      "exclusions": [
+        "Local language, translation, and legal localization support are quoted separately."
+      ]
+    }
+  },
+  "serviceLevel": {
+    "Starter": {
+      "title": "Starter Physical Guarding",
+      "summary": "Fast deployment package for single teams and standard access coverage.",
+      "scopeBullets": [
+        "1 security lead per shift with fixed guard posts",
+        "Visitor sign-in and escort protocol included",
+        "Daily situation log with incident escalation route",
+        "Monthly manager summary to security owner"
+      ],
+      "timeline": [
+        "Week 1: site walk-through and post setup",
+        "Week 2: on-site orientation and drills",
+        "Week 3: initial performance check and SOP alignment",
+        "Week 4: first monthly review"
+      ],
+      "exclusions": [
+        "Advanced video analytics package not included",
+        "Escalation response with third-party resources billed separately"
+      ],
+      "graphic": {
+        "label": "Starter Coverage Layout",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'><defs><linearGradient id='s1' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#93c5fd'/><stop offset='1' stop-color='#1e40af'/></linearGradient></defs><rect x='10' y='10' width='500' height='100' rx='10' fill='url(#s1)'/><rect x='25' y='30' width='150' height='60' rx='8' fill='white' opacity='0.85'/><text x='100' y='63' text-anchor='middle' font-size='14' fill='#102a78'>Post coverage</text><rect x='185' y='30' width='150' height='60' rx='8' fill='white' opacity='0.85'/><text x='260' y='63' text-anchor='middle' font-size='14' fill='#102a78'>Incident log</text><rect x='345' y='30' width='150' height='60' rx='8' fill='white' opacity='0.85'/><text x='420' y='63' text-anchor='middle' font-size='14' fill='#102a78'>Manager report</text></svg>"
+      }
+    },
+    "Enhanced": {
+      "title": "Enhanced Integrated Security",
+      "summary": "Guarding paired with monitoring workflows and digital reporting.",
+      "scopeBullets": [
+        "All Starter activities plus control-room handoff",
+        "Real-time patrol verification checkpoints",
+        "Alarm and alarm-response acknowledgment routing",
+        "Daily executive snapshot dashboard"
+      ],
+      "timeline": [
+        "Week 1: alarm and access process documentation",
+        "Week 2: monitoring escalation matrix and live check",
+        "Week 3: integration test for incident response",
+        "Week 4: first KPI baseline and corrections"
+      ],
+      "exclusions": [
+        "Integration connectors for legacy alarm systems require separate statement",
+        "Dedicated SOC analyst coverage beyond plan hours is extra"
+      ],
+      "graphic": {
+        "label": "Monitoring Workflow",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'><defs><linearGradient id='e1' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#bfdbfe'/><stop offset='1' stop-color='#1d4ed8'/></linearGradient></defs><rect x='10' y='10' width='500' height='100' rx='10' fill='url(#e1)'/><circle cx='80' cy='60' r='26' fill='white' opacity='0.9'/><text x='80' y='65' text-anchor='middle' font-size='12' fill='#1e3a8a'>Guards</text><circle cx='260' cy='60' r='26' fill='white' opacity='0.9'/><text x='260' y='65' text-anchor='middle' font-size='12' fill='#1e3a8a'>Monitoring</text><circle cx='440' cy='60' r='26' fill='white' opacity='0.9'/><text x='440' y='65' text-anchor='middle' font-size='12' fill='#1e3a8a'>Control</text><line x1='106' y1='60' x2='234' y2='60' stroke='#1e3a8a' stroke-width='4' /><line x1='286' y1='60' x2='414' y2='60' stroke='#1e3a8a' stroke-width='4' /></svg>"
+      }
+    },
+    "Executive": {
+      "title": "Executive Security Program",
+      "summary": "Full program with dedicated management and continuous optimization.",
+      "scopeBullets": [
+        "All Enhanced capabilities plus program manager",
+        "Quarterly threat model refresh and response playbook",
+        "Executive security scorecard with exception reporting",
+        "Dedicated readiness drills and corrective training plan"
+      ],
+      "timeline": [
+        "Week 1: strategic alignment and policy review",
+        "Week 2: security playbook release and ownership model",
+        "Week 3: management reporting automation",
+        "Week 4: readiness exercise and executive review",
+        "Month 2+: monthly optimization iterations"
+      ],
+      "exclusions": [
+        "Executive briefings outside contracted cadence are billed separately",
+        "Specialized legal or compliance advisory services are separate line items"
+      ],
+      "graphic": {
+        "label": "Executive Oversight",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'><defs><linearGradient id='x1' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#e2e8f0'/><stop offset='1' stop-color='#334155'/></linearGradient></defs><rect x='10' y='10' width='500' height='100' rx='10' fill='url(#x1)'/><rect x='30' y='28' width='120' height='64' rx='8' fill='white' opacity='0.9'/><text x='90' y='65' text-anchor='middle' font-size='12' fill='#334155'>Program lead</text><rect x='170' y='28' width='130' height='64' rx='8' fill='white' opacity='0.9'/><text x='235' y='65' text-anchor='middle' font-size='12' fill='#334155'>Analytics</text><rect x='320' y='28' width='170' height='64' rx='8' fill='white' opacity='0.9'/><text x='405' y='65' text-anchor='middle' font-size='12' fill='#334155'>Executive review</text><line x1='150' y1='60' x2='170' y2='60' stroke='#334155' stroke-width='4' /><line x1='300' y1='60' x2='320' y2='60' stroke='#334155' stroke-width='4' /></svg>"
+      }
+    }
+  },
+  "siteType": {
+    "Corporate office": {
+      "title": "Corporate Office Deployment",
+      "summary": "Reception, access points, and executive floor pathways are covered.",
+      "scopeBullets": [
+        "Reception desk controls and access badge review",
+        "Escort protocols for visitors and contractors",
+        "After-hours coverage for restricted access zones"
+      ],
+      "timeline": ["Day 4-14: visitor protocol mapping and executive floor handoff"],
+      "exclusions": ["Onsite executive escorts are not included by default"],
+      "graphic": {
+        "label": "Lobby Reception Access Executive Floor",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#dbeafe'/><rect x='22' y='20' width='90' height='50' rx='8' fill='white'/><text x='67' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Lobby</text><rect x='124' y='20' width='90' height='50' rx='8' fill='white'/><text x='169' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Reception</text><rect x='226' y='20' width='90' height='50' rx='8' fill='white'/><text x='271' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Access</text><rect x='328' y='20' width='170' height='50' rx='8' fill='white'/><text x='413' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Executive Floor</text></svg>"
+      }
+    },
+    "Warehouse": {
+      "title": "Warehouse Deployment",
+      "summary": "Perimeter and dock coverage for materials movement and storage zones.",
+      "scopeBullets": [
+        "Perimeter checkpoint rotations",
+        "Loading-dock vehicle logs",
+        "Spot checks for dock access and storage zones"
+      ],
+      "timeline": ["Day 4-14: route audit and dock workflow integration"],
+      "exclusions": ["Dock-side CCTV hardware procurement is not included"],
+      "graphic": {
+        "label": "Warehouse perimeter",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#dcfce7'/><rect x='22' y='25' width='150' height='40' rx='8' fill='white'/><text x='97' y='50' text-anchor='middle' font-size='11' fill='#166534'>Loading</text><rect x='186' y='25' width='130' height='40' rx='8' fill='white'/><text x='251' y='50' text-anchor='middle' font-size='11' fill='#166534'>Yard Gate</text><rect x='328' y='25' width='170' height='40' rx='8' fill='white'/><text x='413' y='50' text-anchor='middle' font-size='11' fill='#166534'>Storage Block</text></svg>"
+      }
+    },
+    "Retail chain": {
+      "title": "Retail Chain Deployment",
+      "summary": "Loss-prevention focus with store-level and after-hours control.",
+      "scopeBullets": [
+        "Cash-safe and shrink controls",
+        "After-hours patrol across multiple entries",
+        "Uniform incident escalation playbooks"
+      ],
+      "timeline": ["Day 4-14: store map review and safe protocol training"],
+      "exclusions": ["Loss prevention investigation reports are outside base package"],
+      "graphic": {
+        "label": "Retail coverage",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#fee2e2'/><rect x='22' y='25' width='120' height='40' rx='8' fill='white'/><text x='82' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Front Counter</text><rect x='154' y='25' width='120' height='40' rx='8' fill='white'/><text x='214' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Back Room</text><rect x='286' y='25' width='120' height='40' rx='8' fill='white'/><text x='346' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Safe Zone</text><rect x='418' y='25' width='80' height='40' rx='8' fill='white'/><text x='458' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Labs</text></svg>"
+      }
+    },
+    "Hospitality": {
+      "title": "Hospitality Deployment",
+      "summary": "Guest-facing coverage for lobby and parking with event-ready response.",
+      "scopeBullets": [
+        "Guest-entry screening sequence",
+        "Night staff escort support",
+        "Lobby and parking oversight"
+      ],
+      "timeline": ["Day 4-14: concierge and guest response coordination"],
+      "exclusions": ["Event crowd-management packages are separate"],
+      "graphic": {
+        "label": "Hospitality coverage",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#ffedd5'/><rect x='22' y='25' width='130' height='40' rx='8' fill='white'/><text x='87' y='50' text-anchor='middle' font-size='11' fill='#c2410c'>Lobby</text><rect x='166' y='25' width='130' height='40' rx='8' fill='white'/><text x='231' y='50' text-anchor='middle' font-size='11' fill='#c2410c'>Guest Floor</text><rect x='310' y='25' width='130' height='40' rx='8' fill='white'/><text x='375' y='50' text-anchor='middle' font-size='11' fill='#c2410c'>Parking</text></svg>"
+      }
+    },
+    "Education": {
+      "title": "Education Deployment",
+      "summary": "Visitor and activity controls tuned for school and campus timing.",
+      "scopeBullets": [
+        "Student and visitor flow control",
+        "After-school activity and event coverage",
+        "Locker and access-area checks"
+      ],
+      "timeline": ["Day 4-14: activity and class schedule alignment"],
+      "exclusions": ["Student-specific disciplinary response outside security scope"],
+      "graphic": {
+        "label": "Education zones",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#ede9fe'/><rect x='22' y='25' width='150' height='40' rx='8' fill='white'/><text x='97' y='50' text-anchor='middle' font-size='11' fill='#5b21b6'>Reception</text><rect x='186' y='25' width='150' height='40' rx='8' fill='white'/><text x='261' y='50' text-anchor='middle' font-size='11' fill='#5b21b6'>Courtyard</text><rect x='350' y='25' width='150' height='40' rx='8' fill='white'/><text x='425' y='50' text-anchor='middle' font-size='11' fill='#5b21b6'>Events</text></svg>"
+      }
+    },
+    "Other": {
+      "title": "Custom Site Deployment",
+      "summary": "Tailored patrol map based on client-specific architecture and risks.",
+      "scopeBullets": ["Tailored patrol map based on site-specific risk"],
+      "timeline": ["Day 4-14: custom workflow discovery and design"],
+      "exclusions": ["Custom architecture or access retrofits are not included by default"],
+      "graphic": {
+        "label": "Tailored deployment",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#f3f4f6'/><rect x='22' y='25' width='476' height='40' rx='8' fill='white'/><text x='260' y='52' text-anchor='middle' font-size='14' fill='#334155'>Tailored program map</text></svg>"
+      }
+    }
+  },
+  "risk": {
+    "Low": {
+      "title": "Low Risk",
+      "summary": "Standard monitoring depth with moderate checkpoint cadence.",
+      "scopeBullets": ["Standard patrol windows and periodic checks"],
+      "timeline": ["Monthly: preventive review and small improvements"],
+      "exclusions": ["Incident surge response tiers are not automatic" ]
+    },
+    "Medium": {
+      "title": "Medium Risk",
+      "summary": "Higher verification levels and broader escalation paths.",
+      "scopeBullets": ["Additional checkpoint verification and weekly checks"],
+      "timeline": ["Monthly: trend review and policy refresh"],
+      "exclusions": ["Crisis-level exercises are available as an add-on" ]
+    },
+    "High": {
+      "title": "High Risk",
+      "summary": "Frequent patrols plus tested readiness routines.",
+      "scopeBullets": ["Higher patrol frequency and escalation rehearsals"],
+      "timeline": ["Bi-weekly: response readiness drill"],
+      "exclusions": ["Full crisis command support is quoted separately"]
+    },
+    "Critical": {
+      "title": "Critical Risk",
+      "summary": "Accelerated command routing and executive oversight cadence.",
+      "scopeBullets": ["Critical-risk command routing and accelerated escalation"],
+      "timeline": ["Weekly: rapid readiness call and reporting"],
+      "exclusions": ["24/7 command officer stand-by requires add-on"]
+    }
+  },
+  "coverage": {
+    "Business hours": {
+      "title": "Business Hours Coverage",
+      "summary": "Coverage during normal operational periods.",
+      "scopeBullets": ["Standard daytime staffing"],
+      "timeline": ["During business hours: routine rounding and access checks"],
+      "exclusions": []
+    },
+    "Evenings + weekends": {
+      "title": "Evenings + Weekends",
+      "summary": "Shift and weekend expansion to reduce uncovered windows.",
+      "scopeBullets": ["Evening and weekend shift extension"],
+      "timeline": ["Night and weekend readiness verification"],
+      "exclusions": []
+    },
+    "24/7": {
+      "title": "24/7 Protection",
+      "summary": "Continuous coverage plan with handoff protocol and escalation continuity.",
+      "scopeBullets": ["Continuous presence strategy and after-hours escalation"],
+      "timeline": ["Daily overnight handoff included"],
+      "exclusions": ["Emergency medical response outside security scope"]
+    }
+  },
+  "capabilities": {
+    "24/7 patrol scheduling": {
+      "title": "24/7 Patrol Scheduling",
+      "summary": "Continuously managed patrol planning and verification.",
+      "scopeBullets": ["Continuous patrol schedule with audit trail"],
+      "timeline": ["Daily routing and shift handoff"],
+      "exclusions": ["Overtime for unscheduled late requests"],
+      "graphic": {
+        "label": "Patrol schedule",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' rx='8' fill='#ddd6fe'/><path d='M30 50 L120 30 L210 48 L300 25 L390 42 L490 20' fill='none' stroke='#5b21b6' stroke-width='8' stroke-linecap='round'/><circle cx='30' cy='50' r='7' fill='#5b21b6'/><circle cx='120' cy='30' r='7' fill='#5b21b6'/><circle cx='210' cy='48' r='7' fill='#5b21b6'/><circle cx='300' cy='25' r='7' fill='#5b21b6'/><circle cx='390' cy='42' r='7' fill='#5b21b6'/><circle cx='490' cy='20' r='7' fill='#5b21b6'/></svg>"
+      }
+    },
+    "CCTV room monitoring": {
+      "title": "CCTV Room Monitoring",
+      "summary": "Centralized camera monitoring support.",
+      "scopeBullets": ["Centralized camera monitoring support"],
+      "timeline": ["Shift-based monitoring handoff"],
+      "exclusions": ["Recording policy and retention settings are client-owned"],
+      "graphic": {
+        "label": "CCTV wall",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' fill='#dbeafe'/><rect x='40' y='20' width='80' height='40' rx='6' fill='white'/><text x='80' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Cam 1</text><rect x='140' y='20' width='80' height='40' rx='6' fill='white'/><text x='180' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Cam 2</text><rect x='240' y='20' width='80' height='40' rx='6' fill='white'/><text x='280' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Cam 3</text><rect x='340' y='20' width='120' height='40' rx='6' fill='white'/><text x='400' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Command</text></svg>"
+      }
+    },
+    "Access control audit": {
+      "title": "Access Control Audit",
+      "summary": "Validation of access controls and badge policy enforcement.",
+      "scopeBullets": ["Entry/exit point access audit and role map review"],
+      "timeline": ["Week 1 and week 4 access control checkpoint review"],
+      "exclusions": ["Hardware upgrades are quoted separately"],
+      "graphic": {
+        "label": "Access audit",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' rx='8' fill='#fef3c7'/><rect x='30' y='22' width='460' height='36' rx='8' fill='white'/><text x='260' y='45' text-anchor='middle' font-size='14' fill='#78350f'>Access Control Checkpoints</text><line x1='30' y1='40' x2='490' y2='40' stroke='#92400e' stroke-width='4' /></svg>"
+      }
+    },
+    "Alarm response dispatch": {
+      "title": "Alarm Response Dispatch",
+      "summary": "Route-to-response planning and incident acknowledgment procedures.",
+      "scopeBullets": ["Incident response routing and acknowledgment process"],
+      "timeline": ["Alarm response role test in Week 3"],
+      "exclusions": ["Third-party emergency response services are not included"],
+      "graphic": {
+        "label": "Alarm dispatch",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' rx='8' fill='#fee2e2'/><rect x='28' y='23' width='120' height='34' rx='6' fill='white'/><text x='88' y='45' text-anchor='middle' font-size='12' fill='#b91c1c'>Alarm</text><polygon points='156,40 240,22 240,58' fill='#dc2626'/><rect x='240' y='23' width='120' height='34' rx='6' fill='white'/><text x='300' y='45' text-anchor='middle' font-size='12' fill='#b91c1c'>Dispatch</text><polygon points='368,40 452,22 452,58' fill='#dc2626'/><rect x='452' y='23' width='50' height='34' rx='6' fill='white'/><text x='477' y='45' text-anchor='middle' font-size='11' fill='#b91c1c'>Team</text></svg>"
+      }
+    },
+    "Background verification support": {
+      "title": "Background Verification Support",
+      "summary": "Identity and role-history verification support for new security hires.",
+      "scopeBullets": ["Initial screening workflow guidance and package coordination"],
+      "timeline": ["Screening setup during weeks 1-2"],
+      "exclusions": ["Third-party HR/legal investigations are not included"],
+      "graphic": {
+        "label": "Background checks",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' rx='8' fill='#d1fae5'/><rect x='36' y='18' width='70' height='44' rx='6' fill='white'/><text x='71' y='45' text-anchor='middle' font-size='11' fill='#065f46'>ID</text><line x1='116' y1='40' x2='180' y2='40' stroke='#047857' stroke-width='4'/><rect x='180' y='18' width='110' height='44' rx='6' fill='white'/><text x='235' y='45' text-anchor='middle' font-size='11' fill='#065f46'>Check</text><line x1='290' y1='40' x2='360' y2='40' stroke='#047857' stroke-width='4'/><rect x='360' y='18' width='130' height='44' rx='6' fill='white'/><text x='425' y='45' text-anchor='middle' font-size='11' fill='#065f46'>Approve</text></svg>"
+      }
+    },
+    "Incident reporting portal": {
+      "title": "Incident Reporting Portal",
+      "summary": "Digital intake and tracking of incidents from field to executive view.",
+      "scopeBullets": ["Digital intake of incidents with ownership tags"],
+      "timeline": ["Continuous: portal updates and review"],
+      "exclusions": ["Third-party SOC connectors may be added"],
+      "graphic": {
+        "label": "Reporting portal",
+        "inline": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' rx='8' fill='#e0f2fe'/><rect x='30' y='20' width='460' height='40' rx='8' fill='white'/><line x1='50' y1='38' x2='450' y2='38' stroke='#0ea5e9' stroke-width='6'/><circle cx='60' cy='40' r='6' fill='#0ea5e9'/><circle cx='130' cy='40' r='6' fill='#0ea5e9'/><circle cx='200' cy='40' r='6' fill='#0ea5e9'/><text x='430' y='45' font-size='10' fill='#0f172a'>Portal</text></svg>"
+      }
+    }
+  }
+}

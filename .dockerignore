@@ -1,0 +1,9 @@
+node_modules
+*.log
+data
+proposal-data
+.git
+.gitignore
+.env
+server.out.log
+server.err.log

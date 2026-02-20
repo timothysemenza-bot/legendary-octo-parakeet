@@ -1,0 +1,31 @@
+# Node/artifacts
+node_modules/
+
+# Logs
+*.log
+server.out.log
+server.err.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+data/
+
+# Local OS/editor files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+!.env.example
+
+# Generated test docs
+*.docx
+*.doc
+
+# Local scratch files
+*.tmp
+*.temp
+temp_*

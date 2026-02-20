@@ -1,0 +1,1965 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>St. Moritz Security Services | Proposal Builder</title>
+    <meta
+      name="description"
+      content="Sales intake app with proposal generation, persistence, and versioning for St. Moritz Security Services."
+    />
+    <style>
+      :root {
+        --bg: #f3f6fd;
+        --surface: #ffffff;
+        --ink: #0f172a;
+        --muted: #475569;
+        --line: #dbe4f3;
+        --accent: #102a78;
+        --accent-soft: #1f56d8;
+        --danger: #b91c1c;
+        --success: #0f766e;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Alegreya Sans", "Trebuchet MS", "Verdana", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(1200px 600px at 10% 0%, #e9efff 0%, transparent 45%), var(--bg);
+        min-height: 100vh;
+      }
+      .wrap { width: min(1080px, 92vw); margin: 0 auto; padding: 20px 0 46px; }
+      .top { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin-bottom: 18px; display: flex; justify-content: space-between; gap: 14px; align-items: center; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .badge { width: 42px; height: 42px; border-radius: 12px; color: #fff; display: grid; place-items: center; font-weight: 700; font-size: .95rem; background: linear-gradient(135deg, var(--accent), var(--accent-soft)); }
+      .small { color: var(--muted); font-size: .86rem; }
+      .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+      .view-toggle button { margin-left: 8px; }
+      .grid { display: grid; gap: 16px; }
+      .two { grid-template-columns: 1.25fr 0.75fr; }
+      .three { grid-template-columns: 1fr 1fr 1fr; }
+      .progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0; }
+      .progress .step-pill { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; color: #64748b; background: #fff; font-weight: 600; }
+      .progress .step-pill.active { border-color: #cfe0ff; background: #edf4ff; color: var(--accent); }
+      .progress .step-pill.complete { border-color: #a7f3d0; color: var(--success); background: #ecfdf5; }
+      .status-line { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+      .pill { display: inline-block; border-radius: 999px; background: #eef2ff; border: 1px solid #c7d2fe; padding: 4px 10px; font-size: .74rem; font-weight: 700; color: #3730a3; }
+      label { display: block; margin-bottom: 6px; font-weight: 600; }
+      .field { margin-bottom: 12px; }
+      input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; background: #fff; }
+      textarea { resize: vertical; min-height: 110px; }
+      .row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+      .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+      .checkbox-grid label { margin: 0; display: flex; gap: 8px; align-items: center; font-weight: 500; }
+      input[type="checkbox"] { width: auto; }
+      .btn-row { display: flex; justify-content: space-between; margin-top: 14px; }
+      button { border: none; border-radius: 10px; padding: 11px 16px; font-weight: 700; cursor: pointer; }
+      .primary { background: linear-gradient(150deg, var(--accent), var(--accent-soft)); color: #fff; }
+      .ghost { background: #eff6ff; color: var(--accent); border: 1px solid #dbeafe; }
+      .step { display: none; }
+      .step.active { display: block; }
+      .alert { color: var(--danger); font-size: .85rem; margin-top: 10px; display: none; }
+      .actionbar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+      .hidden { display: none; }
+      .list { margin: 0; padding-left: 18px; }
+      .proposal-section { border: 1px solid #dbeafe; border-radius: 12px; padding: 12px; margin-top: 10px; background: #fcfdff; }
+      .proposal-section h4 { margin: 0 0 8px; }
+      .industry-picker-wrap { margin-top: 10px; }
+      .industry-picker-wrap .field small { margin-top: 6px; display: block; }
+      .proposal-graphic { margin-top: 10px; overflow: hidden; }
+      .proposal-graphic svg { width: 100%; max-width: 520px; height: auto; display: block; border: 1px solid #dbeafe; border-radius: 10px; background: #fff; }
+      .industry-graphic-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+      .industry-graphic-option { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: #f8fbff; }
+      .industry-graphic-option label { margin: 0; display: grid; gap: 6px; }
+      .industry-graphic-option input[type='radio'] { margin: 0; }
+      .industry-graphic-option .thumb { display: block; width: 100%; border: 1px solid #dbeafe; border-radius: 8px; background: #fff; }
+      .total { padding: 16px; border: 1px dashed #c7d7ee; border-radius: 12px; margin-top: 12px; background: #f8fbff; }
+      .notice { color: var(--success); font-size: .86rem; }
+      .admin-toolbar { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+      .admin-item { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 12px; background: #fcfdff; }
+      .admin-item h4 { margin: 0; }
+      .admin-item small { display: block; color: #64748b; }
+      .admin-actions, .version-item .actionbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+      .admin-json-editor { width: 100%; border: 1px solid var(--line); border-radius: 10px; min-height: 260px; font-family: "Cascadia Code", Consolas, Monaco, "Courier New", monospace; font-size: .74rem; background: #fff; padding: 10px; }
+      .version-list { border-left: 3px solid #dbeafe; margin-top: 10px; padding-left: 10px; }
+      .version-item { border: 1px dashed #e2e8f0; border-radius: 10px; padding: 8px; margin-top: 8px; }
+      @media (max-width: 960px) {
+        .wrap { width: 96vw; }
+        .top, .admin-toolbar { flex-direction: column; align-items: flex-start; }
+        .two, .row, .checkbox-grid, .three, .progress { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="top">
+        <div class="brand">
+          <div class="badge">SMS</div>
+          <div>
+            <h1>St. Moritz Security Services</h1>
+            <div class="small">Proposal builder with backend persistence and versioning</div>
+          </div>
+        </div>
+        <div class="view-toggle">
+          <button id="salesModeBtn" type="button" class="ghost">Sales mode</button>
+          <button id="adminModeBtn" type="button" class="ghost">Admin dashboard</button>
+        </div>
+      </section>
+
+      <section id="salesView">
+        <section class="card">
+          <h2>Build and save proposals</h2>
+          <p class="small">Complete the intake and generate a draft proposal, then save it to the backend for version tracking.</p>
+          <p class="small">API status: <span id="serverStatus" class="pill">Checking...</span></p>
+          <div class="status-line">
+            <span class="small">Proposal ID: <strong id="proposalIdDisplay">Not saved</strong></span>
+            <span class="small">Current version: <strong id="proposalVersionDisplay">0</strong></span>
+            <span class="small" id="proposalNotice"></span>
+          </div>
+
+          <div class="progress" id="progress">
+            <div class="step-pill active" data-step-pill="0">1. Company</div>
+            <div class="step-pill" data-step-pill="1">2. Requirements</div>
+            <div class="step-pill" data-step-pill="2">3. Scope</div>
+            <div class="step-pill" data-step-pill="3">4. Review</div>
+          </div>
+
+          <form id="proposalForm" autocomplete="off">
+            <section class="step active" data-step="0">
+              <h3>Step 1 - Company profile</h3>
+              <div class="field">
+                <label for="companyName">Company name</label>
+                <input id="companyName" name="companyName" required />
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label for="primaryContact">Primary contact</label>
+                  <input id="primaryContact" name="primaryContact" required />
+                </div>
+                <div class="field">
+                  <label for="contactEmail">Contact email</label>
+                  <input id="contactEmail" name="contactEmail" type="email" required />
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label for="phone">Phone</label>
+                  <input id="phone" name="phone" placeholder="+1 (555) 000-0000" />
+                </div>
+                <div class="field">
+                  <label for="location">Primary location</label>
+                  <input id="location" name="location" placeholder="City, state" />
+                </div>
+                <div class="field">
+                  <label for="geography">Geography</label>
+                  <select id="geography" name="geography">
+                    <option>US Northeast</option>
+                    <option>US Southeast</option>
+                    <option>US Midwest</option>
+                    <option>US Southwest</option>
+                    <option>US West</option>
+                    <option>US International</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="facilities">Number of facilities</label>
+                <input id="facilities" name="facilities" type="number" min="1" max="99" value="1" />
+              </div>
+              <div class="alert" id="stepError"></div>
+              <div class="btn-row">
+                <button type="button" class="ghost" id="clearDraftBtn">Clear draft</button>
+                <button type="button" class="primary" id="nextBtn">Next</button>
+              </div>
+            </section>
+
+            <section class="step" data-step="1">
+              <h3>Step 2 - Requirements</h3>
+              <div class="row">
+                <div class="field">
+                  <label for="siteType">Site type</label>
+                  <select id="siteType" name="siteType">
+                    <option>Corporate office</option>
+                    <option>Warehouse</option>
+                    <option>Retail chain</option>
+                    <option>Hospitality</option>
+                    <option>Education</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="coverageHours">Coverage window</label>
+                  <select id="coverageHours" name="coverageHours">
+                    <option>Business hours</option>
+                    <option>Evenings + weekends</option>
+                    <option>24/7</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label for="riskLevel">Perceived risk level</label>
+                  <select id="riskLevel" name="riskLevel">
+                    <option>Low</option>
+                    <option selected>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="startWindow">Preferred start window</label>
+                  <select id="startWindow" name="startWindow">
+                    <option>2-4 weeks</option>
+                    <option>1 month</option>
+                    <option>2+ months</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="keyConcerns">Key concerns</label>
+                <textarea id="keyConcerns" name="keyConcerns"></textarea>
+              </div>
+              <div class="field">
+                <small class="small">Industry visuals are derived automatically from the selected site type.</small>
+              </div>
+              <div class="field">
+                <label>Industry visual</label>
+                <div id="industryGraphicLibrary" class="industry-graphic-grid"></div>
+                <small id="industryGraphicNotice" class="small"></small>
+              </div>
+              <div class="alert" id="stepError2"></div>
+              <div class="btn-row">
+                <button type="button" class="ghost" id="prevBtn1">Back</button>
+                <button type="button" class="primary" id="nextBtn2">Next</button>
+              </div>
+            </section>
+
+            <section class="step" data-step="2">
+              <h3>Step 3 - Scope & services</h3>
+              <div class="field">
+                <label for="serviceLevel">Service level</label>
+                <select id="serviceLevel" name="serviceLevel">
+                  <option>Starter</option>
+                  <option selected>Enhanced</option>
+                  <option>Executive</option>
+                </select>
+                <div class="small">Starter = patrol, Enhanced = patrol + monitoring, Executive = managed operations</div>
+              </div>
+              <div class="field">
+                <label>Capabilities</label>
+                <div class="checkbox-grid">
+                  <label><input type="checkbox" name="capabilities" value="24/7 patrol scheduling" checked>24/7 patrol scheduling</label>
+                  <label><input type="checkbox" name="capabilities" value="CCTV room monitoring">CCTV room monitoring</label>
+                  <label><input type="checkbox" name="capabilities" value="Access control audit">Access control audit</label>
+                  <label><input type="checkbox" name="capabilities" value="Alarm response dispatch" checked>Alarm response dispatch</label>
+                  <label><input type="checkbox" name="capabilities" value="Background verification support">Background verification support</label>
+                  <label><input type="checkbox" name="capabilities" value="Incident reporting portal" checked>Incident reporting portal</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label for="budgetBand">Target monthly budget</label>
+                  <select id="budgetBand" name="budgetBand">
+                    <option>Under $6,000</option>
+                    <option>$6,000 - $10,000</option>
+                    <option>$10,000 - $20,000</option>
+                    <option>Above $20,000</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="contractLength">Contract length</label>
+                  <select id="contractLength" name="contractLength">
+                    <option>3 months</option>
+                    <option selected>6 months</option>
+                    <option>12 months</option>
+                  </select>
+                </div>
+              </div>
+              <div class="alert" id="stepError3"></div>
+              <div class="btn-row">
+                <button type="button" class="ghost" id="prevBtn2">Back</button>
+                <button type="button" class="primary" id="nextBtn3">Next</button>
+              </div>
+            </section>
+
+            <section class="step" data-step="3">
+              <h3>Step 4 - Review, save, and export</h3>
+              <p class="small">Create the proposal draft and save it to the backend for versioning.</p>
+              <div class="actionbar">
+                <button type="button" class="ghost" id="prevBtn3">Back</button>
+                <button type="button" class="primary" id="generateBtn">Generate proposal</button>
+                <button type="button" class="primary" id="saveProposalBtn">Save / New version</button>
+              </div>
+              <div class="alert" id="generateError"></div>
+              <div class="notice" id="saveNotice"></div>
+            </section>
+          </form>
+        </section>
+
+        <section class="grid two" style="margin-top:16px;">
+          <article class="card">
+            <h3>Proposal preview</h3>
+            <div id="proposalOutput" class="small">No proposal generated yet.</div>
+            <div id="proposalMeta" class="small"></div>
+            <div id="pricingSummary" class="total"></div>
+          </article>
+      <article class="card">
+            <h3>Proposal export</h3>
+            <div class="actionbar">
+              <button type="button" class="primary" id="downloadPdfBtn">Export PDF (print)</button>
+              <button type="button" class="ghost" id="downloadWordBtn">Download Word (.docx)</button>
+              <button type="button" class="ghost" id="downloadHtmlBtn">Download HTML</button>
+              <button type="button" class="ghost" id="downloadJsonBtn">Download intake JSON</button>
+              <button type="button" class="ghost" id="printBtn">Print</button>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section id="adminView" class="card hidden" style="margin-top:16px;">
+        <div class="admin-toolbar">
+          <div>
+            <h2>Admin dashboard</h2>
+            <p class="small">Track all proposals and restore a previous version back into the sales form.</p>
+          </div>
+          <div class="actionbar">
+            <button type="button" class="primary" id="refreshDashboardBtn">Refresh</button>
+            <button type="button" class="ghost" id="backToSalesBtn">Back to sales</button>
+          </div>
+        </div>
+        <div id="adminStatus" class="small"></div>
+        <div id="adminList"></div>
+        <div class="admin-item" style="margin-top: 12px;">
+          <h3>Content library</h3>
+          <p class="small">Edit proposal library content and embedded graphics as JSON.</p>
+          <textarea id="contentLibraryEditor" class="admin-json-editor" spellcheck="false"></textarea>
+          <div class="actionbar" style="margin-top: 10px;">
+            <button type="button" class="primary" id="saveLibraryBtn">Save library</button>
+            <button type="button" class="ghost" id="resetLibraryBtn">Reset editor</button>
+          </div>
+          <div id="librarySaveNotice" class="small"></div>
+        </div>
+      </section>
+    </main>
+    <script>
+      const API_ORIGIN_OVERRIDE = new URLSearchParams(window.location.search).get('apiBase');
+      const API_BASE_CANDIDATES = Array.from(
+        new Set(
+          [
+            API_ORIGIN_OVERRIDE,
+            window.location.protocol === 'file:' ? 'http://localhost:3000' : `${window.location.origin}`,
+            'http://localhost:3000',
+          ].filter(Boolean)
+        )
+      ).map((origin) => `${origin}/api`);
+      let activeApiBase = null;
+      const STORAGE_KEY = 'smss_builder_state_v2';
+      const state = {
+        current: 0,
+        proposalId: '',
+        currentVersion: 0,
+        data: {
+          companyName: '',
+          primaryContact: '',
+          contactEmail: '',
+          phone: '',
+          location: '',
+          geography: 'US Northeast',
+          facilities: 1,
+        siteType: 'Corporate office',
+        coverageHours: 'Business hours',
+        riskLevel: 'Medium',
+        startWindow: '2-4 weeks',
+        keyConcerns: '',
+        industry: 'Corporate office',
+        industryGraphicId: '',
+        serviceLevel: 'Enhanced',
+        capabilities: ['24/7 patrol scheduling', 'Alarm response dispatch', 'Incident reporting portal'],
+        budgetBand: 'Under $6,000',
+        contractLength: '6 months',
+      },
+        generated: null,
+      };
+
+      const form = document.getElementById('proposalForm');
+      const steps = Array.from(document.querySelectorAll('.step'));
+      const pills = Array.from(document.querySelectorAll('[data-step-pill]'));
+      const pricingMatrix = {
+        Starter: { base: 3200, multiplier: 1.0 },
+        Enhanced: { base: 5400, multiplier: 1.45 },
+        Executive: { base: 8600, multiplier: 2.2 },
+      };
+      const riskModifiers = { Low: 0.9, Medium: 1.05, High: 1.25, Critical: 1.45 };
+      const levelToName = {
+        Starter: 'Physical Guarding',
+        Enhanced: 'Integrated Security',
+        Executive: 'Executive Security',
+      };
+      const WORD_STYLE_SET = {
+        title: 'SMS Title',
+        subtitle: 'SMS Subtitle',
+        sectionHeading: 'SMS Section Heading',
+        body: 'SMS Body',
+        summary: 'SMS Summary',
+        figure: 'SMS Figure',
+      };
+      const FALLBACK_INDUSTRY_GRAPHICS = {
+        'Corporate office': [
+          {
+            id: 'corp-reception-exec',
+            label: 'Lobby Reception Executive Floor',
+            title: 'Industry visual - Corporate office',
+            description: 'Lobby, reception desk, and executive floor workflow.',
+            source: '/assets/industry-graphics/corporate-lobby-reception-exec-floor.png',
+          },
+          {
+            id: 'corp-access',
+            label: 'Badge Access and Escorts',
+            title: 'Industry visual - Corporate office',
+            description: 'Badge readers and escorted visitor routing.',
+            source: '/assets/industry-graphics/corporate-badge-access.png',
+          },
+        ],
+        Warehouse: [
+          {
+            id: 'warehouse-perimeter',
+            label: 'Warehouse Perimeter Coverage',
+            title: 'Industry visual - Warehouse',
+            description: 'Perimeter checkpoint and storage block overview.',
+            source: '/assets/industry-graphics/warehouse-perimeter.png',
+          },
+          {
+            id: 'warehouse-dock',
+            label: 'Loading Dock Sweep',
+            title: 'Industry visual - Warehouse',
+            description: 'Loading dock and yard gate flow.',
+            source: '/assets/industry-graphics/warehouse-loading-dock.png',
+          },
+        ],
+        'Retail chain': [
+          {
+            id: 'retail-store-front',
+            label: 'Store Front Security',
+            title: 'Industry visual - Retail chain',
+            description: 'Front desk, entrances, and back-of-house support.',
+            source: '/assets/industry-graphics/retail-store-front.png',
+          },
+          {
+            id: 'retail-incident',
+            label: 'Retail Incident Flow',
+            title: 'Industry visual - Retail chain',
+            description: 'Incident escalation and safe handling flow.',
+            source: '/assets/industry-graphics/retail-incident-flow.png',
+          },
+        ],
+        Hospitality: [
+          {
+            id: 'hospitality-lobby',
+            label: 'Lobby and Parking',
+            title: 'Industry visual - Hospitality',
+            description: 'Guest entry and patrol handoff at parking.',
+            source: '/assets/industry-graphics/hospitality-lobby-parking.png',
+          },
+          {
+            id: 'hospitality-events',
+            label: 'Hospitality Event Coverage',
+            title: 'Industry visual - Hospitality',
+            description: 'Event-ready visitor and staff support.',
+            source: '/assets/industry-graphics/hospitality-event-coverage.png',
+          },
+        ],
+        Education: [
+          {
+            id: 'education-front-door',
+            label: 'Visitor and classroom flow',
+            title: 'Industry visual - Education',
+            description: 'Primary entry and controlled access flow.',
+            source: '/assets/industry-graphics/education-entry-flow.png',
+          },
+          {
+            id: 'education-activities',
+            label: 'After-hours activity monitoring',
+            title: 'Industry visual - Education',
+            description: 'Activity periods and controlled access zones.',
+            source: '/assets/industry-graphics/education-after-hours.png',
+          },
+        ],
+        Other: [
+          {
+            id: 'custom-overview',
+            label: 'Custom deployment map',
+            title: 'Industry visual - Custom',
+            description: 'Tailored plan map for custom environments.',
+            source: '/assets/industry-graphics/custom-overview.png',
+          },
+        ],
+      };
+
+      const FALLBACK_CONTENT_LIBRARY = {
+        geography: {
+          Default: {
+            title: 'Regional context',
+            summary: 'Proposal language is adapted for {geography} operations and response expectations in {location}.',
+            scopeBullets: [
+              'Local response assumptions reflect typical operating characteristics in {geography}.',
+              'Deployment planning uses standard contact and handoff practices for {region}.',
+              'Timeline and escalation assumptions can be fine-tuned during kickoff.',
+            ],
+            timeline: [
+              'Regional follow-up for local compliance and permit verification during week 1.',
+            ],
+            exclusions: [
+              'Local permitting or municipal compliance requirements are validated during kickoff.',
+            ],
+            regionTerminology: 'regional',
+          },
+          'US Northeast': {
+            title: 'Northeast security context',
+            summary: 'In the Northeast region, service design prioritizes weather resilience, transit adjacency, and dense urban access flow in {location}.',
+            scopeBullets: [
+              'Prioritize access controls for dense urban or mixed-use environments.',
+              'Include transit-adjacent access and pickup/dropoff risk mitigations for {location}.',
+              'Schedule escalation checks that account for seasonal weather-related disruption.',
+            ],
+            timeline: ['Weather- and transit-aware onboarding checkpoint added in week 2 for Northeast operations.'],
+            exclusions: ['Additional overtime for severe weather response is billed separately.'],
+            regionTerminology: 'Northeast operations',
+          },
+          'US Southeast': {
+            title: 'Southeast security context',
+            summary: 'In the Southeast profile, proposal language and sequencing emphasize heat-related staffing windows and event-driven demand around {location}.',
+            scopeBullets: [
+              'Plan for high-traffic seasonal periods and community event spikes in {location}.',
+              'Document access flow for campus and parking in warm-weather operating conditions.',
+            ],
+            timeline: ['Heat and staffing continuity readiness is reviewed in week 1 for Southeast operations.'],
+            exclusions: ['Additional hardening for weather and utility interruption windows is a separate line item.'],
+            regionTerminology: 'Southeast operations',
+          },
+          'US Midwest': {
+            title: 'Midwest security context',
+            summary: 'For Midwest locations, the proposal reflects manufacturing, logistics, and rural-to-urban travel distances around {location}.',
+            scopeBullets: [
+              'Coordinate patrol loops around facility miles and shift transfer points in {location}.',
+              'Include logistics touchpoints when loading or route-sensitive workflows exist.',
+            ],
+            timeline: ['Route and logistics coordination checkpoint added in week 2 for Midwest facilities.'],
+            exclusions: ['Extended logistics route support is billed separately if distances increase materially.'],
+            regionTerminology: 'Midwest operations',
+          },
+          'US Southwest': {
+            title: 'Southwest security context',
+            summary: 'For Southwest operations, this proposal adjusts communication and deployment cadence for wide-area coverage around {location}.',
+            scopeBullets: [
+              'Strengthen site-to-site check timing for large footprint coverage around {location}.',
+              'Address heat and remote access considerations for gate and perimeter controls.',
+            ],
+            timeline: ['Coverage continuity planning for high-temperature windows in week 3.'],
+            exclusions: ['Climate adaptation equipment and additional sensors are quoted separately.'],
+            regionTerminology: 'Southwest operations',
+          },
+          'US West': {
+            title: 'West region context',
+            summary: 'West-region proposals prioritize geography-specific commuting, event density, and multi-site response sequencing in {location}.',
+            scopeBullets: [
+              'Tailor patrol and escalation timing for remote-site spread and traffic windows in {location}.',
+              'Include incident communication cadence compatible with multiple time zones and teams.',
+            ],
+            timeline: ['Cross-site coordination and communication checks in week 2 for West sites.'],
+            exclusions: ['Dedicated cross-border coordination beyond normal operating areas is a separate scope item.'],
+            regionTerminology: 'West operations',
+          },
+          'US International': {
+            title: 'International context',
+            summary: 'International deployments use globally aware operational language while still mirroring St. Moritz policy structure in {location}.',
+            scopeBullets: [
+              'Use location-specific escalation owners and authority mapping during onboarding in {location}.',
+              'Maintain core service standards while honoring local security and reporting rules.',
+            ],
+            timeline: ['Regional compliance and authority alignment reviewed in week 1 for international operations.'],
+            exclusions: ['Local language, translation, and legal localization support are quoted separately.'],
+            regionTerminology: 'global operations',
+          },
+        },
+        serviceLevel: {
+          Starter: {
+            title: 'Starter Physical Guarding',
+            summary: 'Fast deployment package for single teams and standard access coverage.',
+            scopeBullets: [
+              '1 security lead per shift with fixed guard posts',
+              'Visitor sign-in and escort protocol included',
+              'Daily situation log with incident escalation route',
+              'Monthly manager summary to security owner',
+            ],
+            timeline: [
+              'Week 1: site walk-through and post setup',
+              'Week 2: on-site orientation and drills',
+              'Week 3: initial performance check and SOP alignment',
+              'Week 4: first monthly review',
+            ],
+            exclusions: [
+              'Advanced video analytics package not included',
+              'Escalation response with third-party resources billed separately',
+            ],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'><defs><linearGradient id='s1' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#93c5fd'/><stop offset='1' stop-color='#1e40af'/></linearGradient></defs><rect x='10' y='10' width='500' height='100' rx='10' fill='url(#s1)'/><rect x='25' y='30' width='150' height='60' rx='8' fill='white' opacity='0.85'/><text x='100' y='63' text-anchor='middle' font-size='14' fill='#102a78'>Post coverage</text><rect x='185' y='30' width='150' height='60' rx='8' fill='white' opacity='0.85'/><text x='260' y='63' text-anchor='middle' font-size='14' fill='#102a78'>Incident log</text><rect x='345' y='30' width='150' height='60' rx='8' fill='white' opacity='0.85'/><text x='420' y='63' text-anchor='middle' font-size='14' fill='#102a78'>Manager report</text></svg>`,
+          },
+          Enhanced: {
+            title: 'Enhanced Integrated Security',
+            summary: 'Guarding paired with monitoring workflows and digital reporting.',
+            scopeBullets: [
+              'All Starter activities plus control-room handoff',
+              'Real-time patrol verification checkpoints',
+              'Alarm and alarm-response acknowledgment routing',
+              'Daily executive snapshot dashboard',
+            ],
+            timeline: [
+              'Week 1: alarm and access process documentation',
+              'Week 2: monitoring escalation matrix and live check',
+              'Week 3: integration test for incident response',
+              'Week 4: KPI baseline and correction actions',
+            ],
+            exclusions: [
+              'Integration connectors for legacy alarm systems require separate statement',
+              'Dedicated SOC analyst coverage beyond plan hours is extra',
+            ],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'><defs><linearGradient id='e1' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#bfdbfe'/><stop offset='1' stop-color='#1d4ed8'/></linearGradient></defs><rect x='10' y='10' width='500' height='100' rx='10' fill='url(#e1)'/><circle cx='80' cy='60' r='26' fill='white' opacity='0.9'/><text x='80' y='65' text-anchor='middle' font-size='12' fill='#1e3a8a'>Guards</text><circle cx='260' cy='60' r='26' fill='white' opacity='0.9'/><text x='260' y='65' text-anchor='middle' font-size='12' fill='#1e3a8a'>Monitoring</text><circle cx='440' cy='60' r='26' fill='white' opacity='0.9'/><text x='440' y='65' text-anchor='middle' font-size='12' fill='#1e3a8a'>Control</text><line x1='106' y1='60' x2='234' y2='60' stroke='#1e3a8a' stroke-width='4' /><line x1='286' y1='60' x2='414' y2='60' stroke='#1e3a8a' stroke-width='4' /></svg>`,
+          },
+          Executive: {
+            title: 'Executive Security Program',
+            summary: 'Full program with dedicated management and continuous optimization.',
+            scopeBullets: [
+              'All Enhanced capabilities plus program manager',
+              'Quarterly threat model refresh and response playbook',
+              'Executive security scorecard with exception reporting',
+              'Dedicated readiness drills and corrective training plan',
+            ],
+            timeline: [
+              'Week 1: strategic alignment and policy review',
+              'Week 2: security playbook release and ownership model',
+              'Week 3: management reporting automation',
+              'Week 4: readiness exercise and executive review',
+              'Month 2+: monthly optimization iterations',
+            ],
+            exclusions: [
+              'Executive briefings outside contracted cadence are billed separately',
+              'Specialized legal/compliance advisory services are separate line items',
+            ],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'><defs><linearGradient id='x1' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#e2e8f0'/><stop offset='1' stop-color='#334155'/></linearGradient></defs><rect x='10' y='10' width='500' height='100' rx='10' fill='url(#x1)'/><rect x='30' y='28' width='120' height='64' rx='8' fill='white' opacity='0.9'/><text x='90' y='65' text-anchor='middle' font-size='12' fill='#334155'>Program lead</text><rect x='170' y='28' width='130' height='64' rx='8' fill='white' opacity='0.9'/><text x='235' y='65' text-anchor='middle' font-size='12' fill='#334155'>Analytics</text><rect x='320' y='28' width='170' height='64' rx='8' fill='white' opacity='0.9'/><text x='405' y='65' text-anchor='middle' font-size='12' fill='#334155'>Executive review</text><line x1='150' y1='60' x2='170' y2='60' stroke='#334155' stroke-width='4' /><line x1='300' y1='60' x2='320' y2='60' stroke='#334155' stroke-width='4' /></svg>`,
+          },
+        },
+        siteType: {
+          'Corporate office': {
+            title: 'Corporate Office Deployment',
+            scopeBullets: ['Reception desk controls and access badge review', 'Escorts for visitors and contractors', 'After-hours coverage for restricted access zones'],
+            timeline: ['Day 4-14: visitor protocols and contractor onboarding'],
+            exclusions: ['Onsite executive escorts are not standard and need approval'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#dbeafe'/><rect x='22' y='20' width='90' height='50' rx='8' fill='white'/><text x='67' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Lobby</text><rect x='124' y='20' width='90' height='50' rx='8' fill='white'/><text x='169' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Reception</text><rect x='226' y='20' width='90' height='50' rx='8' fill='white'/><text x='271' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Access</text><rect x='328' y='20' width='170' height='50' rx='8' fill='white'/><text x='413' y='50' text-anchor='middle' font-size='11' fill='#1e3a8a'>Executive Floor</text></svg>`,
+          },
+          Warehouse: {
+            title: 'Warehouse Deployment',
+            scopeBullets: ['Perimeter checkpoint rotations', 'Loading-dock vehicle logs', 'Spot checks for dock access and storage zones'],
+            timeline: ['Day 4-14: route audit and dock workflow integration'],
+            exclusions: ['Dock-side CCTV hardware procurement is not included'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#dcfce7'/><rect x='22' y='25' width='150' height='40' rx='8' fill='white'/><text x='97' y='50' text-anchor='middle' font-size='11' fill='#166534'>Loading</text><rect x='186' y='25' width='130' height='40' rx='8' fill='white'/><text x='251' y='50' text-anchor='middle' font-size='11' fill='#166534'>Yard Gate</text><rect x='328' y='25' width='170' height='40' rx='8' fill='white'/><text x='413' y='50' text-anchor='middle' font-size='11' fill='#166534'>Storage Block</text></svg>`,
+          },
+          'Retail chain': {
+            title: 'Retail Chain Deployment',
+            scopeBullets: ['Cash-safe and shrink controls', 'After-hours patrol across multiple entries', 'Uniform incident escalation playbooks'],
+            timeline: ['Day 4-14: store map review and safe protocol training'],
+            exclusions: ['Loss prevention investigation reports are outside base package'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#fee2e2'/><rect x='22' y='25' width='120' height='40' rx='8' fill='white'/><text x='82' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Front Counter</text><rect x='154' y='25' width='120' height='40' rx='8' fill='white'/><text x='214' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Back Room</text><rect x='286' y='25' width='120' height='40' rx='8' fill='white'/><text x='346' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Safe Zone</text><rect x='418' y='25' width='80' height='40' rx='8' fill='white'/><text x='458' y='50' text-anchor='middle' font-size='11' fill='#b91c1c'>Labs</text></svg>`,
+          },
+          Hospitality: {
+            title: 'Hospitality Deployment',
+            scopeBullets: ['Guest-entry screening sequence', 'Night staff escort support', 'Lobby and parking oversight'],
+            timeline: ['Day 4-14: concierge and guest response coordination'],
+            exclusions: ['Event crowd-management packages are separate'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#ffedd5'/><rect x='22' y='25' width='130' height='40' rx='8' fill='white'/><text x='87' y='50' text-anchor='middle' font-size='11' fill='#c2410c'>Lobby</text><rect x='166' y='25' width='130' height='40' rx='8' fill='white'/><text x='231' y='50' text-anchor='middle' font-size='11' fill='#c2410c'>Guest Floor</text><rect x='310' y='25' width='130' height='40' rx='8' fill='white'/><text x='375' y='50' text-anchor='middle' font-size='11' fill='#c2410c'>Parking</text></svg>`,
+          },
+          Education: {
+            title: 'Education Deployment',
+            scopeBullets: ['Student/visitor flow control', 'After-school activity and event coverage', 'Locker and access-area checks'],
+            timeline: ['Day 4-14: activity and class schedule alignment'],
+            exclusions: ['Student-specific disciplinary response outside security scope'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#ede9fe'/><rect x='22' y='25' width='150' height='40' rx='8' fill='white'/><text x='97' y='50' text-anchor='middle' font-size='11' fill='#5b21b6'>Reception</text><rect x='186' y='25' width='150' height='40' rx='8' fill='white'/><text x='261' y='50' text-anchor='middle' font-size='11' fill='#5b21b6'>Courtyard</text><rect x='350' y='25' width='150' height='40' rx='8' fill='white'/><text x='425' y='50' text-anchor='middle' font-size='11' fill='#5b21b6'>Events</text></svg>`,
+          },
+          Other: {
+            title: 'Custom Site Deployment',
+            scopeBullets: ['Tailored patrol map based on site-specific risk'],
+            timeline: ['Day 4-14: custom workflow discovery and design'],
+            exclusions: ['Custom architecture or access retrofit not included by default'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 90'><rect x='10' y='10' width='500' height='70' fill='#f3f4f6'/><rect x='22' y='25' width='476' height='40' rx='8' fill='white'/><text x='260' y='52' text-anchor='middle' font-size='14' fill='#334155'>Tailored program map</text></svg>`,
+          },
+        },
+        risk: {
+          Low: {
+            title: 'Low Risk',
+            scopeBullets: ['Standard patrol windows and periodic checks'],
+            timeline: ['Monthly: preventive review and small improvements'],
+            exclusions: ['Incident surge response tiers are not automatic'],
+          },
+          Medium: {
+            title: 'Medium Risk',
+            scopeBullets: ['Additional checkpoint verification and weekly checks'],
+            timeline: ['Monthly: trend review and policy refresh'],
+            exclusions: ['Crisis-level exercises can be added if required'],
+          },
+          High: {
+            title: 'High Risk',
+            scopeBullets: ['Higher patrol frequency and escalation rehearsals'],
+            timeline: ['Bi-weekly: response readiness drill'],
+            exclusions: ['Full crisis command support is quoted separately'],
+          },
+          Critical: {
+            title: 'Critical Risk',
+            scopeBullets: ['Critical-risk command routing and accelerated escalation'],
+            timeline: ['Weekly: rapid readiness call and reporting'],
+            exclusions: ['24/7 command officer stand-by requires add-on'],
+          },
+        },
+        coverage: {
+          'Business hours': {
+            title: 'Business Hours Coverage',
+            scopeBullets: ['Standard daytime staffing'],
+            timeline: ['During business hours: routine rounding and access checks'],
+          },
+          'Evenings + weekends': {
+            title: 'Evenings + Weekends',
+            scopeBullets: ['Evening and weekend shift extension'],
+            timeline: ['Night/weekend readiness verification'],
+          },
+          '24/7': {
+            title: '24/7 Protection',
+            scopeBullets: ['Continuous presence strategy and after-hours escalation'],
+            timeline: ['Daily overnight handoff included'],
+            exclusions: ['Emergency medical response beyond security scope'],
+          },
+        },
+        capabilities: {
+          '24/7 patrol scheduling': {
+            title: '24/7 patrol scheduling',
+            scopeBullets: ['Continuous patrol schedule with audit trail'],
+            timeline: ['Daily routing and shift handoff'],
+            exclusions: ['Overtime for unscheduled late requests'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' rx='8' fill='#ddd6fe'/><path d='M30 50 L120 30 L210 48 L300 25 L390 42 L490 20' fill='none' stroke='#5b21b6' stroke-width='8' stroke-linecap='round'/><circle cx='30' cy='50' r='7' fill='#5b21b6'/><circle cx='120' cy='30' r='7' fill='#5b21b6'/><circle cx='210' cy='48' r='7' fill='#5b21b6'/><circle cx='300' cy='25' r='7' fill='#5b21b6'/><circle cx='390' cy='42' r='7' fill='#5b21b6'/><circle cx='490' cy='20' r='7' fill='#5b21b6'/></svg>`,
+          },
+          'CCTV room monitoring': {
+            title: 'CCTV room monitoring',
+            scopeBullets: ['Centralized camera monitoring support'],
+            timeline: ['Shift-based monitoring handoff'],
+            exclusions: ['Recording policy and retention settings are client-owned'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' fill='#dbeafe'/><rect x='40' y='20' width='80' height='40' rx='6' fill='white'/><text x='80' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Cam 1</text><rect x='140' y='20' width='80' height='40' rx='6' fill='white'/><text x='180' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Cam 2</text><rect x='240' y='20' width='80' height='40' rx='6' fill='white'/><text x='280' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Cam 3</text><rect x='340' y='20' width='120' height='40' rx='6' fill='white'/><text x='400' y='47' text-anchor='middle' font-size='11' fill='#1e40af'>Command</text></svg>`,
+          },
+          'Access control audit': {
+            title: 'Access control audit',
+            scopeBullets: ['Access matrix review and remediation recommendations'],
+            timeline: ['Week 1: entry controls and card policy review'],
+            exclusions: ['Hardware key replacement outside standard scope'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' fill='#dcfce7'/><rect x='30' y='24' width='120' height='30' rx='5' fill='white'/><text x='90' y='44' text-anchor='middle' font-size='11' fill='#166534'>Current policy</text><rect x='180' y='24' width='120' height='30' rx='5' fill='white'/><text x='240' y='44' text-anchor='middle' font-size='11' fill='#166534'>Gap analysis</text><rect x='330' y='24' width='160' height='30' rx='5' fill='white'/><text x='410' y='44' text-anchor='middle' font-size='11' fill='#166534'>Improvement plan</text></svg>`,
+          },
+          'Alarm response dispatch': {
+            title: 'Alarm response dispatch',
+            scopeBullets: ['Immediate response routing and confirmation'],
+            timeline: ['Continuous verification loops and closure reporting'],
+            exclusions: ['Fire department liaison is not standard'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' fill='#fee2e2'/><circle cx='90' cy='40' r='20' fill='white'/><text x='90' y='44' text-anchor='middle' font-size='12' fill='#b91c1c'>ALARM</text><path d='M110 40 H220' stroke='#b91c1c' stroke-width='5'/><circle cx='260' cy='40' r='20' fill='white'/><text x='260' y='44' text-anchor='middle' font-size='12' fill='#b91c1c'>DISP</text><path d='M280 40 H390' stroke='#b91c1c' stroke-width='5'/><circle cx='430' cy='40' r='20' fill='white'/><text x='430' y='44' text-anchor='middle' font-size='12' fill='#b91c1c'>LOG</text></svg>`,
+          },
+          'Background verification support': {
+            title: 'Background verification support',
+            scopeBullets: ['Pre-employment and renewal checklist support'],
+            timeline: ['Before onboarding: screening completion targets'],
+            exclusions: ['Direct bureau fees excluded'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' fill='#fef3c7'/><rect x='40' y='22' width='120' height='34' rx='6' fill='white'/><text x='100' y='43' text-anchor='middle' font-size='11' fill='#92400e'>Checks</text><rect x='190' y='22' width='130' height='34' rx='6' fill='white'/><text x='255' y='43' text-anchor='middle' font-size='11' fill='#92400e'>Verification</text><rect x='350' y='22' width='140' height='34' rx='6' fill='white'/><text x='420' y='43' text-anchor='middle' font-size='11' fill='#92400e'>Clearance</text></svg>`,
+          },
+          'Incident reporting portal': {
+            title: 'Incident reporting portal',
+            scopeBullets: ['Digital intake of incidents with ownership tags'],
+            timeline: ['Continuous: portal updates and review'],
+            exclusions: ['Third-party SOC connectors may be added'],
+            graphic: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 80'><rect x='10' y='10' width='500' height='60' fill='#e0f2fe'/><rect x='30' y='20' width='460' height='40' rx='8' fill='white'/><line x1='50' y1='38' x2='450' y2='38' stroke='#0ea5e9' stroke-width='6'/><circle cx='60' cy='40' r='6' fill='#0ea5e9'/><circle cx='130' cy='40' r='6' fill='#0ea5e9'/><circle cx='200' cy='40' r='6' fill='#0ea5e9'/></svg>`,
+          },
+        },
+      };
+
+      let CONTENT_LIBRARY = FALLBACK_CONTENT_LIBRARY;
+      let libraryReady = false;
+      let proposalCache = [];
+      const industryGraphicLibrary = document.getElementById('industryGraphicLibrary');
+      const industryGraphicNotice = document.getElementById('industryGraphicNotice');
+
+      const contentLibraryEditor = document.getElementById('contentLibraryEditor');
+      const librarySaveNotice = document.getElementById('librarySaveNotice');
+
+      function normalizeIndustryGraphicsCatalog(payload) {
+        const source = payload?.industryGraphics;
+        if (!source || typeof source !== 'object' || Array.isArray(source)) return FALLBACK_INDUSTRY_GRAPHICS;
+        return source;
+      }
+
+      function getIndustryGraphicOptions(industry) {
+        const catalog = normalizeIndustryGraphicsCatalog(CONTENT_LIBRARY);
+        const options = catalog?.[industry] || [];
+        if (Array.isArray(options) && options.length) return options;
+        return FALLBACK_INDUSTRY_GRAPHICS?.[industry] || [];
+      }
+
+      function getIndustryGraphicSelection(data = state.data) {
+        const selected = getIndustryGraphicOptions(data.industry);
+        if (!selected.length) return null;
+        const selectedGraphic = selected.find((entry) => entry.id === data.industryGraphicId);
+        return selectedGraphic || selected[0];
+      }
+
+      function buildIndustryGraphicPayload(entry, fallback) {
+        if (!entry) return null;
+        const source = entry.source || entry.image || entry.wordImage || entry.imageUrl || entry.src || '';
+        if (!source) return null;
+        return {
+          label: entry.label || fallback.label || 'Industry graphic',
+          inline: entry.inline || entry.graphic || '',
+          wordImage: source,
+          alt: entry.description || fallback.description || '',
+        };
+      }
+
+      function setLibraryNotice(message, tone = 'var(--muted)') {
+        if (!librarySaveNotice) return;
+        librarySaveNotice.textContent = message;
+        librarySaveNotice.style.color = tone;
+      }
+
+      function renderIndustryGraphics() {
+        if (!industryGraphicLibrary || !industryGraphicNotice) return;
+        const options = getIndustryGraphicOptions(state.data.industry);
+        const currentGraphic = state.data.industryGraphicId;
+        const selected = options.find((item) => item.id === currentGraphic) || options[0];
+
+        if (!options.length) {
+          industryGraphicLibrary.innerHTML = '<p class="small">No graphics found for this industry yet.</p>';
+          industryGraphicNotice.textContent = 'No graphics available for selected industry. Please add one in the library editor.';
+          industryGraphicNotice.style.color = 'var(--danger)';
+          return;
+        }
+
+        state.data.industryGraphicId = selected?.id || '';
+        industryGraphicLibrary.innerHTML = options
+          .map(
+            (item) => `
+              <label class="industry-graphic-option">
+                <input type="radio" name="industryGraphic" value="${escapeHtml(item.id)}" ${item.id === state.data.industryGraphicId ? 'checked' : ''} />
+                <strong>${escapeHtml(item.label || item.title || 'Industry graphic')}</strong>
+                <img class="thumb" src="${escapeHtml(resolveImageUrl(item.source || item.image || item.imageUrl || ''))}" alt="${escapeHtml(item.description || item.label || 'industry graphic')}" />
+                <span class="small">${escapeHtml(item.description || '')}</span>
+              </label>
+            `
+          )
+          .join('');
+        industryGraphicNotice.textContent = `${options.length} graphic option${options.length === 1 ? '' : 's'} available for ${escapeHtml(state.data.industry)}.`;
+        industryGraphicNotice.style.color = 'var(--muted)';
+      }
+
+      function updateLibraryEditor(payload) {
+        if (!contentLibraryEditor) return;
+        contentLibraryEditor.value = JSON.stringify(payload, null, 2);
+      }
+
+      function svgToDataUri(svgMarkup) {
+        const raw = String(svgMarkup || '').trim();
+        if (!raw) return '';
+        try {
+          return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(raw)))}`;
+        } catch (error) {
+          return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(raw)}`;
+        }
+      }
+
+      function isLikelyImageUrl(value) {
+        const text = String(value || '').trim();
+        if (!text) return false;
+        if (/^(https?:\/\/|\/\/|data:|blob:)/i.test(text)) return true;
+        if (text.startsWith('/') || text.startsWith('./') || text.startsWith('../')) return true;
+        return /\.[a-z0-9]+(?:[?#].*)?$/i.test(text);
+      }
+
+      function isSvgMarkup(value) {
+        return /^\s*<svg/i.test(String(value || '').trim());
+      }
+
+      function resolveImageUrl(value) {
+        const text = String(value || '').trim();
+        if (!text) return '';
+        if (/^(https?:|data:|blob:|\/\/)/i.test(text)) return text;
+        if (text.startsWith('/')) return `${window.location.origin}${text}`;
+        return new URL(text, window.location.href).href;
+      }
+
+      function sanitizeProposalGraphic(graphic) {
+        if (!graphic) return null;
+        if (typeof graphic === 'string') {
+          return isSvgMarkup(graphic) ? null : { inline: graphic };
+        }
+        if (typeof graphic !== 'object') return null;
+        const next = { ...graphic };
+        const source = next.wordImage || next.image || next.imageUrl || next.src || next.path || next.source || '';
+        const inline = next.inline || next.svg || next.html || next.graphic || '';
+        if (!source && isSvgMarkup(inline)) return null;
+        return next;
+      }
+
+      function inferImageMimeFromUrl(url) {
+        const source = String(url || '').toLowerCase();
+        const base = source.split(/[?#]/)[0];
+        const file = base.split('/').pop() || '';
+        const extension = file.includes('.') ? file.slice(file.lastIndexOf('.') + 1) : '';
+        if (extension === 'png') return 'image/png';
+        if (extension === 'jpeg') return 'image/jpeg';
+        if (extension === 'jpg') return 'image/jpg';
+        if (extension === 'gif') return 'image/gif';
+        if (extension === 'webp') return 'image/webp';
+        if (extension === 'bmp') return 'image/bmp';
+        if (extension === 'svg' || extension === 'svgz') return 'image/svg+xml';
+        return '';
+      }
+
+      function blobToDataUri(blob) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ''));
+          reader.onerror = () => resolve('');
+          reader.readAsDataURL(blob);
+        });
+      }
+
+      async function fetchImageAsDataUri(source) {
+        try {
+          const resolved = resolveImageUrl(source);
+          const response = await fetch(resolved);
+          if (!response.ok) return '';
+          const blob = await response.blob();
+          if (!blob) return '';
+          const mime = blob.type && blob.type !== 'application/octet-stream' ? blob.type : inferImageMimeFromUrl(resolved);
+          if (!mime || !mime.startsWith('image/')) return '';
+          if (blob.type !== mime) {
+            const typedBlob = new Blob([blob], { type: mime });
+            return blobToDataUri(typedBlob);
+          }
+          return blobToDataUri(blob);
+        } catch (_error) {
+          return '';
+        }
+      }
+
+      async function getWordImageForGraphic(graphic) {
+        if (!graphic) return graphic;
+        if (typeof graphic === 'string') {
+          return graphic;
+        }
+
+        if (!graphic || typeof graphic !== 'object') return graphic;
+        const raster = graphic.wordImage || graphic.image || graphic.imageUrl || graphic.src || graphic.path || graphic.source || '';
+        const isRasterData = typeof raster === 'string' && /^data:image\/(png|jpe?g|gif|webp|bmp|svg\+xml);/i.test(raster);
+        if (isRasterData && !raster.startsWith('data:image/svg+xml')) {
+          return graphic;
+        }
+        if (raster && isLikelyImageUrl(raster)) {
+          const fetched = await fetchImageAsDataUri(raster);
+          if (fetched) return { ...graphic, wordImage: fetched };
+        }
+        return graphic;
+      }
+
+      async function normalizeGeneratedForWord(generated) {
+        if (!generated || !Array.isArray(generated.sections)) return generated;
+        const sections = [];
+        for (const section of generated.sections) {
+          if (!section || typeof section !== "object") {
+            sections.push(section);
+            continue;
+          }
+          try {
+            const upgradedGraphic = await getWordImageForGraphic(sanitizeProposalGraphic(section.graphic));
+            sections.push({ ...section, graphic: upgradedGraphic });
+          } catch (_error) {
+            sections.push(section);
+          }
+        }
+        return { ...generated, sections };
+      }
+
+      function getGraphicMarkup(graphic, forWord = false) {
+        const normalized = sanitizeProposalGraphic(graphic);
+        if (!normalized) return '';
+        if (typeof graphic === 'string' && normalized.inline === graphic) {
+          if (!forWord) return `<div class="proposal-graphic">${graphic}</div>`;
+          const source = svgToDataUri(graphic);
+          return source ? `<div class="proposal-graphic sm-word-graphic"><img src="${source}" alt="" /></div>` : '';
+        }
+        if (typeof graphic === 'string') {
+          if (!forWord) return `<div class="proposal-graphic">${graphic}</div>`;
+          const source = svgToDataUri(graphic);
+          return source ? `<div class="proposal-graphic sm-word-graphic"><img src="${source}" alt="" /></div>` : '';
+        }
+        if (typeof graphic !== 'object') return '';
+        const inline = normalized.inline || normalized.svg || normalized.html || normalized.graphic || '';
+        const source = resolveImageUrl(
+          normalized.wordImage ||
+            normalized.image ||
+            normalized.imageUrl ||
+            normalized.src ||
+            normalized.path ||
+            normalized.source ||
+            ''
+        );
+        const label = graphic.label || graphic.alt || '';
+        if (forWord) {
+          const wordSource = source || (inline && inline.trim().startsWith('<svg') ? svgToDataUri(inline) : '');
+          if (!wordSource) return '';
+          return `<div class="proposal-graphic sm-word-graphic"><img src="${wordSource}" alt="${escapeHtml(label)}" style="max-width: 100%; height: auto;" /></div>`;
+        }
+        if (source) {
+          return `<div class="proposal-graphic"><img src="${source}" alt="${escapeHtml(label)}" style="max-width: 100%; height: auto;" /></div>`;
+        }
+        return inline ? `<div class="proposal-graphic">${inline}</div>` : '';
+      }
+
+      async function loadLibraryFromServer(path) {
+        const response = await fetch(path, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!response.ok) {
+          const message = await response.text().catch(() => 'Failed');
+          throw new Error(message);
+        }
+        const payload = await response.json();
+        if (!isValidLibraryPayload(payload)) {
+          throw new Error('Invalid library payload');
+        }
+        return payload;
+      }
+
+      function isPlainObject(value) {
+        return !!value && typeof value === 'object' && !Array.isArray(value);
+      }
+
+      function isObjectMap(value) {
+        return isPlainObject(value);
+      }
+
+      function isIndustryGraphicMap(value) {
+        if (!isPlainObject(value)) return false;
+        return Object.values(value).every((item) => Array.isArray(item));
+      }
+
+      function isValidLibraryPayload(payload) {
+        if (!isPlainObject(payload)) return false;
+        if (!isIndustryGraphicMap(payload.industryGraphics)) return false;
+        if (!isObjectMap(payload.geography)) return false;
+        if (!isObjectMap(payload.serviceLevel)) return false;
+        if (!isObjectMap(payload.siteType)) return false;
+        if (!isObjectMap(payload.risk)) return false;
+        if (!isObjectMap(payload.coverage)) return false;
+        if (!isObjectMap(payload.capabilities)) return false;
+        return true;
+      }
+
+      async function loadLibrary() {
+        let payload = null;
+        let fallbackError = null;
+        const apiBase = await resolveApiBase();
+        for (const source of [`${apiBase}/library`, '/content-library.json']) {
+          try {
+            payload = await loadLibraryFromServer(source);
+            break;
+          } catch (error) {
+            fallbackError = error;
+          }
+        }
+        if (!payload) {
+          libraryReady = false;
+          CONTENT_LIBRARY = FALLBACK_CONTENT_LIBRARY;
+          updateLibraryEditor(CONTENT_LIBRARY);
+          setLibraryNotice(`Using fallback library (could not load: ${fallbackError?.message || 'unknown' })`, 'var(--danger)');
+          renderIndustryGraphics();
+          return;
+        }
+        CONTENT_LIBRARY = payload;
+        libraryReady = true;
+        updateLibraryEditor(CONTENT_LIBRARY);
+        setLibraryNotice('Library loaded from API.', 'var(--success)');
+        renderIndustryGraphics();
+      }
+
+      async function saveLibrary() {
+        try {
+          const parsed = JSON.parse(contentLibraryEditor.value || '{}');
+          if (!isValidLibraryPayload(parsed)) {
+            throw new Error('Library payload is missing required sections.');
+          }
+          const apiBase = await resolveApiBase();
+          const response = await fetch(`${apiBase}/library`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(parsed),
+          });
+          if (!response.ok) {
+            const message = await response.text().catch(() => 'Save failed');
+            throw new Error(message);
+          }
+          CONTENT_LIBRARY = parsed;
+          updateLibraryEditor(CONTENT_LIBRARY);
+          setLibraryNotice('Library saved.', 'var(--success)');
+        } catch (error) {
+          setLibraryNotice(`Save failed: ${error.message}`, 'var(--danger)');
+        }
+      }
+
+      function resetLibraryEditor() {
+        updateLibraryEditor(CONTENT_LIBRARY);
+        setLibraryNotice('Editor reset.', 'var(--muted)');
+      }
+
+      function uniqueList(items) {
+        return Array.from(new Set(items.filter(Boolean)));
+      }
+
+      async function resolveApiBase() {
+        if (activeApiBase) return activeApiBase;
+        for (const base of API_BASE_CANDIDATES) {
+          try {
+            const response = await fetch(`${base}/proposals`, {
+              headers: { 'Content-Type': 'application/json' },
+            });
+            if (response.ok) {
+              activeApiBase = base;
+              return base;
+            }
+          } catch {}
+        }
+        throw new Error(`Cannot reach API from: ${API_BASE_CANDIDATES.join(' | ')}`);
+      }
+
+      function firstOf(obj, key, fallback) {
+        return obj && obj[key] ? obj[key] : fallback;
+      }
+
+      function alignIndustryWithSiteType(target = state.data) {
+        if (!target || typeof target !== 'object') return;
+        if (target.siteType) {
+          target.industry = target.siteType;
+          return;
+        }
+        if (target.industry) {
+          target.siteType = target.industry;
+        }
+      }
+
+      function resolveGeographyProfile(data = state.data) {
+        const catalog = CONTENT_LIBRARY?.geography || FALLBACK_CONTENT_LIBRARY.geography || {};
+        const selected = catalog?.[data.geography] || catalog?.Default;
+        if (!selected || typeof selected !== 'object') {
+          return {
+            title: `Regional context: ${data.geography || 'Default'}`,
+            summary: 'Proposal language is adapted for the selected geography.',
+            scopeBullets: [],
+            timeline: [],
+            exclusions: [],
+          };
+        }
+        return selected;
+      }
+
+      function renderGeographyCopy(value, geography, context) {
+        if (!value) return '';
+        const geographyName = geography?.title || geography?.regionTerminology || context?.geography || 'Default';
+        const location = context.location || 'the selected location';
+        return String(value)
+          .replaceAll('{location}', location)
+          .replaceAll('{geography}', geographyName)
+          .replaceAll('{region}', geographyName);
+      }
+
+      function renderGeographyLines(lines, geography, context) {
+        if (!Array.isArray(lines)) return [];
+        return lines
+          .filter(Boolean)
+          .map((line) => renderGeographyCopy(line, geography, context))
+          .filter(Boolean);
+      }
+
+      const serverStatus = document.getElementById('serverStatus');
+      const proposalIdDisplay = document.getElementById('proposalIdDisplay');
+      const proposalVersionDisplay = document.getElementById('proposalVersionDisplay');
+      const proposalNotice = document.getElementById('proposalNotice');
+      const proposalOutput = document.getElementById('proposalOutput');
+      const proposalMeta = document.getElementById('proposalMeta');
+      const pricingSummary = document.getElementById('pricingSummary');
+      const saveNotice = document.getElementById('saveNotice');
+      const proposalOutputSummary = document.getElementById('proposalOutput');
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function setMode(mode) {
+        document.getElementById('salesView').classList.toggle('hidden', mode === 'admin');
+        document.getElementById('adminView').classList.toggle('hidden', mode !== 'admin');
+        if (mode === 'admin') {
+          loadDashboard();
+          loadLibrary();
+        }
+      }
+
+      function showStep(i) {
+        state.current = i;
+        steps.forEach((step) => step.classList.toggle('active', Number(step.dataset.step) === i));
+        pills.forEach((pill, idx) => {
+          pill.classList.toggle('active', idx === i);
+          pill.classList.toggle('complete', idx < i);
+        });
+        saveLocal();
+      }
+
+      function stepError(message, id) {
+        const alert = document.getElementById(id);
+        if (!alert) return;
+        alert.textContent = message || '';
+        alert.style.display = message ? 'block' : 'none';
+      }
+
+      function getCheckedValues(name) {
+        return Array.from(form.querySelectorAll(`input[name='${name}']:checked`)).map((item) => item.value);
+      }
+
+      function syncFromForm() {
+        const data = new FormData(form);
+        state.data.companyName = data.get('companyName') || '';
+        state.data.primaryContact = data.get('primaryContact') || '';
+        state.data.contactEmail = data.get('contactEmail') || '';
+        state.data.phone = data.get('phone') || '';
+        state.data.location = data.get('location') || '';
+        state.data.geography = data.get('geography') || 'US Northeast';
+        state.data.facilities = Number(data.get('facilities') || 1);
+        state.data.siteType = data.get('siteType') || 'Corporate office';
+        state.data.industry = state.data.siteType;
+        const industryGraphic = data.get('industryGraphic');
+        if (industryGraphic) {
+          state.data.industryGraphicId = industryGraphic;
+        } else {
+          const firstOption = getIndustryGraphicOptions(state.data.industry)[0];
+          state.data.industryGraphicId = firstOption?.id || '';
+        }
+        state.data.coverageHours = data.get('coverageHours') || 'Business hours';
+        state.data.riskLevel = data.get('riskLevel') || 'Medium';
+        state.data.startWindow = data.get('startWindow') || '2-4 weeks';
+        state.data.keyConcerns = data.get('keyConcerns') || '';
+        state.data.serviceLevel = data.get('serviceLevel') || 'Enhanced';
+        state.data.capabilities = getCheckedValues('capabilities');
+        state.data.budgetBand = data.get('budgetBand') || 'Under $6,000';
+        state.data.contractLength = data.get('contractLength') || '6 months';
+        saveLocal();
+      }
+
+      function populateForm() {
+        Object.entries(state.data).forEach(([key, value]) => {
+          const field = form.elements[key];
+          if (!field || Array.isArray(value)) return;
+          field.value = value;
+        });
+        if (state.data.siteType) {
+          state.data.industry = state.data.siteType;
+        }
+        form.querySelectorAll("input[name='capabilities']").forEach((input) => {
+          input.checked = state.data.capabilities.includes(input.value);
+        });
+        renderIndustryGraphics();
+        const selectedIndustryGraphic = state.data.industryGraphicId;
+        if (selectedIndustryGraphic) {
+          const selected = industryGraphicLibrary?.querySelector(`[name='industryGraphic'][value='${CSS.escape(selectedIndustryGraphic)}']`);
+          if (selected) selected.checked = true;
+        }
+      }
+
+      function validateEmail(email) {
+        return /^([^\s@]+)@([^\s@]+\.[^\s@]+)$/.test(email || '');
+      }
+
+      function validateStep1() {
+        syncFromForm();
+        if (!state.data.companyName.trim()) return 'Company name is required.';
+        if (!state.data.primaryContact.trim()) return 'Primary contact is required.';
+        if (!validateEmail(state.data.contactEmail)) return 'Valid email is required.';
+        if (!Number.isInteger(state.data.facilities) || state.data.facilities < 1) return 'Facilities must be at least 1.';
+        if (state.data.facilities > 99) return 'Facilities should be 99 or below for this dummy form.';
+        if (state.data.phone && !/^[0-9().\- +]{7,}$/.test(state.data.phone)) return 'Phone must be at least 7 digits.';
+        return '';
+      }
+
+      function validateStep2() {
+        syncFromForm();
+        if (!state.data.keyConcerns.trim()) return 'Add at least one key concern.';
+        return '';
+      }
+
+      function validateStep3() {
+        syncFromForm();
+        if (!state.data.capabilities.length) return 'Select at least one capability.';
+        return '';
+      }
+
+      function nextStep(validator, index, errorId) {
+        const message = validator ? validator() : '';
+        if (message) {
+          stepError(message, errorId);
+          return;
+        }
+        stepError('', errorId);
+        if (state.current < 3) showStep(index);
+      }
+
+      function prevStep() {
+        if (state.current > 0) showStep(state.current - 1);
+      }
+
+      function getPricing(data) {
+        const facilities = Math.max(1, Number(data.facilities || 1));
+        const base = pricingMatrix[data.serviceLevel].base;
+        const serviceMultiplier = pricingMatrix[data.serviceLevel].multiplier;
+        const risk = riskModifiers[data.riskLevel] || 1;
+        const facilityFactor = 1 + (facilities - 1) * 0.12;
+        const coverageFactor = {
+          'Business hours': 1,
+          'Evenings + weekends': 1.18,
+          '24/7': 1.35,
+        }[data.coverageHours] || 1;
+        const addOns =
+          (data.capabilities.includes('CCTV room monitoring') ? 1100 : 0) +
+          (data.capabilities.includes('Access control audit') ? 900 : 0) +
+          (data.capabilities.includes('Background verification support') ? 1200 : 0);
+        const monthly = Math.round(base * serviceMultiplier * risk * facilityFactor * coverageFactor + addOns);
+        return {
+          monthly,
+          firstMonthInstall: Math.round(monthly * 0.35) + 700,
+          yearly: monthly * 12,
+          facilityFactor,
+        };
+      }
+
+      async function computeProposal(data) {
+        const pricing = getPricing(data);
+        const facilities = Math.max(1, Number(data.facilities || 1));
+        const geography = resolveGeographyProfile(data);
+        const service = firstOf(CONTENT_LIBRARY.serviceLevel, data.serviceLevel, CONTENT_LIBRARY.serviceLevel.Enhanced);
+        const site = firstOf(CONTENT_LIBRARY.siteType, data.siteType, CONTENT_LIBRARY.siteType['Corporate office']);
+        const risk = firstOf(CONTENT_LIBRARY.risk, data.riskLevel, CONTENT_LIBRARY.risk.Medium);
+        const coverage = firstOf(CONTENT_LIBRARY.coverage, data.coverageHours, CONTENT_LIBRARY.coverage['Business hours']);
+        const selectedCapabilities = data.capabilities
+          .map((capability) => firstOf(CONTENT_LIBRARY.capabilities, capability, null))
+          .filter(Boolean);
+        const selectedIndustryOption = getIndustryGraphicSelection(data);
+        const selectedIndustryGraphic = sanitizeProposalGraphic(
+          buildIndustryGraphicPayload(selectedIndustryOption, {
+          label: `${data.industry} industry image`,
+          description: `${data.industry} graphic selected by sales user.`,
+          })
+        );
+        const industrySectionTitle =
+          selectedIndustryOption?.title || `${data.industry || 'Industry'} Visual`;
+        const industryDescription = selectedIndustryOption?.description
+          ? [selectedIndustryOption.description]
+          : ['Industry visual selected manually in the proposal builder.'];
+        const geographySectionTitle = geography?.title || `${data.geography || 'Selected'} geography context`;
+        const geographySummary = renderGeographyCopy(geography.summary, geography, data);
+        const geographyBullets = renderGeographyLines(geography.scopeBullets, geography, data);
+        const geographyTimeline = renderGeographyLines(geography.timeline, geography, data);
+        const geographyExclusions = renderGeographyLines(geography.exclusions, geography, data);
+
+        const scopeSections = [
+          {
+            title: geographySectionTitle,
+            paragraphs: geographySummary ? [geographySummary] : [`Regional context selected: ${data.geography || 'default'}.`],
+            bullets: geographyBullets,
+            graphic: null,
+          },
+          {
+            title: service.title,
+            paragraphs: [service.summary || '', `${data.keyConcerns ? 'Priority concern: ' + data.keyConcerns : 'Priority concerns to confirm at kickoff.'}`],
+            bullets: service.scopeBullets || [],
+            graphic: sanitizeProposalGraphic(service.graphic),
+          },
+          {
+            title: site.title,
+            paragraphs: ['Site profile is configured from the facility type selection.'],
+            bullets: site.scopeBullets || [],
+            graphic: sanitizeProposalGraphic(site.graphic),
+          },
+          {
+            title: risk.title,
+            paragraphs: [`Risk profile: ${data.riskLevel} at ${data.startWindow}.`],
+            bullets: risk.scopeBullets || [],
+            graphic: null,
+          },
+          {
+            title: industrySectionTitle,
+            paragraphs: industryDescription,
+            graphic: selectedIndustryGraphic,
+          },
+          {
+            title: coverage.title,
+            paragraphs: [`Coverage selected: ${data.coverageHours}.`],
+            bullets: coverage.scopeBullets || [],
+            graphic: null,
+          },
+          ...selectedCapabilities.map((capability) => ({
+            title: capability.title,
+            paragraphs: [`Selection pulled from capability library: ${capability.title}.`],
+            bullets: capability.scopeBullets || [],
+            graphic: sanitizeProposalGraphic(capability.graphic),
+          })),
+        ];
+
+        const preparedSections = [];
+        for (const section of scopeSections) {
+          const upgradedGraphic = await getWordImageForGraphic(section.graphic);
+          preparedSections.push({
+            ...section,
+            graphic: upgradedGraphic,
+          });
+        }
+
+        const allTimeline = uniqueList([
+          'Day 1-3: contract review and kickoff.',
+          `Day 4-14: onboarding and access provisioning (${data.startWindow}).`,
+          'Week 3: pilot shifts and escalation drill.',
+          'Week 4: first KPI review.',
+          ...(service.timeline || []),
+          ...(site.timeline || []),
+          ...(risk.timeline || []),
+          ...(coverage.timeline || []),
+          ...geographyTimeline,
+          ...selectedCapabilities.flatMap((capability) => capability.timeline || []),
+        ]);
+
+        const allExclusions = uniqueList([
+          'Permits and third-party certifications are billed separately.',
+          'Overtime outside agreed coverage windows is billed separately.',
+          'Long-term hardware refresh is not included in this base scope.',
+          ...(service.exclusions || []),
+          ...(site.exclusions || []),
+          ...(risk.exclusions || []),
+          ...geographyExclusions,
+          ...selectedCapabilities.flatMap((capability) => capability.exclusions || []),
+        ]);
+
+        const allScope = [
+          `Facility count: ${facilities} site${facilities === 1 ? '' : 's'}`,
+          `Geography: ${data.geography || 'Default'}`,
+          `Service level: ${levelToName[data.serviceLevel]}`,
+          `Contract length: ${data.contractLength}`,
+          `Selected capabilities: ${data.capabilities.join(', ')}`,
+        ];
+
+        return { scope: allScope, timeline: allTimeline, exclusions: allExclusions, pricing, sections: preparedSections };
+      }
+
+      function renderProposal() {
+        if (!state.generated) {
+          return;
+        }
+        const sections = state.generated.sections || [];
+        const sectionsMarkup = sections
+          .map(
+            (section) => `
+              <div class="proposal-section">
+              <h4>${escapeHtml(section.title)}</h4>
+              ${(section.paragraphs || []).map((line) => `<p class=\"small\">${escapeHtml(line)}</p>`).join('')}
+              ${(section.bullets || []).length ? `<ul class="list">${(section.bullets || []).map((line) => `<li>${escapeHtml(line)}</li>`).join('')}</ul>` : ''}
+              ${getGraphicMarkup(section.graphic, false)}
+            </div>
+          `
+          )
+          .join('');
+        proposalOutput.innerHTML = `
+          <p><strong>${escapeHtml(state.data.companyName)}</strong></p>
+          <p class="small">Prepared for ${escapeHtml(state.data.primaryContact)} (${escapeHtml(state.data.contactEmail)})</p>
+          <p class="small">Proposal id: ${escapeHtml(state.proposalId || 'unsaved')}</p>
+          <p class="small">Location: ${escapeHtml(state.data.location || 'TBD')} | Geography: ${escapeHtml(state.data.geography || 'Default')} | Sites: ${state.data.facilities}</p>
+          <p><strong>Scope</strong></p>
+          ${sectionsMarkup}
+          <p><strong>Timeline</strong></p>
+          <ol class="list">${state.generated.timeline.map((line) => `<li>${escapeHtml(line)}</li>`).join('')}</ol>
+          <p><strong>Exclusions</strong></p>
+          <ul class="list">${state.generated.exclusions.map((line) => `<li>${escapeHtml(line)}</li>`).join('')}</ul>
+        `;
+        proposalMeta.textContent = `Service: ${levelToName[state.data.serviceLevel]} | Risk: ${state.data.riskLevel} | Start: ${state.data.startWindow} | Geography: ${state.data.geography || 'Default'}`;
+        pricingSummary.innerHTML = `
+          <strong>Estimated pricing</strong>
+          <p class="small">Monthly: <strong>$${state.generated.pricing.monthly.toLocaleString()}</strong></p>
+          <p class="small">First month onboarding: <strong>$${state.generated.pricing.firstMonthInstall.toLocaleString()}</strong></p>
+          <p class="small">Annualized total: <strong>$${state.generated.pricing.yearly.toLocaleString()}</strong></p>
+        `;
+      }
+
+      async function generateProposal() {
+        syncFromForm();
+        const v2 = validateStep3();
+        if (v2) {
+          state.current = 2;
+          showStep(2);
+          stepError(v2, 'stepError3');
+          return;
+        }
+        state.generated = await computeProposal(state.data);
+        renderProposal();
+        saveNotice.textContent = 'Proposal generated. Save to create a versioned record.';
+        saveNotice.style.color = 'var(--success)';
+        saveLocal();
+      }
+
+      function buildProposalHtmlFor(data, generated, format = 'html') {
+        const payload = generated || state.generated;
+        if (!payload) return '';
+        const safeName = data.companyName || 'client';
+        const facilities = data.facilities || 1;
+        const isWord = format === 'word';
+        const sections = (payload.sections || []).map((section) => `
+          <div class="proposal-section ${isWord ? 'sm-word-section' : ''}">
+            <h3 class="${isWord ? 'sm-word-section-heading' : ''}">${escapeHtml(section.title)}</h3>
+            ${(section.paragraphs || []).map((line) => `<p${isWord ? ' class=\"sm-word-body\"' : ''}>${escapeHtml(line)}</p>`).join('')}
+            ${(section.bullets || []).length ? `<ul${isWord ? ' class=\"sm-word-list\"' : ''}>${(section.bullets || []).map((line) => `<li${isWord ? ' class=\"sm-word-body\"' : ''}>${escapeHtml(line)}</li>`).join('')}</ul>` : ''}
+            ${getGraphicMarkup(section.graphic, isWord)}
+          </div>
+        `).join('');
+        const wordStyle = isWord
+          ? `body { font-family: Calibri, Arial, sans-serif; color: #111827; margin: 24pt; }
+            h1.sm-word-title { mso-style-name: "${WORD_STYLE_SET.title}"; mso-style-next: "${WORD_STYLE_SET.sectionHeading}"; font-size: 26.0pt; margin: 0 0 8pt 0; color: #102a78; font-weight: 700; }
+            h2.sm-word-subtitle { mso-style-name: "${WORD_STYLE_SET.subtitle}"; mso-style-next: "${WORD_STYLE_SET.sectionHeading}"; font-size: 14.0pt; margin: 0 0 10pt 0; color: #102a78; }
+            h3.sm-word-section-heading { mso-style-name: "${WORD_STYLE_SET.sectionHeading}"; font-size: 16.0pt; margin: 0 0 8pt 0; color: #102a78; font-weight: 700; }
+            div.sm-word-section { border: 1px solid #dbeafe; padding: 10px 12px; margin-top: 10px; background: #fcfdff; }
+            div.sm-word-summary { mso-style-name: "${WORD_STYLE_SET.summary}"; border: 1px solid #dbe4f3; background: #f8fbff; border-radius: 8px; padding: 10px 12px; }
+            p.sm-word-body, li.sm-word-body { mso-style-name: "${WORD_STYLE_SET.body}"; font-size: 11.0pt; line-height: 1.35; }
+            ul.sm-word-list { margin: 0 0 8pt 1.1in; }
+            div.sm-word-graphic { mso-style-name: "${WORD_STYLE_SET.figure}"; page-break-inside: avoid; }`
+          : '';
+        return `<!doctype html>
+          <html ${isWord ? "xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'" : ''}>
+          <head><meta charset='utf-8'/><title>${escapeHtml(safeName)} - Proposal</title>
+          <style>${isWord ? wordStyle : 'body{font-family:Arial,Helvetica,sans-serif;color:#0f172a;padding:24px}.proposal-section{border:1px solid #dbeafe;border-radius:12px;padding:12px;margin-top:10px;background:#fcfdff}h1,h2,h3{color:#102a78}ul,ol{margin-top:6px}.summary{border:1px solid #dbe4f3;background:#f8fbff;border-radius:8px;padding:12px}.proposal-graphic svg{max-width:520px;height:auto;display:block;border:1px solid #dbeafe;border-radius:10px;background:#fff}'} </style>
+          </head>
+          <body>
+            <h1${isWord ? ' class="sm-word-title"' : ''}>St. Moritz Security Services</h1>
+            <h2${isWord ? ' class="sm-word-subtitle"' : ''}>Proposal for ${escapeHtml(safeName)}</h2>
+          <p${isWord ? ' class="sm-word-body"' : ''}>Primary contact: ${escapeHtml(data.primaryContact || '')} (${escapeHtml(data.contactEmail || '')})</p>
+          <p${isWord ? ' class="sm-word-body"' : ''}>Location: ${escapeHtml(data.location || 'TBD')} | Geography: ${escapeHtml(data.geography || 'Default')} | Sites: ${facilities}</p>
+            <h3${isWord ? ' class="sm-word-section-heading"' : ''}>Scope</h3>
+            ${sections}
+            <h3${isWord ? ' class="sm-word-section-heading"' : ''}>Timeline</h3>
+            <ol>${payload.timeline.map((i) => `<li class="${isWord ? 'sm-word-body' : ''}">${escapeHtml(i)}</li>`).join('')}</ol>
+            <h3${isWord ? ' class="sm-word-section-heading"' : ''}>Exclusions</h3>
+            <ul>${payload.exclusions.map((i) => `<li class="${isWord ? 'sm-word-body' : ''}">${escapeHtml(i)}</li>`).join('')}</ul>
+            <div class="summary sm-word-summary"><h3${isWord ? ' class="sm-word-section-heading"' : ''}>Pricing</h3>
+              <p class="${isWord ? 'sm-word-body' : ''}">Monthly: $${payload.pricing.monthly.toLocaleString()}</p>
+              <p class="${isWord ? 'sm-word-body' : ''}">First month onboarding: $${payload.pricing.firstMonthInstall.toLocaleString()}</p>
+              <p class="${isWord ? 'sm-word-body' : ''}">Annualized total: $${payload.pricing.yearly.toLocaleString()}</p>
+            </div>
+          </body></html>`;
+      }
+      function exportPdf() {
+        if (!state.generated) return;
+        const win = window.open('');
+        if (!win) return;
+        win.document.write(buildProposalHtmlFor(state.data, state.generated));
+        win.document.close();
+        win.focus();
+        setTimeout(() => win.print(), 250);
+      }
+
+      function downloadHtml() {
+        if (!state.generated) return;
+        const safeName = `${state.data.companyName || 'smss-client'}`.replace(/[^a-z0-9]+/gi, '_').toLowerCase();
+        const file = new Blob([buildProposalHtmlFor(state.data, state.generated)], { type: 'text/html' });
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeName}-proposal.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      async function exportWordDocument(data, generated, safeName = 'proposal') {
+        try {
+          const preparedGenerated = await normalizeGeneratedForWord(generated);
+          const apiBase = await resolveApiBase();
+          const response = await fetch(`${apiBase}/export/docx`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              data,
+              generated: preparedGenerated,
+              wordStyleSet: WORD_STYLE_SET,
+            }),
+          });
+          if (!response.ok) {
+            const errorText = await response.text().catch(() => 'Export failed');
+            throw new Error(errorText);
+          }
+          const contentType = response.headers.get('Content-Type') || '';
+          if (!contentType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+            const preview = await response.text().then((text) => text.slice(0, 120)).catch(() => '');
+            throw new Error(`Unexpected export response type (${contentType || 'unknown'}): ${preview}`);
+          }
+          const blob = await response.blob();
+          const magic = new Uint8Array(await blob.slice(0, 2).arrayBuffer());
+          if (magic[0] !== 0x50 || magic[1] !== 0x4b) {
+            const preview = await blob.text().then((text) => text.slice(0, 120)).catch(() => '');
+            throw new Error(`Export returned non-zip payload (expected DOCX): ${preview}`);
+          }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${safeName}-proposal.docx`;
+          a.click();
+          URL.revokeObjectURL(url);
+          return null;
+        } catch (error) {
+          return error.message || 'Export failed';
+        }
+      }
+
+      function downloadWord() {
+        if (!state.generated) return;
+        const safeName = `${state.data.companyName || 'smss-client'}`.replace(/[^a-z0-9]+/gi, '_').toLowerCase();
+        exportWordDocument(state.data, state.generated, safeName).then((error) => {
+          if (!error) return;
+          saveNotice.textContent = `Word export failed: ${error}`;
+          saveNotice.style.color = 'var(--danger)';
+        });
+      }
+
+      function downloadJson() {
+        const safeName = `${state.data.companyName || 'smss-client'}`.replace(/[^a-z0-9]+/gi, '_').toLowerCase();
+        const file = new Blob([JSON.stringify({ data: state.data, generated: state.generated }, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeName}-intake.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function printCurrent() {
+        window.print();
+      }
+
+      async function apiRequest(path, options = {}) {
+        const apiBase = await resolveApiBase();
+        const response = await fetch(`${apiBase}/proposals${path}`, {
+          headers: { 'Content-Type': 'application/json' },
+          ...options,
+        });
+        if (!response.ok) {
+          const message = await response.text().catch(() => 'Request failed');
+          throw new Error(message);
+        }
+        return response.json();
+      }
+
+      async function checkApi() {
+        try {
+          await apiRequest('');
+          serverStatus.textContent = 'Connected';
+          serverStatus.style.background = '#ecfdf5';
+          serverStatus.style.color = '#065f46';
+        } catch (err) {
+          serverStatus.textContent = 'Offline';
+          serverStatus.style.background = '#fff1f2';
+          serverStatus.style.color = '#991b1b';
+        }
+      }
+
+      async function saveProposal() {
+        syncFromForm();
+        if (!state.generated) {
+          saveNotice.textContent = 'Generate a proposal first.';
+          saveNotice.style.color = 'var(--danger)';
+          return;
+        }
+        try {
+          const preparedGenerated = await normalizeGeneratedForWord(state.generated);
+          if (!state.proposalId) {
+            const created = await apiRequest('', {
+              method: 'POST',
+              body: JSON.stringify({
+                data: state.data,
+                generated: preparedGenerated,
+                status: 'Draft',
+              }),
+            });
+            state.proposalId = created.id;
+            state.currentVersion = created.currentVersion;
+            saveNotice.textContent = `Saved proposal v${created.currentVersion}.`;
+          } else {
+            const updated = await apiRequest(`/${encodeURIComponent(state.proposalId)}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                data: state.data,
+                generated: preparedGenerated,
+              }),
+            });
+            state.currentVersion = updated.currentVersion;
+            saveNotice.textContent = `New version saved: v${updated.currentVersion}.`;
+          }
+          proposalIdDisplay.textContent = state.proposalId;
+          proposalVersionDisplay.textContent = state.currentVersion;
+          proposalNotice.textContent = 'Saved to backend';
+          saveNotice.style.color = 'var(--success)';
+          proposalNotice.style.color = 'var(--success)';
+          saveLocal();
+          await loadDashboard();
+        } catch (err) {
+          saveNotice.textContent = `Save failed: ${err.message}`;
+          saveNotice.style.color = 'var(--danger)';
+        }
+      }
+
+      function saveLocal() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function loadLocal() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+        try {
+          const parsed = JSON.parse(saved);
+          state.current = parsed.current || 0;
+          state.proposalId = parsed.proposalId || '';
+          state.currentVersion = parsed.currentVersion || 0;
+          state.data = { ...state.data, ...(parsed.data || {}) };
+          alignIndustryWithSiteType();
+          state.data.geography = state.data.geography || 'US Northeast';
+          state.generated = parsed.generated || null;
+          showStep(state.current);
+          if (state.generated) {
+            renderProposal();
+          }
+          populateForm();
+        } catch (_) {}
+      }
+
+      function clearDraft() {
+        localStorage.removeItem(STORAGE_KEY);
+        state.current = 0;
+        state.proposalId = '';
+        state.currentVersion = 0;
+        state.generated = null;
+        state.data = {
+          companyName: '',
+          primaryContact: '',
+          contactEmail: '',
+          phone: '',
+          location: '',
+          geography: 'US Northeast',
+          facilities: 1,
+          siteType: 'Corporate office',
+          industry: 'Corporate office',
+          industryGraphicId: '',
+          coverageHours: 'Business hours',
+          riskLevel: 'Medium',
+          startWindow: '2-4 weeks',
+          keyConcerns: '',
+          serviceLevel: 'Enhanced',
+          capabilities: ['24/7 patrol scheduling', 'Alarm response dispatch', 'Incident reporting portal'],
+          budgetBand: 'Under $6,000',
+          contractLength: '6 months',
+        };
+        showStep(0);
+        proposalOutput.innerHTML = 'No proposal generated yet.';
+        proposalMeta.textContent = '';
+        pricingSummary.innerHTML = '';
+        proposalIdDisplay.textContent = 'Not saved';
+        proposalVersionDisplay.textContent = '0';
+        proposalNotice.textContent = 'Draft cleared.';
+        saveNotice.textContent = '';
+        stepError('', 'stepError');
+        stepError('', 'stepError2');
+        stepError('', 'stepError3');
+        populateForm();
+        saveLocal();
+      }
+
+      function hydrateVersion(item, version) {
+        const target = version ? (item.versions || []).find((v) => v.version === version) : item.current;
+        if (!target) return;
+        state.proposalId = item.id;
+        state.currentVersion = target.version;
+        state.data = { ...state.data, ...(target.data || {}) };
+        alignIndustryWithSiteType();
+        state.data.geography = state.data.geography || 'US Northeast';
+        state.generated = target.generated;
+        populateForm();
+        renderProposal();
+        proposalIdDisplay.textContent = item.id;
+        proposalVersionDisplay.textContent = target.version;
+        proposalNotice.textContent = `Loaded version ${target.version}`;
+        saveLocal();
+        setMode('sales');
+      }
+
+      function renderAdmin(items) {
+        const adminList = document.getElementById('adminList');
+        const status = document.getElementById('adminStatus');
+        status.textContent = `${items.length} proposals total`;
+        if (!items.length) {
+          adminList.innerHTML = '<p class="small">No proposals found.</p>';
+          return;
+        }
+        adminList.innerHTML = items.map((item) => {
+          const versions = (item.versions || []).map((v) => `
+            <div class="version-item">
+              <strong>v${v.version}</strong> ${new Date(v.generatedAt).toLocaleString()}
+              <div class="actionbar">
+                <button type="button" class="ghost" data-version-load="${item.id}|${v.version}">Load this version</button>
+              </div>
+            </div>
+          `).join('');
+          return `
+            <div class="admin-item">
+              <h4>${escapeHtml(item.companyName || 'Unnamed')}</h4>
+              <small>ID: ${escapeHtml(item.id)} | Updated: ${new Date(item.updatedAt).toLocaleString()}</small>
+              <small>Current version: v${item.currentVersion} | Status: ${escapeHtml(item.status || 'Draft')}</small>
+              <div class="admin-actions">
+                <button type="button" class="ghost" data-open-latest="${item.id}">Edit latest</button>
+                <button type="button" class="ghost" data-export-latest="${item.id}">Export latest HTML</button>
+                <button type="button" class="ghost" data-export-latest-word="${item.id}">Export latest Word</button>
+              </div>
+              <div class="version-list">${versions}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function exportLatestFromDashboard(id) {
+        const item = proposalCache.find((x) => x.id === id);
+        if (!item || !item.current || !item.current.generated) return;
+        const html = buildProposalHtmlFor(item.current.data || state.data, item.current.generated);
+        const safeName = `${(item.companyName || 'client').replace(/[^a-z0-9]+/gi, '_').toLowerCase()}`;
+        const file = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeName}-proposal.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function exportLatestFromDashboardWord(id) {
+        const item = proposalCache.find((x) => x.id === id);
+        if (!item || !item.current || !item.current.generated) return;
+        const safeName = `${(item.companyName || 'client').replace(/[^a-z0-9]+/gi, '_').toLowerCase()}`;
+        exportWordDocument(item.current.data || state.data, item.current.generated, safeName).then((error) => {
+          if (!error) return;
+          const adminStatus = document.getElementById('adminStatus');
+          adminStatus.textContent = `Word export failed: ${error}`;
+        });
+      }
+
+      async function loadDashboard() {
+        const adminStatus = document.getElementById('adminStatus');
+        const adminList = document.getElementById('adminList');
+        adminStatus.textContent = 'Loading...';
+        try {
+          const items = await apiRequest('');
+          proposalCache = items || [];
+          renderAdmin(items || []);
+        } catch (err) {
+          adminStatus.textContent = `Load failed: ${err.message}`;
+          adminList.innerHTML = '<p class="small">Unable to fetch proposals.</p>';
+        }
+      }
+
+      function updateHeaderMeta() {
+        proposalIdDisplay.textContent = state.proposalId || 'Not saved';
+        proposalVersionDisplay.textContent = state.currentVersion || '0';
+      }
+
+      document.getElementById('nextBtn').addEventListener('click', () => nextStep(validateStep1, 1, 'stepError'));
+      document.getElementById('nextBtn2').addEventListener('click', () => nextStep(validateStep2, 2, 'stepError2'));
+      document.getElementById('nextBtn3').addEventListener('click', () => nextStep(validateStep3, 3, 'stepError3'));
+      document.getElementById('prevBtn1').addEventListener('click', prevStep);
+      document.getElementById('prevBtn2').addEventListener('click', prevStep);
+      document.getElementById('prevBtn3').addEventListener('click', prevStep);
+      document.getElementById('siteType')?.addEventListener('change', () => {
+        syncFromForm();
+        renderIndustryGraphics();
+      });
+      industryGraphicLibrary?.addEventListener('change', (event) => {
+        if (event.target?.name !== 'industryGraphic') return;
+        state.data.industryGraphicId = event.target.value;
+        saveLocal();
+      });
+      document.getElementById('generateBtn').addEventListener('click', generateProposal);
+      document.getElementById('saveProposalBtn').addEventListener('click', saveProposal);
+      document.getElementById('downloadPdfBtn').addEventListener('click', exportPdf);
+      document.getElementById('downloadWordBtn').addEventListener('click', downloadWord);
+      document.getElementById('downloadHtmlBtn').addEventListener('click', downloadHtml);
+      document.getElementById('downloadJsonBtn').addEventListener('click', downloadJson);
+      document.getElementById('printBtn').addEventListener('click', printCurrent);
+      document.getElementById('clearDraftBtn').addEventListener('click', clearDraft);
+      document.getElementById('salesModeBtn').addEventListener('click', () => setMode('sales'));
+      document.getElementById('adminModeBtn').addEventListener('click', () => setMode('admin'));
+      document.getElementById('backToSalesBtn').addEventListener('click', () => setMode('sales'));
+      document.getElementById('refreshDashboardBtn').addEventListener('click', loadDashboard);
+      document.getElementById('saveLibraryBtn')?.addEventListener('click', saveLibrary);
+      document.getElementById('resetLibraryBtn')?.addEventListener('click', resetLibraryEditor);
+
+      document.getElementById('adminList').addEventListener('click', (e) => {
+        const openLatest = e.target.getAttribute('data-open-latest');
+        const exportLatest = e.target.getAttribute('data-export-latest');
+        const exportLatestWord = e.target.getAttribute('data-export-latest-word');
+        const loadVersion = e.target.getAttribute('data-version-load');
+        if (openLatest) {
+          const item = proposalCache.find((x) => x.id === openLatest);
+          if (item) hydrateVersion(item, null);
+          return;
+        }
+        if (loadVersion) {
+          const [id, version] = loadVersion.split('|');
+          const item = proposalCache.find((x) => x.id === id);
+          if (item) hydrateVersion(item, Number(version));
+          return;
+        }
+        if (exportLatest) {
+          const item = proposalCache.find((x) => x.id === exportLatest);
+          if (item) exportLatestFromDashboard(item.id);
+          return;
+        }
+        if (exportLatestWord) {
+          const item = proposalCache.find((x) => x.id === exportLatestWord);
+          if (item) exportLatestFromDashboardWord(item.id);
+        }
+      });
+
+      form.addEventListener('input', syncFromForm);
+
+      async function boot() {
+        await checkApi();
+        await loadLibrary();
+        loadLocal();
+        populateForm();
+        showStep(state.current);
+        if (state.generated) renderProposal();
+        updateHeaderMeta();
+        document.getElementById('salesModeBtn').textContent = 'Sales mode';
+        document.getElementById('adminModeBtn').textContent = 'Admin dashboard';
+      }
+
+      boot();
+    </script>
+  </body>
+</html>
+
