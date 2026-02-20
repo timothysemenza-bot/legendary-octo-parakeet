@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+while read local_ref local_sha remote_ref remote_sha
+do
+  if [[ "$local_ref" == "refs/heads/main" ]]; then
+    echo "Push blocked: direct pushes to 'main' are disabled."
+    echo "Create a feature branch, push that branch, and open a PR."
+    exit 1
+  fi
+done
+
+exit 0

@@ -117,7 +117,7 @@ npm start
 - `data/` is ignored by `.gitignore` so proposal records stay local per deployment.
 - Keep client branding and image libraries in versioned files (e.g., `content-library.json`) and mount client-specific runtime directories via env vars.
 
-## Enforcing “GitHub-only” changes
+## Enforcing GitHub-only changes
 
 To make sure all production changes come only from GitHub:
 
@@ -128,12 +128,25 @@ To make sure all production changes come only from GitHub:
   - Disable force pushes.
   - Do not allow deletion.
 
-Example day-to-day flow:
+### Required workflow
 
-1. Create a branch for your work:
-   - `git checkout -b feat/new-change`
-2. Push branch and open a PR to `main`.
-3. Merge only after CI is green.
-4. The `Deploy package` workflow builds a deployment artifact from GitHub push to `main`.
+- Never push to `main` directly.
+- Open a feature branch for every change:
+  - `git checkout -b feat/new-change`
+- Push the branch and open a PR to `main`.
+- Merge only after CI is green and reviews are complete.
+- Deployments are generated only from `main` merges.
 
-Because CI runs in GitHub Actions and deployment artifacts are produced only from `push` events on `main`, local-only edits remain local until merged and pushed.
+### Repository settings checklist
+
+In GitHub -> Settings -> Branches -> Branch protection rules, configure:
+
+- Branch name pattern: `main`
+- Require a pull request before merging.
+- Require status checks to pass before merging (`CI`).
+- Disable force pushes.
+- Prevent branch deletion.
+
+Because CI runs in GitHub Actions and deployment artifacts are produced only from `push` events on `main`, local-only edits stay local until merged and pushed.
+
+
