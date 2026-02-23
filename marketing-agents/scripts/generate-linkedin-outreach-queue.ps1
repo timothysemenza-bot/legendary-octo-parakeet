@@ -1,0 +1,121 @@
+param(
+    [string]$PipelineFile = "marketing-agents/data/prospect_pipeline.csv",
+    [string]$OutputFile = "marketing-agents/data/linkedin_outreach_queue.csv",
+    [string]$RunDate = "",
+    [int]$MaxRows = 20
+)
+
+$ErrorActionPreference = "Stop"
+
+if (-not (Test-Path $PipelineFile)) { throw "Missing file: $PipelineFile" }
+
+$today = if ([string]::IsNullOrWhiteSpace($RunDate)) { (Get-Date).ToString("yyyy-MM-dd") } else { ([datetime]$RunDate).ToString("yyyy-MM-dd") }
+$pipeline = @(Import-Csv -Path $PipelineFile)
+$existing = if (Test-Path $OutputFile) { @(Import-Csv -Path $OutputFile) } else { @() }
+
+function Build-LinkedInSearchUrl {
+    param([string]$Query)
+    return "https://www.linkedin.com/search/results/all/?keywords=" + [uri]::EscapeDataString($Query)
+}
+
+$eligible = $pipeline |
+    Where-Object {
+        $status = ([string]$_.status).ToLowerInvariant().Trim()
+        $status -eq "active" -or ([string]$_.stage).ToLowerInvariant().Trim() -eq "research"
+    } |
+    Sort-Object @{Expression = {[int]($_.priority_score)}; Descending = $true}
+
+$rowsToAdd = @()
+foreach ($p in $eligible) {
+    if ($rowsToAdd.Count -ge $MaxRows) { break }
+    $company = [string]$p.company_name
+    if ([string]::IsNullOrWhiteSpace($company)) { continue }
+
+    $alreadyQueued = $existing | Where-Object {
+        $_.company_name -eq $company -and $_.status -in @("queued","ready-for-review","approved","sent")
+    } | Select-Object -First 1
+    if ($null -ne $alreadyQueued) { continue }
+
+    $contact = if ([string]::IsNullOrWhiteSpace($p.target_contact) -or $p.target_contact -eq "Main Office" -or $p.target_contact -eq "Owner or GM") { "Owner/GM" } else { $p.target_contact }
+    $role = if ([string]::IsNullOrWhiteSpace($p.role)) { "Owner/GM" } else { $p.role }
+    $location = if ([string]::IsNullOrWhiteSpace($p.location)) { "South Jersey" } else { $p.location }
+    $hook1 = if ([string]::IsNullOrWhiteSpace($p.personalization_hook_1)) { "your current operation" } else { $p.personalization_hook_1.ToLowerInvariant() }
+    $hook2 = if ([string]::IsNullOrWhiteSpace($p.personalization_hook_2)) { "your contract mix" } else { $p.personalization_hook_2.ToLowerInvariant() }
+    $angle = if ([string]::IsNullOrWhiteSpace($p.primary_angle)) { "reduce admin burden and protect margin" } else { $p.primary_angle }
+
+    $isProposalSupportTrack = ([string]$p.notes) -match "proposal-support track"
+    $messageType = if ($isProposalSupportTrack) { "proposal-support-intro" } else { "local-operator-intro" }
+
+    $searchQueryPerson = if ($contact -eq "Owner/GM") { "$company owner CEO LinkedIn" } else { "$contact $company LinkedIn" }
+    $searchQueryCompany = "$company LinkedIn company"
+
+    $connectionNote = if ($isProposalSupportTrack) {
+@"
+Hi, Timmy Semenza here in South Jersey. I support janitorial teams on recompete proposal readiness and admin compression, with federal/state/local proposal background. Open to connecting?
+"@.Trim()
+    } else {
+@"
+Hi, Timmy Semenza here in South Jersey. I help cleaning operators reduce admin load and protect margin. Open to connecting?
+"@.Trim()
+    }
+
+    $dmDraft = if ($isProposalSupportTrack) {
+@"
+Thanks for connecting. I noticed $hook1 and $hook2.
+
+I support operators who are heading into recompete cycles by tightening proposal prep, compliance packaging, and internal workflow speed.
+
+My background includes government proposal work across federal, state, and local sectors.
+
+If useful, I can meet your team at a site visit and share practical first recommendations tied to your next bid cycle.
+
+Open to a short 20-minute call next week?
+"@.Trim()
+    } else {
+@"
+Thanks for connecting. I noticed $hook1 and $hook2.
+
+I work with local operators to cut admin burden between proposals, staffing, and reporting so owners can stay focused on operations.
+
+If useful, I can meet you at your next site visit and give practical first recommendations in person.
+
+Open to a short 20-minute call next week?
+"@.Trim()
+    }
+
+    $idToken = ($company -replace '[^A-Za-z0-9]', '')
+    if ([string]::IsNullOrWhiteSpace($idToken)) { $idToken = "acct" }
+    if ($idToken.Length -gt 8) { $idToken = $idToken.Substring(0, 8) }
+    $queueId = "li-" + (Get-Date -Format "yyyyMMddHHmmss") + "-" + $idToken
+
+    $rowsToAdd += [pscustomobject]@{
+        queue_id = $queueId
+        created_date = $today
+        company_name = $company
+        location = $location
+        target_contact = $contact
+        role = $role
+        linkedin_person_url = ""
+        linkedin_company_url = ""
+        linkedin_person_search_url = Build-LinkedInSearchUrl -Query $searchQueryPerson
+        linkedin_company_search_url = Build-LinkedInSearchUrl -Query $searchQueryCompany
+        message_type = $messageType
+        connection_note = $connectionNote
+        dm_draft = $dmDraft
+        owner_decision = "review"
+        status = "queued"
+        next_action = "Find profile URLs, review copy, then send manually in LinkedIn"
+        notes = "Generated by LinkedIn outreach queue script"
+    }
+}
+
+if ($rowsToAdd.Count -eq 0) {
+    if (-not (Test-Path $OutputFile)) {
+        @() | Select-Object queue_id,created_date,company_name,location,target_contact,role,linkedin_person_url,linkedin_company_url,linkedin_person_search_url,linkedin_company_search_url,message_type,connection_note,dm_draft,owner_decision,status,next_action,notes | Export-Csv -Path $OutputFile -NoTypeInformation
+    }
+    Write-Output "No new LinkedIn outreach rows added."
+    exit 0
+}
+
+(@($existing) + @($rowsToAdd)) | Export-Csv -Path $OutputFile -NoTypeInformation
+Write-Output ("Added {0} LinkedIn outreach rows -> {1}" -f $rowsToAdd.Count, $OutputFile)

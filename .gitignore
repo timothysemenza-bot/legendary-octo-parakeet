@@ -29,3 +29,6 @@ Thumbs.db
 *.tmp
 *.temp
 temp_*
+
+# Local ML models
+ggml-base.en.bin

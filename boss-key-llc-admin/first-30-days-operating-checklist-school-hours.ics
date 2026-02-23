@@ -1,0 +1,164 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Boss Key LLC//30-Day Operating Checklist School Hours//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Boss Key 30-Day Plan (School Hours Safe)
+X-WR-TIMEZONE:America/New_York
+
+BEGIN:VEVENT
+UID:bosskey2-20260223-critical@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260223T100000
+DTEND;TZID=America/New_York:20260223T110000
+SUMMARY:Critical path: BoA confirmation + records vault
+DESCRIPTION:Confirm BoA docs received (app 158275973), save core docs, and enter EIN/business records into 1Password.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260224-bofa-followup@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260224T100000
+DTEND;TZID=America/New_York:20260224T110000
+SUMMARY:BoA follow-up and account activation
+DESCRIPTION:Call BoA, confirm status, fund account if approved, enable online banking/paperless, and set file naming standard.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260225-bookkeeping@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260225T100000
+DTEND;TZID=America/New_York:20260225T113000
+SUMMARY:Set bookkeeping system + chart of accounts
+DESCRIPTION:Set accounting system baseline, chart of accounts, and monthly close checklist.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260226-scorp-payroll@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260226T100000
+DTEND;TZID=America/New_York:20260226T110000
+SUMMARY:S-Corp packet + payroll plan
+DESCRIPTION:Prepare Form 2553 packet for CPA review, define payroll cadence, and set initial salary/distribution policy.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260227-client-docs@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260227T100000
+DTEND;TZID=America/New_York:20260227T113000
+SUMMARY:Finalize client docs + e-sign workflow
+DESCRIPTION:Finalize MSA, SOW template, invoice template, payment terms, and e-sign process.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260302-weekly-launch@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260302T100000
+DTEND;TZID=America/New_York:20260302T111500
+SUMMARY:Week 1 March: pipeline rhythm + website flows
+DESCRIPTION:Launch weekly pipeline rhythm, test website contact flows, validate daily briefing/spam filter, and make first tax reserve transfer.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260309-weekly-finance@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260309T100000
+DTEND;TZID=America/New_York:20260309T111500
+SUMMARY:Week 2 March: invoices, reconciliation, S-Corp status
+DESCRIPTION:Confirm invoicing workflow, reconcile bank activity, check S-Corp filing status, and review pricing mix vs capacity.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260316-mini-close@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260316T100000
+DTEND;TZID=America/New_York:20260316T111500
+SUMMARY:Week 3 March: mini-close + cadence tuning
+DESCRIPTION:Complete mini-close, tune outreach cadence by response rates, and update CRM follow-up actions.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260323-30day-review@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260323T100000
+DTEND;TZID=America/New_York:20260323T111500
+SUMMARY:Week 4 March: 30-day review + next targets
+DESCRIPTION:Review cash, MRR under contract, pipeline coverage, time allocation, and set next 30-day targets.
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-friday-scorecard@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260227T140000
+DTEND;TZID=America/New_York:20260227T142500
+RRULE:FREQ=WEEKLY;COUNT=8;BYDAY=FR
+SUMMARY:Weekly scorecard update
+DESCRIPTION:Update revenue collected, pipeline value, leads, calls, proposals, close rate, admin hours, and tax reserve balance.
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Boss Key task reminder
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:bosskey2-20260415-est-tax@bosskeyops.com
+DTSTAMP:20260223T102300Z
+DTSTART;TZID=America/New_York:20260415T100000
+DTEND;TZID=America/New_York:20260415T103000
+SUMMARY:Federal estimated tax checkpoint (Q1 2026)
+DESCRIPTION:Finalize and verify federal estimated tax planning/payment with CPA.
+BEGIN:VALARM
+TRIGGER:-P3D
+ACTION:DISPLAY
+DESCRIPTION:Boss Key tax reminder
+END:VALARM
+END:VEVENT
+
+END:VCALENDAR

@@ -1,0 +1,3 @@
+- Coverage aligned to standard operation windows
+- Escalation path validated within 24/7 coverage handoff boundaries
+- Weekend fallback contacts confirmed in writing

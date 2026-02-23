@@ -1,0 +1,3 @@
+- 24/7 operations dashboard access
+- Monthly trend and KPI reporting
+- Escalation response audits each quarter

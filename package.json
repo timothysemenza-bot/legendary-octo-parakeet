@@ -5,6 +5,8 @@
   "description": "Proposal builder with backend persistence, PDF export flow, and admin version dashboard.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:operator": "node marketing-agents/operator-app.js",
+    "migrate:sharepoint-content": "node scripts/migrate-content-library.js --source content-library.json --manifest content-library.manifest.json --contentDir migrated-content"
   }
 }

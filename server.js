@@ -1,7 +1,9 @@
 ﻿const fs = require("fs");
 const http = require("http");
 const path = require("path");
+const crypto = require("crypto");
 const { URL } = require("url");
+const { createContentProvider, isValidLibraryPayload } = require("./content-provider");
 
 const CONFIG_ENV_PATH = path.join(__dirname, ".env");
 
@@ -32,10 +34,22 @@ const PORT = Number(process.env.PORT) || 3000;
 const PUBLIC_DIR = path.resolve(process.env.PUBLIC_DIR || __dirname);
 const DATA_DIR = path.resolve(__dirname, process.env.PROPOSAL_DATA_DIR || process.env.DATA_DIR || "data");
 const DATA_FILE = path.resolve(DATA_DIR, "proposals.json");
+const CONTACT_EVENTS_FILE = path.resolve(
+  __dirname,
+  process.env.CONTACT_EVENTS_FILE || "marketing-agents/data/website_contact_events.csv"
+);
 const LIBRARY_FILE = path.resolve(
   __dirname,
   process.env.PROPOSAL_LIBRARY_PATH || process.env.LIBRARY_FILE || "content-library.json"
 );
+const CONTENT_PROVIDER = String(process.env.CONTENT_PROVIDER || "json").toLowerCase();
+const CONTENT_PROVIDER_SETTINGS = (() => {
+  try {
+    return process.env.CONTENT_PROVIDER_SETTINGS ? JSON.parse(process.env.CONTENT_PROVIDER_SETTINGS) : {};
+  } catch (_error) {
+    return {};
+  }
+})();
 const APP_NAME = process.env.BRAND_NAME || "St. Moritz Security Services";
 const APP_TAGLINE = process.env.BRAND_TAGLINE || "Proposal Builder";
 const CLIENT_NAME_FALLBACK = process.env.CLIENT_NAME_FALLBACK || `${APP_NAME} Client`;
@@ -44,32 +58,14 @@ const CORS_ORIGINS = (process.env.CORS_ORIGINS || "*")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
-const REQUIRED_LIBRARY_KEYS = ["industryGraphics", "geography", "serviceLevel", "siteType", "risk", "coverage", "capabilities"];
 const STORAGE = { proposals: [] };
 let CONTENT_LIBRARY = {};
+let CONTENT_LIBRARY_PROVIDER = null;
 
 function isOriginAllowed(origin) {
   if (!origin) return true;
   if (CORS_ORIGINS.includes("*")) return true;
   return CORS_ORIGINS.includes(origin);
-}
-
-function isPlainObject(value) {
-  return !!value && typeof value === "object" && !Array.isArray(value);
-}
-
-function isIndustryGraphicsMap(value) {
-  if (!isPlainObject(value)) return false;
-  return Object.values(value).every((item) => Array.isArray(item));
-}
-
-function isValidLibraryPayload(payload) {
-  if (!isPlainObject(payload)) return false;
-  if (!isIndustryGraphicsMap(payload[REQUIRED_LIBRARY_KEYS[0]])) return false;
-  for (const key of REQUIRED_LIBRARY_KEYS.slice(1)) {
-    if (!isPlainObject(payload[key])) return false;
-  }
-  return true;
 }
 
 function resolveCorsOrigin(origin = "") {
@@ -86,7 +82,32 @@ function ensureDataFile() {
   }
 }
 
+function ensureParentDir(filePath) {
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+function ensureContactEventsFile() {
+  ensureParentDir(CONTACT_EVENTS_FILE);
+  if (!fs.existsSync(CONTACT_EVENTS_FILE)) {
+    const header = [
+      "event_at",
+      "event_date",
+      "source_page",
+      "context",
+      "channel",
+      "referrer",
+      "user_agent",
+      "ip_hash",
+      "spam_score",
+      "spam_flag",
+      "spam_reasons",
+    ].join(",");
+    fs.writeFileSync(CONTACT_EVENTS_FILE, `${header}\n`, "utf8");
+  }
+}
 function ensureLibraryFile() {
+  if (CONTENT_PROVIDER !== "json") return;
   if (!fs.existsSync(LIBRARY_FILE)) {
     fs.writeFileSync(LIBRARY_FILE, "{}", "utf8");
   }
@@ -101,25 +122,53 @@ function loadStore() {
   }
 }
 
-function loadContentLibrary() {
-  try {
-    const raw = fs.readFileSync(LIBRARY_FILE, "utf8");
-    const candidate = JSON.parse(raw);
-    if (!isValidLibraryPayload(candidate)) {
-      throw new Error("Invalid library payload in file");
-    }
-    CONTENT_LIBRARY = candidate;
-  } catch {
-    CONTENT_LIBRARY = {};
-  }
+function initializeContentProvider() {
+  if (CONTENT_LIBRARY_PROVIDER) return;
+  CONTENT_LIBRARY_PROVIDER = createContentProvider({
+    provider: CONTENT_PROVIDER,
+    file: LIBRARY_FILE,
+    settings: CONTENT_PROVIDER_SETTINGS,
+  });
 }
 
 function saveStore() {
   fs.writeFileSync(DATA_FILE, JSON.stringify(STORAGE.proposals, null, 2), "utf8");
 }
 
-function saveContentLibrary() {
-  fs.writeFileSync(LIBRARY_FILE, JSON.stringify(CONTENT_LIBRARY, null, 2), "utf8");
+async function getContentLibrary() {
+  if (!CONTENT_LIBRARY_PROVIDER) {
+    initializeContentProvider();
+  }
+  await CONTENT_LIBRARY_PROVIDER.init();
+  CONTENT_LIBRARY = await CONTENT_LIBRARY_PROVIDER.getLibrary();
+  return CONTENT_LIBRARY;
+}
+
+async function setContentLibrary(payload) {
+  if (!CONTENT_LIBRARY_PROVIDER) {
+    initializeContentProvider();
+  }
+  await CONTENT_LIBRARY_PROVIDER.init();
+  CONTENT_LIBRARY = await CONTENT_LIBRARY_PROVIDER.saveLibrary(payload);
+  return CONTENT_LIBRARY;
+}
+
+async function refreshContentLibrary() {
+  if (!CONTENT_LIBRARY_PROVIDER) {
+    initializeContentProvider();
+  }
+  await CONTENT_LIBRARY_PROVIDER.reload();
+  CONTENT_LIBRARY = await CONTENT_LIBRARY_PROVIDER.getLibrary();
+  return CONTENT_LIBRARY;
+}
+
+function getContentLibraryStatus() {
+  if (!CONTENT_LIBRARY_PROVIDER) return { provider: CONTENT_PROVIDER, loaded: false };
+  const status = CONTENT_LIBRARY_PROVIDER.getStatus();
+  return {
+    ...status,
+    loaded: !!status.loaded,
+  };
 }
 
 function sendJson(res, payload, code = 200) {
@@ -168,6 +217,96 @@ function parseBody(req) {
   });
 }
 
+function csvEscape(value) {
+  const str = String(value ?? "");
+  if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+function hashIp(ip) {
+  const raw = String(ip || "").trim();
+  if (!raw) return "";
+  return crypto.createHash("sha256").update(raw).digest("hex").slice(0, 16);
+}
+
+function getClientIp(req) {
+  const h = req.headers || {};
+  const forwarded = String(h["cf-connecting-ip"] || h["x-forwarded-for"] || "").trim();
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return String(req.socket?.remoteAddress || "").trim();
+}
+
+function normalizeInboundEvent(body = {}, req) {
+  const now = new Date();
+  const eventAt = now.toISOString();
+  const eventDate = eventAt.slice(0, 10);
+  const channel = String(body.channel || "unknown").trim().toLowerCase().slice(0, 20);
+  const context = String(body.context || "").trim().slice(0, 180);
+  const sourcePage = String(body.source_page || body.page_url || "").trim().slice(0, 300);
+  const referrer = String(body.referrer || req.headers.referer || "").trim().slice(0, 300);
+  const userAgent = String(body.user_agent || req.headers["user-agent"] || "").trim().slice(0, 300);
+  const ipHash = hashIp(getClientIp(req));
+  const honeypot = String(body.website || body.honeypot || "").trim();
+  return { eventAt, eventDate, channel, context, sourcePage, referrer, userAgent, ipHash, honeypot };
+}
+
+function scoreSpam(event) {
+  let score = 0;
+  const reasons = [];
+  const ua = String(event.userAgent || "").toLowerCase();
+  const context = String(event.context || "").toLowerCase();
+  const channel = String(event.channel || "").toLowerCase();
+  const page = String(event.sourcePage || "").toLowerCase();
+  const bots = ["bot", "spider", "crawl", "headless", "python", "curl", "wget", "go-http-client", "postman"];
+
+  if (!["call", "sms", "email", "linkedin", "contact"].includes(channel)) {
+    score += 25;
+    reasons.push("unknown-channel");
+  }
+  if (!context || context.length < 3) {
+    score += 25;
+    reasons.push("missing-context");
+  }
+  if (!page || !page.includes("boss-key")) {
+    score += 10;
+    reasons.push("invalid-page");
+  }
+  if (bots.some((b) => ua.includes(b))) {
+    score += 70;
+    reasons.push("bot-user-agent");
+  }
+  if (event.honeypot) {
+    score += 80;
+    reasons.push("honeypot-filled");
+  }
+  if (context.includes("seo") || context.includes("crypto") || context.includes("gambling") || context.includes("viagra")) {
+    score += 70;
+    reasons.push("spam-keywords");
+  }
+
+  return { score, isSpam: score >= 60, reasons };
+}
+
+function appendContactEvent(row) {
+  const line = [
+    row.event_at,
+    row.event_date,
+    row.source_page,
+    row.context,
+    row.channel,
+    row.referrer,
+    row.user_agent,
+    row.ip_hash,
+    String(row.spam_score),
+    row.spam_flag,
+    row.spam_reasons,
+  ]
+    .map(csvEscape)
+    .join(",");
+  fs.appendFileSync(CONTACT_EVENTS_FILE, `${line}\n`, "utf8");
+}
 function escapeXmlValue(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -754,7 +893,35 @@ function makeId() {
 }
 
 async function handleApiRequest(req, res, pathname, method) {
+    if (pathname === "/api/contact-events" && method === "POST") {
+    try {
+      const body = await parseBody(req);
+      const event = normalizeInboundEvent(body, req);
+      const spam = scoreSpam(event);
+      appendContactEvent({
+        event_at: event.eventAt,
+        event_date: event.eventDate,
+        source_page: event.sourcePage,
+        context: event.context,
+        channel: event.channel,
+        referrer: event.referrer,
+        user_agent: event.userAgent,
+        ip_hash: event.ipHash,
+        spam_score: spam.score,
+        spam_flag: spam.isSpam ? "yes" : "no",
+        spam_reasons: spam.reasons.join("|"),
+      });
+      return sendJson(res, { ok: true, accepted: !spam.isSpam, spam_score: spam.score }, 201);
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 400);
+    }
+  }
+
+  if (pathname === "/api/contact-events") {
+    return sendJson(res, { error: "Method not supported" }, 405);
+  }
   if (pathname === "/api/library" && method === "GET") {
+    await getContentLibrary();
     return sendJson(res, CONTENT_LIBRARY);
   }
 
@@ -764,8 +931,7 @@ async function handleApiRequest(req, res, pathname, method) {
       if (!isValidLibraryPayload(nextLibrary)) {
         return sendJson(res, { error: "Invalid library payload" }, 400);
       }
-      CONTENT_LIBRARY = nextLibrary;
-      saveContentLibrary();
+      await setContentLibrary(nextLibrary);
       return sendJson(res, CONTENT_LIBRARY);
     } catch (error) {
       return sendJson(res, { error: error.message }, 400);
@@ -774,6 +940,37 @@ async function handleApiRequest(req, res, pathname, method) {
 
   if (pathname === "/api/library") {
     return sendJson(res, { error: "Method not supported" }, 405);
+  }
+
+  if (pathname === "/api/content/status" && method === "GET") {
+    if (!CONTENT_LIBRARY_PROVIDER) {
+      initializeContentProvider();
+      await CONTENT_LIBRARY_PROVIDER.init();
+    }
+    return sendJson(res, getContentLibraryStatus());
+  }
+
+  if (pathname === "/api/content/refresh" && method === "POST") {
+    try {
+      await refreshContentLibrary();
+      return sendJson(res, { status: "ok", ...getContentLibraryStatus() });
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 500);
+    }
+  }
+
+  if (pathname === "/api/content/resolve" && method === "POST") {
+    try {
+      const body = await parseBody(req);
+      if (!CONTENT_LIBRARY_PROVIDER) {
+        initializeContentProvider();
+        await CONTENT_LIBRARY_PROVIDER.init();
+      }
+      const generated = await CONTENT_LIBRARY_PROVIDER.resolve(body || {});
+      return sendJson(res, generated);
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 400);
+    }
   }
 
   if (pathname === "/api/export/docx" && method === "POST") {
@@ -921,7 +1118,13 @@ async function requestHandler(req, res) {
     return res.end();
   }
   const pathname = url.pathname.endsWith("/") && url.pathname.length > 1 ? url.pathname.slice(0, -1) : url.pathname;
-  if (pathname === "/api/library" || pathname === "/api/export/docx" || pathname.startsWith("/api/proposals")) {
+  if (
+    pathname === "/api/contact-events" ||
+    pathname === "/api/library" ||
+    pathname.startsWith("/api/content/") ||
+    pathname === "/api/export/docx" ||
+    pathname.startsWith("/api/proposals")
+  ) {
     return handleApiRequest(req, res, pathname, req.method);
   }
   return serveStatic(res, pathname, pathname);
@@ -929,14 +1132,19 @@ async function requestHandler(req, res) {
 
 async function main() {
   ensureDataFile();
+  ensureContactEventsFile();
   ensureLibraryFile();
   loadStore();
-  loadContentLibrary();
+  initializeContentProvider();
+  if (CONTENT_LIBRARY_PROVIDER) {
+    await getContentLibrary();
+  }
   const server = http.createServer(requestHandler);
   server.listen(PORT, () => {
     console.log(`${APP_NAME} - ${APP_TAGLINE} running at http://localhost:${PORT}`);
     console.log(`Data file: ${DATA_FILE}`);
-    console.log(`Content library: ${LIBRARY_FILE}`);
+    console.log(`Content provider: ${CONTENT_PROVIDER}`);
+    console.log(`Content library source: ${LIBRARY_FILE}`);
   });
 }
 
@@ -944,6 +1152,19 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

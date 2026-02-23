@@ -1,0 +1,1 @@
+Operational Diagnostic: a focused 2-week assessment of your bid-to-execution workflow that identifies where admin drag and labor variance are reducing margin, then delivers a practical 30/60/90-day fix plan.

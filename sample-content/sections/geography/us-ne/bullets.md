@@ -1,0 +1,3 @@
+- Dense site cluster with shared transit exposure
+- Priority on visitor management and badge controls
+- Focus on coordination with local emergency responders

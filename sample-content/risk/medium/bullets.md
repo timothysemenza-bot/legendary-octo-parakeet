@@ -1,0 +1,3 @@
+- Balanced approach for medium-severity threat models
+- Controlled escalation procedures with documented response ownership
+- Ongoing training on updated incidents

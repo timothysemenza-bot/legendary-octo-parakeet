@@ -27,11 +27,18 @@ Create `.env` from `.env.example` and adjust values.
 - `CLIENT_NAME_FALLBACK` - fallback client name in generated files
 - `CORS_ORIGINS` - comma-separated allowed origins (default `*`)
 - `WORD_IMAGES_ENABLED` - set `0` to temporarily disable images in DOCX export for recovery/debugging
+- `CONTENT_PROVIDER` - `json` (default) or `sharepoint`
+- `CONTENT_PROVIDER_SETTINGS` - JSON string for provider settings (for `sharepoint`, set `manifestFile`, or `siteId` + `driveId` + `manifestPath`)
+- `GRAPH_ACCESS_TOKEN` - optional bearer token used when calling SharePoint/OneDrive Graph endpoints
 
 ## API endpoints
 
 - `GET /api/library`
 - `PUT /api/library`
+- `GET /api/content/status`
+- `POST /api/content/refresh`
+- `POST /api/content/resolve`
+- `POST /api/content/resolve` uses the provider to generate the same payload shape used to build sections from intake JSON.
 - `POST /api/export/docx`
 - `GET /api/proposals`
 - `POST /api/proposals`
@@ -57,6 +64,74 @@ You can replace `.env` values to target a different output location or brand.
 
 - Proposals are stored in `proposals.json` inside `PROPOSAL_DATA_DIR`.
 - Proposal library is stored at `LIBRARY_FILE`.
+
+## SharePoint/OneDrive provider model (JSON manifest)
+
+Set `CONTENT_PROVIDER=sharepoint` and one of these settings:
+
+- `manifestFile`: local path (for example `./content-library.manifest.json`) or direct URL that returns the same library JSON shape.
+- `siteId` + `driveId` + `manifestPath`: resolves manifest from SharePoint/OneDrive via Microsoft Graph.
+
+The manifest may reference external text assets using fields like:
+
+- `summary: "content:sections/geography/us-ne/summary.txt"`
+- `scopeBullets: "content:sections/geography/us-ne/bullets.md"`
+
+Only string, `.txt`, `.md`, or `.json`-based content sources are resolved in this release. More complex Word-file assembly can be added as a later enhancement.
+
+### Quick sample run
+
+1. Copy the sample files as your content source:
+
+- `sample-sharepoint-manifest.json`
+- `sample-content/` directory
+
+2. Configure your `.env`:
+
+```bash
+CONTENT_PROVIDER=sharepoint
+CONTENT_PROVIDER_SETTINGS={"manifestFile":"./sample-sharepoint-manifest.json","basePath":"sample-content"}
+```
+
+3. Restart and call:
+
+- `GET /api/content/status`
+- `GET /api/library`
+- `POST /api/content/resolve`
+
+Example resolve payload:
+
+```json
+{
+  "geography": "US Northeast",
+  "serviceLevel": "Enhanced",
+  "siteType": "Corporate office",
+  "riskLevel": "Medium",
+  "coverageHours": "Business hours",
+  "capabilities": ["Access control"],
+  "industry": "Corporate office"
+}
+```
+
+### Migrate an existing JSON library to manifest + file content
+
+If your existing `content-library.json` is already populated, run:
+
+```bash
+npm run migrate:sharepoint-content
+```
+
+This produces:
+
+- `content-library.manifest.json`
+- `migrated-content/` (with content references extracted to `content:` files)
+
+You can then flip to SharePoint-style mode:
+
+```bash
+CONTENT_PROVIDER=sharepoint
+CONTENT_PROVIDER_SETTINGS={"manifestFile":"./content-library.manifest.json","basePath":"migrated-content"}
+```
 
 If you need isolated environments per client, mount host directories per deployment and set the env paths accordingly.
 

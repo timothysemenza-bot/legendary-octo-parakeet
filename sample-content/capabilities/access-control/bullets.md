@@ -1,0 +1,3 @@
+- Badge provisioning and deprovisioning by manager process
+- Shift-based exception windows
+- Visitor pass validation and audit trail

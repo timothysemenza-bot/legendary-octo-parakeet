@@ -1,0 +1,2 @@
+Business-hours onboarding and alignment are scheduled Monday through Friday.
+Critical alerts are routed according to SLA matrix during support windows.
