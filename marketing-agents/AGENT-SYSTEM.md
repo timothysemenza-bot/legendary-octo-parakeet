@@ -69,6 +69,11 @@ Do not position Boss Key LLC as a generic AI consultancy.
 - Output: draft/send actions through Outlook, send logs, and CRM updates.
 - Rule: send only records explicitly marked `owner_approved=yes`.
 
+14. `Agent 14: Burlington Public Digital Capture Agent`
+- Input: Burlington-area procurement sources, recompete timing signals, and service focus (web/digital/IT-adjacent modernization).
+- Output: ranked pre-RFP government target list, seeded opportunity rows, and seeded pipeline rows for proactive outreach.
+- Rule: prioritize near-term recompetes and named office contacts.
+
 ## Standard Workflow
 
 1. Fill one row in `marketing-agents/data/prospect_pipeline.csv`.
@@ -86,6 +91,8 @@ Do not position Boss Key LLC as a generic AI consultancy.
 13. Use Agent 11 to validate compliance before submission.
 14. Use Agent 12 to execute approved call batches and auto-log outcomes.
 15. Use Agent 13 to send approved outreach emails from Outlook and auto-log outcomes.
+16. Use Agent 14 to run a weekly Burlington public digital recompete scan and refresh pre-RFP capture priorities.
+17. Generate GO/NO-GO memos for `pursue_now` accounts before outreach using `marketing-agents/scripts/generate-public-go-no-go-memos.ps1`.
 
 ## Quality Bar
 

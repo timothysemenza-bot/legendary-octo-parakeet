@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JWBLNG | Member Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --plum-900: #4d205d;
+      --plum-700: #6f2f84;
+      --plum-500: #8d4fa4;
+      --paper: #fbf8fd;
+      --line: #e2d4ea;
+      --ink: #271a2e;
+      --muted: #62516b;
+      --mint: #e9f7f1;
+      --shadow: 0 14px 36px rgba(69, 27, 84, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 320px at 100% -130px, #eadcf0 0%, transparent 68%),
+        var(--paper);
+    }
+
+    .frame { width: min(1180px, 92vw); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+      background: rgba(251, 248, 253, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--plum-700);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .top-links { display: flex; justify-content: center; gap: 16px; }
+    .top-links a { text-decoration: none; color: #4f3f59; font-size: .9rem; font-weight: 600; }
+
+    .btn { border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; text-decoration: none; color: var(--plum-700); background: #fff; font-weight: 700; font-size: .9rem; }
+
+    .portal-hero {
+      padding: 20px 0 14px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+    }
+
+    .hero-main {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main figure {
+      margin: 0;
+      height: 250px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      background: #efe4f3;
+    }
+
+    .hero-main img,
+    .hero-main video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-main .copy { padding: 14px; }
+
+    h1,h2,h3,h4 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: #351a40;
+    }
+
+    h1 { font-size: clamp(1.95rem, 3.6vw, 2.9rem); }
+
+    .copy p { margin: 8px 0 0; color: var(--muted); }
+
+    .hero-side {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .pill { display: inline-block; border-radius: 999px; padding: 4px 8px; background: var(--mint); color: #1f7a5a; font-size: .78rem; font-weight: 700; }
+
+    section { padding: 12px 0; }
+
+    .portal-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .event-list { display: grid; gap: 8px; margin-top: 10px; }
+
+    .event {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fcf8fe;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .event strong { display: block; color: var(--plum-700); margin-bottom: 2px; }
+
+    .status { border-radius: 999px; font-size: .72rem; font-weight: 700; padding: 4px 8px; background: #efe4f3; color: var(--plum-700); text-transform: uppercase; }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px;
+      background: #faf5fc;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .mini strong { display: block; color: var(--plum-700); font-size: 1.02rem; }
+
+    .member {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .member img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
+
+    .actions { margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    .actions a {
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px;
+      text-align: center;
+      color: var(--plum-700);
+      background: #fff;
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+
+    footer {
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding: 14px 0 24px;
+      color: #746184;
+      font-size: .86rem;
+    }
+
+    @media (max-width: 1020px) {
+      .portal-hero, .portal-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      .top-links { display: none; }
+      .actions, .mini-grid { grid-template-columns: 1fr; }
+      .hero-main figure { height: 210px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="frame topbar-inner">
+      <a class="brand" href="./index.html">
+        <img src="./assets/jwblng-logo-screenshot.png" alt="JWBLNG logo">
+        <span>JWBLNG Member Portal</span>
+      </a>
+      <nav class="top-links" aria-label="Portal navigation">
+        <a href="#events">Events</a>
+        <a href="#resources">Resources</a>
+        <a href="#metrics">Metrics</a>
+      </nav>
+      <a class="btn" href="./index.html">Public Site</a>
+    </div>
+  </header>
+
+  <main class="frame">
+    <section class="portal-hero">
+      <article class="hero-main">
+        <figure>
+          <video autoplay muted loop playsinline poster="./assets/stock/portal-hero.jpg" onerror="this.style.display='none';document.getElementById('portal-photo').style.display='block';">
+            <source src="./assets/motion/portal-loop.mp4" type="video/mp4">
+          </video>
+          <img id="portal-photo" src="./assets/stock/portal-hero.jpg" alt="Leadership collaboration" style="display:none;">
+        </figure>
+        <div class="copy">
+          <h1>Welcome back. Your growth calendar is ready.</h1>
+          <p>Track upcoming sessions, continue learning pathways, and manage member communication from one place.</p>
+        </div>
+      </article>
+
+      <aside class="hero-side">
+        <article class="panel">
+          <span class="pill">Profile Complete</span>
+          <div class="member">
+            <img src="./assets/stock/member-portal.jpg" alt="Member portrait">
+            <div><h3>Jessica</h3><p style="margin:4px 0 0;color:var(--muted);font-size:.88rem;">Leadership and Performance Focus</p></div>
+          </div>
+        </article>
+        <article class="panel">
+          <h3>Communication Settings</h3>
+          <ul>
+            <li>Weekly digest: enabled</li>
+            <li>Monthly newsletter: enabled</li>
+            <li>Event reminders: enabled</li>
+          </ul>
+        </article>
+      </aside>
+    </section>
+
+    <section class="portal-grid">
+      <article class="card" id="events">
+        <h2>Upcoming Events</h2>
+        <div class="event-list">
+          <article class="event"><div><strong>Speaker Series: Purpose-Driven Leadership</strong>Thursday, 7:30 PM ET</div><span class="status">Registered</span></article>
+          <article class="event"><div><strong>Book Club: Seven Habits Chapter 6</strong>Monday, 8:00 PM ET</div><span class="status">Open</span></article>
+          <article class="event"><div><strong>Business Halacha Q&A Circle</strong>Sunday, 10:00 AM ET</div><span class="status">Saved</span></article>
+        </div>
+      </article>
+
+      <article class="card" id="metrics">
+        <h2>Operations Snapshot</h2>
+        <div class="mini-grid">
+          <div class="mini"><strong>14</strong>New members this week</div>
+          <div class="mini"><strong>38%</strong>Join conversion</div>
+          <div class="mini"><strong>67%</strong>First event attendance</div>
+          <div class="mini"><strong>54%</strong>Email open rate</div>
+        </div>
+      </article>
+
+      <article class="card" id="resources">
+        <h2>Resource Library</h2>
+        <ul>
+          <li>Leadership speaker archive</li>
+          <li>Coaching worksheets and implementation guides</li>
+          <li>Book club prompts and chapter notes</li>
+          <li>Ask-a-Rabbi channel resources</li>
+        </ul>
+        <div class="actions">
+          <a href="#" onclick="alert('Mock action'); return false;">Open Library</a>
+          <a href="#" onclick="alert('Mock action'); return false;">Ask a Question</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Member Actions</h2>
+        <div class="actions">
+          <a href="#" onclick="alert('Mock action'); return false;">Update Profile</a>
+          <a href="#" onclick="alert('Mock action'); return false;">Manage Notifications</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="frame">JWBLNG member portal concept | Distinct visual/UX direction</div>
+  </footer>
+</body>
+</html>

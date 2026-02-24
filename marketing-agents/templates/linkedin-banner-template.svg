@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1584" height="396" viewBox="0 0 1584 396" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1584" y2="396" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="__BG_START__"/>
+      <stop offset="1" stop-color="__BG_END__"/>
+    </linearGradient>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1584" height="396" fill="url(#bg)"/>
+  <rect width="1584" height="396" fill="url(#grid)"/>
+  <rect x="0" y="0" width="1584" height="396" fill="#000000" fill-opacity="0.16"/>
+
+  <g transform="translate(84 68)">
+    <rect x="0" y="0" width="260" height="260" rx="36" fill="#0B1222"/>
+    <path d="M57 25H203L233 55V205L203 235H57L27 205V55L57 25Z" stroke="#F5F7FB" stroke-width="14" stroke-linejoin="miter"/>
+    <path d="M130 80L185 130L130 180L75 130L130 80Z" stroke="#F5F7FB" stroke-width="14" stroke-linejoin="miter"/>
+    <path d="M130 25V80" stroke="#F5F7FB" stroke-width="14" stroke-linecap="square"/>
+    <circle cx="168.5" cy="130" r="8.5" fill="__ACCENT__"/>
+  </g>
+
+  <g transform="translate(410 114)">
+    <text x="0" y="88" fill="#F5F7FB" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="98" font-weight="700" letter-spacing="0.5">__TITLE__</text>
+    <text x="2" y="146" fill="#C9D4E8" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="31" font-weight="500" letter-spacing="0.4">__SUBTITLE__</text>
+    <rect x="0" y="180" width="640" height="2" fill="__ACCENT__" fill-opacity="0.9"/>
+  </g>
+
+  <g opacity="0.55">
+    <path d="M1265 62L1425 198L1265 334L1106 198L1265 62Z" stroke="#E8EDF8" stroke-opacity="0.24" stroke-width="2.2"/>
+    <path d="M1265 105L1378 198L1265 291L1152 198L1265 105Z" stroke="#E8EDF8" stroke-opacity="0.2" stroke-width="2"/>
+    <path d="M1265 143L1330 198L1265 253L1200 198L1265 143Z" stroke="#E8EDF8" stroke-opacity="0.18" stroke-width="1.8"/>
+    <circle cx="1330" cy="198" r="6" fill="__ACCENT__"/>
+  </g>
+</svg>

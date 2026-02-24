@@ -29,6 +29,10 @@ Thumbs.db
 *.tmp
 *.temp
 temp_*
+tmp-linkedin-*.html
+.recording_state.json
+recordings/
+__docx_probe/
 
 # Local ML models
 ggml-base.en.bin

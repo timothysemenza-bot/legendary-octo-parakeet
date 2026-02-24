@@ -1,0 +1,174 @@
+﻿BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Boss Key//Public Relationship Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:rel-20260225-1@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260225T100000
+DTEND:20260225T103000
+SUMMARY:Send intro email + meeting request - Burlington Township
+DESCRIPTION:Send community-first intro to Municipal Clerk (Clerk/Purchasing). Ask for a 20-minute in-person meeting. Email:  Phone: 609-386-4444
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260225-2@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260225T110000
+DTEND:20260225T113000
+SUMMARY:Send intro email + meeting request - City of Burlington
+DESCRIPTION:Send community-first intro to James Conyer (Business Administration / Purchasing). Ask for a 20-minute in-person meeting. Email: JConyer@burlingtonnj.us Phone: 609-386-0200 x133
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260225-3@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260225T120000
+DTEND:20260225T123000
+SUMMARY:Send intro email + meeting request - Mount Holly Township
+DESCRIPTION:Send community-first intro to Stephanie Marnell (Township Clerk). Ask for a 20-minute in-person meeting. Email: smarnell@twp.mountholly.nj.us Phone: 609-845-1101
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260227-4@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260227T100000
+DTEND:20260227T102000
+SUMMARY:Follow-up call - Burlington Township
+DESCRIPTION:Call Municipal Clerk to confirm receipt and request in-person intro. Phone: 609-386-4444
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260227-5@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260227T110000
+DTEND:20260227T112000
+SUMMARY:Follow-up call - City of Burlington
+DESCRIPTION:Call James Conyer to confirm receipt and request in-person intro. Phone: 609-386-0200 x133
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260227-6@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260227T120000
+DTEND:20260227T122000
+SUMMARY:Follow-up call - Mount Holly Township
+DESCRIPTION:Call Stephanie Marnell to confirm receipt and request in-person intro. Phone: 609-845-1101
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260304-7@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260304T100000
+DTEND:20260304T104500
+SUMMARY:Attend public meeting / in-person touchpoint - Burlington Township
+DESCRIPTION:Show up in person\, introduce yourself as local operator\, and ask for best process to support pre-RFP planning.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260304-8@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260304T110000
+DTEND:20260304T114500
+SUMMARY:Attend public meeting / in-person touchpoint - City of Burlington
+DESCRIPTION:Show up in person\, introduce yourself as local operator\, and ask for best process to support pre-RFP planning.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260304-9@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260304T120000
+DTEND:20260304T124500
+SUMMARY:Attend public meeting / in-person touchpoint - Mount Holly Township
+DESCRIPTION:Show up in person\, introduce yourself as local operator\, and ask for best process to support pre-RFP planning.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260307-10@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260307T100000
+DTEND:20260307T104000
+SUMMARY:Draft and deliver 1-page local modernization memo - Burlington Township
+DESCRIPTION:Deliver tailored one-page memo with bloat hypothesis\, proof points\, and low-risk pilot recommendation.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260307-11@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260307T110000
+DTEND:20260307T114000
+SUMMARY:Draft and deliver 1-page local modernization memo - City of Burlington
+DESCRIPTION:Deliver tailored one-page memo with bloat hypothesis\, proof points\, and low-risk pilot recommendation.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260307-12@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260307T120000
+DTEND:20260307T124000
+SUMMARY:Draft and deliver 1-page local modernization memo - Mount Holly Township
+DESCRIPTION:Deliver tailored one-page memo with bloat hypothesis\, proof points\, and low-risk pilot recommendation.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260312-13@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260312T100000
+DTEND:20260312T102500
+SUMMARY:Second follow-up call - Burlington Township
+DESCRIPTION:Request update on meeting availability and procurement planning timeline.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260312-14@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260312T110000
+DTEND:20260312T112500
+SUMMARY:Second follow-up call - City of Burlington
+DESCRIPTION:Request update on meeting availability and procurement planning timeline.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260312-15@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260312T120000
+DTEND:20260312T122500
+SUMMARY:Second follow-up call - Mount Holly Township
+DESCRIPTION:Request update on meeting availability and procurement planning timeline.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260319-16@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260319T100000
+DTEND:20260319T104500
+SUMMARY:In-person working session request - Burlington Township
+DESCRIPTION:Propose short in-person working session on scope clarity and resident workflow improvements.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260319-17@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260319T110000
+DTEND:20260319T114500
+SUMMARY:In-person working session request - City of Burlington
+DESCRIPTION:Propose short in-person working session on scope clarity and resident workflow improvements.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260319-18@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260319T120000
+DTEND:20260319T124500
+SUMMARY:In-person working session request - Mount Holly Township
+DESCRIPTION:Propose short in-person working session on scope clarity and resident workflow improvements.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260325-19@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260325T100000
+DTEND:20260325T103000
+SUMMARY:30-day account review and go/no-go refresh - Burlington Township
+DESCRIPTION:Review relationship progress\, update winability evidence\, and decide next 30-day plan.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260325-20@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260325T110000
+DTEND:20260325T113000
+SUMMARY:30-day account review and go/no-go refresh - City of Burlington
+DESCRIPTION:Review relationship progress\, update winability evidence\, and decide next 30-day plan.
+END:VEVENT
+BEGIN:VEVENT
+UID:rel-20260325-21@bosskeyops.com
+DTSTAMP:20260224T104231Z
+DTSTART:20260325T120000
+DTEND:20260325T123000
+SUMMARY:30-day account review and go/no-go refresh - Mount Holly Township
+DESCRIPTION:Review relationship progress\, update winability evidence\, and decide next 30-day plan.
+END:VEVENT
+END:VCALENDAR

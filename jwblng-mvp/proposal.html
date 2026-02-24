@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JWBLNG | Donated Scope Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --plum: #6f2f84;
+      --plum-deep: #4d205d;
+      --paper: #fdfbfe;
+      --line: #e4d8ea;
+      --ink: #25192c;
+      --muted: #65556f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 300px at 100% -120px, #eadcf0 0%, transparent 70%),
+        var(--paper);
+    }
+    .wrap { width: min(980px, 92vw); margin: 0 auto; }
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(253, 251, 254, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .top-inner {
+      width: min(980px, 92vw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--plum);
+      font-weight: 700;
+    }
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      object-fit: cover;
+      background: #fff;
+    }
+    .btn {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #fff;
+      background: linear-gradient(135deg, var(--plum), #9a5bb0);
+    }
+    .hero {
+      padding: 26px 0 10px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 12px;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      color: #341a40;
+      line-height: 1.05;
+    }
+    h1 { font-size: clamp(1.9rem, 3.8vw, 3rem); }
+    p { color: var(--muted); margin: 8px 0 0; }
+    .stamp {
+      margin-top: 10px;
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--plum);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #faf4fc;
+      font-weight: 700;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px;
+      background: #fbf7fd;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .kpi strong { display: block; color: var(--plum); }
+    section { padding: 10px 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .list {
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 7px;
+    }
+    .list li {
+      list-style: none;
+      border-left: 3px solid #ead8f1;
+      background: #fbf7fd;
+      border-radius: 8px;
+      padding: 7px 0 7px 10px;
+      color: #5f4f68;
+      font-size: 0.93rem;
+    }
+    .list li strong { color: var(--plum); }
+    .footer {
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding: 14px 0 26px;
+      color: #776785;
+      font-size: 0.88rem;
+    }
+    @media (max-width: 880px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="./index.html">
+        <img src="./assets/jwblng-logo-screenshot.png" alt="JWBLNG logo">
+        <span>JWBLNG Proposal</span>
+      </a>
+      <a class="btn" href="mailto:rabinowitzjessica@gmail.com?subject=JWBLNG%20Donated%20Scope%20Proposal">Share by Email</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <article class="panel">
+        <h1>Donated Scope Proposal</h1>
+        <p>A focused, no-cost starter phase to give JWBLNG clear momentum, a usable member path, and a practical operating baseline without open-ended implementation risk.</p>
+        <span class="stamp">Prepared for Jessica Rabinowitz and Marcy Fried</span>
+      </article>
+      <aside class="panel">
+        <h3>Phase Snapshot</h3>
+        <div class="meta">
+          <div class="kpi"><strong>Cost</strong>Donated</div>
+          <div class="kpi"><strong>Duration</strong>Up to 3 weeks</div>
+          <div class="kpi"><strong>Revisions</strong>One round</div>
+          <div class="kpi"><strong>Goal</strong>Clarity + launch readiness</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>What Is Included</h2>
+        <ul class="list">
+          <li><strong>Member Journey Blueprint:</strong> one-page flow from discover -> join -> onboard -> first event -> ongoing updates.</li>
+          <li><strong>Website MVP Package:</strong> main homepage, 3 standalone event pages, and member portal mock view.</li>
+          <li><strong>Communication Starter Pack:</strong> welcome email, reminder email, monthly digest template, and send checklist.</li>
+          <li><strong>Basic Launch Setup:</strong> canonical join path, event registration pattern, donation CTA, basic click/form tracking.</li>
+          <li><strong>Handoff Session (60-90 min):</strong> walkthrough, operating guidance, and phase-complete checkpoint.</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Boundaries for This Donated Phase</h2>
+        <ul class="list">
+          <li><strong>Not included:</strong> full Kajabi migration or full platform rebuild.</li>
+          <li><strong>Not included:</strong> custom backend/CRM build or advanced integrations.</li>
+          <li><strong>Not included:</strong> ongoing administration/content operations after handoff.</li>
+          <li><strong>Constraint:</strong> one consolidated revision cycle only.</li>
+          <li><strong>Assumption:</strong> timely stakeholder feedback and content inputs.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Success Criteria</h2>
+        <ul class="list">
+          <li>Clear member path and reduced sign-up confusion.</li>
+          <li>Event pages that can be shared externally with confidence.</li>
+          <li>Repeatable monthly communication cadence the team can run.</li>
+          <li>A concrete basis for deciding whether a paid phase is warranted.</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h2>Decision After This Phase</h2>
+        <p>If further implementation is needed, a separate paid scope can be proposed with fixed deliverables, timeline, and pricing.</p>
+        <p>That second phase would be optional and based on what JWBLNG leadership decides after reviewing donated-phase outcomes.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">JWBLNG | Donated Scope Proposal | February 24, 2026</div>
+  </footer>
+</body>
+</html>

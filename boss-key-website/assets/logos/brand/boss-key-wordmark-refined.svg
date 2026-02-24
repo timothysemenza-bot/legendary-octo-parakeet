@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" fill="none">
+  <rect width="900" height="220" rx="22" fill="#0B1222"/>
+  <g transform="translate(36 34)">
+    <rect x="0" y="0" width="152" height="152" rx="24" fill="#121D33"/>
+    <path d="M40 16H112L128 32V112L112 128H40L24 112V32L40 16Z" stroke="#F5F7FB" stroke-width="8" stroke-linejoin="miter"/>
+    <path d="M76 44L104 72L76 100L48 72L76 44Z" stroke="#F5F7FB" stroke-width="8" stroke-linejoin="miter"/>
+    <path d="M76 16V44" stroke="#F5F7FB" stroke-width="8" stroke-linecap="square"/>
+    <circle cx="96.5" cy="72" r="4.8" fill="#C5162E"/>
+  </g>
+  <text x="226" y="108" fill="#F5F7FB" font-family="Fraunces, Georgia, serif" font-size="76" font-weight="700" letter-spacing="0.4">Boss Key</text>
+  <text x="228" y="152" fill="#C9D4E8" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="26" font-weight="600" letter-spacing="0.35">Business Development Acceleration</text>
+  <rect x="228" y="172" width="466" height="3" fill="#C5162E"/>
+</svg>

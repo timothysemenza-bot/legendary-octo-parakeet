@@ -2,6 +2,16 @@
 
 A lightweight Node.js app for collecting intake details and generating proposal drafts, including `.docx` export.
 
+## Repo map
+
+- `server.js`, `index.html`, `content-library.json`: proposal microsite application.
+- `marketing-agents/`: outbound/capture/proposal automation workspace.
+- `boss-key-website/`: public-facing website assets and deployment package.
+- `boss-key-llc-admin/`: business admin, compliance, and finance artifacts.
+- `sample-content/`: sample manifest/content payloads for content-provider workflows.
+
+For the automation workspace specifically, see [marketing-agents/README.md](marketing-agents/README.md).
+
 ## Why it is portable
 
 - No hardcoded filesystem paths remain for data, content library, or branding.

@@ -23,8 +23,8 @@ powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\generate-dai
 
 $briefDate = if ([string]::IsNullOrWhiteSpace($CallDate)) { (Get-Date).ToString("yyyy-MM-dd") } else { $CallDate }
 
-Write-Output "Step 4/7: Generating LinkedIn outreach queue..."
-powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\generate-linkedin-outreach-queue.ps1 -RunDate $briefDate
+Write-Output "Step 4/7: Generating daily LinkedIn writing prompt..."
+powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\generate-daily-linkedin-writing-prompt.ps1 -Date $briefDate -OpenInNotepad
 
 Write-Output "Step 5/7: Generating daily BD brief..."
 powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\generate-daily-brief.ps1 -Date $briefDate
@@ -37,7 +37,7 @@ powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\generate-pro
 
 Write-Output "Done. Review:"
 Write-Output (" - marketing-agents/briefs/public-renewal-radar-{0}.md" -f $briefDate)
-Write-Output " - marketing-agents/data/linkedin_outreach_queue.csv"
+Write-Output (" - marketing-agents/briefs/linkedin-writing-prompt-{0}.md" -f $briefDate)
 Write-Output " - marketing-agents/data/daily_call_plan.csv"
 Write-Output " - marketing-agents/data/prospect_pipeline.csv"
 Write-Output (" - marketing-agents/briefs/{0}.md" -f $briefDate)

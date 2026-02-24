@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Boss Key | Business Development Acceleration And Seller Coaching</title>
   <meta name="description" content="Boss Key helps businesses and individual sellers increase win rates through stronger pursuit systems, faster proposal execution, and reduced admin drag.">
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
@@ -72,17 +72,12 @@
       height: 34px;
       display: inline-grid;
       place-items: center;
-      color: var(--ink);
     }
 
-    .brand-mark svg {
+    .brand-mark img {
       width: 100%;
       height: 100%;
       display: block;
-    }
-
-    .sigil-accent {
-      fill: var(--accent);
     }
 
     .cta-top {
@@ -224,9 +219,15 @@
     }
 
     .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 12px 18px;
       border-radius: 12px;
       font-weight: 700;
+      line-height: 1.15;
+      white-space: nowrap;
+      text-align: center;
       transition: transform 120ms ease, box-shadow 120ms ease;
     }
 
@@ -649,6 +650,13 @@
       max-width: 70ch;
     }
 
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
     .cta-block .btn-secondary {
       background: #fff7f1;
       color: #0a1021;
@@ -875,6 +883,17 @@
         padding: 6px 0;
       }
     }
+
+    @media (max-width: 460px) {
+      .contact-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .contact-actions .btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -882,22 +901,16 @@
     <div class="wrap nav">
       <a class="brand" href="#">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22 12H78L88 22V78L78 88H22L12 78V22L22 12Z" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter"/>
-            <path d="M50 30L70 50L50 70L30 50L50 30Z" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter"/>
-            <path d="M50 12V30" stroke="currentColor" stroke-width="5.5" stroke-linecap="square"/>
-            <circle class="sigil-accent" cx="64" cy="50" r="2.8"/>
-          </svg>
+          <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
         </span>
         <span>Boss Key</span>
       </a>
-      <a class="cta-top" href="#contact">Book a Discovery Call</a>
+      <a class="cta-top schedule-cta track-contact" data-channel="schedule" data-context="Top Nav Schedule Button" href="#">Book a Discovery Call</a>
       <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileHeaderSections">Menu</button>
     </div>
     <div class="wrap quick-contact" id="mobileHeaderSections" aria-label="Direct contact options">
-      <span>Talk directly with Timmy:</span>
-      <a class="track-contact" data-channel="call" data-context="Header Call Button" href="tel:+12035210311">Call (203) 521-0311</a>
-      <a class="track-contact" data-channel="sms" data-context="Header Text Button" href="sms:+12035210311">Text Timmy</a>
+      <span>Schedule time with Timmy:</span>
+      <a class="schedule-cta track-contact" data-channel="schedule" data-context="Header Schedule Button" href="#">Open Scheduling Calendar</a>
       <a class="email-cta" data-context="Header Quick Contact" href="#">timmy@bosskeyops.com</a>
       <a class="quick-linkedin" href="https://www.linkedin.com/company/boss-key-llc" target="_blank" rel="noopener noreferrer">Boss Key on LinkedIn</a>
     </div>
@@ -907,7 +920,7 @@
     <nav class="toc-nav" aria-label="Jump to section">
       <a href="#services">Services</a>
       <a href="#credentials">Background</a>
-      <a href="#pricing">Pricing</a>
+      <a href="#pricing">Service Packages</a>
       <a href="#about">About Timmy</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -917,8 +930,8 @@
         <h1>Win more business without getting buried in admin work.</h1>
         <p>Boss Key helps businesses strengthen pipeline execution, improve pursuit discipline, and speed proposal output. I also coach individual sellers who want better deal control and higher close rates.</p>
         <div class="btn-row">
-          <a class="btn btn-primary track-contact" data-channel="call" data-context="Hero Call Button" href="tel:+12035210311">Call Timmy Now</a>
-          <a class="btn btn-secondary track-contact" data-channel="sms" data-context="Hero Text Button" href="sms:+12035210311">Text Timmy</a>
+          <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Hero Schedule Button" href="#">Schedule Intro Call</a>
+          <a class="btn btn-secondary email-cta" data-context="Hero Email Button" href="#">Email Timmy</a>
           <a class="btn btn-secondary" href="#services">See Services</a>
         </div>
       </div>
@@ -926,7 +939,7 @@
         <h2 class="kicker">Built for teams that need momentum</h2>
         <div class="founder">
           <a class="founder-photo-link" href="https://www.linkedin.com/in/timothy-semenza-82b35656/" target="_blank" rel="noopener noreferrer" aria-label="View Timmy Semenza on LinkedIn">
-            <img class="founder-photo" src="./assets/timothy-semenza-headshot.jpg" alt="Timmy Semenza, founder of Boss Key">
+            <img class="founder-photo" src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza, founder of Boss Key">
           </a>
           <div class="founder-meta">
             <strong>Timmy Semenza</strong>
@@ -982,19 +995,19 @@
               <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFNfbEd1buK4w/company-logo_100_100/company-logo_100_100/0/1630553862696/kellermeyer_bergensons_services_llc_logo?e=2147483647&v=beta&t=Py37dMcS-OsXX28erRrGjmSAgR2-WhE-4xQGk7owEsU" alt="Kellermeyer Bergensons Services logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
             </div>
             <div class="logo-card">
               <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGDn9gqgHN8Ng/company-logo_100_100/B4EZT33OFKGgAQ-/0/1739325236262/the_facilities_group_logo?e=2147483647&v=beta&t=teQXyp3i5kxoGpwEnNRUdWIIJFydBry60TxNZmWOeuU" alt="The Facilities Group logo" loading="lazy">
@@ -1006,19 +1019,19 @@
               <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFNfbEd1buK4w/company-logo_100_100/company-logo_100_100/0/1630553862696/kellermeyer_bergensons_services_llc_logo?e=2147483647&v=beta&t=Py37dMcS-OsXX28erRrGjmSAgR2-WhE-4xQGk7owEsU" alt="Kellermeyer Bergensons Services logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
             </div>
             <div class="logo-card">
-              <img src="./assets/logos/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
+              <img src="./assets/logos/client-wordmarks/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
             </div>
           </div>
         </div>
@@ -1026,19 +1039,19 @@
     </section>
 
     <section id="pricing">
-      <h2 class="kicker fade d2">Straightforward Pricing By Client Type</h2>
-      <p class="pricing-intro fade d2">Choose the track that fits your situation. Every engagement starts with a fixed diagnostic, then moves to a monthly retainer with clear scope and cadence. Typical roster: 4 business clients and 1 seller client for focused delivery.</p>
+      <h2 class="kicker fade d2">Service Packages By Client Type</h2>
+      <p class="pricing-intro fade d2">Choose the track that fits your situation. Every engagement starts with a diagnostic, then moves to a monthly retainer with clear scope and cadence. Final investment is tailored to scope, timeline, and support depth.</p>
       <div class="pricing-tracks">
         <article class="track-card fade d2">
           <span class="price-tag">For Businesses</span>
           <h3>Owner And Team Track</h3>
           <p class="track-sub">Best for businesses that need stronger pursuit execution and less admin drag on leadership.</p>
           <div class="price-block">
-            <b>Business Diagnostic: $5,000-$6,500</b>
+            <b>Business Diagnostic</b>
             <p>2 weeks | fixed fee | workflow map + top bottlenecks + 30/60/90-day plan.</p>
           </div>
           <div class="price-block">
-            <b>Business Acceleration Retainer: $5,500-$6,250/mo</b>
+            <b>Business Acceleration Retainer</b>
             <p>6-month minimum | pipeline rhythm, proposal support, accountability cadence.</p>
           </div>
         </article>
@@ -1047,60 +1060,17 @@
           <h3>Executive Coaching Track</h3>
           <p class="track-sub">Best for high-performing sellers who want better control of live deals and stronger close discipline.</p>
           <div class="price-block">
-            <b>Seller Win Diagnostic: $1,500-$2,000</b>
+            <b>Seller Win Diagnostic</b>
             <p>1-2 weeks | fixed fee | stage audit + qualification reset + target deal plan.</p>
           </div>
           <div class="price-block">
-            <b>Seller Coaching Retainer: $2,250-$3,000/mo</b>
+            <b>Seller Coaching Retainer</b>
             <p>3- or 6-month options | weekly coaching, deal strategy, follow-up discipline.</p>
           </div>
         </article>
       </div>
-      <div class="comparison fade d4">
-        <table>
-          <thead>
-            <tr>
-              <th>Offer</th>
-              <th>Who It Is For</th>
-              <th>Timeline</th>
-              <th>Price</th>
-              <th>Primary Outcome</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Business Diagnostic</td>
-              <td>Owners and leadership teams</td>
-              <td>2 weeks</td>
-              <td>$5,000-$6,500</td>
-              <td>Clear pursuit system reset and action plan</td>
-            </tr>
-            <tr>
-              <td>Business Acceleration Retainer</td>
-              <td>Owner-led businesses</td>
-              <td>6-month minimum</td>
-              <td>$5,500-$6,250/mo</td>
-              <td>Faster proposal and pipeline execution</td>
-            </tr>
-            <tr>
-              <td>Seller Win Diagnostic</td>
-              <td>Individual sellers</td>
-              <td>1-2 weeks</td>
-              <td>$1,500-$2,000</td>
-              <td>Improved qualification and deal focus</td>
-            </tr>
-            <tr>
-              <td>Seller Coaching Retainer</td>
-              <td>Quota-carrying sellers</td>
-              <td>3- or 6-month options</td>
-              <td>$2,250-$3,000/mo</td>
-              <td>Higher close consistency and cleaner cadence</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <div class="btn-row fade d4">
-        <a class="btn btn-primary" href="#contact">Book A Fit Call</a>
+        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Pricing Fit Call Button" href="#">Book A Fit Call</a>
       </div>
     </section>
 
@@ -1151,9 +1121,9 @@
 
     <section id="contact" class="cta-block fade d3">
       <h2 class="kicker">Need help accelerating business development?</h2>
-      <p>Call or text Timmy at <a class="track-contact" data-channel="call" data-context="Contact Paragraph Call Link" href="tel:+12035210311" style="text-decoration: underline;">(203) 521-0311</a>, or email <a class="email-cta" data-context="Contact Section Link" href="#" style="text-decoration: underline;">timmy@bosskeyops.com</a>. If your team or individual seller needs stronger pipeline, pursuit, and proposal execution, you will get practical help you can use right away.</p>
-      <p>
-        <a class="btn btn-secondary track-contact" data-channel="sms" data-context="Contact Section Text Button" href="sms:+12035210311">Text Timmy</a>
+      <p>Use the scheduling calendar to book time directly with Timmy, or email <a class="email-cta" data-context="Contact Section Link" href="#" style="text-decoration: underline;">timmy@bosskeyops.com</a>. If your team or individual seller needs stronger pipeline, pursuit, and proposal execution, you will get practical help you can use right away.</p>
+      <p class="contact-actions">
+        <a class="btn btn-secondary schedule-cta track-contact" data-channel="schedule" data-context="Contact Section Schedule Button" href="#">Schedule With Timmy</a>
         <a class="btn btn-secondary email-cta" data-context="Contact Section Button" href="#">Email Timmy</a>
       </p>
     </section>
@@ -1189,6 +1159,7 @@
   <script>
     (function () {
       const inboxAlias = "timmy@bosskeyops.com";
+      const calendarScheduleUrl = "https://calendar.app.google/XXQaukj4evMTLq4E7";
       const trackingEndpoint = "/api/contact-events";
 
       function buildMailto(context) {
@@ -1246,6 +1217,12 @@
           trackContactEvent("email", context);
           this.href = buildMailto(context);
         });
+      });
+
+      document.querySelectorAll(".schedule-cta").forEach((link) => {
+        link.href = calendarScheduleUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
       });
 
       document.querySelectorAll(".track-contact").forEach((link) => {

@@ -1,0 +1,12 @@
+JWBLNG One-Pager InDesign Script
+
+1. Open Adobe InDesign.
+2. Open the Scripts panel:
+   Window > Utilities > Scripts
+3. Right-click "User" in Scripts panel and choose "Reveal in Explorer".
+4. Copy this file into that folder:
+   JWBLNG-Donated-Scope-OnePager.jsx
+5. Back in InDesign, double-click the script name.
+6. The one-pager document is generated automatically.
+7. Review copy, then export PDF:
+   File > Export > Adobe PDF (Print)
