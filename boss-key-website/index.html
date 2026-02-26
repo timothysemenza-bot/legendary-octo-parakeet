@@ -325,6 +325,58 @@
       gap: 16px;
     }
 
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .insight-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .insight-card h3 {
+      margin: 6px 0 10px;
+      font-size: 1.08rem;
+      line-height: 1.35;
+    }
+
+    .insight-card p {
+      margin: 0 0 12px;
+      color: var(--soft);
+      font-size: 0.95rem;
+    }
+
+    .insight-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: #ffd7dc;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .insight-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffd7dc;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+
+    .insight-link:hover {
+      text-decoration: underline;
+    }
+
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -918,6 +970,7 @@
 
   <main class="wrap">
     <nav class="toc-nav" aria-label="Jump to section">
+      <a href="#insights">Insights</a>
       <a href="#services">Services</a>
       <a href="#credentials">Background</a>
       <a href="#pricing">Service Packages</a>
@@ -975,6 +1028,31 @@
         <article class="card fade d4">
           <h3>Seller Executive Coaching</h3>
           <p>Coach individual sellers on deal strategy, opportunity qualification, and pursuit discipline to improve conversion and consistency.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="insights">
+      <h2 class="kicker fade d2">Insights And Think Pieces</h2>
+      <p class="pricing-intro fade d2">Field notes, long-form perspectives, and practical essays on proposals, pursuit work, and business development execution.</p>
+      <div class="insights-grid">
+        <article class="insight-card fade d2">
+          <div class="insight-meta">
+            <span>Long-Form Article</span>
+            <span>Feb 26, 2026</span>
+          </div>
+          <h3>Inception, Limbo, and the AI Trap</h3>
+          <p>A practical reflection on AI ideation loops, time-boxed experimentation, and why ideas only matter once they become real deliverables.</p>
+          <a class="insight-link" href="./insights/inception-limbo-and-the-ai-trap.html">Read the full article -></a>
+        </article>
+        <article class="insight-card fade d3">
+          <div class="insight-meta">
+            <span>Long-Form Article</span>
+            <span>Feb 25, 2026</span>
+          </div>
+          <h3>What 10+ Years in Proposals Teaches You (That Most Organizations Still Miss)</h3>
+          <p>A perspective on bid management, organizational chaos, AI pressure, and why frontline proximity still determines proposal credibility.</p>
+          <a class="insight-link" href="./insights/what-10-years-in-proposals-teaches-you.html">Read the full article -></a>
         </article>
       </div>
     </section>

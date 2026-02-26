@@ -27,3 +27,22 @@ Before adding a new script, define:
 3. whether output is generated/transient or reusable reference
 
 If generated, default to `briefs/generated/*`.
+
+## APMP LinkedIn ICP List
+
+Use one command to generate a clean, ranked LinkedIn list from existing pipeline data:
+
+`powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\generate-apmp-linkedin-targets.ps1`
+
+Default behavior is APMP/manual-first (`apmp_member_prospects.csv`) with security lookalike disabled.
+
+If you explicitly want to pull from existing pipelines, enable with flags:
+
+`.\marketing-agents\scripts\generate-apmp-linkedin-targets.ps1 -IncludeProspectPipeline:$true`
+
+Outputs:
+- `marketing-agents/data/apmp_linkedin_targets.csv`
+- `marketing-agents/briefs/apmp-linkedin-targets-YYYY-MM-DD.md`
+
+Optional manual APMP contacts can be added to:
+- `marketing-agents/data/apmp_member_prospects.csv`

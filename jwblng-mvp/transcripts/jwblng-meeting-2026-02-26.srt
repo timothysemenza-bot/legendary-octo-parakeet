@@ -1,0 +1,2920 @@
+0
+00:13:14,452 --> 00:13:17,452
+Hi there.
+
+1
+00:13:17,439 --> 00:13:20,439
+Hi, sorry about that.
+
+2
+00:13:20,426 --> 00:13:23,386
+I guess it said it's finishing at 12.30 and that's what I
+
+3
+00:13:23,412 --> 00:13:26,292
+No, it's all good, totally okay.
+
+4
+00:13:26,399 --> 00:13:27,659
+How are you doing?
+
+5
+00:13:27,659 --> 00:13:28,159
+Great.
+
+6
+00:13:28,159 --> 00:13:28,679
+How are you?
+
+7
+00:13:28,679 --> 00:13:30,759
+Nice to meet you.
+
+8
+00:13:29,386 --> 00:13:32,386
+Yeah, yeah, nice to meet you too. Thanks for taking
+
+9
+00:13:32,372 --> 00:13:35,332
+time. Of course. Of course. Thanks for
+
+10
+00:13:35,359 --> 00:13:38,359
+doing this for us. Yeah, yeah, exactly.
+
+11
+00:13:38,346 --> 00:13:40,346
+I want to make sure that
+
+12
+00:13:41,332 --> 00:13:44,292
+you and Jess feel like you're getting what you need.
+
+13
+00:13:44,319 --> 00:13:47,239
+instead of something that is like might sound cool.
+
+14
+00:13:47,306 --> 00:13:50,106
+but isn't necessarily going to be useful for you in the long term.
+
+15
+00:13:50,292 --> 00:13:52,692
+like last time we tried to do this.
+
+16
+00:13:52,692 --> 00:13:55,292
+- Oh yeah, is that what you're doing?
+
+17
+00:13:53,279 --> 00:13:56,279
+what happened? Well, I think the person that
+
+18
+00:13:56,266 --> 00:13:57,806
+that helped us out.
+
+19
+00:13:59,252 --> 00:14:02,212
+Thought Kajabi was a good platform to solve
+
+20
+00:14:02,239 --> 00:14:05,039
+our problem but did not know how to use it.
+
+21
+00:14:05,226 --> 00:14:08,226
+herself. So she spent
+
+22
+00:14:08,212 --> 00:14:11,092
+most of her time learning.
+
+23
+00:14:11,199 --> 00:14:14,199
+And then sort of trying to
+
+24
+00:14:14,186 --> 00:14:17,186
+teach us how to use it with
+
+25
+00:14:17,172 --> 00:14:20,172
+It was obviously didn't work out very well because
+
+26
+00:14:20,159 --> 00:14:22,799
+Right. We've totally switched our.
+
+27
+00:14:23,146 --> 00:14:25,146
+direction and our plan and.
+
+28
+00:14:26,132 --> 00:14:28,692
+And we're not able to get members.
+
+29
+00:14:28,692 --> 00:14:29,192
+So.
+
+30
+00:14:29,119 --> 00:14:30,819
+That's a problem.
+
+31
+00:14:30,819 --> 00:14:32,019
+Yeah, yeah, of course.
+
+32
+00:14:32,106 --> 00:14:34,986
+Okay. Is there...
+
+33
+00:14:35,092 --> 00:14:37,652
+I suggest has given me some of this context as well.
+
+34
+00:14:37,652 --> 00:14:38,132
+Is there a--
+
+35
+00:14:38,079 --> 00:14:41,079
+or anything else that's just kind of off the top of your head, that is.
+
+36
+00:14:41,066 --> 00:14:42,866
+your current state that you want to talk through.
+
+37
+00:14:44,052 --> 00:14:47,052
+No, I think you're familiar with what we're dealing with.
+
+38
+00:14:47,039 --> 00:14:50,039
+really my biggest concern is
+
+39
+00:14:50,026 --> 00:14:54,666
+access and security.
+
+40
+00:14:53,012 --> 00:14:54,012
+Yep.
+
+41
+00:14:54,012 --> 00:14:56,012
+So we really wanted to do a way.
+
+42
+00:14:55,999 --> 00:14:58,999
+with fees so that we can
+
+43
+00:14:58,986 --> 00:15:01,946
+just blow it wide open and there's no
+
+44
+00:15:01,972 --> 00:15:04,972
+restriction. That said, like I said,
+
+45
+00:15:04,959 --> 00:15:09,799
+mentioned to you we are a purely Jewish
+
+46
+00:15:07,946 --> 00:15:10,946
+for women and.
+
+47
+00:15:10,932 --> 00:15:13,812
+with the state of the world right now, security is a
+
+48
+00:15:13,919 --> 00:15:16,919
+real issue and in spammers and all that kind of.
+
+49
+00:15:16,906 --> 00:15:19,906
+stuff happens. So I just want to
+
+50
+00:15:19,892 --> 00:15:22,012
+to make sure that like.
+
+51
+00:15:22,879 --> 00:15:25,879
+We're going to be in conversation.
+
+52
+00:15:25,866 --> 00:15:28,866
+directly with people while working.
+
+53
+00:15:28,852 --> 00:15:30,832
+trying to encourage them to join.
+
+54
+00:15:30,832 --> 00:15:31,832
+However,
+
+55
+00:15:31,839 --> 00:15:34,839
+If we put an event, you know, if people...
+
+56
+00:15:34,826 --> 00:15:39,786
+register. So okay let's say they put a password.
+
+57
+00:15:37,812 --> 00:15:40,812
+or whatever it is and we have the information.
+
+58
+00:15:40,799 --> 00:15:43,799
+I want a secondary method.
+
+59
+00:15:43,786 --> 00:15:46,446
+mechanism like I I don't care if there's a
+
+60
+00:15:46,772 --> 00:15:48,772
+I want to be able to somehow
+
+61
+00:15:49,759 --> 00:15:54,099
+see who's in there.
+
+62
+00:15:52,746 --> 00:15:55,746
+So I don't know if that's possible.
+
+63
+00:15:55,732 --> 00:15:58,612
+but and then really for them just to be able to
+
+64
+00:15:58,719 --> 00:16:01,879
+like, okay, we have an event, we know how to post.
+
+65
+00:16:01,706 --> 00:16:04,706
+it. We know how to have the link. We know how to send it.
+
+66
+00:16:04,692 --> 00:16:07,692
+it out if we need to send an email if we want.
+
+67
+00:16:07,679 --> 00:16:09,679
+I'm going to do a blog post.
+
+68
+00:16:09,679 --> 00:16:10,679
+I'm going to.
+
+69
+00:16:10,666 --> 00:16:13,666
+start on a podcast soon and I think
+
+70
+00:16:13,652 --> 00:16:16,652
+jobby handle that so I wasn't
+
+71
+00:16:16,639 --> 00:16:19,639
+sure for now I was looking at some
+
+72
+00:16:19,626 --> 00:16:22,466
+because I didn't know if we should integrate it.
+
+73
+00:16:22,612 --> 00:16:25,572
+like we were very nervous about adding more.
+
+74
+00:16:25,599 --> 00:16:28,599
+things. So.
+
+75
+00:16:28,586 --> 00:16:31,546
+That's kind of the next phase.
+
+76
+00:16:31,572 --> 00:16:34,572
+is and then what do we do about Wix like our
+
+77
+00:16:34,559 --> 00:16:38,239
+website. Right.
+
+78
+00:16:37,546 --> 00:16:40,546
+Okay. And I saw the way.
+
+79
+00:16:40,532 --> 00:16:43,372
+I just walked me through that as well and it seems like
+
+80
+00:16:43,519 --> 00:16:46,519
+right now. The main function for Wix is as
+
+81
+00:16:46,506 --> 00:16:49,386
+a donation platform like it connects to Zephi.
+
+82
+00:16:49,492 --> 00:16:51,492
+Is that correct?
+
+83
+00:16:51,492 --> 00:16:52,492
+Yeah, so
+
+84
+00:16:52,479 --> 00:16:55,479
+We were using it as before as an image.
+
+85
+00:16:55,466 --> 00:16:58,466
+information, like just a landing page almost.
+
+86
+00:16:58,452 --> 00:17:01,412
+Yeah, before we had kajabi we put our
+
+87
+00:17:01,439 --> 00:17:06,359
+events on there and it was
+
+88
+00:17:04,426 --> 00:17:07,306
+super easy. People could sign up, they could pay.
+
+89
+00:17:07,412 --> 00:17:11,892
+right there. The money went into our account.
+
+90
+00:17:10,399 --> 00:17:12,399
+And it was pretty simple.
+
+91
+00:17:13,386 --> 00:17:16,386
+Are you familiar with both of you?
+
+92
+00:17:16,372 --> 00:17:19,212
+of these? Yeah, I am.
+
+93
+00:17:19,359 --> 00:17:21,359
+So what's your...
+
+94
+00:17:22,346 --> 00:17:25,346
+advice. Yeah. Take the money aside.
+
+95
+00:17:25,332 --> 00:17:27,852
+and the complexity aside.
+
+96
+00:17:27,852 --> 00:17:28,852
+In terms of
+
+97
+00:17:28,319 --> 00:17:31,319
+functionality. What what a.
+
+98
+00:17:31,306 --> 00:17:34,146
+is a better route for us.
+
+99
+00:17:34,292 --> 00:17:36,292
+to go.
+
+100
+00:17:37,279 --> 00:17:41,679
+consolidating all of this.
+
+101
+00:17:40,266 --> 00:17:44,346
+outreach and all of the public.
+
+102
+00:17:43,252 --> 00:17:46,252
+outreach that you're doing in Kajabi is the way.
+
+103
+00:17:46,239 --> 00:17:49,199
+Kajabi does indeed have a l-
+
+104
+00:17:49,226 --> 00:17:52,106
+of the functionality that you're looking for. It does have that podcast.
+
+105
+00:17:52,212 --> 00:17:54,772
+module. It's got the blog section and what I
+
+106
+00:17:55,199 --> 00:17:57,599
+what I'm seeing as I'm looking there is.
+
+107
+00:17:58,186 --> 00:18:01,186
+The way that the previous developer who worked with
+
+108
+00:18:01,172 --> 00:18:04,272
+with you had set it up is everything is kind of locked.
+
+109
+00:18:04,159 --> 00:18:07,039
+under this product page for like juke juke.
+
+110
+00:18:07,146 --> 00:18:10,146
+jubling insider which I understand
+
+111
+00:18:10,132 --> 00:18:13,132
+and kind of gating the access to a certain extent.
+
+112
+00:18:13,119 --> 00:18:16,359
+but it's cutting off your nose to spite your face.
+
+113
+00:18:16,106 --> 00:18:17,786
+phase what's happening here in here.
+
+114
+00:18:17,786 --> 00:18:19,106
+- Well, I think the problem
+
+115
+00:18:19,092 --> 00:18:21,992
+was that we had it was a
+
+116
+00:18:22,079 --> 00:18:24,959
+fee-based membership before. So she
+
+117
+00:18:25,066 --> 00:18:28,066
+I wanted to sort of sort separate out
+
+118
+00:18:28,052 --> 00:18:31,052
+who were paid members and who were
+
+119
+00:18:31,039 --> 00:18:33,839
+free like what was just open to the public but yeah.
+
+120
+00:18:34,026 --> 00:18:36,026
+It feels like we're very stuck.
+
+121
+00:18:37,012 --> 00:18:39,912
+Right and what I was seeing and
+
+122
+00:18:39,999 --> 00:18:42,999
+as I was going through just the architecture you have set up in Kajabi.
+
+123
+00:18:42,986 --> 00:18:46,026
+right now is that it is pretty simple to just train.
+
+124
+00:18:45,972 --> 00:18:48,972
+transfer the various parts that currently
+
+125
+00:18:48,959 --> 00:18:51,839
+exist from Wix into Kajabi.
+
+126
+00:18:51,946 --> 00:18:54,866
+To have that landing page that you're talking about but also
+
+127
+00:18:54,932 --> 00:18:56,932
+to have the various
+
+128
+00:18:57,919 --> 00:19:00,919
+Ways that people can engage on the web.
+
+129
+00:19:00,906 --> 00:19:03,906
+but then there's automations that can be created through
+
+130
+00:19:03,892 --> 00:19:06,952
+through Kajabi that will help to really
+
+131
+00:19:06,879 --> 00:19:09,879
+create a pipeline for outbound
+
+132
+00:19:09,866 --> 00:19:12,826
+and inbound communication that are quite simple.
+
+133
+00:19:12,852 --> 00:19:15,732
+to set up. It's just a matter of having somebody who knows
+
+134
+00:19:15,839 --> 00:19:18,839
+how to doing it. And so that's what I've kind of like laid out.
+
+135
+00:19:18,826 --> 00:19:21,786
+here is a fairly straightforward.
+
+136
+00:19:21,812 --> 00:19:26,812
+feedback loop between you and your friends.
+
+137
+00:19:24,799 --> 00:19:26,599
+in your members.
+
+138
+00:19:26,599 --> 00:19:28,159
+- Okay, yeah, because that's a...
+
+139
+00:19:27,786 --> 00:19:32,666
+other pieces. For instance, this afternoon,
+
+140
+00:19:30,772 --> 00:19:32,772
+I met someone who
+
+141
+00:19:33,759 --> 00:19:38,159
+said, oh, my sister is a senior executive this--
+
+142
+00:19:36,746 --> 00:19:39,746
+is perfect for her. So I said, great.
+
+143
+00:19:39,732 --> 00:19:42,612
+Now, you know, the next thing is like...
+
+144
+00:19:42,719 --> 00:19:45,519
+to get her to somehow go to.
+
+145
+00:19:45,706 --> 00:19:47,706
+jubling.org.
+
+146
+00:19:47,706 --> 00:19:48,706
+- Yeah.
+
+147
+00:19:48,692 --> 00:19:51,692
+Not kajabi because nobody knows what kajabi is.
+
+148
+00:19:51,679 --> 00:19:54,679
+which is another issue is when things come.
+
+149
+00:19:54,666 --> 00:19:57,666
+It comes out from Kajabi.
+
+150
+00:19:57,652 --> 00:20:00,652
+I don't know if there's a workaround for that, but we sort of
+
+151
+00:20:00,639 --> 00:20:03,439
+of lose our identity in there.
+
+152
+00:20:03,626 --> 00:20:06,626
+So that's number one and then so we
+
+153
+00:20:06,612 --> 00:20:09,572
+We want them to go to the website, but then I can't--
+
+154
+00:20:09,599 --> 00:20:11,599
+convert them from there.
+
+155
+00:20:12,586 --> 00:20:15,106
+especially now if I don't have a membership.
+
+156
+00:20:15,572 --> 00:20:18,452
+membership was the mechanism. Okay. Right. But now.
+
+157
+00:20:18,559 --> 00:20:23,559
+look, how do I keep them and how do I keep them?
+
+158
+00:20:21,546 --> 00:20:24,546
+I know that somebody even came and looked as a visitor.
+
+159
+00:20:24,532 --> 00:20:27,532
+I want to be a wholesome data.
+
+160
+00:20:27,519 --> 00:20:32,399
+on that so we can you know reach out with an email.
+
+161
+00:20:30,506 --> 00:20:33,506
+over here and a contact. But I don't know if it has
+
+162
+00:20:33,492 --> 00:20:36,492
+has that capability like a landing page and a.
+
+163
+00:20:36,479 --> 00:20:39,279
+- It does. - It does. Okay.
+
+164
+00:20:39,466 --> 00:20:42,506
+We keep paying more and more money and upgrading our--
+
+165
+00:20:42,452 --> 00:20:46,732
+thing and we I don't know
+
+166
+00:20:45,439 --> 00:20:46,439
+Yeah.
+
+167
+00:20:46,439 --> 00:20:48,439
+I think what you've...
+
+168
+00:20:48,426 --> 00:20:51,426
+got it at this point is you have access to all of
+
+169
+00:20:51,412 --> 00:20:54,212
+this functionality. Now it's just a matter of actually
+
+170
+00:20:54,212 --> 00:20:54,372
+kind of.
+
+171
+00:20:54,399 --> 00:20:57,399
+reaching your arms out into it and it
+
+172
+00:20:57,386 --> 00:21:00,386
+It's like the reason that I would be happy to take this.
+
+173
+00:21:00,372 --> 00:21:03,252
+and donate is one I want to support the mission.
+
+174
+00:21:03,359 --> 00:21:06,359
+but this is exactly the kind of thing that
+
+175
+00:21:06,346 --> 00:21:09,346
+is you just need to do it once and
+
+176
+00:21:09,332 --> 00:21:12,332
+have that structure set up. And then with
+
+177
+00:21:12,319 --> 00:21:15,359
+Within a platform like Kajabi, it will just start to run.
+
+178
+00:21:15,306 --> 00:21:18,266
+itself at a certain point. But having somebody who is
+
+179
+00:21:18,292 --> 00:21:21,292
+already busy with a million other things.
+
+180
+00:21:21,279 --> 00:21:24,159
+like you and Jess are is kind of the key here. So.
+
+181
+00:21:24,266 --> 00:21:27,266
+Yeah, the biggest thing that I can do.
+
+182
+00:21:27,252 --> 00:21:30,132
+from talking to Jessica say from the websites and the the weeks
+
+183
+00:21:30,239 --> 00:21:32,639
+and the distribution happening is just the--
+
+184
+00:21:33,226 --> 00:21:36,226
+The flow of the joining process.
+
+185
+00:21:36,212 --> 00:21:38,612
+just making that very easy.
+
+186
+00:21:38,612 --> 00:21:39,452
+You have the.
+
+187
+00:21:39,199 --> 00:21:42,159
+jubling.org domain it sounds like so all we have to do
+
+188
+00:21:42,186 --> 00:21:45,186
+is just point the Kajabi website to
+
+189
+00:21:45,172 --> 00:21:48,172
+the domain or vice versa, like when they use the domain it
+
+190
+00:21:48,159 --> 00:21:50,639
+It will bring up the Kajabi site, but there doesn't have to be a
+
+191
+00:21:51,146 --> 00:21:54,146
+be this confusing.
+
+192
+00:21:54,132 --> 00:21:57,132
+layer of bureaucracy that's coming from Kajal.
+
+193
+00:21:57,119 --> 00:21:59,119
+That is all easy to...
+
+194
+00:21:59,119 --> 00:22:00,119
+I should...
+
+195
+00:22:00,106 --> 00:22:02,906
+is that easy. It is possible to set that up.
+
+196
+00:22:03,092 --> 00:22:04,692
+easy for you possible.
+
+197
+00:22:06,079 --> 00:22:08,079
+It's easy when you have the time.
+
+198
+00:22:08,079 --> 00:22:09,079
+Do you?
+
+199
+00:22:09,066 --> 00:22:12,066
+Do we need to keep?
+
+200
+00:22:12,052 --> 00:22:14,152
+Keep wicks.
+
+201
+00:22:15,039 --> 00:22:18,039
+Is that I don't see a reason
+
+202
+00:22:18,026 --> 00:22:20,986
+to do that at this point. I think it's a hat on a hat.
+
+203
+00:22:21,012 --> 00:22:23,012
+to have both.
+
+204
+00:22:23,999 --> 00:22:26,999
+People could go to jubling.org.
+
+205
+00:22:26,986 --> 00:22:29,386
+it would take them right to Kajabi.
+
+206
+00:22:29,972 --> 00:22:32,692
+instead of through wicks.
+
+207
+00:22:32,692 --> 00:22:33,532
+- Yes.
+
+208
+00:22:32,959 --> 00:22:35,959
+Okay, we do own the juby-
+
+209
+00:22:35,946 --> 00:22:38,846
+that's fine and thank you for finding out
+
+210
+00:22:38,932 --> 00:22:40,932
+that our site was down the other day.
+
+211
+00:22:40,932 --> 00:22:41,932
+What is that?
+
+212
+00:22:41,919 --> 00:22:44,919
+I mean you see there's
+
+213
+00:22:44,906 --> 00:22:47,906
+nobody even uses it so like nobody even noticed even
+
+214
+00:22:47,892 --> 00:22:50,632
+including us unless somebody wants to give us money.
+
+215
+00:22:50,879 --> 00:22:53,759
+Right. Zephy, we're gonna keep Zephy and Zephy.
+
+216
+00:22:53,866 --> 00:22:58,666
+can go right through from Kajabi.
+
+217
+00:22:56,852 --> 00:22:57,692
+- Yep.
+
+218
+00:22:57,692 --> 00:23:00,192
+- We wanna do, we wanna, because we're...
+
+219
+00:22:59,839 --> 00:23:04,279
+open membership up to be free.
+
+220
+00:23:02,826 --> 00:23:05,826
+So when when people come in and we onboard them
+
+221
+00:23:05,812 --> 00:23:08,812
+them. So there's certain places we really want to put
+
+222
+00:23:08,799 --> 00:23:11,799
+that we need to know who wants to go into these.
+
+223
+00:23:11,786 --> 00:23:15,786
+ongoing learning.
+
+224
+00:23:14,772 --> 00:23:17,652
+groups that we have, autumn kaburos.
+
+225
+00:23:17,759 --> 00:23:20,559
+there, whoever wants to go into these groups.
+
+226
+00:23:20,746 --> 00:23:23,746
+So we need some kind of feedback.
+
+227
+00:23:23,732 --> 00:23:26,732
+back to know to reach out to them because it really
+
+228
+00:23:26,719 --> 00:23:31,359
+manual setup. You can't just do that. Yeah, right.
+
+229
+00:23:29,706 --> 00:23:31,706
+That's fine.
+
+230
+00:23:31,706 --> 00:23:32,706
+And then...
+
+231
+00:23:32,692 --> 00:23:35,692
+And if they want to pay, if they want to make a, you know,
+
+232
+00:23:35,679 --> 00:23:38,079
+voluntary donation instead of a fee.
+
+233
+00:23:38,666 --> 00:23:41,666
+that needs to be there as part of the onboarding process.
+
+234
+00:23:41,652 --> 00:23:42,892
+- Yep.
+
+235
+00:23:42,892 --> 00:23:44,652
+- And then obviously to...
+
+236
+00:23:44,639 --> 00:23:47,599
+point them next. I'll change all those videos and
+
+237
+00:23:47,626 --> 00:23:51,626
+whatever we have on there depending on what our
+
+238
+00:23:50,612 --> 00:23:53,612
+flow needs to be, where they need to go next, how they're going to be.
+
+239
+00:23:53,599 --> 00:23:55,919
+need to access things.
+
+240
+00:23:56,586 --> 00:23:59,466
+And then from a login.
+
+241
+00:23:59,572 --> 00:24:02,452
+perspective. Like we have an
+
+242
+00:24:02,559 --> 00:24:05,559
+event. Let's say that's out there. I put it
+
+243
+00:24:05,546 --> 00:24:08,546
+on WhatsApp to our members and say, "Hey,
+
+244
+00:24:08,532 --> 00:24:11,532
+this is out there or it goes through email and somebody clicks
+
+245
+00:24:11,519 --> 00:24:14,479
+on that link. Right now it's going to assign it.
+
+246
+00:24:14,506 --> 00:24:19,146
+page for name and effort.
+
+247
+00:24:17,492 --> 00:24:20,492
+But it doesn't say what if you forgot?
+
+248
+00:24:20,479 --> 00:24:23,119
+got your password like it just I don't know.
+
+249
+00:24:23,466 --> 00:24:24,466
+Yeah.
+
+250
+00:24:24,466 --> 00:24:25,466
+Yeah.
+
+251
+00:24:25,466 --> 00:24:26,466
+Yeah.
+
+252
+00:24:26,452 --> 00:24:29,332
+not a friendly first place to go.
+
+253
+00:24:29,439 --> 00:24:34,439
+And I'm...
+
+254
+00:24:32,426 --> 00:24:35,426
+What I'll do is I'll kind of walk through that workflow.
+
+255
+00:24:35,412 --> 00:24:38,292
+of just like what happens when you click the various things.
+
+256
+00:24:38,399 --> 00:24:41,279
+that are posted up here, but what I'm hoping...
+
+257
+00:24:41,386 --> 00:24:44,286
+is the case is just by architecting
+
+258
+00:24:44,372 --> 00:24:47,252
+various things within the...
+
+259
+00:24:47,359 --> 00:24:50,319
+modules that Kajabi has on picture here like the sidebar.
+
+260
+00:24:50,346 --> 00:24:52,986
+on the left that has all the different things there that.
+
+261
+00:24:53,332 --> 00:24:56,372
+I think what has been created up until this point.
+
+262
+00:24:56,319 --> 00:24:59,319
+point is essentially like a like worker.
+
+263
+00:24:59,306 --> 00:25:01,986
+rounds that can technically get
+
+264
+00:25:02,292 --> 00:25:05,252
+Members to events can technically get people to be...
+
+265
+00:25:05,279 --> 00:25:08,419
+demonstrating interest, but it's not working within the
+
+266
+00:25:08,266 --> 00:25:11,266
+the framework that Kajabi offers you.
+
+267
+00:25:11,252 --> 00:25:14,252
+So all of the things that you just articulated are
+
+268
+00:25:14,239 --> 00:25:17,119
+very achievable within this.
+
+269
+00:25:17,226 --> 00:25:20,226
+set up here. It's just a matter of like diversifying.
+
+270
+00:25:20,212 --> 00:25:23,212
+the way is that people...
+
+271
+00:25:23,199 --> 00:25:25,999
+the ways that you're collecting information from people.
+
+272
+00:25:26,186 --> 00:25:29,226
+and the ways that people are going to act.
+
+273
+00:25:29,172 --> 00:25:31,572
+access things like what I noticed in your own.
+
+274
+00:25:32,159 --> 00:25:35,159
+in the member section, the member point.
+
+275
+00:25:35,146 --> 00:25:38,146
+there was a lot of overlap.
+
+276
+00:25:38,132 --> 00:25:41,092
+between the different events and you have distinct
+
+277
+00:25:41,119 --> 00:25:44,119
+events, it is possible to segment
+
+278
+00:25:44,106 --> 00:25:46,986
+that out like you were talking about learning so there's a courses
+
+279
+00:25:47,092 --> 00:25:51,712
+within Kajabi as well. I think that's kind of a big...
+
+280
+00:25:50,079 --> 00:25:53,079
+selling point with KnoB. And so we'll get to be in.
+
+281
+00:25:53,066 --> 00:25:56,066
+revenue generator. Like we give things
+
+282
+00:25:56,052 --> 00:25:59,052
+We'll give you the membership for free so certain things come from
+
+283
+00:25:59,039 --> 00:26:02,079
+for free, but if we do a professional development
+
+284
+00:26:02,026 --> 00:26:04,906
+course on public speaking or I don't
+
+285
+00:26:05,012 --> 00:26:08,012
+strategic planning, like, take that and.
+
+286
+00:26:07,999 --> 00:26:10,999
+And if you're signed up as a member, you can get a discount.
+
+287
+00:26:10,986 --> 00:26:12,626
+now but don't have the fee.
+
+288
+00:26:12,626 --> 00:26:14,626
+So like--
+
+289
+00:26:13,972 --> 00:26:16,372
+How do we monetize this?
+
+290
+00:26:16,959 --> 00:26:19,839
+and because you know Jess and I need to get paid and so.
+
+291
+00:26:19,946 --> 00:26:22,426
+God forbid right?
+
+292
+00:26:22,932 --> 00:26:25,332
+That's why you're doing it.
+
+293
+00:26:25,919 --> 00:26:28,919
+We know we're, you know,
+
+294
+00:26:28,906 --> 00:26:31,906
+or someday.
+
+295
+00:26:31,892 --> 00:26:33,472
+And we're doing the right thing.
+
+296
+00:26:33,472 --> 00:26:34,312
+That's all we need.
+
+297
+00:26:34,312 --> 00:26:35,152
+- Yes.
+
+298
+00:26:34,879 --> 00:26:37,519
+(laughs)
+
+299
+00:26:37,519 --> 00:26:38,359
+Yes.
+
+300
+00:26:37,866 --> 00:26:40,866
+That is all very doable with
+
+301
+00:26:40,852 --> 00:26:43,852
+in Kajabi, I think in a lot of ways that
+
+302
+00:26:43,839 --> 00:26:46,839
+This is all meant to be history.
+
+303
+00:26:46,826 --> 00:26:49,826
+If it's free, then there's still--
+
+304
+00:26:49,812 --> 00:26:52,612
+information gating that you're getting from your users.
+
+305
+00:26:52,799 --> 00:26:55,839
+that enables you to market, that's nothing is free anymore.
+
+306
+00:26:55,786 --> 00:26:57,706
+kind of a situation and that's totally fine.
+
+307
+00:26:57,706 --> 00:26:59,146
+That's how that's the world that we are.
+
+308
+00:26:58,772 --> 00:27:01,672
+But then yes, you can have those.
+
+309
+00:27:01,759 --> 00:27:04,759
+those pancakes that make it very clear and like, here's
+
+310
+00:27:04,746 --> 00:27:07,706
+what's part of the experience of just coming to the website and just be
+
+311
+00:27:07,732 --> 00:27:10,612
+a free member, but then here's where you got a call.
+
+312
+00:27:10,719 --> 00:27:13,719
+up and it'll be easier to un-
+
+313
+00:27:13,706 --> 00:27:18,306
+understand the distinction between, well, I'm a member.
+
+314
+00:27:16,692 --> 00:27:19,692
+How does that jive with the...
+
+315
+00:27:19,679 --> 00:27:22,679
+things that are being offered as any products are served.
+
+316
+00:27:22,666 --> 00:27:25,586
+So you said it up before was like this
+
+317
+00:27:25,652 --> 00:27:28,492
+insider and then a free and so
+
+318
+00:27:28,639 --> 00:27:31,639
+What if I'm part of all of them because I want them?
+
+319
+00:27:31,626 --> 00:27:34,586
+that's there and something that's there and it are
+
+320
+00:27:34,612 --> 00:27:36,412
+Our members just like forget it.
+
+321
+00:27:37,599 --> 00:27:40,599
+You know, and our engagement went down.
+
+322
+00:27:40,586 --> 00:27:43,586
+completely different things that we were doing and
+
+323
+00:27:43,572 --> 00:27:46,572
+And yeah, it was very frustrating for people.
+
+324
+00:27:46,559 --> 00:27:47,559
+I'm sure.
+
+325
+00:27:47,559 --> 00:27:48,859
+Okay.
+
+326
+00:27:49,546 --> 00:27:52,586
+Well, the good news is that all of the things that you're talking about.
+
+327
+00:27:52,532 --> 00:27:55,492
+about are completely doable with
+
+328
+00:27:55,519 --> 00:27:58,479
+and Kajabi and within the scope that I had, you know,
+
+329
+00:27:58,506 --> 00:28:01,466
+time box within three or so with three weeks.
+
+330
+00:28:01,492 --> 00:28:06,012
+completely possible within that period of time.
+
+331
+00:28:04,479 --> 00:28:07,119
+Okay. Have you.
+
+332
+00:28:07,466 --> 00:28:10,466
+before with with Kajabi or you
+
+333
+00:28:10,452 --> 00:28:13,452
+you're just like savvy enough.
+
+334
+00:28:13,439 --> 00:28:15,719
+Smart enough to figure it out.
+
+335
+00:28:15,719 --> 00:28:16,479
+It's a little bit of--
+
+336
+00:28:16,426 --> 00:28:19,206
+Both I hadn't used literally Kajabi before,
+
+337
+00:28:19,206 --> 00:28:20,046
+but I...
+
+338
+00:28:19,412 --> 00:28:22,452
+I've used Squarespace, I've used Mailchimp.
+
+339
+00:28:22,399 --> 00:28:25,399
+I've done newsletters and designs for companies.
+
+340
+00:28:25,386 --> 00:28:28,346
+before he's just using like they're all just they're
+
+341
+00:28:28,372 --> 00:28:29,812
+They're all pigs at the same trough.
+
+342
+00:28:29,812 --> 00:28:31,212
+They're all just trying to...
+
+343
+00:28:31,359 --> 00:28:33,359
+offer something somewhat different one.
+
+344
+00:28:34,346 --> 00:28:37,346
+But the job is sort of, it's...
+
+345
+00:28:37,332 --> 00:28:42,212
+those are like, I want to say plug it.
+
+346
+00:28:40,319 --> 00:28:43,319
+right? Where's Abby tries to be a-
+
+347
+00:28:43,306 --> 00:28:46,306
+community space, like it wants people to have a conversation.
+
+348
+00:28:46,292 --> 00:28:49,212
+and you know and we would love to do
+
+349
+00:28:49,279 --> 00:28:52,019
+that if we could make it easily accessible.
+
+350
+00:28:52,266 --> 00:28:55,146
+and get rid of our WhatsApp group and just have the
+
+351
+00:28:55,252 --> 00:28:58,252
+that as a, you know, have a link to something that's
+
+352
+00:28:58,239 --> 00:29:00,639
+going on or here's the conversation.
+
+353
+00:29:01,226 --> 00:29:04,106
+be an extra and kajabi be the community.
+
+354
+00:29:04,212 --> 00:29:07,092
+space versus the other way around. People are
+
+355
+00:29:07,199 --> 00:29:10,099
+frustrated they can't get in so they go and have a conversation.
+
+356
+00:29:10,186 --> 00:29:11,306
+What's that?
+
+357
+00:29:11,306 --> 00:29:12,146
+Right.
+
+358
+00:29:12,146 --> 00:29:12,506
+Yeah.
+
+359
+00:29:12,506 --> 00:29:14,586
+And I was seeing--
+
+360
+00:29:13,172 --> 00:29:16,092
+on the member page that there's a feed where
+
+361
+00:29:16,159 --> 00:29:19,159
+you can have that almost like Facebook or
+
+362
+00:29:19,146 --> 00:29:22,146
+LinkedIn style ongoing discussion between
+
+363
+00:29:22,132 --> 00:29:25,012
+members, but it was just limited to things that you were
+
+364
+00:29:25,119 --> 00:29:27,999
+posting. So again that functionality is there.
+
+365
+00:29:28,106 --> 00:29:31,106
+and you'll get even more of a feedback.
+
+366
+00:29:31,092 --> 00:29:34,092
+back loop if friends are seeing friends or other members put
+
+367
+00:29:34,079 --> 00:29:37,079
+and sharing things and giving each other comments.
+
+368
+00:29:37,066 --> 00:29:40,026
+feedback. So yeah, it that is different.
+
+369
+00:29:40,052 --> 00:29:42,932
+about Kajabi, but it's...
+
+370
+00:29:43,039 --> 00:29:45,639
+fairly straightforward how it comes together.
+
+371
+00:29:45,639 --> 00:29:46,479
+- Okay.
+
+372
+00:29:46,026 --> 00:29:48,706
+And what do you think about this whole security thing?
+
+373
+00:29:48,706 --> 00:29:50,466
+Do you need--
+
+374
+00:29:49,012 --> 00:29:51,972
+to get in there and see it first to see.
+
+375
+00:29:51,999 --> 00:29:54,999
+how like how do we block people?
+
+376
+00:29:54,986 --> 00:29:56,986
+How do we...
+
+377
+00:29:57,972 --> 00:30:00,892
+So the the way that I
+
+378
+00:30:00,959 --> 00:30:03,959
+have my own personal website set up and and I handle
+
+379
+00:30:03,946 --> 00:30:06,826
+this just earlier this week, excuse me.
+
+380
+00:30:06,932 --> 00:30:09,932
+is through CloudFlare, which have you heard of?
+
+381
+00:30:09,919 --> 00:30:12,879
+cloud flare before. Yeah, but I don't know how it's
+
+382
+00:30:12,906 --> 00:30:15,986
+It's not a like, are you a robot?
+
+383
+00:30:15,892 --> 00:30:20,852
+thing or the yes yeah they that's one
+
+384
+00:30:18,879 --> 00:30:21,839
+of the layers of security that they'll implement if you
+
+385
+00:30:21,866 --> 00:30:24,866
+But the reason that you set up with something like that.
+
+386
+00:30:24,852 --> 00:30:27,852
+like Cloud Fire versus GoDaddy is if you
+
+387
+00:30:27,839 --> 00:30:30,999
+are trying to harden your security around.
+
+388
+00:30:30,826 --> 00:30:32,826
+your website more intentionally.
+
+389
+00:30:33,812 --> 00:30:36,552
+That being said, it's free to
+
+390
+00:30:36,799 --> 00:30:39,799
+have the CloudFlare subscription, the only thing that I'm paying for.
+
+391
+00:30:39,786 --> 00:30:42,666
+for me personally is the domain. That's just
+
+392
+00:30:42,772 --> 00:30:45,272
+running through Cloudflare. You have that through GoDaddy.
+
+393
+00:30:45,759 --> 00:30:48,759
+have to switch anything and now it's just a matter of
+
+394
+00:30:48,746 --> 00:30:53,586
+getting the kind of technical...
+
+395
+00:30:51,732 --> 00:30:54,692
+details like the DNS and secure socket.
+
+396
+00:30:54,719 --> 00:30:57,719
+player, how did that be within CloudFlare rather than go
+
+397
+00:30:57,706 --> 00:31:00,706
+Daddy, the alternative, Marcy, is that I can...
+
+398
+00:31:00,692 --> 00:31:03,652
+Look at your go daddy account and if all that's there
+
+399
+00:31:03,679 --> 00:31:06,679
+If it's all possible to just switch
+
+400
+00:31:06,666 --> 00:31:09,666
+things on or to configure it closer to
+
+401
+00:31:09,652 --> 00:31:12,452
+what you're looking for, then we don't have to change anything on the...
+
+402
+00:31:12,639 --> 00:31:15,599
+Yeah, I think that's what happened when I... that's how I...
+
+403
+00:31:15,626 --> 00:31:18,626
+we shut down our email or website this week.
+
+404
+00:31:18,612 --> 00:31:21,492
+I hit one of those. It was like change this thing.
+
+405
+00:31:21,599 --> 00:31:24,759
+in the DNS setting of like, what that means.
+
+406
+00:31:24,586 --> 00:31:27,586
+I thought you could tell me, just go here and do the...
+
+407
+00:31:27,572 --> 00:31:30,172
+And I'm like, I don't know what that means.
+
+408
+00:31:30,559 --> 00:31:33,559
+Now it's so easy to accidentally flip the line.
+
+409
+00:31:33,546 --> 00:31:35,866
+light switch off. So yeah, I can bother.
+
+410
+00:31:35,866 --> 00:31:36,386
+There's me. It's like
+
+411
+00:31:36,532 --> 00:31:39,492
+sites, you know, I get it because they want you to.
+
+412
+00:31:39,519 --> 00:31:40,959
+use their service.
+
+413
+00:31:40,959 --> 00:31:43,959
+Like, you know, I'm a business consumer.
+
+414
+00:31:42,506 --> 00:31:45,466
+all that. I get how this works. It's about money and business.
+
+415
+00:31:45,492 --> 00:31:48,492
+But everybody seems to be.
+
+416
+00:31:48,479 --> 00:31:51,479
+have their own language.
+
+417
+00:31:51,466 --> 00:31:53,666
+like, oh, you just need to go there and do this.
+
+418
+00:31:53,666 --> 00:31:54,466
+Well, but there it goes.
+
+419
+00:31:54,452 --> 00:31:57,252
+language isn't saying the same thing that you're saying.
+
+420
+00:31:57,439 --> 00:31:59,439
+So it's...
+
+421
+00:32:00,426 --> 00:32:03,306
+Yeah, so if you want to deal with all of that, sure.
+
+422
+00:32:03,412 --> 00:32:06,292
+We're very happy to have you take that on.
+
+423
+00:32:06,399 --> 00:32:09,399
+Yes, yeah, that will be kind of
+
+424
+00:32:09,386 --> 00:32:14,386
+part of the first phase is sort of getting the latest
+
+425
+00:32:12,372 --> 00:32:15,332
+of the land, not just out of the jubling, could you obviously say what you're doing?
+
+426
+00:32:15,359 --> 00:32:18,359
+which I have at this point, but looking at what you have.
+
+427
+00:32:18,346 --> 00:32:22,586
+on the technical side, seeing if they're really--
+
+428
+00:32:21,332 --> 00:32:24,172
+is anything that needs to change because it's
+
+429
+00:32:24,319 --> 00:32:27,319
+also possible that the kind of security that you
+
+430
+00:32:27,306 --> 00:32:30,306
+want out of this platform is already being admired.
+
+431
+00:32:30,292 --> 00:32:33,292
+Minister through GoDaddy, I just need to verify that.
+
+432
+00:32:33,279 --> 00:32:36,279
+at first, and if GoDaddy for whatever reasons not able to
+
+433
+00:32:36,266 --> 00:32:39,146
+offer it, then we'll look at pivoting it.
+
+434
+00:32:39,252 --> 00:32:42,172
+to another service and that's what I would handle as well.
+
+435
+00:32:42,239 --> 00:32:45,239
+And also with Wix, if we get rid of that site, that's
+
+436
+00:32:45,226 --> 00:32:48,186
+fine. We just put that up there when we first.
+
+437
+00:32:48,212 --> 00:32:51,012
+launched we needed something.
+
+438
+00:32:51,199 --> 00:32:52,519
+I built that site.
+
+439
+00:32:52,519 --> 00:32:53,359
+- Right.
+
+440
+00:32:53,359 --> 00:32:54,199
+- I'm not a web developer.
+
+441
+00:32:54,186 --> 00:32:57,186
+So I don't know.
+
+442
+00:32:57,172 --> 00:33:00,172
+You know, we just sort of put stuff in there to have information.
+
+443
+00:33:00,159 --> 00:33:03,159
+Yeah, I don't care where it is and
+
+444
+00:33:03,146 --> 00:33:05,786
+and it doesn't hurt my feelings if we get rid of it.
+
+445
+00:33:06,132 --> 00:33:08,932
+Hopefully we'll get some money back from it, but sure.
+
+446
+00:33:09,119 --> 00:33:12,079
+just like as we can keep this as simple.
+
+447
+00:33:12,106 --> 00:33:14,906
+It's so interesting.
+
+448
+00:33:15,092 --> 00:33:18,452
+We're talking about business women. They're used to this. They do.
+
+449
+00:33:18,079 --> 00:33:20,959
+with technology, but this is in their
+
+450
+00:33:21,066 --> 00:33:23,906
+personal. It's not professional.
+
+451
+00:33:24,052 --> 00:33:26,052
+development, it's personal.
+
+452
+00:33:26,052 --> 00:33:27,052
+And so this frusta
+
+453
+00:33:27,039 --> 00:33:31,439
+them to know and in their personal life.
+
+454
+00:33:30,026 --> 00:33:33,026
+I don't want to do something on my time.
+
+455
+00:33:33,012 --> 00:33:36,012
+And I have layers and layers and I have to put in this and I can't find.
+
+456
+00:33:35,999 --> 00:33:38,839
+right? If they just they go no.
+
+457
+00:33:38,986 --> 00:33:40,986
+We don't want to be part of it.
+
+458
+00:33:41,972 --> 00:33:44,712
+I get it because your code switching in your head.
+
+459
+00:33:44,712 --> 00:33:44,972
+I'm not--
+
+460
+00:33:44,959 --> 00:33:47,959
+not doing work on my computer where I'm having to deal with.
+
+461
+00:33:47,946 --> 00:33:49,746
+with my CRM and God knows what else,
+
+462
+00:33:49,746 --> 00:33:51,266
+but I can expect
+
+463
+00:33:50,932 --> 00:33:54,692
+that that's part I'm getting paid to do that.
+
+464
+00:33:53,919 --> 00:33:56,819
+And in my networking group, I wanted to be a--
+
+465
+00:33:56,906 --> 00:33:59,906
+simple as Instagram or Facebook or whatever.
+
+466
+00:33:59,892 --> 00:34:02,492
+whatever the community uses.
+
+467
+00:34:02,879 --> 00:34:05,759
+I get it. I can see why that would happen.
+
+468
+00:34:05,866 --> 00:34:08,746
+Right, and so they just don't engage with it.
+
+469
+00:34:08,852 --> 00:34:11,852
+Okay.
+
+470
+00:34:11,839 --> 00:34:14,739
+but it's a very necessary...
+
+471
+00:34:14,826 --> 00:34:15,826
+Yes.
+
+472
+00:34:15,826 --> 00:34:17,826
+We hear it all.
+
+473
+00:34:17,812 --> 00:34:20,732
+everybody we talk to. This is amazing.
+
+474
+00:34:20,799 --> 00:34:23,039
+This is so important, like in our community,
+
+475
+00:34:23,039 --> 00:34:23,879
+to give women.
+
+476
+00:34:23,786 --> 00:34:28,266
+this support, this love out these features.
+
+477
+00:34:26,772 --> 00:34:29,772
+But again, it's a...
+
+478
+00:34:29,759 --> 00:34:32,359
+It's a nice to do.
+
+479
+00:34:32,359 --> 00:34:33,199
+It's not a...
+
+480
+00:34:32,746 --> 00:34:35,626
+of must do and in their personal time.
+
+481
+00:34:35,732 --> 00:34:38,732
+their personal time as mothers and wives and running
+
+482
+00:34:38,719 --> 00:34:41,759
+house over and above their jobs which are demanding.
+
+483
+00:34:41,706 --> 00:34:43,706
+because they're in business.
+
+484
+00:34:43,706 --> 00:34:44,546
+So.
+
+485
+00:34:44,692 --> 00:34:47,692
+if it's going to cause them any kind of...
+
+486
+00:34:47,679 --> 00:34:50,639
+Forget it. They're not doing it. So right that's where we're
+
+487
+00:34:50,666 --> 00:34:53,546
+holding, especially Jess because she's sort of the...
+
+488
+00:34:53,652 --> 00:34:56,652
+She gets to be the leader.
+
+489
+00:34:56,639 --> 00:34:59,039
+lead on those pieces.
+
+490
+00:34:59,039 --> 00:35:00,279
+And--
+
+491
+00:34:59,626 --> 00:35:02,666
+If she can't figure it out, a smart, invisible item.
+
+492
+00:35:02,612 --> 00:35:04,612
+she is. Yeah, you know.
+
+493
+00:35:05,599 --> 00:35:08,599
+So yeah, okay, what do you need from us with
+
+494
+00:35:08,586 --> 00:35:11,586
+What do you need to do next?
+
+495
+00:35:11,572 --> 00:35:14,572
+the Kajabi login from Jess. She said that this morning.
+
+496
+00:35:14,559 --> 00:35:16,559
+I do.
+
+497
+00:35:16,559 --> 00:35:17,559
+I think.
+
+498
+00:35:17,546 --> 00:35:20,226
+I would benefit from having your wicks log in and having
+
+499
+00:35:20,532 --> 00:35:23,132
+access to GoDaddy.
+
+500
+00:35:23,519 --> 00:35:26,399
+as well as Zafi, basically, zoom as well. Any...
+
+501
+00:35:26,506 --> 00:35:31,206
+thing that is going to be part of this
+
+502
+00:35:29,492 --> 00:35:32,392
+app website ecosystem.
+
+503
+00:35:32,479 --> 00:35:35,479
+I think sending that over to me the way that I
+
+504
+00:35:35,466 --> 00:35:40,426
+secure them RC just for your own comfort is I use one.
+
+505
+00:35:38,452 --> 00:35:41,412
+password is a password vault. I don't say
+
+506
+00:35:41,439 --> 00:35:43,439
+I don't write things down.
+
+507
+00:35:43,439 --> 00:35:44,439
+It is
+
+508
+00:35:44,426 --> 00:35:47,226
+And yeah, so it'll be secure.
+
+509
+00:35:47,412 --> 00:35:48,732
+the vault that I maintain.
+
+510
+00:35:48,732 --> 00:35:50,232
+And I will also...
+
+511
+00:35:50,399 --> 00:35:53,399
+I'm also happy to delete them and send
+
+512
+00:35:53,386 --> 00:35:55,666
+and proof to you that I've gotten rid of the credentials
+
+513
+00:35:55,666 --> 00:35:56,506
+after the fact.
+
+514
+00:35:56,372 --> 00:35:58,372
+Okay, GoDaddy has
+
+515
+00:35:59,359 --> 00:36:02,239
+has my business information in there.
+
+516
+00:36:02,346 --> 00:36:05,386
+as well for my own website.
+
+517
+00:36:05,332 --> 00:36:08,052
+So if you see it, you'll just, you'll...
+
+518
+00:36:08,319 --> 00:36:10,919
+you'll see there's jubling and then there's that.
+
+519
+00:36:10,919 --> 00:36:11,759
+- Okay.
+
+520
+00:36:11,306 --> 00:36:14,106
+and zoom. I have a sheet.
+
+521
+00:36:14,292 --> 00:36:16,052
+I'll just take a picture on it.
+
+522
+00:36:16,052 --> 00:36:17,292
+I have everything. - Okay.
+
+523
+00:36:17,279 --> 00:36:19,579
+What else would you need from us?
+
+524
+00:36:20,266 --> 00:36:22,266
+I think.
+
+525
+00:36:23,252 --> 00:36:26,092
+At some point and I think that this is something that
+
+526
+00:36:26,239 --> 00:36:28,339
+would best be managed by you directly.
+
+527
+00:36:28,339 --> 00:36:29,239
+At some point I might hit...
+
+528
+00:36:29,226 --> 00:36:32,226
+to get where they're like, hey, please connect your bank account for a blog.
+
+529
+00:36:32,212 --> 00:36:35,172
+a bloke for whatever service like I will hand that
+
+530
+00:36:35,199 --> 00:36:37,799
+to you that is obviously something that you can handle.
+
+531
+00:36:37,799 --> 00:36:38,639
+- Right.
+
+532
+00:36:38,186 --> 00:36:40,386
+just let you know when that happens.
+
+533
+00:36:40,386 --> 00:36:41,226
+- Also,
+
+534
+00:36:41,172 --> 00:36:44,172
+because I'm eight, seven hours ahead of you.
+
+535
+00:36:44,159 --> 00:36:47,159
+If you're gonna be doing something, I'm free.
+
+536
+00:36:47,146 --> 00:36:51,826
+available but I'm seven hours ahead of you.
+
+537
+00:36:50,132 --> 00:36:53,132
+So if you're doing something that's going to need a code.
+
+538
+00:36:53,119 --> 00:36:55,719
+And that load is going to come to me.
+
+539
+00:36:56,106 --> 00:36:58,906
+Just like coordinate that with me.
+
+540
+00:36:59,092 --> 00:37:01,092
+Yeah, I'll plan to time that.
+
+541
+00:37:01,092 --> 00:37:02,092
+Okay.
+
+542
+00:37:02,079 --> 00:37:05,079
+Yeah, my late-life.
+
+543
+00:37:05,066 --> 00:37:07,946
+my sleep schedule has me up at 4.30 every day.
+
+544
+00:37:08,052 --> 00:37:10,932
+And so that actually probably works out well in terms of--
+
+545
+00:37:11,039 --> 00:37:13,839
+I didn't talk about too cool.
+
+546
+00:37:13,839 --> 00:37:14,679
+Yeah.
+
+547
+00:37:14,026 --> 00:37:16,626
+- Yeah, I mean, yeah, I'm around and I work.
+
+548
+00:37:16,626 --> 00:37:17,466
+- Cool.
+
+549
+00:37:17,012 --> 00:37:19,012
+I work late. So because we're on a
+
+550
+00:37:19,012 --> 00:37:20,012
+Merit. We're with
+
+551
+00:37:19,999 --> 00:37:22,999
+We have our own full day and then we have an American day.
+
+552
+00:37:22,986 --> 00:37:25,986
+So we work later.
+
+553
+00:37:25,972 --> 00:37:28,952
+But usually I'm around if you can't you have my phone
+
+554
+00:37:28,959 --> 00:37:31,959
+like literally call me and say, "Hey, I need this."
+
+555
+00:37:31,946 --> 00:37:35,066
+code. Okay.
+
+556
+00:37:34,932 --> 00:37:36,932
+Okay, good.
+
+557
+00:37:36,932 --> 00:37:37,932
+Excited.
+
+558
+00:37:37,919 --> 00:37:39,919
+Now, in terms of
+
+559
+00:37:40,906 --> 00:37:43,906
+images or images or images or images or images or images.
+
+560
+00:37:43,892 --> 00:37:46,892
+of that kind of stuff.
+
+561
+00:37:46,879 --> 00:37:49,879
+as much as we can.
+
+562
+00:37:49,866 --> 00:37:52,866
+told us that you could.
+
+563
+00:37:52,852 --> 00:37:55,492
+couldn't really customize that without
+
+564
+00:37:55,839 --> 00:37:58,839
+an extra membership or call.
+
+565
+00:37:58,826 --> 00:38:01,866
+like I don't really know what you'll see when you're
+
+566
+00:38:01,812 --> 00:38:02,852
+when you go into it.
+
+567
+00:38:02,852 --> 00:38:03,692
+- Yeah.
+
+568
+00:38:03,692 --> 00:38:05,172
+- You don't even know what we have.
+
+569
+00:38:04,799 --> 00:38:07,799
+We got it.
+
+570
+00:38:07,786 --> 00:38:10,786
+expanded product.
+
+571
+00:38:10,772 --> 00:38:13,772
+last year I think we upgraded it because
+
+572
+00:38:13,759 --> 00:38:16,639
+we needed to have multiple admin.
+
+573
+00:38:16,746 --> 00:38:19,746
+access before we could only have one.
+
+574
+00:38:19,732 --> 00:38:22,752
+instead of me needing to chase Jess and find her
+
+575
+00:38:22,719 --> 00:38:25,599
+if I needed to get into the site. So we just paid
+
+576
+00:38:25,706 --> 00:38:27,306
+I don't know, $500 or whatever.
+
+577
+00:38:27,306 --> 00:38:28,506
+We got this upgraded.
+
+578
+00:38:28,692 --> 00:38:31,692
+Honestly, Tim, we have no idea what we have.
+
+579
+00:38:31,679 --> 00:38:34,679
+We really don't.
+
+580
+00:38:34,666 --> 00:38:37,666
+We're trusting.
+
+581
+00:38:37,652 --> 00:38:39,652
+Because you know
+
+582
+00:38:40,639 --> 00:38:43,639
+Got it. Yeah, so as far as...
+
+583
+00:38:43,626 --> 00:38:46,626
+This image goes, I did want to quickly just touch on it.
+
+584
+00:38:46,612 --> 00:38:49,492
+that I could obviously see like the purple.
+
+585
+00:38:49,599 --> 00:38:52,599
+like I try to incorporate that in the proposal that I sent to you.
+
+586
+00:38:52,586 --> 00:38:54,866
+and happy to maintain that.
+
+587
+00:38:55,572 --> 00:38:58,472
+a lot of that color scheme was
+
+588
+00:38:58,559 --> 00:39:01,599
+carrying through and the stock images that was being used.
+
+589
+00:39:01,546 --> 00:39:06,466
+for the events. Is that all?
+
+590
+00:39:04,532 --> 00:39:06,532
+stuff that you would want to maintain.
+
+591
+00:39:06,532 --> 00:39:07,532
+Yeah.
+
+592
+00:39:07,519 --> 00:39:10,399
+I mean, just make those images an AI.
+
+593
+00:39:10,506 --> 00:39:12,506
+You know, we have
+
+594
+00:39:13,492 --> 00:39:15,492
+Our women are...
+
+595
+00:39:16,479 --> 00:39:19,479
+They dress most of the artist and really are.
+
+596
+00:39:19,466 --> 00:39:24,026
+to get any images so we have to create them.
+
+597
+00:39:22,452 --> 00:39:25,452
+Yeah. One time I put a...
+
+598
+00:39:25,439 --> 00:39:28,439
+I put in chat GPT and it gave me pictures of all the...
+
+599
+00:39:28,426 --> 00:39:31,426
+Amish women with a... with a...
+
+600
+00:39:31,412 --> 00:39:34,312
+people on their head, you know, a sculpt out.
+
+601
+00:39:34,399 --> 00:39:37,299
+And I was like, yeah, that's not, no, okay.
+
+602
+00:39:37,386 --> 00:39:39,386
+So, oh.
+
+603
+00:39:40,372 --> 00:39:43,372
+Along those lines though, that makes sense about using the...
+
+604
+00:39:43,359 --> 00:39:46,359
+the AI and just and I talked about that.
+
+605
+00:39:46,346 --> 00:39:49,346
+a lot when she and I will work together.
+
+606
+00:39:49,332 --> 00:39:52,332
+You notice that a lot of the women that would come through in the AIG.
+
+607
+00:39:52,319 --> 00:39:55,279
+generated stuff. They look like shiksa women and they're not
+
+608
+00:39:55,306 --> 00:40:00,266
+your community. Right. Recess.
+
+609
+00:39:58,292 --> 00:40:01,292
+So from the standpoint--
+
+610
+00:40:01,279 --> 00:40:04,239
+of like how can we try to maintain that representation?
+
+611
+00:40:04,266 --> 00:40:07,166
+that you're looking for while still kind of striking the madness.
+
+612
+00:40:07,252 --> 00:40:11,792
+balance. So...
+
+613
+00:40:10,239 --> 00:40:13,239
+Anything that we run together, any
+
+614
+00:40:13,226 --> 00:40:15,786
+imagery or whatever, I can run that by you and Jess.
+
+615
+00:40:15,786 --> 00:40:16,106
+I'll...
+
+616
+00:40:16,212 --> 00:40:19,572
+set it up in a place where it's easy so we can look at it asynchronously.
+
+617
+00:40:19,199 --> 00:40:22,199
+honestly, because I'm...
+
+618
+00:40:22,186 --> 00:40:24,186
+I'm the Gentile, I'm outside the community.
+
+619
+00:40:25,172 --> 00:40:28,172
+will do everything that I can to to maintain.
+
+620
+00:40:28,159 --> 00:40:31,159
+in the identity, but I don't need it to be--
+
+621
+00:40:31,146 --> 00:40:33,606
+I don't think we needed to be women necessarily.
+
+622
+00:40:33,606 --> 00:40:34,446
+- Okay.
+
+623
+00:40:34,132 --> 00:40:36,972
+I think if it's a business image,
+
+624
+00:40:36,972 --> 00:40:38,972
+if it's a business image,
+
+625
+00:40:37,119 --> 00:40:40,119
+if it's, I don't know.
+
+626
+00:40:40,106 --> 00:40:43,106
+like some of us, but we're not, we're not.
+
+627
+00:40:43,092 --> 00:40:45,972
+we're not hung up on that. Like, right, we're in business.
+
+628
+00:40:46,079 --> 00:40:48,979
+And we're, it just, I wanted to just be,
+
+629
+00:40:49,066 --> 00:40:52,066
+aesthetically attractive.
+
+630
+00:40:52,052 --> 00:40:54,652
+I want people to enjoy the site.
+
+631
+00:40:54,652 --> 00:40:55,152
+I wanted to
+
+632
+00:40:55,039 --> 00:40:57,919
+be comfortable. I want it to be have
+
+633
+00:40:58,026 --> 00:41:00,906
+something that draws them in.
+
+634
+00:41:01,012 --> 00:41:04,012
+but it doesn't have to be with me.
+
+635
+00:41:03,999 --> 00:41:06,999
+in every image.
+
+636
+00:41:06,986 --> 00:41:09,986
+Yeah, I'm thinking of what you're doing.
+
+637
+00:41:09,972 --> 00:41:12,852
+you're putting down. Yeah, I think feminine is a good angle.
+
+638
+00:41:12,959 --> 00:41:15,959
+take, but it doesn't have to be that literal. So yes.
+
+639
+00:41:15,946 --> 00:41:18,906
+I think I can. I don't know what that really can be.
+
+640
+00:41:18,932 --> 00:41:21,932
+It can be a beautiful...
+
+641
+00:41:21,919 --> 00:41:24,719
+nature picture it can be like something that's
+
+642
+00:41:24,906 --> 00:41:27,806
+thing it can be images it can be like
+
+643
+00:41:27,892 --> 00:41:30,892
+It doesn't have to be...
+
+644
+00:41:30,879 --> 00:41:33,799
+And it doesn't have to be computers because it's
+
+645
+00:41:33,866 --> 00:41:36,426
+business and right.
+
+646
+00:41:36,852 --> 00:41:39,492
+Yeah, yeah, no, I think I could strike that balance. There's
+
+647
+00:41:39,839 --> 00:41:42,839
+There's plenty in God's creation so that we don't have to just do one.
+
+648
+00:41:42,826 --> 00:41:45,826
+Okay. Okay.
+
+649
+00:41:45,812 --> 00:41:48,692
+open, we just we really just wanted to work and be
+
+650
+00:41:48,799 --> 00:41:51,799
+easy experience for
+
+651
+00:41:51,786 --> 00:41:54,786
+our people. So I'm going to get you this information.
+
+652
+00:41:54,772 --> 00:41:56,772
+I'll send it over to you in a minute.
+
+653
+00:41:56,772 --> 00:41:57,772
+Okay.
+
+654
+00:41:57,759 --> 00:42:00,759
+It's probably just going to be a screenshot of a doctor.
+
+655
+00:42:00,746 --> 00:42:02,746
+that I have with everything on it.
+
+656
+00:42:03,732 --> 00:42:07,092
+doesn't work just let me know.
+
+657
+00:42:06,719 --> 00:42:09,719
+Yeah, since you are working and you will be...
+
+658
+00:42:09,706 --> 00:42:12,666
+sending that to me, I will immediately kind of pressure test.
+
+659
+00:42:12,692 --> 00:42:15,692
+of the logins just to make sure that I have access to
+
+660
+00:42:15,679 --> 00:42:18,559
+it and then I'll just ping you if I need anything.
+
+661
+00:42:18,666 --> 00:42:21,466
+Great, so I'll stand by in case anybody's...
+
+662
+00:42:21,652 --> 00:42:24,612
+There's codes or anything as you get in.
+
+663
+00:42:24,639 --> 00:42:27,439
+Yeah, I get it over here.
+
+664
+00:42:27,626 --> 00:42:30,626
+I get questions about everything because now I'm not in the US.
+
+665
+00:42:30,612 --> 00:42:33,052
+anymore. So it's like we had a, you know,
+
+666
+00:42:33,599 --> 00:42:36,239
+have somebody trying to get into your camp from Israel.
+
+667
+00:42:36,239 --> 00:42:36,479
+Yeah.
+
+668
+00:42:36,586 --> 00:42:38,586
+I know.
+
+669
+00:42:39,572 --> 00:42:42,572
+Yeah, they're trying to reconcile on your phone number.
+
+670
+00:42:42,559 --> 00:42:47,359
+areas and all that. I don't know how they determine it but yes.
+
+671
+00:42:45,546 --> 00:42:48,546
+Well, it's interesting the IP address.
+
+672
+00:42:48,532 --> 00:42:51,532
+So I use all my names.
+
+673
+00:42:51,519 --> 00:42:54,519
+American identification still for everything.
+
+674
+00:42:54,506 --> 00:42:57,506
+I have an American phone number, but it picks me up.
+
+675
+00:42:57,492 --> 00:43:00,492
+up certain sites, it automatically deepens.
+
+676
+00:43:00,479 --> 00:43:03,279
+fall to Israel or Hebrew if I go into a certain
+
+677
+00:43:03,466 --> 00:43:04,466
+Okay.
+
+678
+00:43:04,466 --> 00:43:06,466
+And I'm like, wow, that's really interesting.
+
+679
+00:43:06,452 --> 00:43:08,452
+Because I don't do that.
+
+680
+00:43:09,439 --> 00:43:12,339
+specifically do that, but it does it.
+
+681
+00:43:12,426 --> 00:43:15,426
+Another quirk that I noticed that.
+
+682
+00:43:15,412 --> 00:43:18,292
+is just something I wanted to do.
+
+683
+00:43:18,399 --> 00:43:23,319
+clear up with you over the phone is I noticed
+
+684
+00:43:21,386 --> 00:43:24,386
+that on some of the Kajabi pages or might have been on the Wixby
+
+685
+00:43:24,372 --> 00:43:27,372
+pages. The text was like a lot.
+
+686
+00:43:27,359 --> 00:43:30,239
+to the right and I know that Hebrew reads right to the right.
+
+687
+00:43:30,346 --> 00:43:35,266
+left but that I mean this is English tech
+
+688
+00:43:33,332 --> 00:43:35,912
+next for American users, right?
+
+689
+00:43:35,912 --> 00:43:36,752
+So like...
+
+690
+00:43:36,319 --> 00:43:39,519
+That's just something messed up.
+
+691
+00:43:39,306 --> 00:43:41,306
+Yeah, no. Okay.
+
+692
+00:43:42,292 --> 00:43:45,292
+No reason whatsoever. Okay
+
+693
+00:43:45,279 --> 00:43:47,279
+Now, got it.
+
+694
+00:43:47,279 --> 00:43:48,279
+S- simpler than it looks.
+
+695
+00:43:48,266 --> 00:43:51,266
+The explanation is simpler than it looks at you.
+
+696
+00:43:51,252 --> 00:43:52,092
+- No, it's funny.
+
+697
+00:43:52,092 --> 00:43:52,932
+We have
+
+698
+00:43:54,239 --> 00:43:57,239
+We have, in Jewish law,
+
+699
+00:43:57,226 --> 00:43:59,226
+You know, we have a lot of
+
+700
+00:44:00,212 --> 00:44:03,092
+very finite little details.
+
+701
+00:44:03,199 --> 00:44:06,199
+And there's so many stories.
+
+702
+00:44:06,186 --> 00:44:09,186
+where there are a group of people and they took on a certain
+
+703
+00:44:09,172 --> 00:44:13,852
+something and you ask them why?
+
+704
+00:44:12,159 --> 00:44:15,119
+And they go, I don't know. We just we saw you know, we
+
+705
+00:44:15,146 --> 00:44:18,146
+I saw the rabbi do it and so like a whole roommate and they go
+
+706
+00:44:18,132 --> 00:44:19,412
+Well, why didn't you do it?
+
+707
+00:44:19,412 --> 00:44:20,932
+Well, because it was just easier.
+
+708
+00:44:21,119 --> 00:44:24,119
+like it's the end.
+
+709
+00:44:24,106 --> 00:44:26,986
+They're saying but we have to ask questions.
+
+710
+00:44:27,092 --> 00:44:30,092
+because sometimes it's not really
+
+711
+00:44:30,079 --> 00:44:34,879
+an explanation. It's just a mistake.
+
+712
+00:44:33,066 --> 00:44:35,066
+or a right. This happened.
+
+713
+00:44:36,052 --> 00:44:38,932
+Yeah, like I imagine if there's a...
+
+714
+00:44:39,039 --> 00:44:41,879
+There was some rabbi like...
+
+715
+00:44:42,026 --> 00:44:45,026
+millennia ago who was left handed and it was just
+
+716
+00:44:45,012 --> 00:44:47,972
+easier to write from my left hand Senate.
+
+717
+00:44:47,999 --> 00:44:49,999
+the other way. Right.
+
+718
+00:44:50,986 --> 00:44:52,346
+Something like that.
+
+719
+00:44:52,346 --> 00:44:53,946
+Okay, good to know.
+
+720
+00:44:53,972 --> 00:44:55,972
+So yeah, so if you have questions.
+
+721
+00:44:56,959 --> 00:44:59,959
+It's about that. It's probably not.
+
+722
+00:44:59,946 --> 00:45:02,346
+Intentional, just something we did.
+
+723
+00:45:02,932 --> 00:45:05,532
+Okay, all right. I think I have everything that I need.
+
+724
+00:45:05,919 --> 00:45:08,919
+Thank you so much. I'm excited to work with you.
+
+725
+00:45:08,906 --> 00:45:11,906
+And good luck.
+
+726
+00:45:11,892 --> 00:45:14,492
+Yeah, thank you likewise. This will be fun.
+
+727
+00:45:14,879 --> 00:45:19,199
+Yeah, okay. We'll be in touch.
+
+728
+00:45:17,866 --> 00:45:19,506
+Okay, thank you.
+
+729
+00:45:19,506 --> 00:45:20,346
+- Bye.
+

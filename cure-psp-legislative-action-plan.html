@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CurePSP Six‑Month Strategic Roadmap</title>
+  <style>
+    :root {
+      --brand-red: #e1262d;
+      --brand-charcoal: #1f2d3d;
+      --brand-slate: #4d5e70;
+      --brand-ice: #eef3f8;
+      --line: #d3dde7;
+      --paper: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      color: var(--brand-charcoal);
+      background: linear-gradient(180deg, #f7fafd 0%, #edf2f8 100%);
+      line-height: 1.45;
+    }
+    .wrap {
+      max-width: 1040px;
+      margin: 20px auto 40px;
+      padding: 0 12px;
+    }
+    .page {
+      position: relative;
+      display: flex;
+      min-height: 11in;
+      margin: 0 auto 14px;
+      padding: 42px 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      box-shadow: 0 8px 20px rgba(17, 30, 47, 0.08);
+      overflow: hidden;
+    }
+    .page::before { content: none; }
+    .top-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      z-index: 0;
+      display: block;
+    }
+    .page::after {
+      content: "";
+      position: absolute;
+      right: -10%;
+      bottom: -8%;
+      width: 70%;
+      height: 70%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.07;
+      filter: grayscale(25%);
+      z-index: 0;
+      pointer-events: none;
+      display: none;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .kicker {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--brand-slate);
+      font-weight: 700;
+    }
+    .brand-row {
+      margin: 2px 0 14px;
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .curepsp-logo {
+      display: block;
+      width: 270px;
+      max-width: 62%;
+      max-height: none;
+      height: auto;
+    }
+    h1 {
+      margin: 10px 0 8px;
+      font-size: 34px;
+      line-height: 1.15;
+      color: #24364a;
+    }
+    h2 {
+      margin: 22px 0 10px;
+      font-size: 21px;
+      line-height: 1.2;
+      color: #2f4358;
+      border-bottom: 1px solid #e7eef5;
+      padding-bottom: 5px;
+    }
+    h3 {
+      margin: 14px 0 6px;
+      font-size: 16px;
+      color: #42586f;
+    }
+    p { margin: 8px 0; }
+    ul, ol { margin: 8px 0 12px 20px; padding: 0; }
+    li { margin: 6px 0; }
+    .lede {
+      font-size: 16px;
+      color: #2f4257;
+      margin-top: 8px;
+      border-left: 3px solid rgba(225, 38, 45, 0.45);
+      padding-left: 10px;
+    }
+    .panel {
+      border: 1px solid #f3c7ca;
+      background: #fff5f6;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 12px 0 16px;
+    }
+    .panel strong { color: #8f1620; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #fff;
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #32465a;
+      font-size: 15px;
+      border-left: 2px solid rgba(225, 38, 45, 0.4);
+      padding-left: 8px;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.97);
+    }
+    .table th, .table td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .table th {
+      background: var(--brand-ice);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #435568;
+    }
+    .small {
+      font-size: 13px;
+      color: #56697d;
+    }
+    .footer {
+      position: relative;
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #627588;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(1px);
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { margin: 0; max-width: none; padding: 0; }
+      .page {
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding-top: 50px;
+        page-break-after: always;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      .top-gradient {
+        top: 6px;
+        height: 8px;
+      }
+      .brand-row {
+        margin: 2px 0 12px;
+        padding-bottom: 6px;
+      }
+      .curepsp-logo {
+        width: 250px;
+        max-width: 62%;
+      }
+      .page:last-child { page-break-after: auto; }
+    }
+    @media (max-width: 860px) {
+      .page { min-height: auto; padding: 28px 22px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .footer {
+        margin-top: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="page p1">
+      <svg class="top-gradient" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="topGradP1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e1262d"/>
+            <stop offset="45%" stop-color="#f36d74"/>
+            <stop offset="100%" stop-color="#9aa9b8"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="100" height="10" fill="url(#topGradP1)"></rect>
+      </svg>
+      <div class="content">
+        <div class="brand-row">
+          <img class="curepsp-logo" src="cure-psp-logo.png" alt="CurePSP logo">
+        </div>
+        <div class="kicker">Candidate Follow-Up</div>
+        <h1>Six‑Month Strategic Roadmap</h1>
+        <p class="lede">
+          Proposed first-six-month roadmap for the Associate Director of Public Policy & Advocacy role at CurePSP.
+        </p>
+        <div class="panel">
+          <strong>Executive Summary</strong>
+          <p>
+            CurePSP has built meaningful advocacy momentum through leadership, community advocates, and people directly impacted by PSP, CBD, and MSA. This plan is designed to help carry that momentum into a more consistent federal policy rhythm while keeping CurePSP's people-first values visible in every step.
+          </p>
+          <p>
+            The approach is practical for a one-person launch: focus on federal work first, align with current advocacy priorities, keep close coordination with the Steering Committee and leadership, and create clear public-facing progress updates so the broader CurePSP community can stay informed and engaged.
+          </p>
+        </div>
+
+        <h2>What This Plan Is Built To Do</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Honor and Extend Legislative Wins</h3>
+            <ul>
+              <li>Build on CurePSP's legislative wins to date like the National Plan to End Parkinson's Project.</li>
+              <li>Continue existing legislative priorities for affordable and accessible medical care.</li>
+              <li>Continue support for family care partners.</li>
+              <li>Continue work to improve diagnostics for PSP, CBD, and MSA.</li>
+              <li>Increase funding to better understand the etiology and/or epidemiology of PSP and CBD.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Center People and Care Partners</h3>
+            <ul>
+              <li>Bring people with lived experience forward early in strategy, not only at execution.</li>
+              <li>Keep care partners, support groups, and community advocates in regular feedback loops.</li>
+              <li>Use plain-language updates that show what is happening and why.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Create A Repeatable Policy Rhythm</h3>
+            <ul>
+              <li>Use a structured annual legislative calendar tied to the annual appropriations cycle.</li>
+              <li>Track meetings, follow-ups, coalition actions, and outcomes in one shared system.</li>
+              <li>Issue monthly updates to leadership and the Steering Committee.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Strengthen Transparency and Accountability</h3>
+            <ul>
+              <li>Publish regular policy progress snapshots for the broader CurePSP community.</li>
+              <li>Invite feedback early and continuously, including when tactics need adjustment.</li>
+              <li>Keep process documentation clear and transferable.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>CurePSP Six‑Month Strategic Roadmap</span>
+          <span>Page 1 of 3</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page p2">
+      <svg class="top-gradient" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="topGradP2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e1262d"/>
+            <stop offset="45%" stop-color="#f36d74"/>
+            <stop offset="100%" stop-color="#9aa9b8"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="100" height="10" fill="url(#topGradP2)"></rect>
+      </svg>
+      <div class="content">
+        <h2>30/60/90/180-Day Implementation Roadmap</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Window</th>
+              <th>Main Focus</th>
+              <th>Key Actions</th>
+              <th>Outputs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Days 1-30</strong></td>
+              <td>Ground the work in CurePSP context and current priorities</td>
+              <td>
+                <ul>
+                  <li>Meet with leadership, the Steering Committee, and internal partners to confirm priorities and expectations.</li>
+                  <li>Review existing advocacy assets, coalition commitments, previous asks, and office relationships.</li>
+                  <li>Set up a shared tracker for congressional outreach, follow-up actions, and progress notes.</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Baseline memo: where the work stands now and immediate next actions.</li>
+                  <li>Federal target framework and outreach calendar.</li>
+                  <li>First monthly update format for leadership and Steering Committee.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Days 31-60</strong></td>
+              <td>Launch federal outreach and coordinated partner engagement</td>
+              <td>
+                <ul>
+                  <li>Run first round of House and Senate meetings aligned to appropriations timing.</li>
+                  <li>Coordinate asks and timing with coalition partners where CurePSP can add clear value.</li>
+                  <li>Activate advocate and care partner outreach tools for district-level reinforcement.</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Meeting briefs and office-level follow-up.</li>                  
+                  <li>Community-facing policy update draft for website/newsletter use.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Days 61-90</strong></td>
+              <td>Convert early traction into consistent progress</td>
+              <td>
+                <ul>
+                  <li>Run second outreach wave based on learning from first round.</li>
+                  <li>Refine office prioritization criteria using response and engagement patterns.</li>
+                  <li>Hold structured check-in with Steering Committee and leadership for adjustments.</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Monthly policy dashboard with actions completed, outcomes, and next-month focus.</li>
+                  <li>Updated congressional pathway map.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Days 91-180</strong></td>
+              <td>Sustain federal cadence and expand priority relationships</td>
+              <td>
+                <ul>
+                  <li>Maintain federal appropriations and relationship-building cycle.</li>
+                  <li>Run a focused second-phase outreach wave based on response patterns and committee activity.</li>
+                  <li>Continue monthly internal and community update cadence.</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Six-month impact summary and lessons learned.</li>
+                  <li>Priority-office summary with recommendations for next steps.</li>
+                  <li>Refined playbook for continued execution.</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>How Progress Will Be Reported</h2>
+        <ul>
+          <li><strong>Monthly:</strong> Leadership + Steering Committee update (actions, outcomes, upcoming asks).</li>
+          <li><strong>Monthly:</strong> Public-facing community update (brief website/newsletter format).</li>
+          <li><strong>Quarterly:</strong> Expanded Board-ready policy summary.</li>
+        </ul>
+
+        <div class="footer">
+          <span>CurePSP Six‑Month Strategic Roadmap</span>
+          <span>Page 2 of 3</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page p3">
+      <svg class="top-gradient" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="topGradP3" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e1262d"/>
+            <stop offset="45%" stop-color="#f36d74"/>
+            <stop offset="100%" stop-color="#9aa9b8"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="100" height="10" fill="url(#topGradP3)"></rect>
+      </svg>
+      <div class="content">
+        <h2>Execution Standards For The First Six Months</h2>
+        <h3>1) Federal-First Discipline</h3>
+        <ul>
+          <li>Keep federal advocacy as the core focus in year one.</li>
+          <li>Keep secondary initiatives tightly scoped so they support, not distract from, federal progress.</li>
+        </ul>
+
+        <h3>2) People-Centered Policy Practice</h3>
+        <ul>
+          <li>Integrate people with lived experience and care partners into planning and outreach.</li>
+          <li>Ensure messaging reflects real patient and family realities, not abstract policy language.</li>
+        </ul>
+
+        <h3>3) Clear, Consistent Communication</h3>
+        <ul>
+          <li>Provide concise updates that leadership, board members, and community members can all follow.</li>
+          <li>Show what was done, what moved, what did not move yet, and what happens next.</li>
+        </ul>
+
+        <h3>4) Continuous Improvement Without Ego</h3>
+        <ul>
+          <li>Welcome course correction quickly when tactics are not landing.</li>
+          <li>Keep the focus on mission progress, not process defensiveness.</li>
+        </ul>
+
+        <h2>Immediate Next Steps If Selected</h2>
+        <ol>
+          <li>Confirm first 30-day priorities with leadership and Steering Committee.</li>
+          <li>Launch appropriations-focused outreach calendar and shared tracker.</li>
+          <li>Publish first monthly update for both internal teams and community audiences.</li>
+          <li>Finalize second-phase target list based on early outreach response and committee alignment.</li>
+        </ol>
+
+        <div class="footer">
+          <span>CurePSP Six‑Month Strategic Roadmap</span>
+          <span>Page 3 of 3</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

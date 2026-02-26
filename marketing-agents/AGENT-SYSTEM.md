@@ -1,6 +1,6 @@
 # Boss Key Outbound Agent System
 
-This system is designed for initial outreach to janitorial and facility service companies in Burlington County and South Jersey.
+This system is designed for initial outreach to service businesses and public-sector-adjacent organizations that need stronger operating systems and proposal discipline.
 
 ## Goal
 
@@ -45,7 +45,7 @@ Do not position Boss Key LLC as a generic AI consultancy.
 
 8. `Agent 8: Public Bid Scout`
 - Input: geography, NAICS/keywords, and client capability profile.
-- Output: prioritized janitorial/facility contract opportunities.
+- Output: prioritized contract opportunities aligned to your capabilities and growth goals.
 
 9. `Agent 9: Transcript-to-Requirements Mapper`
 - Input: meeting transcripts and client direction.

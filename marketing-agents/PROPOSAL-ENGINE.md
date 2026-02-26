@@ -4,7 +4,7 @@ This module supports a client-service offering where Boss Key runs proposal oper
 
 ## Service Positioning
 
-Deliver compliant, higher-quality public-sector janitorial proposals faster by combining:
+Deliver compliant, higher-quality public-sector proposals faster by combining:
 
 - transcript-driven requirement capture
 - structured compliance checks

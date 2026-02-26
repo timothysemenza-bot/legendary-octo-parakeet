@@ -21,7 +21,7 @@ The Company may maintain other offices as determined by the Member.
 
 ## 4. Purpose
 
-The Company may engage in any lawful business activity permitted under New Jersey law, including proposal management and business development support services for janitorial companies.
+The Company may engage in any lawful business activity permitted under New Jersey law, including proposal management, growth strategy, and operations consulting services for service businesses and public-sector contractors.
 
 ## 5. Term
 

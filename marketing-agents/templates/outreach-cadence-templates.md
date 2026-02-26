@@ -1,4 +1,4 @@
-﻿# Outreach Cadence Templates (Owner-Operator Friendly)
+# Outreach Cadence Templates (Owner-Operator Friendly)
 
 Use these by `template_id` from `outreach_touch_plan.csv`.
 
@@ -7,7 +7,7 @@ Subject: Quick idea to reduce admin drag at [Company Name]
 
 Hi [First Name],
 
-I work with cleaning operators to reduce the office workload that slows bids and eats margin after contract start.
+I work with service businesses to reduce the office workload that slows bids and creates margin leakage after contract start.
 
 Based on [company context], there is usually a simple way to tighten the process so owners spend less time chasing details.
 
@@ -22,7 +22,7 @@ My background includes government proposal work across federal, state, and local
 
 ## C1 - Call + Voicemail
 Hi [First Name], this is Timmy Semenza with Boss Key.  
-I help local cleaning owners reduce admin burden between bids, staffing, and reporting.  
+I help local business owners reduce admin burden between bids, staffing, and reporting.  
 I sent a quick note earlier this week and wanted to follow up.  
 If useful, I can share a short diagnostic on where margin and time usually leak first.  
 I can also meet you at a site visit and walk through quick improvements in person.  
@@ -71,7 +71,7 @@ Hi [First Name],
 
 Quick check-in to stay connected.
 
-If you'd like, I can send a short checklist my local janitorial clients use to reduce proposal/admin bottlenecks before they grow into margin issues.
+If you'd like, I can send a short checklist my clients use to reduce proposal/admin bottlenecks before they grow into margin issues.
 
 If useful, just reply and Iâ€™ll send it.
 

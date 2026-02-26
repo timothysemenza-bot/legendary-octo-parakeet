@@ -1,4 +1,4 @@
-﻿# Call Runbook - 2026-02-23
+# Call Runbook - 2026-02-23
 
 Use this during call blocks. Keep calls to 3-5 minutes unless invited to go deeper.
 
@@ -14,7 +14,7 @@ Use this during call blocks. Keep calls to 3-5 minutes unless invited to go deep
 - Research notes: Phone on website; owner name from BBB/VOB listing | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Left voicemail with value hook | 2026-02-22: Left voicemail with value hook | 2026-02-23: Left voicemail with local angle and asked for callback | 2026-02-23: Public tunnel webhook test | 2026-02-23: Left voicemail with local angle and asked for callback | 2026-02-23: Left voicemail with local angle and asked for callback | 2026-02-23: Left voicemail with local angle and asked for callback | 2026-02-23: Left voicemail with local angle and asked for callback | 2026-02-23: Left voicemail with local angle and asked for callback | 2026-02-23: Left voicemail with local angle and asked for callback
 
 **Open (20-30 sec):**
-Hi Tom Richter, this is Timmy Semenza with Boss Key in South Jersey. I help local cleaning owners reduce the office workload that slows bids and eats margin after award.
+Hi Tom Richter, this is Timmy Semenza with Boss Key in South Jersey. I help local business owners reduce the office workload that slows bids and eats margin after award.
 
 **Tailored bridge:**
 Based on Family-owned local operator and Public/government office cleaning relevance, I thought there may be a practical fit.
@@ -38,7 +38,7 @@ If helpful, I can run a short diagnostic and show the top 2-3 fixes first. Open 
 - Research notes: Owner name confirmed on About page; phone verified on site; direct email not public | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-23: Spoke briefly, asked to reconnect | 2026-02-23: Spoke briefly, asked to reconnect | 2026-02-23: Spoke briefly, asked to reconnect | 2026-02-23: Spoke briefly, asked to reconnect | 2026-02-23: Spoke briefly, asked to reconnect | 2026-02-23: Spoke briefly, asked to reconnect | 2026-02-23: Spoke briefly, asked to reconnect
 
 **Open (20-30 sec):**
-Hi Dave Barr, this is Timmy Semenza with Boss Key in South Jersey. I help local cleaning owners reduce the office workload that slows bids and eats margin after award.
+Hi Dave Barr, this is Timmy Semenza with Boss Key in South Jersey. I help local business owners reduce the office workload that slows bids and eats margin after award.
 
 **Tailored bridge:**
 Based on Broad South NJ footprint and Service mix likely requires tighter scheduling/reporting flow, I thought there may be a practical fit.
@@ -62,7 +62,7 @@ If helpful, I can run a short diagnostic and show the top 2-3 fixes first. Open 
 - Research notes: Verified site contact details; initial outreach queued | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options | 2026-02-22: Good conversation; wants pricing options
 
 **Open (20-30 sec):**
-Hi Main Office, this is Timmy Semenza with Boss Key in South Jersey. I help local cleaning owners reduce the office workload that slows bids and eats margin after award.
+Hi Main Office, this is Timmy Semenza with Boss Key in South Jersey. I help local business owners reduce the office workload that slows bids and eats margin after award.
 
 **Tailored bridge:**
 Based on Local market presence in Burlington/Camden and Likely owner-led proposal process, I thought there may be a practical fit.
@@ -86,7 +86,7 @@ If helpful, I can run a short diagnostic and show the top 2-3 fixes first. Open 
 - Research notes: Leadership names from company background page; phone and HQ from company site; direct email not public | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context | 2026-02-22: Left clear voicemail with local context
 
 **Open (20-30 sec):**
-Hi Robert Nestore / Mike Divito, this is Timmy Semenza with Boss Key in South Jersey. I help local cleaning owners reduce the office workload that slows bids and eats margin after award.
+Hi Robert Nestore / Mike Divito, this is Timmy Semenza with Boss Key in South Jersey. I help local business owners reduce the office workload that slows bids and eats margin after award.
 
 **Tailored bridge:**
 Based on Education contract profile suggests compliance/reporting burden and Regional operator with potential multi-site complexity, I thought there may be a practical fit.
@@ -110,7 +110,7 @@ If helpful, I can run a short diagnostic and show the top 2-3 fixes first. Open 
 - Research notes: Phone verified on site; validate contract size and fit | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window. | 2026-02-22: Call prepared for dialing window; not executed due to time window.
 
 **Open (20-30 sec):**
-Hi Main Office, this is Timmy Semenza with Boss Key in South Jersey. I help local cleaning owners reduce the office workload that slows bids and eats margin after award.
+Hi Main Office, this is Timmy Semenza with Boss Key in South Jersey. I help local business owners reduce the office workload that slows bids and eats margin after award.
 
 **Tailored bridge:**
 Based on Local service business in target geography and Potential transition from small to structured operations, I thought there may be a practical fit.

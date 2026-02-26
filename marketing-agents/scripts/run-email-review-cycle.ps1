@@ -10,11 +10,18 @@ $dataDir = Join-Path $repoRoot "marketing-agents/data"
 $briefDir = Join-Path $repoRoot "marketing-agents/briefs"
 
 Write-Output "Step 1/3: Build new email queue rows (owner approval required)..."
-powershell -ExecutionPolicy Bypass -File (Join-Path $scriptsDir "build-email-queue-from-pipeline.ps1") `
-    -ScheduledDate $ScheduledDate `
-    -ScheduledTime $ScheduledTime `
-    -OwnerApproved no `
-    -SendMode send
+$buildQueueScript = Join-Path $scriptsDir "build-email-queue-from-pipeline.ps1"
+$buildQueueArgs = @(
+    "-ExecutionPolicy", "Bypass",
+    "-File", $buildQueueScript,
+    "-ScheduledTime", $ScheduledTime,
+    "-OwnerApproved", "no",
+    "-SendMode", "send"
+)
+if (-not [string]::IsNullOrWhiteSpace($ScheduledDate)) {
+    $buildQueueArgs += @("-ScheduledDate", $ScheduledDate)
+}
+& powershell @buildQueueArgs
 
 Write-Output "Step 2/3: Build review decisions table..."
 powershell -ExecutionPolicy Bypass -File (Join-Path $scriptsDir "build-email-review-decisions.ps1") `

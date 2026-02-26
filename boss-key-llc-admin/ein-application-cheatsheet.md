@@ -27,7 +27,7 @@ Use this on the IRS EIN tool page:
 - `Highest number of employees expected in next 12 months`: 0 (if no employees yet)
 - `First date wages or annuities paid`: N/A (if no employees yet)
 - `Principal activity`: Other / Consulting services
-- `Principal line of business description`: Proposal management and business development support for janitorial companies
+- `Principal line of business description`: Proposal management, growth strategy, and operations consulting for service businesses and public-sector contractors
 
 ## After EIN Is Issued
 

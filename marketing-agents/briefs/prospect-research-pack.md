@@ -1,4 +1,4 @@
-﻿# Prospect Research Pack - 2026-02-23
+# Prospect Research Pack - 2026-02-23
 
 Use this as a 2-minute prep sheet before each call.
 
@@ -19,7 +19,7 @@ Use this as a 2-minute prep sheet before each call.
 - BBB/profile lookup: https://www.google.com/search?q=Delta%20Cleaning%20Service%20BBB
 
 **20-second opener:**
-Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners reduce office work that slows bids and causes margin leakage after award.
+Timmy Semenza here with Boss Key. I help business owners reduce office work that slows bids and causes margin leakage after award.
 
 ## Absolute Cleaning LLC
 - Contact: Dave Barr (Owner)
@@ -38,7 +38,7 @@ Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners r
 - BBB/profile lookup: https://www.google.com/search?q=Absolute%20Cleaning%20LLC%20BBB
 
 **20-second opener:**
-Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners reduce office work that slows bids and causes margin leakage after award.
+Timmy Semenza here with Boss Key. I help business owners reduce office work that slows bids and causes margin leakage after award.
 
 ## Bernadette Janitorial
 - Contact: Main Office (Owner/Ops Lead)
@@ -57,7 +57,7 @@ Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners r
 - BBB/profile lookup: https://www.google.com/search?q=Bernadette%20Janitorial%20BBB
 
 **20-second opener:**
-Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners reduce office work that slows bids and causes margin leakage after award.
+Timmy Semenza here with Boss Key. I help business owners reduce office work that slows bids and causes margin leakage after award.
 
 ## Education Facility Management
 - Contact: Robert Nestore / Mike Divito (Founder / Operations Leadership)
@@ -76,7 +76,7 @@ Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners r
 - BBB/profile lookup: https://www.google.com/search?q=Education%20Facility%20Management%20BBB
 
 **20-second opener:**
-Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners reduce office work that slows bids and causes margin leakage after award.
+Timmy Semenza here with Boss Key. I help business owners reduce office work that slows bids and causes margin leakage after award.
 
 ## Dependable Janitorial Services (ALC)
 - Contact: Main Office (Owner)
@@ -95,5 +95,5 @@ Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners r
 - BBB/profile lookup: https://www.google.com/search?q=Dependable%20Janitorial%20Services%20(ALC)%20BBB
 
 **20-second opener:**
-Timmy Semenza here with Boss Key in South Jersey. I help local cleaning owners reduce office work that slows bids and causes margin leakage after award.
+Timmy Semenza here with Boss Key. I help business owners reduce office work that slows bids and causes margin leakage after award.
 
