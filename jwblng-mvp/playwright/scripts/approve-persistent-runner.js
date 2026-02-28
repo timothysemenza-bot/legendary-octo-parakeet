@@ -100,9 +100,9 @@ async function runApprovalFlow(page) {
 
   let openedDetail = false;
   const openContactCandidates = [
-    contactRow.getByRole('button', { name: /timmy|semenza/i }).first(),
-    contactRow.getByRole('button', { name: new RegExp(escapedEmail, 'i') }).first(),
-    contactRow.getByRole('button').nth(1),
+    contactRow.getByRole('button', { name: new RegExp(`^(?!.*options).+`, 'i') }).first(),
+    contactRow.getByRole('link', { name: new RegExp(`^(?!.*options).+`, 'i') }).first(),
+    contactRow.locator('button:not(:has-text("Options"))').first(),
   ];
   for (const candidate of openContactCandidates) {
     if (await candidate.isVisible().catch(() => false)) {
@@ -118,12 +118,22 @@ async function runApprovalFlow(page) {
   await page.waitForLoadState('domcontentloaded');
   await page.waitForTimeout(1000);
 
-  if (/\/contacts(\?|$)|\/contact_tags(\/|$)/.test(page.url())) {
+  const stillListUrl = /\/contacts(\?|$)|\/contact_tags(\/|$)/.test(page.url());
+  const hasDetailHeading = await page
+    .getByRole('heading', { name: new RegExp(escapedEmail, 'i') })
+    .isVisible()
+    .catch(() => false);
+  const hasTagPanel = await page
+    .locator('aside:has-text("Tags"), [role="dialog"]:has-text("Tags"), [data-testid*="contact"]')
+    .first()
+    .isVisible()
+    .catch(() => false);
+  if (stillListUrl && !hasDetailHeading && !hasTagPanel) {
     throw new Error('Did not open contact detail view; still on contacts list/tag management page.');
   }
 
   console.log(`[contact-flow] Apply tag: ${approvalTag}`);
-  const detailRoot = page.locator('main').first();
+  const detailRoot = page.locator('main, aside, [role="dialog"]').first();
   const tagControls = [
     detailRoot.getByRole('button', { name: /add tag|tags/i }).first(),
     detailRoot.getByRole('link', { name: /add tag|tags/i }).first(),
