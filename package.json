@@ -12,9 +12,8 @@
     "pw:jwblng:join": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-join-flow.spec.js",
     "pw:jwblng:verify": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-member-journey.spec.js",
     "pw:jwblng:event": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-event-template.spec.js",
-    "pw:jwblng:event:persistent": "node jwblng-mvp/playwright/scripts/event-persistent-runner.js",
     "pw:jwblng:approve": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/approve-contact.spec.js",
-    "pw:jwblng:approve:persistent": "node jwblng-mvp/playwright/scripts/approve-persistent-runner.js"
+    "pw:jwblng:persistent": "node jwblng-mvp/playwright/scripts/persistent-runner.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

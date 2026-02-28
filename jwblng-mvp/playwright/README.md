@@ -50,10 +50,10 @@ $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:event
 ```
 
-Persistent event runner (keeps one Chromium session open; type `r` to rerun, `q` to quit):
+Persistent runner (single command, mode switch for `event` or `approve`):
 ```powershell
 $env:ALLOW_KAJABI_WRITES="1"
-npm run pw:jwblng:event:persistent
+npm run pw:jwblng:persistent
 ```
 
 Optional event env vars:
@@ -69,11 +69,11 @@ $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:approve
 ```
 
-Persistent contact approval runner:
-```powershell
-$env:ALLOW_KAJABI_WRITES="1"
-npm run pw:jwblng:approve:persistent
-```
+Inside runner:
+- `r` rerun current mode
+- `mode event` switch to event flow
+- `mode approve` switch to contact approval flow
+- `q` quit
 
 Optional contact env vars:
 - `JWBLNG_CONTACT_EMAIL_FILTER` (required for safety in approve flow)
