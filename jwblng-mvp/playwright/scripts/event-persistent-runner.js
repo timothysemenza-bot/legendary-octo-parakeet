@@ -73,6 +73,22 @@ async function runEventFlow(page) {
   const eventDescription = env('JWBLNG_EVENT_DESCRIPTION', '');
   const artifactsDir = ensureArtifactsDir();
 
+  function normalizeOccursAt(datePart, timePart) {
+    if (!datePart) return '';
+    let normalizedDate = datePart.trim();
+    const mdy = normalizedDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (mdy) {
+      const mm = mdy[1].padStart(2, '0');
+      const dd = mdy[2].padStart(2, '0');
+      const yyyy = mdy[3];
+      normalizedDate = `${yyyy}-${mm}-${dd}`;
+    }
+
+    if (!timePart) return normalizedDate;
+    const normalizedTime = timePart.trim().toUpperCase();
+    return `${normalizedDate} ${normalizedTime}`;
+  }
+
   console.log('[event-flow] Open dashboard');
   await page.goto(`${adminBase}/dashboard`, { waitUntil: 'domcontentloaded' });
 
@@ -145,7 +161,7 @@ async function runEventFlow(page) {
       page.getByLabel(/when does this event occur|occurs at|start/i).first(),
       page.locator('input[type="date"]:visible, input[name*="date" i], input[placeholder*="date" i], input[placeholder*="mm" i]').first(),
     ],
-    eventTime ? `${eventDate} ${eventTime}` : eventDate,
+    normalizeOccursAt(eventDate, eventTime),
   );
 
   const filledTime = Boolean(eventTime) && filledDate;

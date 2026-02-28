@@ -63,6 +63,16 @@ Optional event env vars:
 - `JWBLNG_EVENT_TIMEZONE` (label text match, e.g. `Eastern`)
 - `JWBLNG_EVENT_DESCRIPTION`
 
+Write-gated contact approval flow (requires email filter):
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:approve
+```
+
+Optional contact env vars:
+- `JWBLNG_CONTACT_EMAIL_FILTER` (required for safety in approve flow)
+- `JWBLNG_APPROVAL_TAG` (defaults to `approved-member`)
+
 ## Artifacts
 Generated under:
 - `jwblng-mvp/playwright/artifacts`

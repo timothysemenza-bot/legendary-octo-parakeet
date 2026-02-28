@@ -67,12 +67,14 @@ Path: `jwblng-mvp/playwright`
 2. `npx playwright install chromium`
 3. Populate root `.env` values from `jwblng-mvp/playwright/.env.example`
 4. Save authenticated state:
-   `npx playwright codegen "$env:KAJABI_BASE_URL/admin/dashboard" --save-storage="jwblng-mvp/playwright/.auth/kajabi-admin.json"`
+   `npx playwright codegen "https://app.kajabi.com/login" --save-storage="jwblng-mvp/playwright/.auth/kajabi-admin.json"`
 
 ### Commands
 - Read-only audit: `npm run pw:jwblng:audit`
 - Public journey verify: `npm run pw:jwblng:verify`
 - Write-gated join draft: set `ALLOW_KAJABI_WRITES=1` then run `npm run pw:jwblng:join`
+- Write-gated event draft: set `ALLOW_KAJABI_WRITES=1` then run `npm run pw:jwblng:event`
+- Persistent event loop (no browser relaunch): set `ALLOW_KAJABI_WRITES=1` then run `npm run pw:jwblng:event:persistent`
 
 ### Artifact locations
 - `jwblng-mvp/playwright/artifacts`
@@ -102,3 +104,9 @@ Path: `jwblng-mvp/playwright`
 2. Execute one supervised run of each core workflow.
 3. Log unresolved issues and classify as Phase 1 fix or Phase 2 scope.
 4. Record sign-off decision.
+
+## Checkpoint Log
+- 2026-02-28: Kajabi automation baseline stabilized.
+- 2026-02-28: Audit paths updated to tenant-valid routes (`website_pages`, `contacts`, `email_campaigns`).
+- 2026-02-28: Join flow aligned to Kajabi modal sequence (`New Website Page` -> `Name` -> `Customize Page`).
+- 2026-02-28: Event flow implemented (standard and persistent runner), including draft field-fill and artifacts.
