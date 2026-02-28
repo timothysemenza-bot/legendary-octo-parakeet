@@ -50,6 +50,12 @@ $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:event
 ```
 
+Persistent event runner (keeps one Chromium session open; type `r` to rerun, `q` to quit):
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:event:persistent
+```
+
 Optional event env vars:
 - `JWBLNG_EVENT_TITLE`
 - `JWBLNG_EVENT_DATE` (format expected by your Kajabi date input)

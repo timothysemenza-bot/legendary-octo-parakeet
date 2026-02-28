@@ -40,8 +40,20 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
     if (!value) return false;
     for (const candidate of candidates) {
       if (await candidate.isVisible().catch(() => false)) {
-        await candidate.fill(value);
-        return true;
+        const tag = await candidate.evaluate((el) => el.tagName.toLowerCase()).catch(() => '');
+        if (tag === 'input' || tag === 'textarea') {
+          await candidate.fill(value);
+          return true;
+        }
+        const contentEditable = await candidate
+          .evaluate((el) => el.getAttribute('contenteditable') === 'true')
+          .catch(() => false);
+        if (contentEditable) {
+          await candidate.fill(value);
+          return true;
+        }
+        // Non-fillable element (e.g., select): skip.
+        continue;
       }
     }
     return false;
@@ -49,12 +61,46 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
 
   async function chooseTimezone(value) {
     if (!value) return false;
-    const timezoneCombobox = activePage.getByRole('combobox', { name: /time.?zone/i }).first();
+    const timezoneCombobox = activePage.getByRole('combobox', { name: /time.?zone|zone/i }).first();
     if (await timezoneCombobox.isVisible().catch(() => false)) {
-      await timezoneCombobox.click();
+      const preferred = new RegExp(value, 'i');
+      const optionByLabel = activePage.getByRole('option', { name: preferred }).first();
+      if (await optionByLabel.isVisible({ timeout: 2000 }).catch(() => false)) {
+        const optionValue = await optionByLabel.getAttribute('value');
+        if (optionValue) {
+          await timezoneCombobox.selectOption(optionValue);
+          return true;
+        }
+      }
+
+      // Fallback: select by matching visible option label.
+      const options = await timezoneCombobox.locator('option').all().catch(() => []);
+      for (const option of options) {
+        const label = (await option.innerText().catch(() => '')).trim();
+        const val = await option.getAttribute('value').catch(() => null);
+        if (label && val && preferred.test(label)) {
+          await timezoneCombobox.selectOption(val);
+          return true;
+        }
+      }
+
+      // Last-resort exact value set (if caller passed full option value).
+      await timezoneCombobox.selectOption({ label: value }).catch(() => {});
       const timezoneOption = activePage.getByRole('option', { name: new RegExp(value, 'i') }).first();
       if (await timezoneOption.isVisible({ timeout: 4000 }).catch(() => false)) {
         await timezoneOption.click();
+        return true;
+      }
+      return false;
+    }
+    const timezoneInputs = [
+      activePage.getByLabel(/time.?zone|zone/i).first(),
+      activePage.locator('input[name*="zone" i], input[placeholder*="zone" i], input[placeholder*="eastern" i]').first(),
+    ];
+    for (const input of timezoneInputs) {
+      if (await input.isVisible().catch(() => false)) {
+        await input.fill(value);
+        await input.press('Enter').catch(() => {});
         return true;
       }
     }
@@ -102,6 +148,12 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
   await activePage.waitForLoadState('domcontentloaded');
   await activePage.waitForTimeout(1000);
 
+  const visibleLabels = await activePage
+    .locator('label:visible')
+    .allTextContents()
+    .catch(() => []);
+  console.log(`[event-flow] Visible labels: ${visibleLabels.join(' | ')}`);
+
   // Fill core draft fields if exposed by this Kajabi event form.
   const titleCandidates = [
     activePage.getByRole('textbox', { name: /title|event name|name/i }).first(),
@@ -122,26 +174,23 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
 
   const filledDate = await fillFirstVisible(
     [
-      activePage.getByRole('textbox', { name: /date|start date/i }).first(),
-      activePage.locator('input[name*="date" i], input[placeholder*="date" i]').first(),
+      activePage.getByRole('textbox', { name: /when does this event occur|occurs at|start/i }).first(),
+      activePage.getByLabel(/when does this event occur|occurs at|start/i).first(),
+      activePage.locator('input[type="date"]:visible, input[name*="date" i], input[placeholder*="date" i], input[placeholder*="mm" i]').first(),
     ],
-    eventDate,
+    eventTime ? `${eventDate} ${eventTime}` : eventDate,
   );
 
-  const filledTime = await fillFirstVisible(
-    [
-      activePage.getByRole('textbox', { name: /time|start time/i }).first(),
-      activePage.locator('input[name*="time" i], input[placeholder*="time" i]').first(),
-    ],
-    eventTime,
-  );
+  // Kajabi commonly combines date+time in one "When does this event occur?" field.
+  const filledTime = Boolean(eventTime) && filledDate;
 
   const selectedTimezone = await chooseTimezone(eventTimezone);
 
   const filledDescription = await fillFirstVisible(
     [
       activePage.getByRole('textbox', { name: /description|details|about/i }).first(),
-      activePage.locator('textarea[name*="description" i], textarea[placeholder*="description" i], [contenteditable="true"]').first(),
+      activePage.getByLabel(/description|details|about/i).first(),
+      activePage.locator('textarea[name*="description" i], textarea[placeholder*="description" i], textarea[placeholder*="details" i], [contenteditable="true"]').first(),
     ],
     eventDescription,
   );
