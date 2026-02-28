@@ -98,20 +98,38 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
     fullPage: true,
   });
 
-  const openContactButton = contactRow.getByRole('button').first();
-  if (await openContactButton.isVisible().catch(() => false)) {
-    await openContactButton.click();
-  } else {
+  // Open contact detail from the row (avoid "Options" button).
+  let openedDetail = false;
+  const openContactCandidates = [
+    contactRow.getByRole('button', { name: /timmy|semenza/i }).first(),
+    contactRow.getByRole('button', { name: new RegExp(escapedEmail, 'i') }).first(),
+    contactRow.getByRole('button').nth(1),
+  ];
+  for (const candidate of openContactCandidates) {
+    if (await candidate.isVisible().catch(() => false)) {
+      await candidate.click();
+      openedDetail = true;
+      break;
+    }
+  }
+  if (!openedDetail) {
+    // Last fallback: click the row, but this may keep us in list view.
     await contactRow.click();
   }
   await activePage.waitForLoadState('domcontentloaded');
   await activePage.waitForTimeout(1000);
 
+  // Must leave contacts list/manage-tags screens before tag mutation.
+  if (/\/contacts(\?|$)|\/contact_tags(\/|$)/.test(activePage.url())) {
+    throw new Error('Did not open contact detail view; still on contacts list/tag management page.');
+  }
+
   console.log(`[contact-flow] Apply tag: ${approvalTag}`);
+  const detailRoot = activePage.locator('main').first();
   const tagControls = [
-    activePage.getByRole('button', { name: /add tag|tags|manage tags/i }).first(),
-    activePage.getByRole('link', { name: /add tag|tags|manage tags/i }).first(),
-    activePage.locator('button:has-text("Add Tag"), button:has-text("Tags"), a:has-text("Add Tag")').first(),
+    detailRoot.getByRole('button', { name: /add tag|tags/i }).first(),
+    detailRoot.getByRole('link', { name: /add tag|tags/i }).first(),
+    detailRoot.locator('button:has-text("Add Tag"), button:has-text("Tags"), a:has-text("Add Tag")').first(),
   ];
 
   let openedTagControl = false;
@@ -128,9 +146,9 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   }
 
   const tagInputCandidates = [
-    activePage.getByRole('combobox', { name: /tag/i }).first(),
-    activePage.getByRole('textbox', { name: /tag/i }).first(),
-    activePage.locator('input[placeholder*="tag" i], input[name*="tag" i]').first(),
+    detailRoot.getByRole('combobox', { name: /tag/i }).first(),
+    detailRoot.getByRole('textbox', { name: /tag/i }).first(),
+    detailRoot.locator('input[placeholder*="tag" i], input[name*="tag" i]').first(),
   ];
 
   let tagInput = null;
