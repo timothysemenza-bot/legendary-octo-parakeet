@@ -87,7 +87,8 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   await searchInput.press('Enter').catch(() => {});
   await activePage.waitForTimeout(1200);
 
-  const contactRow = activePage.getByRole('link', { name: new RegExp(emailFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') }).first();
+  const escapedEmail = emailFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const contactRow = activePage.getByRole('row', { name: new RegExp(escapedEmail, 'i') }).first();
   if (!(await contactRow.isVisible({ timeout: 10000 }).catch(() => false))) {
     throw new Error(`No visible contact row found for '${emailFilter}'.`);
   }
@@ -97,7 +98,12 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
     fullPage: true,
   });
 
-  await contactRow.click();
+  const openContactButton = contactRow.getByRole('button').first();
+  if (await openContactButton.isVisible().catch(() => false)) {
+    await openContactButton.click();
+  } else {
+    await contactRow.click();
+  }
   await activePage.waitForLoadState('domcontentloaded');
   await activePage.waitForTimeout(1000);
 
