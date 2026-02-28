@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const path = require('path');
 const readline = require('readline');
+const fs = require('fs');
 const { chromium } = require('@playwright/test');
 const { env, adminBaseUrl, ensureArtifactsDir, writesAllowed } = require('../utils/env');
 
@@ -328,7 +329,37 @@ async function main() {
 
   console.log('Persistent Kajabi runner started.');
   console.log(`Current mode: ${mode}`);
-  console.log('Commands: r=run, mode event, mode approve, q=quit');
+  console.log('Commands: r=run, mode event, mode approve, report, q=quit');
+
+  const printReportHints = () => {
+    const artifactsDir = ensureArtifactsDir();
+    const reportDir = path.join(__dirname, '..', 'playwright-report');
+    const resultsDir = path.join(__dirname, '..', 'test-results');
+
+    const files = fs
+      .readdirSync(artifactsDir, { withFileTypes: true })
+      .filter((d) => d.isFile())
+      .map((d) => {
+        const full = path.join(artifactsDir, d.name);
+        const stat = fs.statSync(full);
+        return { name: d.name, mtime: stat.mtimeMs };
+      })
+      .sort((a, b) => b.mtime - a.mtime)
+      .slice(0, 10);
+
+    console.log('--- Report Hints ---');
+    console.log(`Artifacts: ${artifactsDir}`);
+    if (files.length) {
+      console.log('Latest artifact files:');
+      for (const f of files) console.log(` - ${f.name}`);
+    } else {
+      console.log('No artifact files found yet.');
+    }
+    console.log(`Playwright HTML report dir (test-runner only): ${reportDir}`);
+    console.log(`Playwright test-results dir (test-runner only): ${resultsDir}`);
+    console.log('To open HTML report (after npm run pw:... commands):');
+    console.log('  npx.cmd playwright show-report jwblng-mvp\\\\playwright\\\\playwright-report');
+  };
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -380,7 +411,11 @@ async function main() {
       console.log('Mode switched to approve. Press r to run.');
       return;
     }
-    console.log('Unknown command. Use r, mode event, mode approve, q.');
+    if (cmd === 'report') {
+      printReportHints();
+      return;
+    }
+    console.log('Unknown command. Use r, mode event, mode approve, report, q.');
   });
 }
 

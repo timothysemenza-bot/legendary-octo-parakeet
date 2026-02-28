@@ -73,6 +73,7 @@ Inside runner:
 - `r` rerun current mode
 - `mode event` switch to event flow
 - `mode approve` switch to contact approval flow
+- `report` print latest artifacts and HTML report hint paths
 - `q` quit
 
 Optional contact env vars:
