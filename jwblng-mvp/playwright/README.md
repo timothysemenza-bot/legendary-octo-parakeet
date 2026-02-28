@@ -50,6 +50,13 @@ $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:event
 ```
 
+Optional event env vars:
+- `JWBLNG_EVENT_TITLE`
+- `JWBLNG_EVENT_DATE` (format expected by your Kajabi date input)
+- `JWBLNG_EVENT_TIME` (format expected by your Kajabi time input)
+- `JWBLNG_EVENT_TIMEZONE` (label text match, e.g. `Eastern`)
+- `JWBLNG_EVENT_DESCRIPTION`
+
 ## Artifacts
 Generated under:
 - `jwblng-mvp/playwright/artifacts`
