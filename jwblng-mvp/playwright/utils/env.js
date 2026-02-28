@@ -25,9 +25,18 @@ function ensureArtifactsDir() {
   return dir;
 }
 
+function adminBaseUrl() {
+  const scoped = env('KAJABI_ADMIN_BASE_URL', '').trim().replace(/\/+$/, '');
+  if (scoped) return scoped;
+
+  const base = requireEnv('KAJABI_BASE_URL').trim().replace(/\/+$/, '');
+  return `${base}/admin`;
+}
+
 module.exports = {
   env,
   requireEnv,
   writesAllowed,
   ensureArtifactsDir,
+  adminBaseUrl,
 };

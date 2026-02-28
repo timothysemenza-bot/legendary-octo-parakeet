@@ -1,18 +1,18 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
-const { requireEnv, ensureArtifactsDir } = require('../utils/env');
+const { adminBaseUrl, ensureArtifactsDir } = require('../utils/env');
 
 test('audit current Kajabi surfaces (read-only)', async ({ page }) => {
-  const baseUrl = requireEnv('KAJABI_BASE_URL');
+  const adminBase = adminBaseUrl();
   const artifactsDir = ensureArtifactsDir();
 
   const targets = [
-    { id: 'admin_dashboard', url: `${baseUrl}/admin/dashboard` },
-    { id: 'admin_website_pages', url: `${baseUrl}/admin/website/pages` },
-    { id: 'admin_people', url: `${baseUrl}/admin/people` },
-    { id: 'admin_events', url: `${baseUrl}/admin/events` },
-    { id: 'admin_marketing', url: `${baseUrl}/admin/marketing/email-campaigns` },
+    { id: 'admin_dashboard', url: `${adminBase}/dashboard` },
+    { id: 'admin_website_pages', url: `${adminBase}/website/pages` },
+    { id: 'admin_people', url: `${adminBase}/people` },
+    { id: 'admin_events', url: `${adminBase}/events` },
+    { id: 'admin_marketing', url: `${adminBase}/marketing/email-campaigns` },
   ];
 
   const findings = [];

@@ -1,17 +1,17 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
-const { env, requireEnv, writesAllowed, ensureArtifactsDir } = require('../utils/env');
+const { env, adminBaseUrl, writesAllowed, ensureArtifactsDir } = require('../utils/env');
 
 test('draft/create canonical join page (write-gated)', async ({ page }) => {
   test.skip(!writesAllowed(), 'Set ALLOW_KAJABI_WRITES=1 to enable write actions.');
 
-  const baseUrl = requireEnv('KAJABI_BASE_URL');
+  const adminBase = adminBaseUrl();
   const pageTitle = env('JWBLNG_JOIN_PAGE_TITLE', 'Join JWBLNG');
   const pagePath = env('JWBLNG_JOIN_PAGE_PATH', '/join');
   const ctaText = env('JWBLNG_JOIN_PAGE_CTA', 'Apply Now');
   const artifactsDir = ensureArtifactsDir();
 
-  await page.goto(`${baseUrl}/admin/website/pages`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${adminBase}/website/pages`, { waitUntil: 'domcontentloaded' });
 
   // These selectors are intentionally broad to tolerate Kajabi UI changes.
   await page.getByRole('button', { name: /new page|create page|add page/i }).first().click();

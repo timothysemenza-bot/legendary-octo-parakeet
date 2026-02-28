@@ -18,11 +18,12 @@ npx playwright install chromium
 ## 2) Configure environment
 1. Copy `jwblng-mvp/playwright/.env.example` values into your root `.env`.
 2. Keep `ALLOW_KAJABI_WRITES=0` until you explicitly want write actions.
+3. If your admin URL is site-scoped (for example `app.kajabi.com/admin/sites/<id>/dashboard`), set `KAJABI_ADMIN_BASE_URL`.
 
 ## 3) Save authenticated Kajabi storage state
 Run this once, log in manually, then close the browser:
 ```powershell
-npx playwright codegen "$env:KAJABI_BASE_URL/admin/dashboard" --save-storage="jwblng-mvp/playwright/.auth/kajabi-admin.json"
+npx playwright codegen "https://app.kajabi.com/login" --save-storage="jwblng-mvp/playwright/.auth/kajabi-admin.json"
 ```
 
 ## 4) Run tests
