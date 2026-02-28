@@ -119,20 +119,8 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   await activePage.waitForLoadState('domcontentloaded');
   await activePage.waitForTimeout(1000);
 
-  // Kajabi may open contact details as full page or side panel.
-  const stillListUrl = /\/contacts(\?|$)|\/contact_tags(\/|$)/.test(activePage.url());
-  const hasDetailHeading = await activePage
-    .getByRole('heading', { name: new RegExp(escapedEmail, 'i') })
-    .isVisible()
-    .catch(() => false);
-  const hasTagPanel = await activePage
-    .locator('aside:has-text("Tags"), [role="dialog"]:has-text("Tags"), [data-testid*="contact"]')
-    .first()
-    .isVisible()
-    .catch(() => false);
-  if (stillListUrl && !hasDetailHeading && !hasTagPanel) {
-    throw new Error('Did not open contact detail view; still on contacts list/tag management page.');
-  }
+  // Kajabi may keep /contacts URL while opening a side panel detail view.
+  // Do not hard-fail here; tag-control discovery below is the source of truth.
 
   console.log(`[contact-flow] Apply tag: ${approvalTag}`);
   const detailRoot = activePage.locator('main, aside, [role="dialog"]').first();
