@@ -10,7 +10,8 @@
     "migrate:sharepoint-content": "node scripts/migrate-content-library.js --source content-library.json --manifest content-library.manifest.json --contentDir migrated-content",
     "pw:jwblng:audit": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/audit.kajabi.spec.js",
     "pw:jwblng:join": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-join-flow.spec.js",
-    "pw:jwblng:verify": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-member-journey.spec.js"
+    "pw:jwblng:verify": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-member-journey.spec.js",
+    "pw:jwblng:event": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-event-template.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

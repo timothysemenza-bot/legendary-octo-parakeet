@@ -6,6 +6,7 @@ This folder provides a safe starter for running a local browser agent against Ka
 - `playwright.config.js`: Single-project Chromium config + artifacts.
 - `tests/audit.kajabi.spec.js`: Read-only inventory capture.
 - `tests/create-join-flow.spec.js`: Write-gated join-page draft script.
+- `tests/create-event-template.spec.js`: Write-gated event create-flow draft script.
 - `tests/verify-member-journey.spec.js`: Public journey smoke test.
 - `utils/env.js`: Environment and safety helpers.
 
@@ -41,6 +42,12 @@ Write-gated draft flow (only after review):
 ```powershell
 $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:join
+```
+
+Write-gated event draft flow:
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:event
 ```
 
 ## Artifacts
