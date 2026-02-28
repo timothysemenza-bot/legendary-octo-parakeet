@@ -8,23 +8,43 @@ test('audit current Kajabi surfaces (read-only)', async ({ page }) => {
   const artifactsDir = ensureArtifactsDir();
 
   const targets = [
-    { id: 'admin_dashboard', url: `${adminBase}/dashboard` },
-    { id: 'admin_website_pages', url: `${adminBase}/website/pages` },
-    { id: 'admin_people', url: `${adminBase}/people` },
-    { id: 'admin_events', url: `${adminBase}/events` },
-    { id: 'admin_marketing', url: `${adminBase}/marketing/email-campaigns` },
+    { id: 'admin_dashboard', candidates: [`${adminBase}/dashboard`] },
+    { id: 'admin_website_pages', candidates: [`${adminBase}/website_pages`, `${adminBase}/landing_pages`, `${adminBase}/website/pages`] },
+    { id: 'admin_contacts', candidates: [`${adminBase}/contacts`, `${adminBase}/people`] },
+    { id: 'admin_events', candidates: [`${adminBase}/events`] },
+    { id: 'admin_marketing', candidates: [`${adminBase}/email_campaigns`, `${adminBase}/marketing/email-campaigns`] },
   ];
 
   const findings = [];
 
   for (const target of targets) {
-    const response = await page.goto(target.url, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(1200);
+    let chosenUrl = null;
+    let chosenStatus = null;
+
+    for (const candidate of target.candidates) {
+      const response = await page.goto(candidate, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(800);
+
+      const status = response ? response.status() : null;
+      const title = await page.title();
+      const isNotFound = status === 404 || /doesn't exist|404/i.test(title);
+
+      if (!isNotFound) {
+        chosenUrl = candidate;
+        chosenStatus = status;
+        break;
+      }
+
+      if (!chosenUrl) {
+        chosenUrl = candidate;
+        chosenStatus = status;
+      }
+    }
 
     findings.push({
       id: target.id,
-      url: target.url,
-      status: response ? response.status() : null,
+      url: chosenUrl,
+      status: chosenStatus,
       title: await page.title(),
       finalUrl: page.url(),
     });
