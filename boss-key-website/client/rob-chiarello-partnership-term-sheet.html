@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key | Private Partnership Term Sheet</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --paper: #0a0a0b;
+      --accent: #c5162e;
+      --accent-soft: #ffd7dc;
+      --line: #2d2f35;
+      --card: #16171a;
+      --soft: #c3c8d3;
+      --ok: #87d5a8;
+      --warn: #ffcc76;
+      --radius: 16px;
+      --max: 980px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    .wrap {
+      width: min(var(--max), 94vw);
+      margin: 0 auto;
+      padding: 20px 0 34px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .head img {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      color: var(--soft);
+      background: #111217;
+    }
+    h1, h2, h3 { margin: 0 0 8px; }
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.7rem;
+      line-height: 1.2;
+      color: #fff;
+    }
+    h2 {
+      color: var(--accent-soft);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    h3 {
+      color: #fff;
+      font-size: 0.98rem;
+    }
+    p { margin: 0 0 8px; }
+    .muted {
+      color: var(--soft);
+      font-size: 0.95rem;
+    }
+    .term-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .term-label {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--accent-soft);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .term-value {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #121318;
+      padding: 10px;
+      font-size: 0.94rem;
+    }
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    li {
+      margin: 4px 0;
+      color: var(--ink);
+    }
+    .sign-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .sig {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #101116;
+      padding: 12px;
+      min-height: 130px;
+    }
+    .line {
+      border-bottom: 1px solid #4a4e58;
+      margin: 28px 0 8px;
+      height: 1px;
+    }
+    .small {
+      font-size: 0.82rem;
+      color: var(--soft);
+    }
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      background: rgba(6, 6, 7, 0.92);
+      padding: 14px;
+    }
+    .gate-card {
+      width: min(460px, 94vw);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #141519;
+      padding: 16px;
+    }
+    label {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--soft);
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0f1013;
+      color: var(--ink);
+      padding: 10px;
+      font: inherit;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: 1px solid #5f232b;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .status {
+      margin-top: 10px;
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: #101116;
+      display: none;
+      font-size: 0.9rem;
+    }
+    .status.warn {
+      display: block;
+      border-color: #6d5830;
+      color: var(--warn);
+      background: #1a1710;
+    }
+    .status.ok {
+      display: block;
+      border-color: #2f5f42;
+      color: var(--ok);
+      background: #101a13;
+    }
+    @media (max-width: 900px) {
+      .term-grid { grid-template-columns: 1fr; }
+      .two { grid-template-columns: 1fr; }
+      .sign-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="access-gate" class="gate">
+    <div class="gate-card">
+      <h2>Private Document</h2>
+      <p class="muted">This partnership term sheet is restricted. Enter the access code shared by Boss Key.</p>
+      <label for="access-code">Access code</label>
+      <input id="access-code" type="password" autocomplete="one-time-code">
+      <div class="actions">
+        <button id="unlock-btn" type="button">Unlock</button>
+        <span class="small">Intended recipient: Rob Chiarello</span>
+      </div>
+      <div id="gate-status" class="status"></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="panel">
+      <div class="head">
+        <img src="../assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key">
+        <div class="chips">
+          <span class="chip">Private Draft</span>
+          <span class="chip">Prepared: February 27, 2026</span>
+          <span class="chip">Non-Binding Framework</span>
+        </div>
+      </div>
+      <h1>Partnership Term Sheet</h1>
+      <p class="muted">Prepared by Boss Key LLC for discussion with Rob Chiarello regarding a potential referral, implementation, and optional white-label relationship around proposal automation software.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Parties</h2>
+      <div class="term-grid">
+        <div class="term-label">Advisor Partner</div>
+        <div class="term-value">Boss Key LLC ("Boss Key"), represented by Timothy Semenza.</div>
+        <div class="term-label">Software Partner</div>
+        <div class="term-value">Proposal Forge / Rob Chiarello ("Software Partner").</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Commercial Structure (Proposed)</h2>
+      <div class="term-grid">
+        <div class="term-label">Phase 1</div>
+        <div class="term-value">Pilot + referral/implementation mode only. No white-label go-live until due diligence gates are passed.</div>
+        <div class="term-label">Compensation</div>
+        <div class="term-value">35% revenue share to Boss Key on all clients sourced by Boss Key, paid monthly within 15 days of month-end with statement-level transparency.</div>
+        <div class="term-label">White-Label Trigger</div>
+        <div class="term-value">Optional white-label activation only after mutual written approval by both parties following technical, legal, and client outcome validation.</div>
+        <div class="term-label">Exclusivity</div>
+        <div class="term-value">Non-exclusive. Boss Key retains the right to use and recommend alternate tools to meet client requirements.</div>
+      </div>
+    </section>
+
+    <section class="panel two">
+      <article class="panel" style="margin:0;">
+        <h2>Responsibilities: Boss Key</h2>
+        <ul>
+          <li>Lead qualification, advisory, and implementation strategy with client stakeholders.</li>
+          <li>Present software as one option within a broader workflow-optimization model.</li>
+          <li>Provide workflow and adoption feedback from pilot scenarios.</li>
+          <li>Protect client relationship continuity and delivery standards.</li>
+        </ul>
+      </article>
+      <article class="panel" style="margin:0;">
+        <h2>Responsibilities: Software Partner</h2>
+        <ul>
+          <li>Provide platform reliability, onboarding support, and user training resources.</li>
+          <li>Maintain security controls, data handling controls, and uptime operations.</li>
+          <li>Provide transparent roadmap and incident communication.</li>
+          <li>Support issue resolution and technical escalation in agreed response windows.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Due Diligence Gates (Required Before White Label)</h2>
+      <div class="term-grid">
+        <div class="term-label">Product Gate</div>
+        <div class="term-value">Pilot scenarios must prove acceptable output quality, formatting readiness, and reviewer usability in realistic US workflows.</div>
+        <div class="term-label">Security Gate</div>
+        <div class="term-value">Software Partner provides written details on encryption, sub-processors, retention/deletion controls, incident response, and tenant separation.</div>
+        <div class="term-label">Legal Gate</div>
+        <div class="term-value">Mutual agreement on MSA terms including liability, confidentiality, IP boundaries, and termination rights.</div>
+        <div class="term-label">Service Gate</div>
+        <div class="term-value">Defined support ownership, SLA expectations, and escalation paths for client-facing issues.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Core Terms</h2>
+      <div class="term-grid">
+        <div class="term-label">Client Ownership</div>
+        <div class="term-value">Each party retains ownership of its own direct client relationships unless otherwise documented in a client-specific SOW.</div>
+        <div class="term-label">Brand Usage</div>
+        <div class="term-value">No logo, name, or marketing claims may be used without prior written approval from the owning party.</div>
+        <div class="term-label">Data Access</div>
+        <div class="term-value">Boss Key client data may only be used for contracted service delivery and never for unrelated model training or external disclosure.</div>
+        <div class="term-label">Term + Exit</div>
+        <div class="term-value">30-day pilot window. Either party may terminate pilot collaboration with written notice; confidentiality obligations survive.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Next Steps (If Agreed)</h2>
+      <ul>
+        <li>Finalize pilot success criteria and test scenarios.</li>
+        <li>Exchange technical and legal diligence documents.</li>
+        <li>Draft short-form referral agreement for Phase 1.</li>
+        <li>Reassess white-label activation decision after pilot review.</li>
+      </ul>
+      <p class="small">This document is a non-binding discussion framework and does not constitute a final legal agreement.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Discussion Sign-Off</h2>
+      <div class="sign-grid">
+        <div class="sig">
+          <h3>Boss Key LLC</h3>
+          <div class="line"></div>
+          <p>Name / Title</p>
+          <p class="small">Date: ____________________</p>
+        </div>
+        <div class="sig">
+          <h3>Proposal Forge / Rob Chiarello</h3>
+          <div class="line"></div>
+          <p>Name / Title</p>
+          <p class="small">Date: ____________________</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const CONFIG = {
+      accessCodeSha256: "dcf2adf33c07926ea8a591a0f6dd63bc9aafaf4616a138278914ac4beda03ce7"
+    };
+
+    const gate = document.getElementById("access-gate");
+    const gateStatus = document.getElementById("gate-status");
+    const codeInput = document.getElementById("access-code");
+    const unlockBtn = document.getElementById("unlock-btn");
+
+    async function sha256Hex(value) {
+      const data = new TextEncoder().encode(value);
+      const hash = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function unlock() {
+      gateStatus.className = "status";
+      gateStatus.textContent = "";
+      const attempt = codeInput.value.trim();
+      if (!attempt) {
+        gateStatus.className = "status warn";
+        gateStatus.textContent = "Enter the access code.";
+        return;
+      }
+      const hash = await sha256Hex(attempt);
+      if (hash !== CONFIG.accessCodeSha256) {
+        gateStatus.className = "status warn";
+        gateStatus.textContent = "Access code is invalid.";
+        return;
+      }
+      sessionStorage.setItem("bk_rob_term_sheet_ok", "1");
+      gate.style.display = "none";
+    }
+
+    unlockBtn.addEventListener("click", unlock);
+    codeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") unlock();
+    });
+
+    if (sessionStorage.getItem("bk_rob_term_sheet_ok") === "1") {
+      gate.style.display = "none";
+    }
+  </script>
+</body>
+</html>

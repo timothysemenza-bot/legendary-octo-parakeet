@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key | Product One-Pager + Verticals</title>
+  <meta name="description" content="Boss Key product one-pager and vertical overview prepared for Ann Highsmith.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --soft: #c3c8d3;
+      --paper: #0a0a0b;
+      --panel: #15171b;
+      --line: #2d2f35;
+      --accent: #c5162e;
+      --accent-soft: #ffd7dc;
+      --ok: #87d5a8;
+      --max: 1080px;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: min(var(--max), 94vw);
+      margin: 0 auto;
+      padding: 20px 0 28px;
+    }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #111317;
+      color: var(--soft);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .chip.accent {
+      border-color: #5f232b;
+      background: #241518;
+      color: var(--accent-soft);
+    }
+
+    .page {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.73rem;
+      color: #f2a8b3;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0 0 8px;
+      color: #fff;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+    }
+
+    h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.4rem;
+      line-height: 1.22;
+      margin-top: 4px;
+    }
+
+    h3 {
+      font-size: 0.98rem;
+      color: var(--accent-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    h4 {
+      font-size: 1rem;
+    }
+
+    p {
+      margin: 0 0 10px;
+      color: var(--soft);
+    }
+
+    .lead {
+      color: #f6dbe0;
+      font-size: 1.02rem;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #111318;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .partner-lockup {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #101217;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+
+    .partner-lockup p {
+      margin: 0;
+      color: var(--soft);
+      font-size: 0.9rem;
+    }
+
+    .talos-logo {
+      height: 38px;
+      width: auto;
+      display: block;
+      max-width: 180px;
+      object-fit: contain;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: #0f1724;
+      border: 1px solid #31415a;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #12141a;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      font-size: 0.93rem;
+    }
+
+    .steps {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--soft);
+    }
+
+    .steps li {
+      margin-bottom: 6px;
+    }
+
+    .meta-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .meta-list li {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #101217;
+      padding: 8px 10px;
+      font-size: 0.92rem;
+      color: var(--soft);
+    }
+
+    .meta-list b {
+      color: #fff;
+    }
+
+    .outcome {
+      border: 1px solid #2f5f42;
+      background: #0f1a13;
+      color: var(--ok);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-top: 12px;
+    }
+
+    .footer-note {
+      color: #9ea8ba;
+      font-size: 0.84rem;
+      margin-top: 10px;
+    }
+
+    .print-break {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    @media (max-width: 920px) {
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .page { padding: 14px; }
+      .partner-lockup { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #111;
+      }
+      .wrap {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+      }
+      .top { margin: 0 0 10px; }
+      .chip { color: #333; background: #fff; }
+      .page {
+        box-shadow: none;
+        border-color: #ddd;
+        border-radius: 0;
+        background: #fff;
+        color: #111;
+      }
+      h1, h2, h3, h4, p, .meta-list li, .steps li { color: #111 !important; }
+      .section, .card, .meta-list li { border-color: #ddd; background: #fff; }
+      .outcome { border-color: #b8d8c5; background: #f4faf6; color: #1e5a37; }
+      .footer-note { color: #555; }
+      .talos-logo {
+        background: #f5f5f5;
+        border-color: #bbb;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top">
+      <a class="brand" href="../index.html">
+        <img src="../assets/logos/brand/boss-key-logo-refined.svg" alt="">
+        <span>Boss Key</span>
+      </a>
+      <div class="actions">
+        <span class="chip accent">Client Copy</span>
+        <span class="chip">Prepared February 27, 2026</span>
+      </div>
+    </div>
+
+    <section class="page" aria-label="Page 1 product one-pager">
+      <div class="partner-lockup" aria-label="Co-branded for Talos">
+        <p>Prepared for Ann Highsmith and the Talos leadership team</p>
+        <img class="talos-logo" src="../assets/logos/client/talos_logo.png" alt="Talos logo">
+      </div>
+      <span class="eyebrow">Page 1 of 2 | Product One-Pager</span>
+      <h1>Boss Key Pursuit Operating System</h1>
+      <p class="lead">An AI-assisted pursuit and proposal workflow that helps founder-led teams qualify faster, respond faster, and reduce manual BD/admin load.</p>
+
+      <div class="grid-2">
+        <div class="section">
+          <h3>Prepared For</h3>
+          <p><b>Ann Highsmith</b>, Talos (Intro/Pilot Discussion)</p>
+          <ul class="meta-list">
+            <li><b>Primary Goal:</b> Reduce proposal and lead qualification overhead while keeping execution quality high.</li>
+            <li><b>Pilot Intent:</b> Use Talos as a live partner account to tune workflows and prove measurable speed gains.</li>
+            <li><b>Buying Motion:</b> Board-ready pilot packet with clear one-time and recurring options.</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h3>Current Pain Pattern</h3>
+          <ul class="steps">
+            <li>Founder/exec is doing site walks, proposal writing, qualification, and pricing checks personally.</li>
+            <li>Government and enterprise submissions are long, inconsistent, and hard to score quickly.</li>
+            <li>Lead-gen channels produce noise; quality intros and pre-qualified targets are scarce.</li>
+            <li>Growth stalls when BD output depends on one person.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Core Capabilities</h3>
+        <div class="grid-3">
+          <article class="card">
+            <h4>1) Qualification Engine</h4>
+            <p>Scores opportunities against ICP, deal size, fit criteria, and likely win path.</p>
+          </article>
+          <article class="card">
+            <h4>2) Go/No-Go Support</h4>
+            <p>Flags low-probability pursuits early so effort stays on winnable work.</p>
+          </article>
+          <article class="card">
+            <h4>3) Proposal Draft Acceleration</h4>
+            <p>Transforms source data into first-pass response packages and checklists.</p>
+          </article>
+          <article class="card">
+            <h4>4) Multi-Profile Targeting</h4>
+            <p>Supports different market profiles by geography, vertical, and account type.</p>
+          </article>
+          <article class="card">
+            <h4>5) Pre-Meeting Intelligence</h4>
+            <p>Builds concise prep notes before calls so outreach becomes more relevant.</p>
+          </article>
+          <article class="card">
+            <h4>6) Handoff-Ready Output</h4>
+            <p>Packages key facts, assumptions, and actions so teams can execute with less rework.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="section">
+          <h3>Operating Flow</h3>
+          <ol class="steps">
+            <li>Ingest opportunity context (RFP, account notes, target profile).</li>
+            <li>Run fit and probability checks.</li>
+            <li>Generate pursuit recommendation + draft content package.</li>
+            <li>Review and finalize for submission or outreach.</li>
+            <li>Track outcomes and improve scoring logic each cycle.</li>
+          </ol>
+        </div>
+        <div class="section">
+          <h3>Pilot Deliverables</h3>
+          <ul class="steps">
+            <li>Configured Talos pursuit profile (ICP + qualification logic).</li>
+            <li>Pilot playbook with workflow, roles, and QA checkpoints.</li>
+            <li>Board-facing summary format for pilot updates.</li>
+            <li>One-page vertical expansion sheet (included as Page 2).</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="outcome">Target outcome: move from multi-week admin-heavy cycles to faster, repeatable qualification and first-draft output with tighter focus on high-value accounts.</p>
+      <div class="section">
+        <h3>Appendix A | Post-Pilot Pricing Options</h3>
+        <p>Commercial structure and service levels.</p>
+        <div class="grid-3">          
+          <article class="card">
+            <h4>Pilot Diagnostic Sprint</h4>
+            <p><b>$5,500</b> one-time (2 weeks)</p>
+            <p>Focused 2-week pilot for Talos, applied to 1 live pursuit cycle with executive digest, qualification output, and implementation recommendation.</p>
+          </article>
+          <article class="card">
+            <h4>Managed Pursuit Retainer</h4>
+            <p><b>$6,000</b> per month | <b>3-month minimum</b></p>
+            <p>Monthly operating cadence, qualification/go-no-go support, draft acceleration, and weekly leadership checkpoint (up to 2 pursuit cycles per month).</p>
+          </article>          
+          <article class="card">
+            <h4>Complete Package</h4>
+            <p><b>$9,500</b> per month | <b>3-month minimum</b></p>
+            <p><b>Embedded Capture Partner</b></p>
+            <p>Includes up to 4 pursuit cycles per month, structured pursuit planning support, dedicated searchable Q&amp;A workspace, twice-weekly stakeholder standups, and executive performance snapshots.</p>
+          </article>
+        </div>
+        <ul class="steps" style="margin-top:10px;">          
+          <li>The <b>$5,500 pilot fee is due at pilot kickoff</b> to reserve capacity and begin execution.</li>
+          <li>The pilot fee is for the 2-week pilot itself and <b>is not the monthly retainer commitment</b>.</li>
+          <li>At pilot close, Talos decides whether to continue with either retainer package.</li>
+          <li>Capacity is intentionally capped to preserve turnaround speed and quality.</li>
+          <li>Scope can expand via fixed project add-ons if volume exceeds baseline monthly capacity.</li>
+          <li>Alternatively, we can begin with the retainer and skip the pilot.</li>
+        </ul>
+      </div>
+      <p class="footer-note">Boss Key LLC | Timmy Semenza | timmy@bosskeyops.com</p>
+    </section>
+
+    <section class="page print-break" aria-label="Page 2 verticals and use-cases">
+      <span class="eyebrow">Page 2 of 2 | Vertical Use-Case Sheet</span>
+      <h2>Verticals + Intro Pathways</h2>
+      <p class="lead">This page is designed for referral conversations: where the system fits, who to introduce, and what outputs are produced.</p>
+
+      <div class="section">
+        <h3>Vertical Coverage</h3>
+        <div class="grid-3">
+          <article class="card">
+            <h4>Facilities + CRE</h4>
+            <p>Prioritize larger portfolios, site complexity, and measurable labor/productivity gains.</p>
+          </article>
+          <article class="card">
+            <h4>Data Centers / Hyperscalers</h4>
+            <p>Screen for high-square-foot environments where scale economics and uptime constraints matter.</p>
+          </article>
+          <article class="card">
+            <h4>Public Sector / Gov</h4>
+            <p>Support requirement parsing, compliance checks, and submission readiness for longer bid packages.</p>
+          </article>
+          <article class="card">
+            <h4>Airports + Transportation</h4>
+            <p>Map high-traffic operational contexts and multi-stakeholder evaluation criteria.</p>
+          </article>
+          <article class="card">
+            <h4>Life Sciences + Corporate Campuses</h4>
+            <p>Qualify accounts where consistency, reporting discipline, and process clarity are essential.</p>
+          </article>
+          <article class="card">
+            <h4>Startup / VC Ecosystems</h4>
+            <p>Create rapid target-account triage and practical go-to-market execution packages.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="section">
+          <h3>Who To Introduce</h3>
+          <ul class="steps">
+            <li>Decision-makers responsible for pipeline growth, pursuit approval, or proposal throughput.</li>
+            <li>Operators managing enterprise submissions or government bid responses.</li>
+            <li>Teams that need faster qualification without adding full-time proposal headcount.</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h3>Referral-Ready Output Pack</h3>
+          <ul class="steps">
+            <li>Primary one-pager (Page 1).</li>
+            <li>Vertical fit summary (this page).</li>
+            <li>Pilot model and milestone summary.</li>
+            <li>Commercial appendix with selected post-pilot service package.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>30-Second Positioning Line</h3>
+        <p>Boss Key helps lean teams execute business development faster by combining qualification discipline, proposal acceleration, and operational handoff structure into one practical system.</p>
+      </div>
+
+      <p class="footer-note">Prepared for Ann Highsmith and Talos leadership review.</p>
+    </section>
+  </main>
+</body>
+</html>
