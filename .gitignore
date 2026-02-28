@@ -36,3 +36,9 @@ __docx_probe/
 
 # Local ML models
 ggml-base.en.bin
+
+# Playwright local automation artifacts
+jwblng-mvp/playwright/.auth/
+jwblng-mvp/playwright/artifacts/
+jwblng-mvp/playwright/playwright-report/
+jwblng-mvp/playwright/test-results/
