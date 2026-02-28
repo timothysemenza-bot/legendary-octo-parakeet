@@ -69,6 +69,12 @@ $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:approve
 ```
 
+Persistent contact approval runner:
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:approve:persistent
+```
+
 Optional contact env vars:
 - `JWBLNG_CONTACT_EMAIL_FILTER` (required for safety in approve flow)
 - `JWBLNG_APPROVAL_TAG` (defaults to `approved-member`)
