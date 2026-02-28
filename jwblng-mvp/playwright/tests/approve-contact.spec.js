@@ -37,18 +37,26 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   const mainNav = activePage.getByRole('navigation', { name: /main navigation/i });
 
   console.log('[contact-flow] Navigate to Contacts via UI');
-  const openedContacts = await clickFirstVisible([
+  const openedContactsGroup = await clickFirstVisible([
     mainNav.getByRole('link', { name: /^contacts$/i }).first(),
     mainNav.getByRole('button', { name: /^contacts$/i }).first(),
     mainNav.locator('li:has-text("Contacts")').first(),
   ]);
 
-  if (!openedContacts) {
+  if (!openedContactsGroup) {
     throw new Error(`Could not open Contacts section from sidebar. URL: ${activePage.url()}`);
   }
 
-  await activePage.waitForLoadState('domcontentloaded');
-  await expect(activePage).toHaveURL(/contacts/);
+  const allContactsLink = mainNav.getByRole('link', { name: /^all contacts$/i }).first();
+  if (!(await allContactsLink.isVisible({ timeout: 10000 }).catch(() => false))) {
+    throw new Error(`Contacts section opened, but 'All Contacts' link was not visible. URL: ${activePage.url()}`);
+  }
+
+  await Promise.all([
+    activePage.waitForURL(/\/contacts(\?|$)/, { timeout: 15000 }),
+    allContactsLink.click(),
+  ]);
+  await expect(activePage).toHaveURL(/\/contacts(\?|$)/);
 
   // Optional segment shortcut if present.
   await clickFirstVisible([
