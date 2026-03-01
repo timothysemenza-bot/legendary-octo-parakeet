@@ -11,9 +11,20 @@
     "pw:jwblng:audit": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/audit.kajabi.spec.js",
     "pw:jwblng:join": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-join-flow.spec.js",
     "pw:jwblng:verify": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-member-journey.spec.js",
+    "pw:jwblng:homeqa": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-homepage-spec.spec.js",
+    "pw:jwblng:homebuilderqa": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-homepage-builder.spec.js",
+    "pw:jwblng:homeapply": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/apply-homepage-content.spec.js",
+    "pw:jwblng:scopepages": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/apply-scope-pages.spec.js",
+    "pw:jwblng:eventpagesapply": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/apply-event-pages-content.spec.js",
+    "pw:jwblng:speakercleanup": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/cleanup-speaker-visuals.spec.js",
+    "pw:jwblng:homecleanup": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/cleanup-homepage-visuals.spec.js",
+    "pw:jwblng:palette": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/apply-brand-palette.spec.js",
+    "pw:jwblng:eventimages": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/add-event-key-images.spec.js",
+    "pw:jwblng:eventshub": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/apply-events-hub-links.spec.js",
+    "pw:jwblng:sliceverify": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-slice.spec.js",
+    "pw:jwblng:eventqa": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-event-pages-spec.spec.js",
     "pw:jwblng:event": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-event-template.spec.js",
-    "pw:jwblng:approve": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/approve-contact.spec.js",
-    "pw:jwblng:persistent": "node jwblng-mvp/playwright/scripts/persistent-runner.js"
+    "pw:jwblng:approve": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/approve-contact.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

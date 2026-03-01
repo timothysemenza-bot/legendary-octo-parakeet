@@ -1,0 +1,1012 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bunny Carrot Quest - 8-bit Roguelite</title>
+  <style>
+    :root {
+      --bg: #14110f;
+      --panel: #2e2520;
+      --panel-border: #5a4739;
+      --text: #f5edd7;
+      --accent: #f2a65a;
+      --danger: #de6b48;
+      --good: #99c24d;
+      --sky: #1f3f5b;
+      --grass: #2b5f3a;
+      --grass-light: #3d7a47;
+      --wall: #8d6a4e;
+      --wall-dark: #6f523c;
+      --carrot: #f47f26;
+      --carrot-leaf: #3fa34d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 20% 20%, #2d1f17 0%, #14110f 60%);
+      color: var(--text);
+      font-family: "Courier New", Courier, monospace;
+      image-rendering: pixelated;
+      padding: 16px;
+    }
+
+    .wrap {
+      width: min(100vw - 24px, 860px);
+      display: grid;
+      gap: 10px;
+    }
+
+    .hud {
+      background: var(--panel);
+      border: 4px solid var(--panel-border);
+      padding: 8px 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      font-size: 14px;
+      line-height: 1.35;
+      box-shadow: 0 0 0 4px #1a1411;
+    }
+
+    .hud strong { color: var(--accent); }
+    .hud .danger { color: var(--danger); }
+    .hud .good { color: var(--good); }
+
+    canvas {
+      width: 100%;
+      max-width: 832px;
+      border: 6px solid var(--panel-border);
+      background: var(--sky);
+      box-shadow: 0 0 0 4px #1a1411;
+      display: block;
+      touch-action: none;
+    }
+
+    .help {
+      background: var(--panel);
+      border: 4px solid var(--panel-border);
+      padding: 8px 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      box-shadow: 0 0 0 4px #1a1411;
+    }
+
+    .help strong { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hud" id="hud"></div>
+    <canvas id="game" width="832" height="576" aria-label="Bunny Carrot Quest"></canvas>
+    <div class="help">
+      <strong>Controls:</strong> Move with WASD or Arrow Keys, swing with Space/J, dash with Shift/K, restart run with R.
+      <br>
+      Explore connected rooms, collect all carrots, and survive. Defeating enemies grants XP to level up during the run.
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const hud = document.getElementById("hud");
+
+      const W = canvas.width;
+      const H = canvas.height;
+      const TILE = 32;
+      const ROOM_COLS = Math.floor(W / TILE);
+      const ROOM_ROWS = Math.floor(H / TILE);
+      const PLAY_MIN_X = TILE;
+      const PLAY_MIN_Y = TILE;
+      const PLAY_MAX_X = W - TILE;
+      const PLAY_MAX_Y = H - TILE;
+
+      const keys = new Set();
+
+      const rng = {
+        seed: Math.floor(Math.random() * 2147483646) + 1,
+        next() {
+          this.seed = (this.seed * 48271) % 2147483647;
+          return this.seed / 2147483647;
+        },
+        range(min, max) {
+          return min + (max - min) * this.next();
+        },
+        int(min, max) {
+          return Math.floor(this.range(min, max + 1));
+        },
+        pick(arr) {
+          return arr[this.int(0, arr.length - 1)];
+        }
+      };
+
+      const dirs = {
+        up: { x: 0, y: -1 },
+        down: { x: 0, y: 1 },
+        left: { x: -1, y: 0 },
+        right: { x: 1, y: 0 }
+      };
+
+      const state = {
+        mode: "title",
+        tick: 0,
+        cameraShake: 0,
+        rooms: new Map(),
+        currentRoomId: "0,0",
+        worldCarrots: 0,
+        worldCarrotsCollected: 0,
+        runDepth: 1,
+        message: "",
+        messageTicks: 0,
+        player: null,
+        particles: [],
+        runStartTime: 0,
+        bestTime: Number.POSITIVE_INFINITY,
+      };
+
+      function roomId(x, y) {
+        return `${x},${y}`;
+      }
+
+      function parseRoomId(id) {
+        const [x, y] = id.split(",").map(Number);
+        return { x, y };
+      }
+
+      function makePlayer() {
+        return {
+          x: W / 2,
+          y: H / 2,
+          size: 18,
+          speed: 2.5,
+          vx: 0,
+          vy: 0,
+          hpMax: 6,
+          hp: 6,
+          facing: "down",
+          attackCooldown: 0,
+          attackTicks: 0,
+          attackDir: "down",
+          invulnTicks: 0,
+          dashCooldown: 0,
+          dashTicks: 0,
+          xp: 0,
+          level: 1,
+          xpNeed: 8,
+          carrots: 0,
+          kills: 0,
+          perks: {
+            power: 1,
+            speed: 1,
+            vitality: 0,
+            luck: 0
+          }
+        };
+      }
+
+      function spawnParticle(x, y, color, vx = 0, vy = 0, life = 18, size = 4) {
+        state.particles.push({ x, y, color, vx, vy, life, size });
+      }
+
+      function burst(x, y, color, count = 12, speed = 2.2) {
+        for (let i = 0; i < count; i += 1) {
+          const a = rng.range(0, Math.PI * 2);
+          const s = rng.range(0.4, speed);
+          spawnParticle(x, y, color, Math.cos(a) * s, Math.sin(a) * s, rng.int(10, 24), rng.int(2, 5));
+        }
+      }
+
+      function carveRoomGraph(depth) {
+        const targetRooms = 5 + depth * 2;
+        const visited = new Set([roomId(0, 0)]);
+        const open = [roomId(0, 0)];
+
+        while (visited.size < targetRooms && open.length > 0) {
+          const base = rng.pick(open);
+          const p = parseRoomId(base);
+          const options = [
+            { x: p.x + 1, y: p.y },
+            { x: p.x - 1, y: p.y },
+            { x: p.x, y: p.y + 1 },
+            { x: p.x, y: p.y - 1 }
+          ];
+          const n = rng.pick(options);
+          const id = roomId(n.x, n.y);
+          if (!visited.has(id)) {
+            visited.add(id);
+            open.push(id);
+          }
+          if (rng.next() < 0.24 && open.length > 1) {
+            open.splice(open.indexOf(base), 1);
+          }
+        }
+
+        const rooms = new Map();
+        for (const id of visited) {
+          const p = parseRoomId(id);
+          const doors = {
+            up: visited.has(roomId(p.x, p.y - 1)),
+            down: visited.has(roomId(p.x, p.y + 1)),
+            left: visited.has(roomId(p.x - 1, p.y)),
+            right: visited.has(roomId(p.x + 1, p.y))
+          };
+          rooms.set(id, makeRoom(id, doors, id === "0,0", depth));
+        }
+
+        let farthestId = "0,0";
+        let farthestDist = -1;
+        for (const id of rooms.keys()) {
+          const p = parseRoomId(id);
+          const d = Math.abs(p.x) + Math.abs(p.y);
+          if (d > farthestDist) {
+            farthestDist = d;
+            farthestId = id;
+          }
+        }
+        const farRoom = rooms.get(farthestId);
+        farRoom.hasStairs = true;
+
+        return rooms;
+      }
+      function makeRoom(id, doors, isStart, depth) {
+        const room = {
+          id,
+          doors,
+          carrots: [],
+          enemies: [],
+          pickups: [],
+          hasStairs: false,
+          cleared: false,
+          discovered: isStart,
+        };
+
+        const carrotCount = isStart ? 2 : rng.int(1, 3 + Math.min(depth, 3));
+        for (let i = 0; i < carrotCount; i += 1) {
+          room.carrots.push(spawnFreePos(room, 14));
+        }
+
+        const enemyCount = isStart ? 1 : rng.int(1 + Math.floor(depth / 2), 2 + depth);
+        for (let i = 0; i < enemyCount; i += 1) {
+          const pos = spawnFreePos(room, 16);
+          room.enemies.push(makeEnemy(pos.x, pos.y, depth));
+        }
+
+        return room;
+      }
+
+      function spawnFreePos(room, size) {
+        for (let i = 0; i < 120; i += 1) {
+          const x = rng.int(2, ROOM_COLS - 3) * TILE + TILE / 2;
+          const y = rng.int(2, ROOM_ROWS - 3) * TILE + TILE / 2;
+          if (isNearDoor(x, y, room.doors)) continue;
+          let blocked = false;
+          for (const c of room.carrots) {
+            if (dist(x, y, c.x, c.y) < 26) blocked = true;
+          }
+          for (const e of room.enemies) {
+            if (dist(x, y, e.x, e.y) < 28) blocked = true;
+          }
+          if (!blocked) return { x, y, size };
+        }
+        return { x: W / 2, y: H / 2, size };
+      }
+
+      function makeEnemy(x, y, depth) {
+        const archetype = rng.pick(["slime", "bat", "boar"]);
+        const base = {
+          x,
+          y,
+          size: archetype === "boar" ? 16 : 14,
+          vx: 0,
+          vy: 0,
+          hp: 2 + Math.floor(depth / 2),
+          speed: 1.1 + depth * 0.12,
+          touchDmg: 1,
+          xpDrop: 2,
+          type: archetype,
+          hurtTicks: 0,
+          attackCooldown: rng.int(20, 70),
+          chargeTicks: 0,
+        };
+
+        if (archetype === "bat") {
+          base.hp -= 1;
+          base.speed += 0.45;
+          base.xpDrop += 1;
+        }
+        if (archetype === "boar") {
+          base.hp += 2;
+          base.speed -= 0.15;
+          base.touchDmg = 2;
+          base.xpDrop += 2;
+        }
+
+        return base;
+      }
+
+      function isNearDoor(x, y, doors) {
+        const midX = W / 2;
+        const midY = H / 2;
+        if (doors.up && Math.abs(x - midX) < 52 && y < 86) return true;
+        if (doors.down && Math.abs(x - midX) < 52 && y > H - 86) return true;
+        if (doors.left && x < 86 && Math.abs(y - midY) < 52) return true;
+        if (doors.right && x > W - 86 && Math.abs(y - midY) < 52) return true;
+        return false;
+      }
+
+      function dist(ax, ay, bx, by) {
+        return Math.hypot(ax - bx, ay - by);
+      }
+
+      function rectsOverlap(a, b) {
+        return (
+          Math.abs(a.x - b.x) * 2 < (a.w + b.w) &&
+          Math.abs(a.y - b.y) * 2 < (a.h + b.h)
+        );
+      }
+
+      function worldReset() {
+        state.rooms = carveRoomGraph(state.runDepth);
+        state.currentRoomId = "0,0";
+        state.worldCarrots = 0;
+        state.worldCarrotsCollected = 0;
+
+        for (const room of state.rooms.values()) {
+          state.worldCarrots += room.carrots.length;
+        }
+
+        state.player = makePlayer();
+        state.runStartTime = performance.now();
+        state.message = "Collect every carrot, then find the stairs.";
+        state.messageTicks = 180;
+      }
+
+      function startNewRun() {
+        state.runDepth = 1;
+        worldReset();
+        state.mode = "play";
+      }
+
+      function nextDepth() {
+        state.runDepth += 1;
+        const p = state.player;
+        worldReset();
+
+        state.player.hpMax = p.hpMax;
+        state.player.hp = Math.min(p.hp + 2, p.hpMax);
+        state.player.level = p.level;
+        state.player.xp = p.xp;
+        state.player.xpNeed = p.xpNeed;
+        state.player.perks = { ...p.perks };
+        state.player.speed = p.speed;
+        state.player.kills = p.kills;
+        state.player.carrots = p.carrots;
+
+        state.message = `Depth ${state.runDepth}: harder burrows ahead.`;
+        state.messageTicks = 160;
+      }
+
+      function currentRoom() {
+        return state.rooms.get(state.currentRoomId);
+      }
+
+      function moveToRoom(direction) {
+        const room = currentRoom();
+        if (!room.doors[direction]) return;
+
+        const pos = parseRoomId(state.currentRoomId);
+        const target = {
+          x: pos.x + dirs[direction].x,
+          y: pos.y + dirs[direction].y,
+        };
+        const id = roomId(target.x, target.y);
+        if (!state.rooms.has(id)) return;
+
+        state.currentRoomId = id;
+        const nr = currentRoom();
+        nr.discovered = true;
+
+        if (direction === "up") {
+          state.player.y = PLAY_MAX_Y - 6;
+          state.player.x = W / 2;
+        } else if (direction === "down") {
+          state.player.y = PLAY_MIN_Y + 6;
+          state.player.x = W / 2;
+        } else if (direction === "left") {
+          state.player.x = PLAY_MAX_X - 6;
+          state.player.y = H / 2;
+        } else {
+          state.player.x = PLAY_MIN_X + 6;
+          state.player.y = H / 2;
+        }
+      }
+
+      function clampPlayerToRoom() {
+        const p = state.player;
+        const room = currentRoom();
+
+        const midX = W / 2;
+        const midY = H / 2;
+        const halfDoor = 56;
+
+        const nextX = p.x + p.vx;
+        const nextY = p.y + p.vy;
+
+        p.x = nextX;
+        p.y = nextY;
+
+        if (room.doors.up && Math.abs(p.x - midX) < halfDoor && p.y < 6) return moveToRoom("up");
+        if (room.doors.down && Math.abs(p.x - midX) < halfDoor && p.y > H - 6) return moveToRoom("down");
+        if (room.doors.left && Math.abs(p.y - midY) < halfDoor && p.x < 6) return moveToRoom("left");
+        if (room.doors.right && Math.abs(p.y - midY) < halfDoor && p.x > W - 6) return moveToRoom("right");
+
+        if (!(room.doors.left && Math.abs(p.y - midY) < halfDoor)) p.x = Math.max(PLAY_MIN_X, p.x);
+        if (!(room.doors.right && Math.abs(p.y - midY) < halfDoor)) p.x = Math.min(PLAY_MAX_X, p.x);
+        if (!(room.doors.up && Math.abs(p.x - midX) < halfDoor)) p.y = Math.max(PLAY_MIN_Y, p.y);
+        if (!(room.doors.down && Math.abs(p.x - midX) < halfDoor)) p.y = Math.min(PLAY_MAX_Y, p.y);
+      }
+
+      function gainXp(v) {
+        const p = state.player;
+        p.xp += v;
+        while (p.xp >= p.xpNeed) {
+          p.xp -= p.xpNeed;
+          p.level += 1;
+          p.xpNeed = Math.floor(p.xpNeed * 1.3 + 3);
+          levelUpReward();
+        }
+      }
+
+      function levelUpReward() {
+        const p = state.player;
+        const choices = ["power", "speed", "vitality", "luck"];
+        const perk = rng.pick(choices);
+
+        if (perk === "power") {
+          p.perks.power += 1;
+          state.message = "Level Up: Carrot Blade power increased.";
+        } else if (perk === "speed") {
+          p.perks.speed += 1;
+          p.speed += 0.2;
+          state.message = "Level Up: Hop speed increased.";
+        } else if (perk === "vitality") {
+          p.perks.vitality += 1;
+          p.hpMax += 1;
+          p.hp = Math.min(p.hp + 2, p.hpMax);
+          state.message = "Level Up: Vitality increased.";
+        } else {
+          p.perks.luck += 1;
+          state.message = "Level Up: Luck increased item drops.";
+        }
+        state.messageTicks = 120;
+        burst(state.player.x, state.player.y, "#ffe8a3", 14, 2.5);
+      }
+
+      function damagePlayer(dmg) {
+        const p = state.player;
+        if (p.invulnTicks > 0 || p.dashTicks > 0) return;
+        p.hp -= dmg;
+        p.invulnTicks = 45;
+        state.cameraShake = 9;
+        burst(p.x, p.y, "#ffcab0", 16, 2.8);
+        if (p.hp <= 0) {
+          state.mode = "dead";
+          const t = (performance.now() - state.runStartTime) / 1000;
+          if (Number.isFinite(t) && t < state.bestTime) state.bestTime = t;
+        }
+      }
+      function swingAttack() {
+        const p = state.player;
+        if (p.attackCooldown > 0 || p.dashTicks > 0) return;
+
+        p.attackTicks = 8;
+        p.attackCooldown = 14;
+        p.attackDir = p.facing;
+
+        const hitbox = attackHitbox(p);
+        const room = currentRoom();
+
+        for (const e of room.enemies) {
+          if (e.hp <= 0) continue;
+          if (rectsOverlap(hitbox, { x: e.x, y: e.y, w: e.size * 2, h: e.size * 2 })) {
+            const dmg = 1 + Math.floor((p.perks.power - 1) / 2);
+            e.hp -= dmg;
+            e.hurtTicks = 6;
+            const kb = 8;
+            if (p.attackDir === "up") e.y -= kb;
+            if (p.attackDir === "down") e.y += kb;
+            if (p.attackDir === "left") e.x -= kb;
+            if (p.attackDir === "right") e.x += kb;
+            burst(e.x, e.y, "#ffd17a", 8, 2.1);
+
+            if (e.hp <= 0) {
+              state.player.kills += 1;
+              gainXp(e.xpDrop);
+              if (rng.next() < 0.1 + state.player.perks.luck * 0.04) {
+                room.pickups.push({ x: e.x, y: e.y, type: rng.next() < 0.55 ? "heart" : "xp" });
+              }
+              burst(e.x, e.y, "#f3b85a", 14, 2.8);
+            }
+          }
+        }
+
+        room.enemies = room.enemies.filter((e) => e.hp > 0);
+        if (room.enemies.length === 0 && !room.cleared) {
+          room.cleared = true;
+          state.message = "Room cleared.";
+          state.messageTicks = 70;
+        }
+      }
+
+      function attackHitbox(p) {
+        const range = 26;
+        const thick = 28;
+        if (p.attackDir === "up") return { x: p.x, y: p.y - range, w: thick, h: range };
+        if (p.attackDir === "down") return { x: p.x, y: p.y + range, w: thick, h: range };
+        if (p.attackDir === "left") return { x: p.x - range, y: p.y, w: range, h: thick };
+        return { x: p.x + range, y: p.y, w: range, h: thick };
+      }
+
+      function doDash() {
+        const p = state.player;
+        if (p.dashCooldown > 0 || p.attackTicks > 0) return;
+        p.dashTicks = 8;
+        p.dashCooldown = 40;
+      }
+
+      function updatePlayer() {
+        const p = state.player;
+        let ix = 0;
+        let iy = 0;
+        if (keys.has("arrowup") || keys.has("w")) iy -= 1;
+        if (keys.has("arrowdown") || keys.has("s")) iy += 1;
+        if (keys.has("arrowleft") || keys.has("a")) ix -= 1;
+        if (keys.has("arrowright") || keys.has("d")) ix += 1;
+
+        const len = Math.hypot(ix, iy) || 1;
+        ix /= len;
+        iy /= len;
+
+        if (Math.abs(ix) > 0.15 || Math.abs(iy) > 0.15) {
+          if (Math.abs(ix) > Math.abs(iy)) p.facing = ix < 0 ? "left" : "right";
+          else p.facing = iy < 0 ? "up" : "down";
+        }
+
+        const speed = p.speed * (p.dashTicks > 0 ? 2.5 : 1);
+        p.vx = ix * speed;
+        p.vy = iy * speed;
+
+        clampPlayerToRoom();
+
+        if (p.attackCooldown > 0) p.attackCooldown -= 1;
+        if (p.attackTicks > 0) p.attackTicks -= 1;
+        if (p.invulnTicks > 0) p.invulnTicks -= 1;
+        if (p.dashTicks > 0) p.dashTicks -= 1;
+        if (p.dashCooldown > 0) p.dashCooldown -= 1;
+      }
+
+      function updateRoomObjects() {
+        const room = currentRoom();
+        const p = state.player;
+
+        for (let i = room.carrots.length - 1; i >= 0; i -= 1) {
+          const c = room.carrots[i];
+          if (dist(p.x, p.y, c.x, c.y) < 20) {
+            room.carrots.splice(i, 1);
+            p.carrots += 1;
+            state.worldCarrotsCollected += 1;
+            gainXp(1);
+            burst(c.x, c.y, "#ff9f46", 10, 1.9);
+          }
+        }
+
+        for (let i = room.pickups.length - 1; i >= 0; i -= 1) {
+          const item = room.pickups[i];
+          if (dist(p.x, p.y, item.x, item.y) < 18) {
+            room.pickups.splice(i, 1);
+            if (item.type === "heart") p.hp = Math.min(p.hpMax, p.hp + 1);
+            else gainXp(3);
+            burst(item.x, item.y, "#b6f1b0", 9, 1.8);
+          }
+        }
+
+        for (const e of room.enemies) {
+          const dx = p.x - e.x;
+          const dy = p.y - e.y;
+          const d = Math.hypot(dx, dy) || 1;
+
+          if (e.type === "boar") {
+            e.attackCooldown -= 1;
+            if (e.attackCooldown <= 0) {
+              e.chargeTicks = 18;
+              e.attackCooldown = rng.int(45, 85);
+            }
+
+            if (e.chargeTicks > 0) {
+              const cs = e.speed * 2.8;
+              e.vx = (dx / d) * cs;
+              e.vy = (dy / d) * cs;
+              e.chargeTicks -= 1;
+            } else {
+              e.vx = (dx / d) * e.speed;
+              e.vy = (dy / d) * e.speed;
+            }
+          } else if (e.type === "bat") {
+            const orbit = Math.sin((state.tick + e.x * 0.1) * 0.09) * 0.9;
+            e.vx = (dx / d) * e.speed + orbit;
+            e.vy = (dy / d) * e.speed - orbit;
+          } else {
+            e.vx = (dx / d) * e.speed;
+            e.vy = (dy / d) * e.speed;
+          }
+
+          e.x += e.vx;
+          e.y += e.vy;
+
+          e.x = Math.max(PLAY_MIN_X + 3, Math.min(PLAY_MAX_X - 3, e.x));
+          e.y = Math.max(PLAY_MIN_Y + 3, Math.min(PLAY_MAX_Y - 3, e.y));
+
+          if (e.hurtTicks > 0) e.hurtTicks -= 1;
+
+          if (dist(e.x, e.y, p.x, p.y) < e.size + p.size - 2) {
+            damagePlayer(e.touchDmg);
+          }
+        }
+
+        if (
+          room.hasStairs &&
+          state.worldCarrotsCollected >= state.worldCarrots &&
+          dist(p.x, p.y, W / 2, H / 2) < 28
+        ) {
+          nextDepth();
+        }
+      }
+
+      function updateParticles() {
+        for (let i = state.particles.length - 1; i >= 0; i -= 1) {
+          const p = state.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.95;
+          p.vy *= 0.95;
+          p.life -= 1;
+          if (p.life <= 0) state.particles.splice(i, 1);
+        }
+      }
+
+      function drawTileRect(x, y, w, h, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
+      }
+
+      function drawRoom() {
+        const room = currentRoom();
+
+        drawTileRect(0, 0, W, H, "#244934");
+        for (let y = 0; y < ROOM_ROWS; y += 1) {
+          for (let x = 0; x < ROOM_COLS; x += 1) {
+            const odd = (x + y) % 2 === 0;
+            drawTileRect(x * TILE, y * TILE, TILE, TILE, odd ? "#2b5f3a" : "#346f40");
+          }
+        }
+
+        drawWalls(room.doors);
+
+        if (room.hasStairs && state.worldCarrotsCollected >= state.worldCarrots) {
+          drawStairs(W / 2, H / 2);
+        }
+
+        for (const c of room.carrots) drawCarrot(c.x, c.y);
+
+        for (const item of room.pickups) {
+          if (item.type === "heart") drawHeart(item.x, item.y);
+          else drawXpOrb(item.x, item.y);
+        }
+
+        for (const e of room.enemies) drawEnemy(e);
+
+        drawPlayer(state.player);
+
+        if (state.player.attackTicks > 0) drawAttackSlash(state.player);
+
+        for (const p of state.particles) {
+          drawTileRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size, p.color);
+        }
+
+        if (state.mode === "title") drawTitleScreen();
+        if (state.mode === "dead") drawDeathScreen();
+      }
+
+      function drawWalls(doors) {
+        const wall = "#8d6a4e";
+        const dark = "#6f523c";
+        const w = TILE;
+
+        drawTileRect(0, 0, W, w, wall);
+        drawTileRect(0, H - w, W, w, wall);
+        drawTileRect(0, 0, w, H, wall);
+        drawTileRect(W - w, 0, w, H, wall);
+
+        drawTileRect(0, 0, W, 6, dark);
+        drawTileRect(0, H - 6, W, 6, dark);
+        drawTileRect(0, 0, 6, H, dark);
+        drawTileRect(W - 6, 0, 6, H, dark);
+
+        const lane = 96;
+        if (doors.up) drawTileRect(W / 2 - lane / 2, 0, lane, w, "#244934");
+        if (doors.down) drawTileRect(W / 2 - lane / 2, H - w, lane, w, "#244934");
+        if (doors.left) drawTileRect(0, H / 2 - lane / 2, w, lane, "#244934");
+        if (doors.right) drawTileRect(W - w, H / 2 - lane / 2, w, lane, "#244934");
+      }
+
+      function drawPlayer(p) {
+        const blink = p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
+        if (blink) return;
+
+        const x = Math.floor(p.x);
+        const y = Math.floor(p.y);
+
+        drawTileRect(x - 10, y - 8, 20, 16, "#f6f0e8");
+        drawTileRect(x - 6, y + 8, 12, 6, "#dfd6c8");
+
+        drawTileRect(x - 9, y - 18, 5, 10, "#f6f0e8");
+        drawTileRect(x + 4, y - 18, 5, 10, "#f6f0e8");
+        drawTileRect(x - 8, y - 15, 3, 6, "#f7bac9");
+        drawTileRect(x + 5, y - 15, 3, 6, "#f7bac9");
+
+        drawTileRect(x - 2, y - 2, 2, 2, "#101010");
+        drawTileRect(x + 1, y - 2, 2, 2, "#101010");
+        drawTileRect(x - 8, y, 16, 8, "#6fbf73");
+
+        const bCol = "#f1f3f5";
+        if (p.attackTicks > 0) {
+          if (p.attackDir === "up") drawTileRect(x - 2, y - 30, 4, 16, bCol);
+          if (p.attackDir === "down") drawTileRect(x - 2, y + 12, 4, 16, bCol);
+          if (p.attackDir === "left") drawTileRect(x - 30, y - 2, 16, 4, bCol);
+          if (p.attackDir === "right") drawTileRect(x + 14, y - 2, 16, 4, bCol);
+        }
+      }
+      function drawAttackSlash(p) {
+        const hb = attackHitbox(p);
+        drawTileRect(hb.x - hb.w / 2, hb.y - hb.h / 2, hb.w, hb.h, "rgba(252, 247, 212, 0.35)");
+      }
+
+      function drawEnemy(e) {
+        const x = Math.floor(e.x);
+        const y = Math.floor(e.y);
+
+        if (e.type === "slime") {
+          drawTileRect(x - 10, y - 7, 20, 14, e.hurtTicks > 0 ? "#f3a4a4" : "#88d498");
+          drawTileRect(x - 6, y - 2, 2, 2, "#1a1a1a");
+          drawTileRect(x + 4, y - 2, 2, 2, "#1a1a1a");
+        } else if (e.type === "bat") {
+          const fl = (state.tick + x) % 14 < 7 ? 1 : 0;
+          drawTileRect(x - 8, y - 5, 16, 10, e.hurtTicks > 0 ? "#f4b6c2" : "#7f7caf");
+          drawTileRect(x - 14, y - 5 - fl, 6, 4 + fl, "#645f9e");
+          drawTileRect(x + 8, y - 5 - fl, 6, 4 + fl, "#645f9e");
+        } else {
+          drawTileRect(x - 12, y - 9, 24, 18, e.hurtTicks > 0 ? "#f4c8a5" : "#a86b3f");
+          drawTileRect(x - 12, y - 12, 5, 4, "#e7d4c2");
+          drawTileRect(x + 7, y - 12, 5, 4, "#e7d4c2");
+        }
+      }
+
+      function drawCarrot(x, y) {
+        x = Math.floor(x);
+        y = Math.floor(y);
+        drawTileRect(x - 5, y - 4, 10, 12, "#f47f26");
+        drawTileRect(x - 2, y + 8, 4, 2, "#cf6216");
+        drawTileRect(x - 5, y - 8, 4, 4, "#3fa34d");
+        drawTileRect(x + 1, y - 9, 4, 5, "#54bf5f");
+      }
+
+      function drawHeart(x, y) {
+        x = Math.floor(x);
+        y = Math.floor(y);
+        drawTileRect(x - 6, y - 4, 4, 4, "#ff6b6b");
+        drawTileRect(x + 2, y - 4, 4, 4, "#ff6b6b");
+        drawTileRect(x - 8, y, 16, 8, "#ff6b6b");
+      }
+
+      function drawXpOrb(x, y) {
+        x = Math.floor(x);
+        y = Math.floor(y);
+        drawTileRect(x - 5, y - 5, 10, 10, "#b1f7ff");
+        drawTileRect(x - 2, y - 2, 4, 4, "#e6fdff");
+      }
+
+      function drawStairs(x, y) {
+        x = Math.floor(x);
+        y = Math.floor(y);
+        drawTileRect(x - 16, y - 16, 32, 32, "#2f3c44");
+        for (let i = 0; i < 4; i += 1) {
+          drawTileRect(x - 14 + i * 7, y - 14 + i * 4, 24 - i * 4, 3, "#5b6e79");
+        }
+      }
+
+      function drawTitleScreen() {
+        ctx.fillStyle = "rgba(12, 10, 8, 0.72)";
+        ctx.fillRect(0, 0, W, H);
+
+        drawPanel(W / 2 - 240, H / 2 - 150, 480, 260);
+        pxText("BUNNY CARROT QUEST", W / 2, H / 2 - 92, 3, "#f5edd7", true);
+        pxText("8-BIT ROGUELITE", W / 2, H / 2 - 52, 2, "#f2a65a", true);
+        pxText("INSPIRED BY CLASSIC TOP-DOWN ADVENTURE", W / 2, H / 2 - 20, 1, "#d8cebc", true);
+        pxText("Collect all carrots in each burrow depth", W / 2, H / 2 + 22, 1, "#d8cebc", true);
+        pxText("Space/J: Attack   Shift/K: Dash", W / 2, H / 2 + 44, 1, "#d8cebc", true);
+        pxText("Press Enter to Start", W / 2, H / 2 + 80, 2, "#99c24d", true);
+      }
+
+      function drawDeathScreen() {
+        ctx.fillStyle = "rgba(18, 6, 6, 0.68)";
+        ctx.fillRect(0, 0, W, H);
+
+        drawPanel(W / 2 - 220, H / 2 - 130, 440, 220);
+        pxText("YOU WERE DEFEATED", W / 2, H / 2 - 68, 2, "#ffb6a3", true);
+        pxText(`Depth Reached: ${state.runDepth}`, W / 2, H / 2 - 25, 1, "#f5edd7", true);
+        pxText(`Carrots: ${state.player.carrots}`, W / 2, H / 2 - 4, 1, "#f5edd7", true);
+        pxText(`Enemies Defeated: ${state.player.kills}`, W / 2, H / 2 + 17, 1, "#f5edd7", true);
+        pxText("Press R to Start New Run", W / 2, H / 2 + 56, 2, "#99c24d", true);
+      }
+
+      function drawPanel(x, y, w, h) {
+        drawTileRect(x, y, w, h, "#2e2520");
+        drawTileRect(x, y, w, 6, "#5a4739");
+        drawTileRect(x, y + h - 6, w, 6, "#5a4739");
+        drawTileRect(x, y, 6, h, "#5a4739");
+        drawTileRect(x + w - 6, y, 6, h, "#5a4739");
+      }
+
+      const FONT = {
+        A: ["010", "101", "111", "101", "101"],
+        B: ["110", "101", "110", "101", "110"],
+        C: ["011", "100", "100", "100", "011"],
+        D: ["110", "101", "101", "101", "110"],
+        E: ["111", "100", "110", "100", "111"],
+        F: ["111", "100", "110", "100", "100"],
+        G: ["011", "100", "101", "101", "011"],
+        H: ["101", "101", "111", "101", "101"],
+        I: ["111", "010", "010", "010", "111"],
+        J: ["001", "001", "001", "101", "010"],
+        K: ["101", "101", "110", "101", "101"],
+        L: ["100", "100", "100", "100", "111"],
+        M: ["101", "111", "111", "101", "101"],
+        N: ["101", "111", "111", "111", "101"],
+        O: ["010", "101", "101", "101", "010"],
+        P: ["110", "101", "110", "100", "100"],
+        Q: ["010", "101", "101", "111", "011"],
+        R: ["110", "101", "110", "101", "101"],
+        S: ["011", "100", "010", "001", "110"],
+        T: ["111", "010", "010", "010", "010"],
+        U: ["101", "101", "101", "101", "111"],
+        V: ["101", "101", "101", "101", "010"],
+        W: ["101", "101", "111", "111", "101"],
+        X: ["101", "101", "010", "101", "101"],
+        Y: ["101", "101", "010", "010", "010"],
+        Z: ["111", "001", "010", "100", "111"],
+        0: ["111", "101", "101", "101", "111"],
+        1: ["010", "110", "010", "010", "111"],
+        2: ["110", "001", "010", "100", "111"],
+        3: ["110", "001", "010", "001", "110"],
+        4: ["101", "101", "111", "001", "001"],
+        5: ["111", "100", "110", "001", "110"],
+        6: ["011", "100", "110", "101", "010"],
+        7: ["111", "001", "010", "100", "100"],
+        8: ["010", "101", "010", "101", "010"],
+        9: ["010", "101", "011", "001", "110"],
+        ":": ["0", "1", "0", "1", "0"],
+        "-": ["0", "0", "1", "0", "0"],
+        ".": ["0", "0", "0", "1", "0"],
+        " ": ["0", "0", "0", "0", "0"],
+      };
+
+      function pxText(text, x, y, scale = 2, color = "#fff", center = false) {
+        const chars = String(text).toUpperCase().split("");
+        const cw = 4 * scale;
+        const totalW = chars.length * cw;
+        let dx = center ? Math.floor(x - totalW / 2) : Math.floor(x);
+
+        ctx.fillStyle = color;
+        for (const ch of chars) {
+          const glyph = FONT[ch] || FONT[" "];
+          for (let gy = 0; gy < glyph.length; gy += 1) {
+            const row = glyph[gy];
+            for (let gx = 0; gx < row.length; gx += 1) {
+              if (row[gx] === "1") {
+                ctx.fillRect(dx + gx * scale, y + gy * scale, scale, scale);
+              }
+            }
+          }
+          dx += cw;
+        }
+      }
+      function updateHud() {
+        const p = state.player || makePlayer();
+        const room = currentRoom() || { hasStairs: false, enemies: [] };
+        const needs = Math.max(0, state.worldCarrots - state.worldCarrotsCollected);
+
+        let status = `Depth <strong>${state.runDepth}</strong> | HP <strong class="${p.hp <= 2 ? "danger" : "good"}">${p.hp}/${p.hpMax}</strong> | Level <strong>${p.level}</strong> | XP <strong>${p.xp}/${p.xpNeed}</strong> | Carrots <strong>${state.worldCarrotsCollected}/${state.worldCarrots}</strong> | Kills <strong>${p.kills}</strong>`;
+
+        if (state.mode === "title") {
+          status = "<strong>Bunny Carrot Quest</strong> | Press Enter to begin your run.";
+        } else if (state.mode === "dead") {
+          status += " | <span class='danger'>Run failed</span>";
+        } else if (room.hasStairs && needs === 0) {
+          status += " | <span class='good'>Stairs active in this room</span>";
+        } else if (needs > 0) {
+          status += ` | ${needs} carrots left before stairs unlock`;
+        }
+
+        if (state.messageTicks > 0 && state.message) {
+          status += ` | <strong>${state.message}</strong>`;
+        }
+
+        hud.innerHTML = status;
+      }
+
+      function frame() {
+        state.tick += 1;
+
+        if (state.mode === "play") {
+          updatePlayer();
+          updateRoomObjects();
+          if (state.messageTicks > 0) state.messageTicks -= 1;
+        }
+
+        updateParticles();
+
+        const shakeX = state.cameraShake > 0 ? rng.int(-2, 2) : 0;
+        const shakeY = state.cameraShake > 0 ? rng.int(-2, 2) : 0;
+        if (state.cameraShake > 0) state.cameraShake -= 1;
+
+        ctx.save();
+        ctx.translate(shakeX, shakeY);
+        drawRoom();
+        ctx.restore();
+
+        updateHud();
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("keydown", (e) => {
+        const key = e.key.toLowerCase();
+        keys.add(key);
+
+        if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(key)) {
+          e.preventDefault();
+        }
+
+        if (state.mode === "title" && key === "enter") {
+          startNewRun();
+        }
+
+        if (state.mode === "play") {
+          if (key === " " || key === "j") swingAttack();
+          if (key === "shift" || key === "k") doDash();
+        }
+
+        if ((state.mode === "dead" || state.mode === "play" || state.mode === "title") && key === "r") {
+          startNewRun();
+        }
+      });
+
+      window.addEventListener("keyup", (e) => {
+        keys.delete(e.key.toLowerCase());
+      });
+
+      worldReset();
+      state.mode = "title";
+      frame();
+    })();
+  </script>
+</body>
+</html>

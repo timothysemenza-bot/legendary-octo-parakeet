@@ -1,9 +1,18 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 const { env, adminBaseUrl, writesAllowed, ensureArtifactsDir } = require('../utils/env');
+const {
+  getActivePage,
+  clickFirstVisible,
+  fillFirstEditable,
+  normalizeOccursAt,
+  chooseTimezone,
+} = require('../utils/kajabi-ui');
 
 test('draft/create event template flow (write-gated)', async ({ page, context }) => {
-  test.skip(!writesAllowed(), 'Set ALLOW_KAJABI_WRITES=1 to enable write actions.');
+  const runMode = env('JWBLNG_RUN_MODE', 'apply').toLowerCase();
+  const isPlanMode = runMode === 'plan';
+  test.skip(!isPlanMode && !writesAllowed(), 'Set ALLOW_KAJABI_WRITES=1 or run JWBLNG_RUN_MODE=plan.');
 
   const adminBase = adminBaseUrl();
   const eventTitle = env('JWBLNG_EVENT_TITLE', `JWBLNG Event Draft ${new Date().toISOString().slice(0, 10)}`);
@@ -13,120 +22,16 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
   const eventDescription = env('JWBLNG_EVENT_DESCRIPTION', '');
   const artifactsDir = ensureArtifactsDir();
 
-  function normalizeOccursAt(datePart, timePart) {
-    if (!datePart) return '';
-    let normalizedDate = datePart.trim();
-    const mdy = normalizedDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (mdy) {
-      const mm = mdy[1].padStart(2, '0');
-      const dd = mdy[2].padStart(2, '0');
-      const yyyy = mdy[3];
-      normalizedDate = `${yyyy}-${mm}-${dd}`;
-    }
-
-    if (!timePart) return normalizedDate;
-    const normalizedTime = timePart.trim().toUpperCase();
-    return `${normalizedDate} ${normalizedTime}`;
-  }
-
   console.log('[event-flow] Open dashboard');
   await page.goto(`${adminBase}/dashboard`, { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('domcontentloaded');
 
-  const activePage = context.pages().at(-1) || page;
-  if (activePage.isClosed()) {
-    throw new Error('Active Kajabi admin page is closed before event actions.');
-  }
-
-  async function clickFirstVisible(candidates, timeoutMs = 15000) {
-    const deadline = Date.now() + timeoutMs;
-    while (Date.now() < deadline) {
-      for (const candidate of candidates) {
-        if (await candidate.isVisible().catch(() => false)) {
-          await candidate.click();
-          return true;
-        }
-      }
-      await activePage.waitForTimeout(250);
-    }
-    return false;
-  }
-
-  async function fillFirstVisible(candidates, value) {
-    if (!value) return false;
-    for (const candidate of candidates) {
-      if (await candidate.isVisible().catch(() => false)) {
-        const tag = await candidate.evaluate((el) => el.tagName.toLowerCase()).catch(() => '');
-        if (tag === 'input' || tag === 'textarea') {
-          await candidate.fill(value);
-          return true;
-        }
-        const contentEditable = await candidate
-          .evaluate((el) => el.getAttribute('contenteditable') === 'true')
-          .catch(() => false);
-        if (contentEditable) {
-          await candidate.fill(value);
-          return true;
-        }
-        // Non-fillable element (e.g., select): skip.
-        continue;
-      }
-    }
-    return false;
-  }
-
-  async function chooseTimezone(value) {
-    if (!value) return false;
-    const timezoneCombobox = activePage.getByRole('combobox', { name: /time.?zone|zone/i }).first();
-    if (await timezoneCombobox.isVisible().catch(() => false)) {
-      const preferred = new RegExp(value, 'i');
-      const optionByLabel = activePage.getByRole('option', { name: preferred }).first();
-      if (await optionByLabel.isVisible({ timeout: 2000 }).catch(() => false)) {
-        const optionValue = await optionByLabel.getAttribute('value');
-        if (optionValue) {
-          await timezoneCombobox.selectOption(optionValue);
-          return true;
-        }
-      }
-
-      // Fallback: select by matching visible option label.
-      const options = await timezoneCombobox.locator('option').all().catch(() => []);
-      for (const option of options) {
-        const label = (await option.innerText().catch(() => '')).trim();
-        const val = await option.getAttribute('value').catch(() => null);
-        if (label && val && preferred.test(label)) {
-          await timezoneCombobox.selectOption(val);
-          return true;
-        }
-      }
-
-      // Last-resort exact value set (if caller passed full option value).
-      await timezoneCombobox.selectOption({ label: value }).catch(() => {});
-      const timezoneOption = activePage.getByRole('option', { name: new RegExp(value, 'i') }).first();
-      if (await timezoneOption.isVisible({ timeout: 4000 }).catch(() => false)) {
-        await timezoneOption.click();
-        return true;
-      }
-      return false;
-    }
-    const timezoneInputs = [
-      activePage.getByLabel(/time.?zone|zone/i).first(),
-      activePage.locator('input[name*="zone" i], input[placeholder*="zone" i], input[placeholder*="eastern" i]').first(),
-    ];
-    for (const input of timezoneInputs) {
-      if (await input.isVisible().catch(() => false)) {
-        await input.fill(value);
-        await input.press('Enter').catch(() => {});
-        return true;
-      }
-    }
-    return false;
-  }
+  const activePage = await getActivePage(page, context, 'Active Kajabi admin page is closed before event actions.');
 
   const mainNav = activePage.getByRole('navigation', { name: /main navigation/i });
 
   console.log('[event-flow] Navigate to Marketing/Events via UI');
-  const openedMarketing = await clickFirstVisible([
+  const openedMarketing = await clickFirstVisible(activePage, [
     mainNav.getByRole('link', { name: /^marketing$/i }).first(),
     mainNav.getByRole('button', { name: /^marketing$/i }).first(),
     mainNav.locator('li:has-text("Marketing")').first(),
@@ -136,7 +41,7 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
     throw new Error(`Could not open Marketing section from sidebar. URL: ${activePage.url()}`);
   }
 
-  const openedEvents = await clickFirstVisible([
+  const openedEvents = await clickFirstVisible(activePage, [
     mainNav.getByRole('link', { name: /^events$/i }).first(),
     mainNav.getByRole('link', { name: /events/i }).first(),
     mainNav.locator('li:has-text("Events")').first(),
@@ -153,6 +58,19 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
     path: path.join(artifactsDir, 'event-flow-events-screen.png'),
     fullPage: true,
   });
+
+  if (isPlanMode) {
+    console.log('[event-flow] Plan mode: validated Events screen and create control visibility only.');
+    const createEventControlPlan = activePage
+      .locator('a:has-text("New Event"):visible, a:has-text("Create Event"):visible, button:has-text("New Event"):visible, button:has-text("Create Event"):visible, button:has-text("Add Event"):visible')
+      .first();
+    await expect(createEventControlPlan).toBeVisible({ timeout: 15000 });
+    await activePage.screenshot({
+      path: path.join(artifactsDir, 'event-flow-plan-ready.png'),
+      fullPage: true,
+    });
+    return;
+  }
 
   console.log('[event-flow] Open create event flow');
   const createEventControl = activePage
@@ -188,7 +106,7 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
     throw new Error(`Could not find a visible Event Title/Name input. URL: ${activePage.url()}`);
   }
 
-  const filledDate = await fillFirstVisible(
+  const filledDate = await fillFirstEditable(
     [
       activePage.getByRole('textbox', { name: /when does this event occur|occurs at|start/i }).first(),
       activePage.getByLabel(/when does this event occur|occurs at|start/i).first(),
@@ -200,9 +118,9 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
   // Kajabi commonly combines date+time in one "When does this event occur?" field.
   const filledTime = Boolean(eventTime) && filledDate;
 
-  const selectedTimezone = await chooseTimezone(eventTimezone);
+  const selectedTimezone = await chooseTimezone(activePage, eventTimezone);
 
-  const filledDescription = await fillFirstVisible(
+  const filledDescription = await fillFirstEditable(
     [
       activePage.getByRole('textbox', { name: /description|details|about/i }).first(),
       activePage.getByLabel(/description|details|about/i).first(),
@@ -217,6 +135,39 @@ test('draft/create event template flow (write-gated)', async ({ page, context })
 
   await activePage.screenshot({
     path: path.join(artifactsDir, 'event-flow-create-dialog.png'),
+    fullPage: true,
+  });
+
+  console.log('[event-flow] Save draft event');
+  const saveButton = activePage.getByRole('button', { name: /^save$/i }).first();
+  await expect(saveButton).toBeVisible({ timeout: 10000 });
+  await expect(saveButton).toBeEnabled({ timeout: 10000 });
+  await saveButton.click();
+
+  const landedOnEventsList = await activePage
+    .waitForURL(/\/events(\?|$)/, { timeout: 15000 })
+    .then(() => true)
+    .catch(() => false);
+
+  if (!landedOnEventsList) {
+    const createHeadingVisible = await activePage
+      .getByRole('heading', { name: /create an event/i })
+      .first()
+      .isVisible()
+      .catch(() => false);
+    const invalidFieldCount = await activePage
+      .locator('[aria-invalid="true"], .field_with_errors, .sage-input--invalid, .error')
+      .count()
+      .catch(() => 0);
+    if (createHeadingVisible) {
+      throw new Error(
+        `Event save did not leave create form. Potential validation issues: ${invalidFieldCount}. URL: ${activePage.url()}`,
+      );
+    }
+  }
+
+  await activePage.screenshot({
+    path: path.join(artifactsDir, 'event-flow-after-save.png'),
     fullPage: true,
   });
 });

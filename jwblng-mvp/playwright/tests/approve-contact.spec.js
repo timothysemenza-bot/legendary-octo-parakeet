@@ -1,9 +1,18 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 const { env, adminBaseUrl, writesAllowed, ensureArtifactsDir } = require('../utils/env');
+const {
+  getActivePage,
+  clickFirstVisible,
+  findContactRowByEmail,
+  openContactDetailFromRow,
+  applyTagToOpenContact,
+} = require('../utils/kajabi-ui');
 
 test('approve contact by email filter (write-gated)', async ({ page, context }) => {
-  test.skip(!writesAllowed(), 'Set ALLOW_KAJABI_WRITES=1 to enable write actions.');
+  const runMode = env('JWBLNG_RUN_MODE', 'apply').toLowerCase();
+  const isPlanMode = runMode === 'plan';
+  test.skip(!isPlanMode && !writesAllowed(), 'Set ALLOW_KAJABI_WRITES=1 or run JWBLNG_RUN_MODE=plan.');
 
   const adminBase = adminBaseUrl();
   const emailFilter = env('JWBLNG_CONTACT_EMAIL_FILTER', '').trim();
@@ -14,21 +23,7 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
     throw new Error('JWBLNG_CONTACT_EMAIL_FILTER is required for safe contact approval runs.');
   }
 
-  const activePage = context.pages().at(-1) || page;
-
-  async function clickFirstVisible(candidates, timeoutMs = 15000) {
-    const deadline = Date.now() + timeoutMs;
-    while (Date.now() < deadline) {
-      for (const candidate of candidates) {
-        if (await candidate.isVisible().catch(() => false)) {
-          await candidate.click();
-          return true;
-        }
-      }
-      await activePage.waitForTimeout(250);
-    }
-    return false;
-  }
+  const activePage = await getActivePage(page, context, 'Active Kajabi admin page is closed before contact actions.');
 
   console.log('[contact-flow] Open dashboard');
   await activePage.goto(`${adminBase}/dashboard`, { waitUntil: 'domcontentloaded' });
@@ -37,7 +32,7 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   const mainNav = activePage.getByRole('navigation', { name: /main navigation/i });
 
   console.log('[contact-flow] Navigate to Contacts via UI');
-  const openedContactsGroup = await clickFirstVisible([
+  const openedContactsGroup = await clickFirstVisible(activePage, [
     mainNav.getByRole('link', { name: /^contacts$/i }).first(),
     mainNav.getByRole('button', { name: /^contacts$/i }).first(),
     mainNav.locator('li:has-text("Contacts")').first(),
@@ -59,7 +54,7 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   await expect(activePage).toHaveURL(/\/contacts(\?|$)/);
 
   // Optional segment shortcut if present.
-  await clickFirstVisible([
+  await clickFirstVisible(activePage, [
     activePage.getByRole('link', { name: /pending-review/i }).first(),
     activePage.getByRole('button', { name: /pending-review/i }).first(),
   ], 2000).catch(() => false);
@@ -87,9 +82,8 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
   await searchInput.press('Enter').catch(() => {});
   await activePage.waitForTimeout(1200);
 
-  const escapedEmail = emailFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const contactRow = activePage.getByRole('row', { name: new RegExp(escapedEmail, 'i') }).first();
-  if (!(await contactRow.isVisible({ timeout: 10000 }).catch(() => false))) {
+  const contactRow = await findContactRowByEmail(activePage, emailFilter, 10000);
+  if (!contactRow) {
     throw new Error(`No visible contact row found for '${emailFilter}'.`);
   }
 
@@ -98,88 +92,30 @@ test('approve contact by email filter (write-gated)', async ({ page, context }) 
     fullPage: true,
   });
 
-  // Open contact detail from the row (avoid "Options" button).
-  let openedDetail = false;
-  const openContactCandidates = [
-    contactRow.getByRole('button', { name: new RegExp(`^(?!.*options).+`, 'i') }).first(),
-    contactRow.getByRole('link', { name: new RegExp(`^(?!.*options).+`, 'i') }).first(),
-    contactRow.locator('button:not(:has-text("Options"))').first(),
-  ];
-  for (const candidate of openContactCandidates) {
-    if (await candidate.isVisible().catch(() => false)) {
-      await candidate.click();
-      openedDetail = true;
-      break;
-    }
+  if (isPlanMode) {
+    console.log('[contact-flow] Plan mode: validated contact discovery only, no tag mutation applied.');
+    await activePage.screenshot({
+      path: path.join(artifactsDir, 'contact-flow-plan-ready.png'),
+      fullPage: true,
+    });
+    return;
   }
-  if (!openedDetail) {
-    // Last fallback: click the row, but this may keep us in list view.
-    await contactRow.click();
-  }
-  await activePage.waitForLoadState('domcontentloaded');
-  await activePage.waitForTimeout(1000);
 
-  // Kajabi may keep /contacts URL while opening a side panel detail view.
-  // Do not hard-fail here; tag-control discovery below is the source of truth.
+  const openedDetail = await openContactDetailFromRow(activePage, contactRow);
+  if (!openedDetail) {
+    throw new Error('Did not open contact detail view; still on contacts list/tag management page.');
+  }
 
   console.log(`[contact-flow] Apply tag: ${approvalTag}`);
-  const detailRoot = activePage.locator('main, aside, [role="dialog"]').first();
-  const tagControls = [
-    detailRoot.getByRole('button', { name: /add tag|tags/i }).first(),
-    detailRoot.getByRole('link', { name: /add tag|tags/i }).first(),
-    detailRoot.locator('button:has-text("Add Tag"), button:has-text("Tags"), a:has-text("Add Tag")').first(),
-  ];
-
-  let openedTagControl = false;
-  for (const control of tagControls) {
-    if (await control.isVisible().catch(() => false)) {
-      await control.click();
-      openedTagControl = true;
-      break;
-    }
+  const tagResult = await applyTagToOpenContact(activePage, approvalTag);
+  if (!tagResult.success) {
+    throw new Error(`Could not apply tag '${approvalTag}' (${tagResult.reason}).`);
   }
-
-  if (!openedTagControl) {
-    throw new Error('Could not open tag editor controls on contact page.');
-  }
-
-  const tagInputCandidates = [
-    detailRoot.getByRole('combobox', { name: /tag/i }).first(),
-    detailRoot.getByRole('textbox', { name: /tag/i }).first(),
-    detailRoot.locator('input[placeholder*="tag" i], input[name*="tag" i]').first(),
-  ];
-
-  let tagInput = null;
-  for (const candidate of tagInputCandidates) {
-    if (await candidate.isVisible({ timeout: 5000 }).catch(() => false)) {
-      tagInput = candidate;
-      break;
-    }
-  }
-
-  if (!tagInput) {
-    throw new Error('Could not find tag input after opening tag controls.');
-  }
-
-  await tagInput.fill(approvalTag);
-  await activePage.waitForTimeout(500);
-
-  const tagOption = activePage.getByRole('option', { name: new RegExp(approvalTag, 'i') }).first();
-  if (await tagOption.isVisible().catch(() => false)) {
-    await tagOption.click();
-  } else {
-    await tagInput.press('Enter');
-  }
-
-  // Save/update if explicit button exists.
-  const saved = await clickFirstVisible([
-    activePage.getByRole('button', { name: /save|update|apply/i }).first(),
-  ], 2000);
 
   await activePage.screenshot({
     path: path.join(artifactsDir, 'contact-flow-after-tag.png'),
     fullPage: true,
   });
 
-  console.log(`[contact-flow] Tag applied candidate:${approvalTag} saveClicked:${saved}`);
+  console.log(`[contact-flow] Tag applied candidate:${approvalTag} saveClicked:${Boolean(tagResult.saved)}`);
 });

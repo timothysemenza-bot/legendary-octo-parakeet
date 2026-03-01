@@ -7,6 +7,7 @@ This folder provides a safe starter for running a local browser agent against Ka
 - `tests/audit.kajabi.spec.js`: Read-only inventory capture.
 - `tests/create-join-flow.spec.js`: Write-gated join-page draft script.
 - `tests/create-event-template.spec.js`: Write-gated event create-flow draft script.
+- `tests/apply-homepage-content.spec.js`: Write-gated homepage content apply script (Kajabi editor).
 - `tests/verify-member-journey.spec.js`: Public journey smoke test.
 - `utils/env.js`: Environment and safety helpers.
 
@@ -38,6 +39,17 @@ Public journey smoke test:
 npm run pw:jwblng:verify
 ```
 
+Homepage QA in Kajabi builder preview (works even when public domain is in coming-soon mode):
+```powershell
+npm run pw:jwblng:homebuilderqa
+```
+
+Agile slice verification (single-slice checks):
+```powershell
+$env:JWBLNG_SLICE_ID="home-cta"
+npm run pw:jwblng:sliceverify
+```
+
 Write-gated draft flow (only after review):
 ```powershell
 $env:ALLOW_KAJABI_WRITES="1"
@@ -48,12 +60,6 @@ Write-gated event draft flow:
 ```powershell
 $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:event
-```
-
-Persistent runner (single command, mode switch for `event` or `approve`):
-```powershell
-$env:ALLOW_KAJABI_WRITES="1"
-npm run pw:jwblng:persistent
 ```
 
 Optional event env vars:
@@ -69,12 +75,60 @@ $env:ALLOW_KAJABI_WRITES="1"
 npm run pw:jwblng:approve
 ```
 
-Inside runner:
-- `r` rerun current mode
-- `mode event` switch to event flow
-- `mode approve` switch to contact approval flow
-- `report` print latest artifacts and HTML report hint paths
-- `q` quit
+Write-gated homepage content apply flow:
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:homeapply
+```
+
+Write-gated scoped event pages ensure/create flow:
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:scopepages
+```
+
+Write-gated scoped event pages content-apply flow:
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:eventpagesapply
+```
+
+Write-gated global brand palette flow (Encore Style Guide):
+```powershell
+$env:ALLOW_KAJABI_WRITES="1"
+npm run pw:jwblng:palette
+```
+
+Optional homepage env vars:
+- `JWBLNG_HOMEPAGE_NAME` (default `Home`)
+- `JWBLNG_HOMEPAGE_HEADLINE`
+- `JWBLNG_HOMEPAGE_SUBHEAD`
+- `JWBLNG_HOMEPAGE_PRIMARY_CTA_TEXT`
+- `JWBLNG_HOMEPAGE_PRIMARY_CTA_LINK`
+- `JWBLNG_HOMEPAGE_SECONDARY_CTA_TEXT`
+- `JWBLNG_HOMEPAGE_SECONDARY_CTA_LINK`
+- `JWBLNG_HOMEPAGE_DONATION_LINK`
+- `JWBLNG_SCOPE_PAGE_TITLES` (pipe-delimited, default `Speaker Series|Book Club|Halacha Circle`)
+
+### Optional: One-command PowerShell runner
+Use `jwblng-mvp/playwright/scripts/run-flow.ps1` to set env vars and run a flow in one command.
+- `-Mode plan`: navigation/validation/screenshots only (no mutations)
+- `-Mode apply`: execute write actions (requires `-AllowWrites` for write flows)
+
+Examples:
+```powershell
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow audit -Mode plan
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow join -Mode plan
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow join -Mode apply -AllowWrites -JoinTitle "Join JWBLNG" -JoinPath "/join"
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow event -Mode apply -AllowWrites -EventDate "03/15/2026" -EventTime "7:00 PM" -EventTimezone "Eastern"
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow approve -Mode apply -AllowWrites -ContactEmail "timmy@bosskeyops.com" -ApprovalTag "approved-member"
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow homepage -Mode apply -AllowWrites -HomepageName "Home" -HomepagePrimaryCtaText "Join JWBLNG" -HomepagePrimaryCtaLink "/join" -HomepageSecondaryCtaText "View Events" -HomepageSecondaryCtaLink "/events"
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow homeverify -Mode plan -HomepageName "Home"
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow scopepages -Mode apply -AllowWrites
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow eventpages -Mode apply -AllowWrites
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-flow.ps1 -Flow palette -Mode apply -AllowWrites
+powershell -ExecutionPolicy Bypass -File jwblng-mvp/playwright/scripts/run-slice.ps1 -Slice home-cta -Mode apply
+```
 
 Optional contact env vars:
 - `JWBLNG_CONTACT_EMAIL_FILTER` (required for safety in approve flow)
@@ -90,3 +144,6 @@ Generated under:
 - No write actions unless `ALLOW_KAJABI_WRITES=1`.
 - Start with `audit` and `verify` before any write run.
 - Review screenshots before publish or delete operations.
+
+## Workflow Contract
+- See `jwblng-mvp/playwright/WORKFLOW_CONTRACT.md` for flow inputs, expected outcomes, artifacts, and failure codes.
