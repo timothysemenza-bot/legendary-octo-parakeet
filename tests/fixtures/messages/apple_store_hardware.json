@@ -1,0 +1,9 @@
+{
+  "message_id": "msg-store-003",
+  "subject": "Apple Store Invoice",
+  "sender": "store_news@apple.com",
+  "date": "2026-02-21T18:45:00-05:00",
+  "text_body": "Apple Store\nDocument No.: DOC-445566\nUSB-C Cable $19.00\nTotal USD 19.00\n",
+  "html_body": "",
+  "raw_content": "hardware invoice"
+}

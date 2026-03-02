@@ -1,0 +1,9 @@
+{
+  "message_id": "msg-appstore-002",
+  "subject": "App Store receipt",
+  "sender": "appstore@email.apple.com",
+  "date": "2026-02-13T08:00:00-05:00",
+  "text_body": "",
+  "html_body": "<html><body><p>Receipt</p><p>Invoice: INV-998877</p><p>Pro Camera Monthly $4.99</p><p>Photo Filters Pack $1.99</p><p>Total $6.98</p></body></html>",
+  "raw_content": "appstore html"
+}

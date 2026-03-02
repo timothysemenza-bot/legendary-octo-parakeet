@@ -43,3 +43,12 @@ jwblng-mvp/playwright/.profile/
 jwblng-mvp/playwright/artifacts/
 jwblng-mvp/playwright/playwright-report/
 jwblng-mvp/playwright/test-results/
+
+# Apple receipts automation outputs
+output/
+credentials/
+*.token.json
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

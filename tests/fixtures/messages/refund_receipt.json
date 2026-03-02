@@ -1,0 +1,9 @@
+{
+  "message_id": "msg-refund-004",
+  "subject": "Refund processed for your purchase",
+  "sender": "no_reply@email.apple.com",
+  "date": "2026-02-25T09:10:00-05:00",
+  "text_body": "Apple Support\nOrder ID: RF-111222\nRefund for App Purchase $3.99\nRefund Total $3.99\n",
+  "html_body": "",
+  "raw_content": "refund receipt"
+}

@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charleigh Invention Trifold Mockup</title>
+  <style>
+    :root {
+      --bg1: #fff7d6;
+      --bg2: #ffe3f1;
+      --panel: #ffffff;
+      --line: #31456b;
+      --accent1: #ff6b8a;
+      --accent2: #49c9b0;
+      --accent3: #ffd45c;
+      --accent4: #6fb8ff;
+      --text: #1f2c4a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 14%, #ffd16699 0 15%, transparent 16%),
+        radial-gradient(circle at 86% 20%, #6fb8ff66 0 13%, transparent 14%),
+        radial-gradient(circle at 90% 84%, #ff9ec255 0 18%, transparent 19%),
+        linear-gradient(130deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .page {
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+
+    .title {
+      text-align: center;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      margin: 8px 0 6px;
+      letter-spacing: .02em;
+      text-shadow: 0 2px 0 #ffffff;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin: 0 0 18px;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 700;
+    }
+
+    .kid-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 12px 0 18px;
+    }
+
+    .kid-pill {
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      text-align: center;
+      padding: 8px 10px;
+      font-weight: 900;
+      background: #fff;
+      font-size: 1.02rem;
+    }
+
+    .kid-pill.one { background: var(--accent3); }
+    .kid-pill.two { background: var(--accent4); }
+    .kid-pill.three { background: #ffa8be; }
+
+    .trifold {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr 1.12fr 1fr;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 4px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 8px 24px #0000001f;
+      padding: 14px;
+      min-height: 640px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 10px;
+    }
+
+    .label {
+      display: inline-block;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 900;
+      font-size: 1.06rem;
+      width: fit-content;
+      background: #fff;
+    }
+
+    .label.problem { background: var(--accent3); }
+    .label.invention { background: var(--accent1); color: #fff; }
+    .label.works { background: var(--accent2); color: #09312d; }
+
+    .box {
+      border: 3px dashed #7f95c6;
+      border-radius: 16px;
+      padding: 12px;
+      background: #f9fbff;
+    }
+
+    .photo {
+      border: 3px dashed #9fb0d6;
+      border-radius: 16px;
+      background: repeating-linear-gradient(45deg, #edf2ff, #edf2ff 12px, #f6f8ff 12px, #f6f8ff 24px);
+      min-height: 140px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.06rem;
+      color: #3f5286;
+      padding: 10px;
+    }
+
+    h2, h3, p { margin: 0; }
+
+    .big-name {
+      text-align: center;
+      font-size: clamp(1.55rem, 2.8vw, 2.15rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .step {
+      border: 3px solid #7f8db6;
+      border-radius: 14px;
+      padding: 10px;
+      background: #fff;
+      font-weight: 800;
+      font-size: 1.03rem;
+    }
+
+    .small {
+      font-size: 1.03rem;
+      line-height: 1.42;
+    }
+
+    .story {
+      display: grid;
+      gap: 8px;
+    }
+
+    .story-item {
+      border: 3px solid #d1daf2;
+      border-radius: 14px;
+      background: #fff;
+      padding: 8px 10px;
+      font-size: 1rem;
+      line-height: 1.36;
+    }
+
+    .story-item strong {
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .qa {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .qa-card {
+      background: #fff;
+      border: 3px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+      min-height: 120px;
+    }
+
+    .qa-card h3 {
+      font-size: 1.08rem;
+      margin-bottom: 6px;
+    }
+
+    .qa-card p {
+      font-size: .98rem;
+      line-height: 1.4;
+    }
+
+    .footer {
+      margin-top: 14px;
+      font-size: 1rem;
+      text-align: center;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .guide {
+      margin-top: 10px;
+      display: inline-block;
+      background: #fff;
+      border: 3px solid var(--line);
+      border-radius: 14px;
+      padding: 8px 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 920px) {
+      .kid-strip { grid-template-columns: 1fr; }
+      .trifold { grid-template-columns: 1fr; }
+      .panel { min-height: auto; }
+      .qa { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 8px; }
+      .footer { display: none; }
+      .panel { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1 class="title">Charleigh's Invention Board</h1>
+    <p class="subtitle">Colorful mockup to show your family before making the real poster</p>
+
+    <section class="kid-strip">
+      <div class="kid-pill one">Big Pictures</div>
+      <div class="kid-pill two">Short Sentences</div>
+      <div class="kid-pill three">Fun Colors</div>
+    </section>
+
+    <section class="trifold">
+      <article class="panel">
+        <span class="label problem">The Problem</span>
+        <div class="box small">
+          Sometimes my ears hurt when glasses or headphones press too hard.
+        </div>
+        <div class="box small">
+          <h3 style="margin-bottom:6px;">Slogan</h3>
+          Happy ears, happy day.
+        </div>
+        <div class="box">
+          <div class="photo">Add a drawing/photo<br/>showing the problem</div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <span class="label invention">My Invention</span>
+        <div class="box">
+          <h2 class="big-name">Charleigh's Headphone Pillow</h2>
+          <p class="small" style="margin-top:8px; text-align:center;">
+            A soft little pillow clip that helps glasses or headphones feel comfy.
+          </p>
+          <p class="small" style="margin-top:8px; text-align:center;">
+            Why it matters: when kids feel comfy, they can learn and play better.
+          </p>
+        </div>
+        <div class="box">
+          <div class="photo" style="min-height:220px;">Big photo of prototype<br/>(or drawing)</div>
+          <div class="story" style="margin-top:8px;">
+            <div class="story-item"><strong>Research:</strong> I learned where ears hurt the most.</div>
+            <div class="story-item"><strong>Idea:</strong> Make a soft piece that sits by the ear.</div>
+            <div class="story-item"><strong>Build:</strong> We used TinkerCAD to make a model.</div>
+            <div class="story-item"><strong>Test:</strong> We tried different sizes to find the best fit.</div>
+            <div class="story-item"><strong>Impact:</strong> More comfort for kids and grown-ups.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <span class="label works">How It Works</span>
+        <div class="steps">
+          <div class="step">1) Clip it on</div>
+          <div class="step">2) Put on glasses or headphones</div>
+          <div class="step">3) Enjoy comfy ears</div>
+        </div>
+        <div class="box small">
+          <h3 style="margin-bottom:6px;">What I Learned</h3>
+          I can test my idea, fix it, and make it better.
+        </div>
+        <div class="box small">
+          <h3 style="margin-bottom:6px;">Try Me</h3>
+          Put the sample model on the table next to the board.
+        </div>
+        <div class="box small">
+          <h3 style="margin-bottom:6px;">Real-world use</h3>
+          At school, in the car, at home, while traveling, and during screen time.
+        </div>
+      </article>
+    </section>
+
+    <section class="qa">
+      <div class="qa-card">
+        <h3>What problem did you see?</h3>
+        <p>Headphones and glasses can press ears and make them sore.</p>
+      </div>
+      <div class="qa-card">
+        <h3>How is yours different?</h3>
+        <p>It is a tiny soft pillow clip that goes where pressure happens.</p>
+      </div>
+      <div class="qa-card">
+        <h3>What would you improve next?</h3>
+        <p>I would test more sizes, colors, and softer materials.</p>
+      </div>
+    </section>
+
+    <p class="footer">Tip: print this and use it as your cut-and-glue guide for the real trifold board.</p>
+    <p style="text-align:center;"><span class="guide">Keep each text card short so Charleigh can read and explain it.</span></p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "ledger_tab": "Ledger",
+  "monthly_summary_tab": "MonthlySummary",
+  "columns": [
+    "Date",
+    "Vendor",
+    "Description",
+    "Amount",
+    "Currency",
+    "InvoiceId",
+    "SourceMessageId",
+    "Source",
+    "MonthKey",
+    "ImportedAt"
+  ]
+}

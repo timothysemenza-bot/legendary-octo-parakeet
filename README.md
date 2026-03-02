@@ -1,237 +1,134 @@
-# St. Moritz Security Services - Proposal Microsite
+# Apple Receipt Reimbursement Automation
 
-A lightweight Node.js app for collecting intake details and generating proposal drafts, including `.docx` export.
+End-to-end Python automation for:
+1. Pulling Apple-related receipt emails for a month window.
+2. Parsing receipts into normalized line items.
+3. Deduping against existing ledger keys and in-run duplicates.
+4. Appending only new rows to Google Sheets `Ledger` via Sheets API `values.append`.
+5. Emitting a monthly reimbursement report with total, itemized list, and Venmo memo text.
 
-## Repo map
+## Required Layout
 
-- `server.js`, `index.html`, `content-library.json`: proposal microsite application.
-- `marketing-agents/`: outbound/capture/proposal automation workspace.
-- `boss-key-website/`: public-facing website assets and deployment package.
-- `boss-key-llc-admin/`: business admin, compliance, and finance artifacts.
-- `sample-content/`: sample manifest/content payloads for content-provider workflows.
+- `src/config.py`
+- `src/email_client_gmail_api.py`
+- `src/email_client_imap.py`
+- `src/receipt_extractors/apple_receipt_parser.py`
+- `src/dedupe.py`
+- `src/sheets_client.py`
+- `src/monthly_report.py`
+- `src/main.py`
+- `config/merchants.json`
+- `config/sheet_schema.json`
+- `output/logs`, `output/reports`, `output/debug`
+- `tests/` for parser, dedupe, and month-boundary logic
 
-For the automation workspace specifically, see [marketing-agents/README.md](marketing-agents/README.md).
+## Google Sheet Schema (documented)
 
-## Why it is portable
+Create a Google Sheet with tab `Ledger` and this header row:
 
-- No hardcoded filesystem paths remain for data, content library, or branding.
-- Runtime behavior is driven by environment variables so another client can deploy with their own settings.
-- Includes both direct Node.js and Docker-based deployment paths.
+`Date, Vendor, Description, Amount, Currency, InvoiceId, SourceMessageId, Source, MonthKey, ImportedAt`
 
-## Local quick start
+Optional tab: `MonthlySummary`.
 
-- Install Node.js 18+.
-- Run `npm start`.
-- Open `http://localhost:3000`.
+The script appends rows using Sheets API `spreadsheets.values.append` with:
+- `valueInputOption=USER_ENTERED`
+- `insertDataOption=INSERT_ROWS`
 
-## Environment variables
+Reference:
+- https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/append
 
-Create `.env` from `.env.example` and adjust values.
+## Setup
 
-- `PORT` - server port (default `3000`)
-- `PUBLIC_DIR` - directory for static files (default repo root)
-- `PROPOSAL_DATA_DIR` - proposal store location (default `<repo>/data`)
-- `LIBRARY_FILE` - path to content library JSON (default `<repo>/content-library.json`)
-- `BRAND_NAME` - company name used in generated docs (default `St. Moritz Security Services`)
-- `BRAND_TAGLINE` - optional startup log text (default `Proposal Builder`)
-- `CLIENT_NAME_FALLBACK` - fallback client name in generated files
-- `CORS_ORIGINS` - comma-separated allowed origins (default `*`)
-- `WORD_IMAGES_ENABLED` - set `0` to temporarily disable images in DOCX export for recovery/debugging
-- `CONTENT_PROVIDER` - `json` (default) or `sharepoint`
-- `CONTENT_PROVIDER_SETTINGS` - JSON string for provider settings (for `sharepoint`, set `manifestFile`, or `siteId` + `driveId` + `manifestPath`)
-- `GRAPH_ACCESS_TOKEN` - optional bearer token used when calling SharePoint/OneDrive Graph endpoints
-
-## API endpoints
-
-- `GET /api/library`
-- `PUT /api/library`
-- `GET /api/content/status`
-- `POST /api/content/refresh`
-- `POST /api/content/resolve`
-- `POST /api/content/resolve` uses the provider to generate the same payload shape used to build sections from intake JSON.
-- `POST /api/export/docx`
-- `GET /api/proposals`
-- `POST /api/proposals`
-- `GET /api/proposals/:id`
-- `PUT /api/proposals/:id`
-
-## Docker
-
-Run locally from this repo:
-
-```bash
-docker compose up --build
-```
-
-Compose mounts a volume for runtime data:
-
-- proposals -> `PROPOSAL_DATA_DIR` (default `/app/data`)
-- content library -> `LIBRARY_FILE`
-
-You can replace `.env` values to target a different output location or brand.
-
-## Persistence
-
-- Proposals are stored in `proposals.json` inside `PROPOSAL_DATA_DIR`.
-- Proposal library is stored at `LIBRARY_FILE`.
-
-## SharePoint/OneDrive provider model (JSON manifest)
-
-Set `CONTENT_PROVIDER=sharepoint` and one of these settings:
-
-- `manifestFile`: local path (for example `./content-library.manifest.json`) or direct URL that returns the same library JSON shape.
-- `siteId` + `driveId` + `manifestPath`: resolves manifest from SharePoint/OneDrive via Microsoft Graph.
-
-The manifest may reference external text assets using fields like:
-
-- `summary: "content:sections/geography/us-ne/summary.txt"`
-- `scopeBullets: "content:sections/geography/us-ne/bullets.md"`
-
-Only string, `.txt`, `.md`, or `.json`-based content sources are resolved in this release. More complex Word-file assembly can be added as a later enhancement.
-
-### Quick sample run
-
-1. Copy the sample files as your content source:
-
-- `sample-sharepoint-manifest.json`
-- `sample-content/` directory
-
-2. Configure your `.env`:
-
-```bash
-CONTENT_PROVIDER=sharepoint
-CONTENT_PROVIDER_SETTINGS={"manifestFile":"./sample-sharepoint-manifest.json","basePath":"sample-content"}
-```
-
-3. Restart and call:
-
-- `GET /api/content/status`
-- `GET /api/library`
-- `POST /api/content/resolve`
-
-Example resolve payload:
-
-```json
-{
-  "geography": "US Northeast",
-  "serviceLevel": "Enhanced",
-  "siteType": "Corporate office",
-  "riskLevel": "Medium",
-  "coverageHours": "Business hours",
-  "capabilities": ["Access control"],
-  "industry": "Corporate office"
-}
-```
-
-### Migrate an existing JSON library to manifest + file content
-
-If your existing `content-library.json` is already populated, run:
-
-```bash
-npm run migrate:sharepoint-content
-```
-
-This produces:
-
-- `content-library.manifest.json`
-- `migrated-content/` (with content references extracted to `content:` files)
-
-You can then flip to SharePoint-style mode:
-
-```bash
-CONTENT_PROVIDER=sharepoint
-CONTENT_PROVIDER_SETTINGS={"manifestFile":"./content-library.manifest.json","basePath":"migrated-content"}
-```
-
-If you need isolated environments per client, mount host directories per deployment and set the env paths accordingly.
-
-## GitHub deployment
-
-### 1) Install Git and initialize
-
-From this project folder:
-
-- Install Git (if needed) and initialize:
-
-```bash
-git init
-git branch -M main
-```
-
-- Add `.gitignore` entries (already in this repo) and check status:
-
-```bash
-git status
-```
-
-### 2) Create the first commit
-
-```bash
-git add .
-git commit -m "Initial proposal microsite implementation"
-```
-
-Or run:
+### 1. Python environment
 
 ```powershell
-./scripts/bootstrap-github.ps1 -GitHubOwnerRepo "<OWNER>/<REPO>"
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-### 3) Create a GitHub repository and connect it
+### 2. Environment config
 
-- On GitHub, create a new repository (blank, no README/license if adding existing files).
-- Add remote and push:
+Copy `.env.example` to `.env` and set values:
 
-```bash
-git remote add origin https://github.com/<OWNER>/<REPO>.git
-git push -u origin main
+- `GMAIL_MODE=(api|imap)`
+- `IMAP_HOST`, `IMAP_USER`, `IMAP_APP_PASSWORD` (IMAP fallback)
+- `GOOGLE_SHEETS_SPREADSHEET_ID`
+- `GOOGLE_SHEETS_RANGE` (example: `Ledger!A1`)
+- `GOOGLE_OAUTH_CLIENT_SECRET_JSON` (OAuth client secret JSON path)
+- `GOOGLE_GMAIL_OAUTH_TOKEN_JSON` (Gmail OAuth token path)
+- `GOOGLE_SHEETS_OAUTH_TOKEN_JSON` (Sheets OAuth token path)
+- `TIMEZONE=America/New_York`
+- `FRIEND_NAME=Matt`
+- `EMAIL_FIXTURES_DIR` (optional local fixture mode)
+
+### 3. Google Sheets API auth
+
+Use the Google quickstart-style OAuth flow for installed apps. First run will open browser auth and save Gmail token JSON to `GOOGLE_GMAIL_OAUTH_TOKEN_JSON` and Sheets token JSON to `GOOGLE_SHEETS_OAUTH_TOKEN_JSON`.
+
+Reference:
+- https://developers.google.com/workspace/sheets/api/quickstart/python
+
+### 4. Gmail auth mode
+
+Recommended: Gmail API OAuth (`GMAIL_MODE=api`) using the same OAuth credentials flow.
+
+Fallback: IMAP app password (`GMAIL_MODE=imap`). Gmail app passwords require 2-Step Verification.
+
+Reference:
+- https://support.google.com/accounts/answer/185833
+
+## CLI Usage
+
+### Dry run
+
+```powershell
+python -m src.main dry-run --month prior
 ```
 
-### 4) Clone and run elsewhere
+- Parses and computes report totals without writing to Sheets.
+- Works without external services when fixture mode is enabled (`EMAIL_FIXTURES_DIR`) or when `tests/fixtures/messages` exists.
 
-```bash
-git clone https://github.com/<OWNER>/<REPO>.git
-cd <REPO>
-npm install
-cp .env.example .env  # then update values for the target client
-npm start
+### Monthly run
+
+```powershell
+python -m src.main run --month prior
 ```
 
-## Optional: protect client runtime data
+- Pulls prior month in `America/New_York`.
+- Dedupes against existing `Ledger` rows and within current run.
+- Appends only new rows to `Ledger`.
+- Writes report: `output/reports/YYYY-MM.txt`
 
-- `data/` is ignored by `.gitignore` so proposal records stay local per deployment.
-- Keep client branding and image libraries in versioned files (e.g., `content-library.json`) and mount client-specific runtime directories via env vars.
+### Backfill
 
-## Enforcing GitHub-only changes
+```powershell
+python -m src.main backfill --start 2025-01 --end 2025-12
+```
 
-To make sure all production changes come only from GitHub:
+## Report output
 
-- Set `main` as the default branch.
-- Enable branch protection on `main`:
-  - Require pull requests before merging.
-  - Require status checks from `CI` to pass.
-  - Disable force pushes.
-  - Do not allow deletion.
+Each report file includes:
+- `MonthKey`
+- `Total`
+- itemized list `(date, description, amount)`
+- Venmo memo: `Apple expenses YYYY-MM`
+- `Amount to pay Matt: $X.XX`
 
-### Required workflow
+## Error handling and logs
 
-- Never push to `main` directly.
-- Open a feature branch for every change:
-  - `git checkout -b feat/new-change`
-- Push the branch and open a PR to `main`.
-- Merge only after CI is green and reviews are complete.
-- Deployments are generated only from `main` merges.
+- Structured JSON logs: `output/logs/automation.log`
+- On parse failures, raw message is written to `output/debug` and processing continues.
 
-### Repository settings checklist
+## Windows Task Scheduler (monthly)
 
-In GitHub -> Settings -> Branches -> Branch protection rules, configure:
+Create a task:
+1. Trigger: Monthly, day 1, `08:00`.
+2. Action: Start a program.
+3. Program/script: `C:\Users\timot\Documents\Proposal-Microsite\.venv\Scripts\python.exe`
+4. Arguments: `-m src.main run --month prior`
+5. Start in: `C:\Users\timot\Documents\Proposal-Microsite`
 
-- Branch name pattern: `main`
-- Require a pull request before merging.
-- Require status checks to pass before merging (`CI`).
-- Disable force pushes.
-- Prevent branch deletion.
-
-Because CI runs in GitHub Actions and deployment artifacts are produced only from `push` events on `main`, local-only edits stay local until merged and pushed.
-
-
+This avoids Codex app automations dependency on the Codex app process.
+Reference:
+- https://developers.openai.com/codex/app/automations/

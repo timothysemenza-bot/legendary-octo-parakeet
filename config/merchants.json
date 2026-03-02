@@ -1,0 +1,18 @@
+{
+  "vendors": [
+    {
+      "name": "Apple",
+      "sender_contains": [
+        "no_reply@email.apple.com"
+      ],
+      "subject_contains": [
+        "purchase",
+        "your subscription is confirmed",
+        "subscription is confirmed",
+        "receipt",
+        "invoice",
+        "apple.com/bill"
+      ]
+    }
+  ]
+}

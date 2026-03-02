@@ -1,0 +1,9 @@
+{
+  "message_id": "msg-sub-001",
+  "subject": "Your receipt from Apple",
+  "sender": "no_reply@email.apple.com",
+  "date": "2026-02-10T14:20:00-05:00",
+  "text_body": "Apple.com/bill\nOrder ID: MXA12345ABC\niCloud+ 200GB $2.99\nTotal $2.99\n",
+  "html_body": "",
+  "raw_content": "subscription receipt"
+}
