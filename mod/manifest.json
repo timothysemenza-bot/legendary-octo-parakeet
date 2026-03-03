@@ -1,0 +1,7 @@
+{
+  "id": "bosskeymod",
+  "name": "BossKeyMod",
+  "version": "0.1.0",
+  "entrypoint": "main.lua",
+  "description": "Example private mod with CI/CD scaffolding."
+}

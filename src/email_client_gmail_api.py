@@ -92,9 +92,18 @@ def build_gmail_query(start: datetime, end_exclusive: datetime, merchants: dict[
 
 
 class GmailApiEmailClient:
-    def __init__(self, client_secret: str, token_path: str) -> None:
+    def __init__(self, client_secret: str, token_path: str, allowed_account_email: str | None = None) -> None:
         creds = _load_credentials(client_secret, token_path)
         self.service = build("gmail", "v1", credentials=creds, cache_discovery=False)
+        self.account_email = self.get_authenticated_email()
+        if allowed_account_email and self.account_email != allowed_account_email.strip().lower():
+            raise ValueError(
+                f"Authenticated Gmail account '{self.account_email}' does not match allowed account '{allowed_account_email}'."
+            )
+
+    def get_authenticated_email(self) -> str:
+        profile = self.service.users().getProfile(userId="me").execute()
+        return str(profile.get("emailAddress", "")).strip().lower()
 
     def fetch_messages(
         self,

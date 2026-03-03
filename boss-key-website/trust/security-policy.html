@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key | Information Security Policy</title>
+  <meta name="description" content="Boss Key Information Security Policy for client security and IT review.">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --paper: #0a0a0b;
+      --accent: #c5162e;
+      --accent-soft: #f2a8b3;
+      --card: #15171b;
+      --line: #2c2f37;
+      --muted: #c4c9d3;
+      --max: 980px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 12% 8%, #20232a 0%, var(--paper) 44%), linear-gradient(145deg, #101115 0%, #080809 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      width: min(var(--max), 92vw);
+      margin: 0 auto;
+    }
+
+    .policy-header {
+      padding: 28px 0 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand img {
+      width: 180px;
+      max-width: 44vw;
+      height: auto;
+      display: block;
+    }
+
+    .hero {
+      margin: 10px 0 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(160deg, #1a1d24 0%, #111318 100%);
+      padding: 26px;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
+    }
+
+    .eyebrow {
+      color: var(--accent-soft);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin: 0 0 8px;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0;
+      font-size: clamp(1.9rem, 3.7vw, 2.7rem);
+      line-height: 1.15;
+    }
+
+    .subhead {
+      margin: 12px 0 0;
+      color: var(--muted);
+      max-width: 65ch;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .meta-item {
+      border: 1px solid #3a3f4a;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #13161c;
+    }
+
+    .meta-item strong {
+      display: block;
+      color: #ffffff;
+      font-size: 0.92rem;
+    }
+
+    .meta-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    main {
+      padding-bottom: 40px;
+    }
+
+    section {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      padding: 18px 18px 16px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.28rem;
+      line-height: 1.25;
+      color: #ffffff;
+    }
+
+    p {
+      margin: 8px 0;
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .appendix-title {
+      color: var(--accent-soft);
+    }
+
+    .foot {
+      margin: 16px 0 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      color: #aeb5c2;
+      font-size: 0.9rem;
+    }
+
+    .chip {
+      display: inline-block;
+      margin-top: 8px;
+      border: 1px solid #5e222c;
+      color: #ffdbe0;
+      background: #2a1317;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        color: #111111;
+      }
+
+      .hero,
+      section {
+        background: #ffffff;
+        box-shadow: none;
+        border-color: #d7d7d7;
+      }
+
+      .eyebrow,
+      .appendix-title,
+      .chip {
+        color: #7a0f1f;
+      }
+
+      h1,
+      h2,
+      p,
+      li,
+      .meta-item strong,
+      .meta-item span,
+      .foot {
+        color: #111111;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="policy-header wrap">
+    <a class="brand" href="../index.html" aria-label="Boss Key home">
+      <img src="../assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key">
+    </a>
+    <div class="hero">
+      <p class="eyebrow">Governance Document</p>
+      <h1>Boss Key Information Security Policy</h1>
+      <p class="subhead">This policy defines the minimum security controls Boss Key applies when building, deploying, and supporting software and automation for client environments, including Microsoft 365-connected solutions.</p>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Document ID</strong>
+          <span>BK-ISP-001</span>
+        </div>
+        <div class="meta-item">
+          <strong>Version</strong>
+          <span>1.0</span>
+        </div>
+        <div class="meta-item">
+          <strong>Effective Date</strong>
+          <span>March 2, 2026</span>
+        </div>
+        <div class="meta-item">
+          <strong>Owner</strong>
+          <span>Boss Key</span>
+        </div>
+      </div>
+      <span class="chip">Client Security Review Copy</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>1. Purpose</h2>
+      <p>This policy defines the minimum security requirements Boss Key follows when designing, developing, deploying, and supporting software and agents for private-sector clients, including Microsoft 365-connected solutions.</p>
+    </section>
+
+    <section>
+      <h2>2. Scope</h2>
+      <ul>
+        <li>All Boss Key personnel, contractors, and subcontractors.</li>
+        <li>All systems used to process client data.</li>
+        <li>All client engagements involving development, deployment, support, or managed services.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Security Principles</h2>
+      <ul>
+        <li>Apply least privilege and need-to-know access.</li>
+        <li>Keep client production control in the client tenant/environment.</li>
+        <li>Use secure-by-default architecture and change control.</li>
+        <li>Maintain auditability of access, changes, and incidents.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Governance and Responsibility</h2>
+      <ul>
+        <li>A named Boss Key Security Owner is responsible for this policy and annual review.</li>
+        <li>Each engagement has a designated technical owner and incident contact.</li>
+        <li>Clients retain responsibility for tenant-level approvals and admin consent in their Microsoft 365 tenant unless contractually delegated.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Identity and Access Management</h2>
+      <ul>
+        <li>MFA is required for all privileged and client-facing accounts.</li>
+        <li>Privileged access is limited, role-based, and time-bounded where feasible.</li>
+        <li>Shared admin accounts are prohibited unless explicitly approved and logged.</li>
+        <li>Access is revoked within 24 hours of role change or termination.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Client Tenant Access (M365/Entra)</h2>
+      <ul>
+        <li>Boss Key requests only documented, minimum required API permissions.</li>
+        <li>High-risk permissions require explicit written client approval.</li>
+        <li>Client admin consent is required in the client tenant for production access.</li>
+        <li>All consented permissions are recorded in an engagement permission register.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Data Protection</h2>
+      <ul>
+        <li>Client data is classified at minimum as Public, Internal, Confidential, or Restricted.</li>
+        <li>Confidential and Restricted data must be encrypted in transit and at rest.</li>
+        <li>Production data is not copied to non-production environments without written approval and controls.</li>
+        <li>Data retention and deletion follow contractual terms and applicable law.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Secrets and Key Management</h2>
+      <ul>
+        <li>Secrets must never be hardcoded in source code or stored in plain text.</li>
+        <li>Secrets are stored in approved secret managers or equivalent secure vaulting.</li>
+        <li>Rotation intervals are defined per engagement; emergency rotation must be supported.</li>
+        <li>Access to secrets is logged and restricted to authorized roles.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>9. Secure Development and Change Management</h2>
+      <ul>
+        <li>Source code uses version control with documented change history.</li>
+        <li>Peer review is required for production-impacting changes.</li>
+        <li>Dependencies are kept current and security patches prioritized by risk.</li>
+        <li>Deployment must be reproducible and include rollback procedures.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>10. Logging and Monitoring</h2>
+      <ul>
+        <li>Security-relevant events are logged, including auth events, privilege changes, deployments, and data access events where feasible.</li>
+        <li>Logs are protected from tampering and retained per contract and regulatory requirements.</li>
+        <li>Alerts are configured for suspicious access, failed auth spikes, and critical system failures.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>11. Incident Response</h2>
+      <ul>
+        <li>Security incidents are triaged immediately and documented.</li>
+        <li>Clients are notified per contractual breach and incident notification terms.</li>
+        <li>Boss Key performs containment, eradication, and recovery actions with traceable records.</li>
+        <li>Post-incident review and corrective actions are required.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>12. Business Continuity</h2>
+      <ul>
+        <li>Critical systems and configuration are backed up according to engagement RTO and RPO targets.</li>
+        <li>Recovery steps are documented and tested periodically.</li>
+        <li>Minimum continuity contacts are maintained for each active client engagement.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>13. Third-Party and Subprocessor Management</h2>
+      <ul>
+        <li>Third-party tools and services are risk-reviewed before use with client data.</li>
+        <li>Subprocessors are disclosed where required by contract or law.</li>
+        <li>Contracts include confidentiality and security obligations appropriate to data risk.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>14. Personnel Security and Awareness</h2>
+      <ul>
+        <li>Personnel with client access sign confidentiality obligations (NDA or equivalent).</li>
+        <li>Security awareness training is completed at onboarding and annually.</li>
+        <li>Policy violations may result in access removal and disciplinary action.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>15. Compliance, Exceptions, and Review</h2>
+      <ul>
+        <li>Exceptions require documented risk acceptance and approval by the Boss Key Security Owner and client where applicable.</li>
+        <li>This policy is reviewed at least annually or after major incidents or regulatory changes.</li>
+        <li>Evidence of compliance is maintained for audit and readiness purposes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="appendix-title">Appendix A: Minimum Engagement Control Checklist</h2>
+      <ul>
+        <li>Architecture and data flow diagram.</li>
+        <li>Permission matrix showing requested versus approved scopes.</li>
+        <li>Asset inventory for systems and services handling client data.</li>
+        <li>Incident contact and notification workflow.</li>
+        <li>Backup, recovery, and rollback procedures.</li>
+        <li>Access and offboarding register.</li>
+        <li>Legal package: NDA, MSA/SOW, and DPA where applicable.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="appendix-title">Appendix B: Client Shared Responsibility Statement</h2>
+      <p>Unless otherwise contracted:</p>
+      <ul>
+        <li><strong>Boss Key:</strong> Secure development, secure deployment process, support operations, and incident handling.</li>
+        <li><strong>Client:</strong> Tenant admin governance, consent approval, internal user and device controls, and business risk policy decisions.</li>
+      </ul>
+    </section>
+
+    <p class="foot">Boss Key LLC | Information Security Policy | Version 1.0</p>
+  </main>
+</body>
+</html>

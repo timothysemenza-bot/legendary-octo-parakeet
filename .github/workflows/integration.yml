@@ -1,0 +1,62 @@
+name: Integration (Self-Hosted)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: [self-hosted, isaac-win]
+    env:
+      ISAAC_MODS_DIR: C:\\Users\\runner\\Documents\\My Games\\Binding of Isaac Repentance+\\mods
+      ISAAC_EXE: ""
+      LOG_PATH: dist\\integration.log
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python requirements
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tools/requirements.txt
+
+      - name: Install mod into game mods dir
+        shell: pwsh
+        run: |
+          python tools/install_mod.py --mods-dir "$env:ISAAC_MODS_DIR"
+
+      - name: Run seed scenarios (or simulate)
+        shell: pwsh
+        run: |
+          python tools/run_seeds.py --seeds tools/seeds.txt --exe "$env:ISAAC_EXE" --log "$env:LOG_PATH" --timeout 60
+
+      - name: Parse BKTEST log
+        shell: pwsh
+        run: |
+          python tools/parse_log.py --log "$env:LOG_PATH" --out dist/test-report.json
+
+      - name: Compare against baseline
+        shell: pwsh
+        run: |
+          python tools/compare_baseline.py --baseline .artifacts/baselines/baseline.json --report dist/test-report.json
+
+      - name: Package mod
+        shell: pwsh
+        run: |
+          python tools/pack_mod.py --version dev
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-artifacts
+          path: |
+            dist/mod-dev.zip
+            dist/test-report.json
+            dist/integration.log

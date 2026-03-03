@@ -1,0 +1,29 @@
+{
+  "tolerances": {
+    "duration_ms": 0,
+    "score": 0
+  },
+  "expected": {
+    "summary": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    "seeds": {
+      "SEED0001": {
+        "status": "pass",
+        "metrics": {
+          "duration_ms": 100,
+          "score": 100
+        }
+      },
+      "SEED0002": {
+        "status": "pass",
+        "metrics": {
+          "duration_ms": 110,
+          "score": 120
+        }
+      }
+    }
+  }
+}

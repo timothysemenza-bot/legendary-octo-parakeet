@@ -1,0 +1,19 @@
+; Engine configuration file.
+; Best edited using Godot.
+
+config_version=5
+
+[application]
+config/name="Project Nebula"
+run/main_scene="res://scenes/core/game.tscn"
+config/features=PackedStringArray("4.6")
+config/icon="res://icon.svg"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+
+[rendering]
+textures/canvas_textures/default_texture_filter=0

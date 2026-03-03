@@ -11,7 +11,6 @@ from .date_utils import get_month_window, get_prior_month_window, iter_month_key
 from .dedupe import DedupeResult, filter_new_items
 from .email_client_fixtures import FixturesEmailClient
 from .email_client_gmail_api import GmailApiEmailClient
-from .email_client_imap import ImapEmailClient
 from .logging_utils import setup_logging
 from .models import EmailMessage, ExistingLedgerKeys, NormalizedLineItem, ProcessResult
 from .monthly_report import now_iso, write_report
@@ -72,14 +71,19 @@ def _build_email_client(cfg: AppConfig, dry_run: bool):
     if fixtures_dir and Path(fixtures_dir).exists():
         return FixturesEmailClient(fixtures_dir), "fixtures"
 
-    if cfg.gmail_mode == "imap":
-        if not (cfg.imap_host and cfg.imap_user and cfg.imap_app_password):
-            raise ValueError("IMAP mode requires IMAP_HOST, IMAP_USER, IMAP_APP_PASSWORD")
-        return ImapEmailClient(cfg.imap_host, cfg.imap_user, cfg.imap_app_password), "imap"
+    if cfg.gmail_mode != "api":
+        raise ValueError("Only GMAIL_MODE=api is supported. IMAP/app-password auth has been disabled.")
 
     if not cfg.oauth_client_secret_json:
         raise ValueError("API mode requires GOOGLE_OAUTH_CLIENT_SECRET_JSON")
-    return GmailApiEmailClient(cfg.oauth_client_secret_json, cfg.gmail_oauth_token_json), "gmail_api"
+    return (
+        GmailApiEmailClient(
+            cfg.oauth_client_secret_json,
+            cfg.gmail_oauth_token_json,
+            allowed_account_email=cfg.allowed_gmail_account,
+        ),
+        "gmail_api",
+    )
 
 
 def _build_sheets_client(cfg: AppConfig) -> GoogleSheetsClient:

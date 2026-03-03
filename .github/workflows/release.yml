@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Lua 5.4 and luarocks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4 luarocks
+          sudo luarocks install luacheck
+
+      - name: Install Python requirements
+        run: python -m pip install --upgrade pip && pip install -r tools/requirements.txt
+
+      - name: Lint + validate + tests
+        run: |
+          luacheck mod/
+          python tools/validate_mod.py
+          python -m unittest discover tests
+
+      - name: Package for tag
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          python tools/pack_mod.py --version "$VERSION"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/mod-${{ github.ref_name }}.zip

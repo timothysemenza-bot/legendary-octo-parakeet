@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key | Trust Center</title>
+  <meta name="description" content="Boss Key trust center with security and governance documents.">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --paper: #0a0a0b;
+      --accent: #c5162e;
+      --line: #2c2f37;
+      --card: #15171b;
+      --muted: #c4c9d3;
+      --max: 920px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 12% 8%, #20232a 0%, var(--paper) 44%), linear-gradient(145deg, #101115 0%, #080809 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      width: min(var(--max), 92vw);
+      margin: 0 auto;
+    }
+
+    header { padding: 26px 0 10px; }
+
+    .brand img {
+      width: 180px;
+      max-width: 46vw;
+      height: auto;
+      display: block;
+    }
+
+    .hero {
+      margin: 14px 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(160deg, #1a1d24 0%, #111318 100%);
+      padding: 24px;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: #f2a8b3;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 68ch;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: #ffffff;
+    }
+
+    .meta {
+      margin: 7px 0 14px;
+      color: #aeb5c2;
+      font-size: 0.92rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #5f2530;
+      background: #2a1318;
+      color: #ffdce1;
+    }
+
+    .btn.secondary {
+      border-color: #3b4350;
+      background: #181c24;
+      color: #dbe8ff;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      margin-top: 18px;
+      padding: 16px 0 26px;
+      color: #adb4c1;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="../index.html" aria-label="Boss Key home">
+      <img src="../assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key">
+    </a>
+    <div class="hero">
+      <p class="eyebrow">Trust Center</p>
+      <h1>Security and Governance</h1>
+      <p>Public trust documents for prospective and active clients evaluating Boss Key controls, operating model, and shared-responsibility boundaries.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Information Security Policy</h2>
+      <p class="meta">Document ID: BK-ISP-001 | Version 1.0 | Effective March 2, 2026</p>
+      <div class="actions">
+        <a class="btn" href="./security-policy.html">Open Policy</a>
+        <a class="btn secondary" href="../index.html">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Boss Key LLC | Trust Center</div>
+  </footer>
+</body>
+</html>

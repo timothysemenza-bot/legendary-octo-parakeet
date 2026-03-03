@@ -2,7 +2,7 @@ param(
     [string]$ProjectName = "boss-key-website",
     [string]$SourceDir = "boss-key-website",
     [string]$Branch = "main",
-    [string]$WranglerVersion = "4.29.1"
+    [string]$WranglerVersion = "4.69.0"
 )
 
 $ErrorActionPreference = "Stop"

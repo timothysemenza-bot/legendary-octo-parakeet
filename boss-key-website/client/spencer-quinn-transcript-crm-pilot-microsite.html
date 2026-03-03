@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key | Transcript-to-CRM Pilot Scope</title>
+  <meta name="description" content="Boss Key pilot scope for transcript-to-CRM compliance automation.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --soft: #c3c8d3;
+      --paper: #0a0a0b;
+      --panel: #15171b;
+      --line: #2d2f35;
+      --accent: #c5162e;
+      --accent-soft: #ffd7dc;
+      --ok: #87d5a8;
+      --warn: #ffd58f;
+      --max: 1080px;
+      --radius: 16px;
+      --shadow: 0 14px 28px rgba(0, 0, 0, 0.36);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: min(var(--max), 94vw);
+      margin: 0 auto;
+      padding: 20px 0 28px;
+    }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #111317;
+      color: var(--soft);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .chip.accent {
+      border-color: #5f232b;
+      background: #241518;
+      color: var(--accent-soft);
+    }
+
+    .page {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0 0 8px;
+      color: #fff;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+    }
+
+    h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.35rem;
+      line-height: 1.22;
+      margin-top: 2px;
+    }
+
+    h3 {
+      font-size: 0.94rem;
+      color: var(--accent-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 10px;
+      color: var(--soft);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.73rem;
+      color: #f2a8b3;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .lead {
+      color: #f6dbe0;
+      font-size: 1.02rem;
+      max-width: 66ch;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #111318;
+      padding: 12px;
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #101217;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--soft);
+    }
+
+    .list li { margin-bottom: 7px; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .metric {
+      border: 1px solid #34553f;
+      background: #0f1b14;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--ok);
+      font-size: 0.94rem;
+      margin-bottom: 4px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .timeline .card {
+      background: #11151e;
+      border-color: #2a3346;
+    }
+
+    .timeline .card h4 {
+      color: #d7e9ff;
+      margin-bottom: 6px;
+    }
+
+    .warning {
+      border: 1px solid #6e5424;
+      background: #20190f;
+      color: var(--warn);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-weight: 700;
+      font-size: 0.92rem;
+      transition: transform 120ms ease, border-color 120ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #4a4e58;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: #9f1325;
+    }
+
+    .btn-secondary {
+      background: #1a1d24;
+      color: #dce4f2;
+      border-color: #33425a;
+    }
+
+    .footer-note {
+      color: #9ea8ba;
+      font-size: 0.84rem;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .grid-2,
+      .timeline,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="../assets/logos/brand/boss-key-logo-refined.svg" alt="Boss Key logo">
+        <span>Boss Key</span>
+      </div>
+      <div class="actions">
+        <span class="chip accent">Client Draft</span>
+        <span class="chip">Transcript-to-CRM Pilot</span>
+        <span class="chip">March 2026</span>
+      </div>
+    </div>
+
+    <section class="page">
+      <span class="eyebrow">Pilot Scope</span>
+      <h1>Transcript-to-CRM Compliance Automation</h1>
+      <p class="lead">
+        A focused 2-week pilot to convert discovery call transcripts into structured CRM updates and next-action tasks, so sales activity gets captured without relying on rep admin discipline.
+      </p>
+
+      <div class="hero-grid">
+        <div class="card">
+          <h3>Core Outcome</h3>
+          <p>Increase CRM completion and manager visibility while reducing admin drag on your sales team.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="mailto:timmy@bosskeyoperations.com?subject=Approve%20Transcript-to-CRM%20Pilot">Approve Pilot</a>
+            <a class="btn btn-secondary" href="https://calendar.app.google/XXQaukj4evMTLq4E7">Book Kickoff</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Pilot Snapshot</h3>
+          <p class="value">2 Weeks</p>
+          <p>Client: Broadspire Sales Team</p>
+          <p>Format: transcript ingest, field mapping, CRM-ready updates, manager digest, QA log</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page grid-2">
+      <div class="section">
+        <h2>Problem This Solves</h2>
+        <ol class="list">
+          <li>Reps complete calls but do not consistently update CRM records.</li>
+          <li>Sales leadership lacks reliable activity visibility for coaching and forecasting.</li>
+          <li>Manual follow-up logging creates avoidable overhead and delay.</li>
+        </ol>
+      </div>
+      <div class="section">
+        <h2>In Scope</h2>
+        <ol class="list">
+          <li>Ingest transcript text from discovery calls.</li>
+          <li>Map pain points, buying signals, objections, and agreed next step.</li>
+          <li>Generate CRM-ready updates plus follow-up tasks.</li>
+          <li>Generate manager summary email or daily digest.</li>
+          <li>Maintain auditable QA log for refinement.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="page grid-2">
+      <div class="section">
+        <h2>Out Of Scope (Pilot)</h2>
+        <ol class="list">
+          <li>Full CRM migration.</li>
+          <li>End-to-end outbound sequencing build.</li>
+          <li>Legal/compliance policy redesign.</li>
+          <li>Cross-department workflow redesign beyond sales capture.</li>
+        </ol>
+      </div>
+      <div class="section">
+        <h2>Required Inputs</h2>
+        <ol class="list">
+          <li>10 to 20+ sample call transcripts.</li>
+          <li>CRM schema and required field list.</li>
+          <li>One sales-manager reviewer for quality checks.</li>
+          <li>Handoff preference: API push or email/drop-file import.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>Deliverables</h2>
+        <ol class="list">
+          <li>Pilot workflow map (input → parse → update → review).</li>
+          <li>Transcript-to-CRM mapping template.</li>
+          <li>Manager summary format (single-call and daily digest).</li>
+          <li>QA log with detected gaps and tuning notes.</li>
+          <li>End-of-pilot recommendation: scale, revise, or stop.</li>
+        </ol>
+      </div>
+
+      <div class="section">
+        <h2>Success Metrics</h2>
+        <div class="metric-grid">
+          <div class="metric">
+            <strong>CRM completion rate</strong>
+            Target: +40% or better vs baseline.
+          </div>
+          <div class="metric">
+            <strong>Call-to-update speed</strong>
+            Target: under 15 minutes after call end.
+          </div>
+          <div class="metric">
+            <strong>Rep admin burden</strong>
+            Target: 30%+ reduction in manual update time.
+          </div>
+          <div class="metric">
+            <strong>Manager confidence</strong>
+            Target: quality score 1-5 tracked across pilot calls.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>Implementation Plan</h2>
+        <div class="timeline">
+          <article class="card">
+            <h4>Week 1</h4>
+            <ol class="list">
+              <li>Confirm required schema and update fields.</li>
+              <li>Build initial extraction and mapping logic.</li>
+              <li>Run historical transcript QA and adjust rules.</li>
+            </ol>
+          </article>
+          <article class="card">
+            <h4>Week 2</h4>
+            <ol class="list">
+              <li>Process live calls daily.</li>
+              <li>Tune extraction from manager feedback.</li>
+              <li>Finalize readout and rollout recommendation.</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Commercial Frame</h2>
+        <ol class="list">
+          <li>Pilot option: fixed fee at <strong>$5,500</strong>.</li>
+          <li>Retainer path: apply pilot fee credit toward <strong>$6,000/month</strong> for 3-month minimum support.</li>
+        </ol>
+        <div class="warning">
+          Decision checkpoint at end of week 2: scale to full team, continue manager-only workflow, or pause with lessons learned.
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Prepared by Boss Key for Broadspire Sales Team • Draft scope microsite • Contact: timmy@bosskeyoperations.com
+    </p>
+  </main>
+</body>
+</html>

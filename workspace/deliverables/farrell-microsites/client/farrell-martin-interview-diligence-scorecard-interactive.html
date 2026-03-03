@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key | Interactive Interview Diligence Scorecard</title>
+  <meta name="description" content="Interactive interview diligence scorecard for Farrell Martin opportunities.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --soft: #c3c8d3;
+      --paper: #0a0a0b;
+      --line: #2d2f35;
+      --accent: #c5162e;
+      --accent-soft: #ffd7dc;
+      --ok: #87d5a8;
+      --warn: #ffd58f;
+      --risk: #ff9aa8;
+      --max: 1160px;
+      --radius: 16px;
+      --shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: min(var(--max), 95vw);
+      margin: 0 auto;
+      padding: 20px 0 26px;
+    }
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      background: #111317;
+      color: var(--soft);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .chip.accent {
+      border-color: #5f232b;
+      background: #241518;
+      color: var(--accent-soft);
+    }
+
+    .page {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      color: #fff;
+    }
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.6rem, 3.1vw, 2.35rem);
+      line-height: 1.12;
+    }
+    h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.25rem;
+    }
+    h3 {
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+    }
+    p { margin: 0 0 10px; color: var(--soft); }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #101217;
+      padding: 10px;
+    }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: #d6deec;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      border: 1px solid #2f3440;
+      border-radius: 8px;
+      background: #0d1016;
+      color: var(--ink);
+      font-size: 0.93rem;
+      padding: 8px 10px;
+      font-family: inherit;
+    }
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #101217;
+      padding: 8px;
+      margin-bottom: 8px;
+    }
+    .score-row:last-child { margin-bottom: 0; }
+    .score-row p {
+      margin: 0;
+      color: #dce3ef;
+      font-size: 0.92rem;
+    }
+
+    select {
+      border: 1px solid #2f3440;
+      border-radius: 8px;
+      background: #0d1016;
+      color: var(--ink);
+      min-width: 82px;
+      padding: 6px 8px;
+      font-weight: 700;
+    }
+
+    .score-summary {
+      border: 1px solid #2b3b56;
+      background: #121927;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+      color: #d8e6ff;
+      font-size: 0.92rem;
+    }
+    .metric:last-child { margin-bottom: 0; }
+    .metric strong { color: #fff; }
+
+    .total {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .decision {
+      border: 1px solid #33425a;
+      border-radius: 10px;
+      background: #171d2b;
+      padding: 10px;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+    .decision.good { border-color: #2f5f42; background: #0f1a13; color: var(--ok); }
+    .decision.mid { border-color: #6e5424; background: #20190f; color: var(--warn); }
+    .decision.bad { border-color: #6a2d39; background: #211117; color: var(--risk); }
+
+    .checklist {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+    .checklist li {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #101217;
+      padding: 8px 10px;
+      color: #dce3ef;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .checklist input { margin-top: 3px; }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1a1d24;
+      color: #dce4f2;
+      padding: 9px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.primary {
+      border-color: #9f1325;
+      background: var(--accent);
+      color: #fff;
+    }
+    button:hover { filter: brightness(1.08); }
+
+    .tiny {
+      color: #9ea8ba;
+      font-size: 0.82rem;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-3, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="../assets/logos/brand/boss-key-logo-refined.svg" alt="Boss Key logo">
+        <span>Boss Key</span>
+      </div>
+      <div class="chip-row">
+        <span class="chip accent">Interactive Scorecard</span>
+        <span class="chip">Farrell Martin</span>
+      </div>
+    </div>
+
+    <section class="page">
+      <h1>Interview Diligence Scorecard</h1>
+      <p>Rate each item from <strong>1</strong> (weak/high risk) to <strong>5</strong> (strong/low risk). Section scores are auto-calculated to `/20` and total to `/100`.</p>
+      <div class="grid-3">
+        <div class="field">
+          <label for="candidateName">Candidate</label>
+          <input id="candidateName" type="text" value="Farrell Martin">
+        </div>
+        <div class="field">
+          <label for="targetCompany">Target Company</label>
+          <input id="targetCompany" type="text" placeholder="Stratus or Cushman">
+        </div>
+        <div class="field">
+          <label for="interviewDate">Interview Date</label>
+          <input id="interviewDate" type="date">
+        </div>
+      </div>
+    </section>
+
+    <section class="page grid-2">
+      <div class="field">
+        <h3>1. Role Clarity and Authority</h3>
+        <div id="s1"></div>
+      </div>
+      <div class="field">
+        <h3>2. Culture and Leadership Reality</h3>
+        <div id="s2"></div>
+      </div>
+      <div class="field">
+        <h3>3. Ownership and Financial Context</h3>
+        <div id="s3"></div>
+      </div>
+      <div class="field">
+        <h3>4. Client Model Fit</h3>
+        <div id="s4"></div>
+      </div>
+      <div class="field">
+        <h3>5. Career Risk Controls</h3>
+        <div id="s5"></div>
+      </div>
+      <div class="field">
+        <h3>Evidence Notes</h3>
+        <label for="evidence">Key evidence from interview answers</label>
+        <textarea id="evidence" placeholder="Capture exact wording that supports or contradicts the score..."></textarea>
+      </div>
+    </section>
+
+    <section class="page grid-2">
+      <div class="score-summary">
+        <h2>Weighted Recommendation</h2>
+        <div class="metric"><span>Role Clarity and Authority</span><strong id="m1">0 / 20</strong></div>
+        <div class="metric"><span>Culture and Leadership Reality</span><strong id="m2">0 / 20</strong></div>
+        <div class="metric"><span>Ownership and Financial Context</span><strong id="m3">0 / 20</strong></div>
+        <div class="metric"><span>Client Model Fit</span><strong id="m4">0 / 20</strong></div>
+        <div class="metric"><span>Career Risk Controls</span><strong id="m5">0 / 20</strong></div>
+        <hr style="border:0;border-top:1px solid #2b3550;margin:10px 0;">
+        <div class="metric"><span>Total Score</span><span id="total" class="total">0 / 100</span></div>
+        <div id="decision" class="decision bad">High risk, pause or decline</div>
+        <div class="tiny">Guide: 80-100 strong fit, 65-79 proceed with risk controls, below 65 pause/decline.</div>
+      </div>
+
+      <div>
+        <div class="field" style="margin-bottom:10px;">
+          <h3>Red Flags (Immediate Escalation)</h3>
+          <ul class="checklist" id="redFlags"></ul>
+        </div>
+        <div class="field">
+          <h3>Must-Ask Questions Checklist</h3>
+          <ul class="checklist" id="mustAsk"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <h2>Debrief</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label for="positives">Top 3 Positives</label>
+          <textarea id="positives" placeholder="1) ...&#10;2) ...&#10;3) ..."></textarea>
+        </div>
+        <div class="field">
+          <label for="risks">Top 3 Risks</label>
+          <textarea id="risks" placeholder="1) ...&#10;2) ...&#10;3) ..."></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="primary" id="copySummary">Copy Summary</button>
+        <button id="saveState">Save Local</button>
+        <button id="clearState">Reset Scorecard</button>
+      </div>
+      <p class="tiny">Copy Summary creates a clean text block for email, notes, or CRM.</p>
+    </section>
+  </main>
+
+  <script>
+    const sections = [
+      {
+        id: "s1",
+        metricId: "m1",
+        title: "Role Clarity and Authority",
+        questions: [
+          "Role outcome clearly defined for first 90 days?",
+          "Metrics tied to business impact, not activity only?",
+          "Decision authority explicit (process/headcount/budget/tooling)?",
+          "Cross-functional dependencies realistic and leadership-backed?"
+        ]
+      },
+      {
+        id: "s2",
+        metricId: "m2",
+        title: "Culture and Leadership Reality",
+        questions: [
+          "Direct leadership style matches your operating style?",
+          "Interview behavior consistent with likely day-to-day reality?",
+          "Leaders discuss failures and lessons openly?",
+          "Evidence of trust/accountability over politics/churn?"
+        ]
+      },
+      {
+        id: "s3",
+        metricId: "m3",
+        title: "Ownership and Financial Context",
+        questions: [
+          "Ownership/funding profile is clear and stable?",
+          "Likely ownership timeline/exit pressure is understood?",
+          "Cost-cutting pressure risk in next 12-18 months acceptable?",
+          "Role appears true build role, not optics-only seat?"
+        ]
+      },
+      {
+        id: "s4",
+        metricId: "m4",
+        title: "Client Model Fit",
+        questions: [
+          "Client portfolio matches your enterprise account strengths?",
+          "Company appears serious about client excellence/client success?",
+          "Growth model aligns with strategic relationship depth?",
+          "Real support exists for data/insight-driven account strategy?"
+        ]
+      },
+      {
+        id: "s5",
+        metricId: "m5",
+        title: "Career Risk Controls",
+        questions: [
+          "Legal constraints are reviewed and manageable?",
+          "Leadership overlap/friction risk is manageable?",
+          "Role success does not rely on one political sponsor?",
+          "Credible path exists if priorities shift in 6 months?"
+        ]
+      }
+    ];
+
+    const redFlags = [
+      "Role was not posted and scope is vague.",
+      "Interviewers cannot define decision rights.",
+      "Metrics are activity-heavy and outcome-light.",
+      "Leadership avoids ownership/funding questions.",
+      "Major transformation language with no execution resources."
+    ];
+
+    const mustAsk = [
+      "What are the top 3 outcomes this role must deliver in 90 days?",
+      "What decisions can I make without additional approval?",
+      "What has caused prior leaders in this lane to fail?",
+      "How is client excellence measured today and where underperforming?",
+      "What ownership/board milestones are driving this role now?",
+      "If successful, what changes in 12 months are visible at executive level?"
+    ];
+
+    function createSelect(id) {
+      const select = document.createElement("select");
+      select.id = id;
+      for (let i = 1; i <= 5; i++) {
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = String(i);
+        if (i === 3) opt.selected = true;
+        select.appendChild(opt);
+      }
+      select.addEventListener("change", recalc);
+      return select;
+    }
+
+    function renderSections() {
+      sections.forEach((section, sIdx) => {
+        const container = document.getElementById(section.id);
+        section.questions.forEach((q, qIdx) => {
+          const row = document.createElement("div");
+          row.className = "score-row";
+          const qEl = document.createElement("p");
+          qEl.textContent = q;
+          row.appendChild(qEl);
+          row.appendChild(createSelect(`score-${sIdx}-${qIdx}`));
+          container.appendChild(row);
+        });
+      });
+    }
+
+    function renderChecklist(list, targetId, prefix) {
+      const target = document.getElementById(targetId);
+      list.forEach((text, idx) => {
+        const li = document.createElement("li");
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.id = `${prefix}-${idx}`;
+        cb.addEventListener("change", saveLocal);
+        const label = document.createElement("label");
+        label.htmlFor = cb.id;
+        label.textContent = text;
+        li.appendChild(cb);
+        li.appendChild(label);
+        target.appendChild(li);
+      });
+    }
+
+    function scoreSection(sectionIndex) {
+      let total = 0;
+      for (let i = 0; i < 4; i++) {
+        total += Number(document.getElementById(`score-${sectionIndex}-${i}`).value);
+      }
+      return total;
+    }
+
+    function recalc() {
+      let grand = 0;
+      sections.forEach((section, idx) => {
+        const sectionRaw = scoreSection(idx); // out of 20
+        grand += sectionRaw;
+        document.getElementById(section.metricId).textContent = `${sectionRaw} / 20`;
+      });
+      document.getElementById("total").textContent = `${grand} / 100`;
+      const decision = document.getElementById("decision");
+      decision.className = "decision";
+      if (grand >= 80) {
+        decision.classList.add("good");
+        decision.textContent = "Strong fit, proceed";
+      } else if (grand >= 65) {
+        decision.classList.add("mid");
+        decision.textContent = "Proceed with explicit risk mitigations";
+      } else {
+        decision.classList.add("bad");
+        decision.textContent = "High risk, pause or decline";
+      }
+      saveLocal();
+    }
+
+    function collectChecked(prefix, count) {
+      const items = [];
+      for (let i = 0; i < count; i++) {
+        const cb = document.getElementById(`${prefix}-${i}`);
+        if (cb && cb.checked) items.push(i + 1);
+      }
+      return items;
+    }
+
+    function buildSummary() {
+      const total = document.getElementById("total").textContent;
+      const decision = document.getElementById("decision").textContent;
+      const lines = [
+        `Candidate: ${document.getElementById("candidateName").value || "-"}`,
+        `Company: ${document.getElementById("targetCompany").value || "-"}`,
+        `Interview Date: ${document.getElementById("interviewDate").value || "-"}`,
+        "",
+        "Section Scores:",
+        `- Role Clarity and Authority: ${document.getElementById("m1").textContent}`,
+        `- Culture and Leadership Reality: ${document.getElementById("m2").textContent}`,
+        `- Ownership and Financial Context: ${document.getElementById("m3").textContent}`,
+        `- Client Model Fit: ${document.getElementById("m4").textContent}`,
+        `- Career Risk Controls: ${document.getElementById("m5").textContent}`,
+        `Total: ${total}`,
+        `Decision: ${decision}`,
+        "",
+        `Red Flags Triggered (by number): ${collectChecked("rf", redFlags.length).join(", ") || "None"}`,
+        `Must-Ask Completed (by number): ${collectChecked("maq", mustAsk.length).join(", ") || "None"}`,
+        "",
+        "Evidence Notes:",
+        document.getElementById("evidence").value || "-",
+        "",
+        "Top 3 Positives:",
+        document.getElementById("positives").value || "-",
+        "",
+        "Top 3 Risks:",
+        document.getElementById("risks").value || "-"
+      ];
+      return lines.join("\n");
+    }
+
+    function saveLocal() {
+      const payload = {
+        candidateName: document.getElementById("candidateName").value,
+        targetCompany: document.getElementById("targetCompany").value,
+        interviewDate: document.getElementById("interviewDate").value,
+        evidence: document.getElementById("evidence").value,
+        positives: document.getElementById("positives").value,
+        risks: document.getElementById("risks").value,
+        scores: {},
+        redFlags: {},
+        mustAsk: {}
+      };
+      sections.forEach((_, sIdx) => {
+        for (let qIdx = 0; qIdx < 4; qIdx++) {
+          payload.scores[`score-${sIdx}-${qIdx}`] = document.getElementById(`score-${sIdx}-${qIdx}`).value;
+        }
+      });
+      for (let i = 0; i < redFlags.length; i++) {
+        payload.redFlags[`rf-${i}`] = document.getElementById(`rf-${i}`).checked;
+      }
+      for (let i = 0; i < mustAsk.length; i++) {
+        payload.mustAsk[`maq-${i}`] = document.getElementById(`maq-${i}`).checked;
+      }
+      localStorage.setItem("bk_farrell_scorecard_v1", JSON.stringify(payload));
+    }
+
+    function loadLocal() {
+      const raw = localStorage.getItem("bk_farrell_scorecard_v1");
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        document.getElementById("candidateName").value = data.candidateName || "Farrell Martin";
+        document.getElementById("targetCompany").value = data.targetCompany || "";
+        document.getElementById("interviewDate").value = data.interviewDate || "";
+        document.getElementById("evidence").value = data.evidence || "";
+        document.getElementById("positives").value = data.positives || "";
+        document.getElementById("risks").value = data.risks || "";
+        Object.keys(data.scores || {}).forEach((k) => {
+          const el = document.getElementById(k);
+          if (el) el.value = data.scores[k];
+        });
+        Object.keys(data.redFlags || {}).forEach((k) => {
+          const el = document.getElementById(k);
+          if (el) el.checked = Boolean(data.redFlags[k]);
+        });
+        Object.keys(data.mustAsk || {}).forEach((k) => {
+          const el = document.getElementById(k);
+          if (el) el.checked = Boolean(data.mustAsk[k]);
+        });
+      } catch (e) {
+        console.warn("Could not load saved scorecard state.", e);
+      }
+    }
+
+    function wireInputs() {
+      ["candidateName", "targetCompany", "interviewDate", "evidence", "positives", "risks"].forEach((id) => {
+        const el = document.getElementById(id);
+        el.addEventListener("input", saveLocal);
+        el.addEventListener("change", saveLocal);
+      });
+
+      document.getElementById("copySummary").addEventListener("click", async () => {
+        const summary = buildSummary();
+        try {
+          await navigator.clipboard.writeText(summary);
+          alert("Scorecard summary copied.");
+        } catch (_) {
+          alert("Clipboard blocked. Copy manually:\n\n" + summary);
+        }
+      });
+
+      document.getElementById("saveState").addEventListener("click", () => {
+        saveLocal();
+        alert("Scorecard saved locally in this browser.");
+      });
+
+      document.getElementById("clearState").addEventListener("click", () => {
+        if (!confirm("Reset all scores and notes?")) return;
+        localStorage.removeItem("bk_farrell_scorecard_v1");
+        location.reload();
+      });
+    }
+
+    renderSections();
+    renderChecklist(redFlags, "redFlags", "rf");
+    renderChecklist(mustAsk, "mustAsk", "maq");
+    loadLocal();
+    wireInputs();
+    recalc();
+  </script>
+</body>
+</html>
+

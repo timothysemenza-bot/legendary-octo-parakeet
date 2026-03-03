@@ -1,0 +1,7 @@
+{
+  "items": [
+    {"id": "item_alpha", "name": "Alpha Module"},
+    {"id": "item_beta", "name": "Beta Module"},
+    {"id": "item_gamma", "name": "Gamma Module"}
+  ]
+}

@@ -1,134 +1,72 @@
-# Apple Receipt Reimbursement Automation
+# Video Game Mod CI/CD Skeleton
 
-End-to-end Python automation for:
-1. Pulling Apple-related receipt emails for a month window.
-2. Parsing receipts into normalized line items.
-3. Deduping against existing ledger keys and in-run duplicates.
-4. Appending only new rows to Google Sheets `Ledger` via Sheets API `values.append`.
-5. Emitting a monthly reimbursement report with total, itemized list, and Venmo memo text.
+This repository now includes a complete CI/CD skeleton for a private mod project.
 
-## Required Layout
+## What this includes
+- Hosted CI (`.github/workflows/ci.yml`) on `ubuntu-latest`:
+  - Lua lint (`luacheck` via `luarocks`)
+  - mod validation (`tools/validate_mod.py`)
+  - Python unit tests (`python -m unittest discover tests`)
+  - deterministic packaging (`tools/pack_mod.py`) to `dist/mod-dev.zip`
+- Self-hosted integration CI (`.github/workflows/integration.yml`) on Windows runner labels:
+  - `runs-on: [self-hosted, isaac-win]`
+  - installs mod into game mods directory
+  - runs seed scenarios via a generic harness (`tools/run_seeds.py`)
+  - parses `BKTEST` contract logs (`tools/parse_log.py`)
+  - compares report to baseline (`tools/compare_baseline.py`)
+  - packages zip and uploads artifacts
+- Release workflow (`.github/workflows/release.yml`):
+  - triggers on tags `v*.*.*`
+  - validates + packages with tag version
+  - creates GitHub release with attached zip
 
-- `src/config.py`
-- `src/email_client_gmail_api.py`
-- `src/email_client_imap.py`
-- `src/receipt_extractors/apple_receipt_parser.py`
-- `src/dedupe.py`
-- `src/sheets_client.py`
-- `src/monthly_report.py`
-- `src/main.py`
-- `config/merchants.json`
-- `config/sheet_schema.json`
-- `output/logs`, `output/reports`, `output/debug`
-- `tests/` for parser, dedupe, and month-boundary logic
+## Important note
+Hosted CI does **not** run the game and does not require proprietary binaries.
 
-## Google Sheet Schema (documented)
+## Repo layout
+- `mod/` sample mod scaffold
+- `mod/main.lua` includes `TEST_MODE` switch and emits `BKTEST` + `BKTEST_DONE` JSON lines
+- `tools/` Python 3.11 scripts
+- `tests/` minimal unit tests
+- `.artifacts/baselines/baseline.json` sample baseline
+- `dist/` generated artifacts (gitignored)
 
-Create a Google Sheet with tab `Ledger` and this header row:
-
-`Date, Vendor, Description, Amount, Currency, InvoiceId, SourceMessageId, Source, MonthKey, ImportedAt`
-
-Optional tab: `MonthlySummary`.
-
-The script appends rows using Sheets API `spreadsheets.values.append` with:
-- `valueInputOption=USER_ENTERED`
-- `insertDataOption=INSERT_ROWS`
-
-Reference:
-- https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/append
-
-## Setup
-
-### 1. Python environment
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+## Local usage
+### Validate mod
+```bash
+python tools/validate_mod.py
 ```
 
-### 2. Environment config
-
-Copy `.env.example` to `.env` and set values:
-
-- `GMAIL_MODE=(api|imap)`
-- `IMAP_HOST`, `IMAP_USER`, `IMAP_APP_PASSWORD` (IMAP fallback)
-- `GOOGLE_SHEETS_SPREADSHEET_ID`
-- `GOOGLE_SHEETS_RANGE` (example: `Ledger!A1`)
-- `GOOGLE_OAUTH_CLIENT_SECRET_JSON` (OAuth client secret JSON path)
-- `GOOGLE_GMAIL_OAUTH_TOKEN_JSON` (Gmail OAuth token path)
-- `GOOGLE_SHEETS_OAUTH_TOKEN_JSON` (Sheets OAuth token path)
-- `TIMEZONE=America/New_York`
-- `FRIEND_NAME=Matt`
-- `EMAIL_FIXTURES_DIR` (optional local fixture mode)
-
-### 3. Google Sheets API auth
-
-Use the Google quickstart-style OAuth flow for installed apps. First run will open browser auth and save Gmail token JSON to `GOOGLE_GMAIL_OAUTH_TOKEN_JSON` and Sheets token JSON to `GOOGLE_SHEETS_OAUTH_TOKEN_JSON`.
-
-Reference:
-- https://developers.google.com/workspace/sheets/api/quickstart/python
-
-### 4. Gmail auth mode
-
-Recommended: Gmail API OAuth (`GMAIL_MODE=api`) using the same OAuth credentials flow.
-
-Fallback: IMAP app password (`GMAIL_MODE=imap`). Gmail app passwords require 2-Step Verification.
-
-Reference:
-- https://support.google.com/accounts/answer/185833
-
-## CLI Usage
-
-### Dry run
-
-```powershell
-python -m src.main dry-run --month prior
+### Package mod (deterministic)
+```bash
+python tools/pack_mod.py --version dev
 ```
 
-- Parses and computes report totals without writing to Sheets.
-- Works without external services when fixture mode is enabled (`EMAIL_FIXTURES_DIR`) or when `tests/fixtures/messages` exists.
-
-### Monthly run
-
-```powershell
-python -m src.main run --month prior
+### Simulate integration test flow without game
+```bash
+python tools/run_seeds.py --seeds tools/seeds.txt --log dist/integration.log
+python tools/parse_log.py --log dist/integration.log --out dist/test-report.json
+python tools/compare_baseline.py --baseline .artifacts/baselines/baseline.json --report dist/test-report.json
 ```
 
-- Pulls prior month in `America/New_York`.
-- Dedupes against existing `Ledger` rows and within current run.
-- Appends only new rows to `Ledger`.
-- Writes report: `output/reports/YYYY-MM.txt`
+## Self-hosted runner configuration
+Set these env vars on your Windows self-hosted runner (or in workflow/job env):
+- `ISAAC_MODS_DIR`: game mods directory to install into
+- `ISAAC_EXE`: executable path for integration harness (leave empty to simulate)
+- `LOG_PATH`: path to raw integration log output
+- `ISAAC_ARGS_TEMPLATE` (optional): args template for executable, supports `{seed}`
 
-### Backfill
+Example defaults are already set in `integration.yml` and intended to be edited.
 
-```powershell
-python -m src.main backfill --start 2025-01 --end 2025-12
-```
+## Baseline behavior
+Baseline file: `.artifacts/baselines/baseline.json`.
 
-## Report output
+`tools/compare_baseline.py` checks:
+- expected summary totals
+- expected per-seed status
+- expected per-seed metrics within configured tolerances
 
-Each report file includes:
-- `MonthKey`
-- `Total`
-- itemized list `(date, description, amount)`
-- Venmo memo: `Apple expenses YYYY-MM`
-- `Amount to pay Matt: $X.XX`
-
-## Error handling and logs
-
-- Structured JSON logs: `output/logs/automation.log`
-- On parse failures, raw message is written to `output/debug` and processing continues.
-
-## Windows Task Scheduler (monthly)
-
-Create a task:
-1. Trigger: Monthly, day 1, `08:00`.
-2. Action: Start a program.
-3. Program/script: `C:\Users\timot\Documents\Proposal-Microsite\.venv\Scripts\python.exe`
-4. Arguments: `-m src.main run --month prior`
-5. Start in: `C:\Users\timot\Documents\Proposal-Microsite`
-
-This avoids Codex app automations dependency on the Codex app process.
-Reference:
-- https://developers.openai.com/codex/app/automations/
+To intentionally update baseline after approved changes:
+1. Run integration flow and inspect `dist/test-report.json`.
+2. Copy expected values into `.artifacts/baselines/baseline.json`.
+3. Commit baseline update with rationale in PR.

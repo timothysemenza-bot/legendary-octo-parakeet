@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bid Managers Film Score Taste Board</title>
+  <style>
+    :root {
+      --bg-0: #05070e;
+      --bg-1: #0b1220;
+      --bg-2: #101b2f;
+      --text: #eaf2ff;
+      --muted: #9fb2d3;
+      --accent: #7de2ff;
+      --tile-border: rgba(255, 255, 255, 0.14);
+      --tile-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      --radius: 18px;
+      --font-display: "Avenir Next Condensed", "Franklin Gothic Medium", "Arial Narrow", sans-serif;
+      --font-body: "Segoe UI", "Trebuchet MS", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, #19315d 0%, transparent 45%),
+        radial-gradient(circle at 85% 5%, #3f1f54 0%, transparent 35%),
+        linear-gradient(145deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+      padding: 40px 24px 60px;
+    }
+
+    .page {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+    }
+
+    .intro {
+      margin-bottom: 28px;
+      padding: 20px 22px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      background: linear-gradient(125deg, rgba(14, 26, 48, 0.8), rgba(10, 15, 29, 0.7));
+      backdrop-filter: blur(2px);
+    }
+
+    .intro .eyebrow {
+      margin: 0 0 8px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.45rem, 2.6vw, 2.2rem);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .intro p {
+      margin: 12px 0 0;
+      max-width: 78ch;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+    }
+
+    .tile {
+      position: relative;
+      border: 1px solid var(--tile-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      min-height: 300px;
+      padding: 14px;
+      display: flex;
+      align-items: flex-end;
+      box-shadow: var(--tile-shadow);
+      isolation: isolate;
+      transform: translateY(14px);
+      opacity: 0;
+      animation: rise-in 650ms ease forwards;
+      animation-delay: calc(var(--idx) * 70ms);
+    }
+
+    .tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.72) 100%),
+        linear-gradient(160deg, var(--c1), var(--c2));
+      z-index: -2;
+    }
+
+    .tile::after {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.26), transparent 62%);
+      mix-blend-mode: screen;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .meta {
+      width: 100%;
+      background: rgba(4, 8, 16, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 12px;
+      padding: 10px 10px 9px;
+    }
+
+    .title {
+      margin: 0 0 5px;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 1.02rem;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .composer {
+      margin: 0;
+      font-size: 0.78rem;
+      color: #c6d6f3;
+      line-height: 1.35;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      color: #90a3c4;
+      font-size: 0.78rem;
+    }
+
+    @keyframes rise-in {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 24px 14px 40px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .tile {
+        min-height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Internal Use Only</p>
+      <h1>Bid managers, I'd like to know if you share my taste in film scores, and what that may say about us.</h1>
+      <p>Poster-style tiles below are grouped from a high-intensity, atmospheric score stack: Zimmer, Johannsson, Reznor/Ross, Martinez, Newman, and Junkie XL. If we overlap here, we probably make similar pacing calls under pressure.</p>
+    </section>
+
+    <section class="grid" id="posterGrid" aria-label="Movie score favorites"></section>
+
+    <p class="footer-note">Note: This page uses stylized poster tiles (not licensed official poster art), suitable for internal concept use.</p>
+  </main>
+
+  <script>
+    const films = [
+      { title: "Inception", composer: "Hans Zimmer" },
+      { title: "Interstellar", composer: "Hans Zimmer" },
+      { title: "Dunkirk", composer: "Hans Zimmer" },
+      { title: "Blade Runner 2049", composer: "Hans Zimmer, Benjamin Wallfisch" },
+      { title: "The Dark Knight Trilogy", composer: "Hans Zimmer, James Newton Howard" },
+      { title: "Man of Steel", composer: "Hans Zimmer" },
+      { title: "Dune", composer: "Hans Zimmer" },
+      { title: "Arrival", composer: "Jóhann Jóhannsson" },
+      { title: "Sicario", composer: "Jóhann Jóhannsson" },
+      { title: "Prisoners", composer: "Jóhann Jóhannsson" },
+      { title: "The Social Network", composer: "Trent Reznor, Atticus Ross" },
+      { title: "Gone Girl", composer: "Trent Reznor, Atticus Ross" },
+      { title: "Ex Machina", composer: "Ben Salisbury, Geoff Barrow" },
+      { title: "Annihilation", composer: "Ben Salisbury, Geoff Barrow" },
+      { title: "Drive", composer: "Cliff Martinez" },
+      { title: "Solaris (2002)", composer: "Cliff Martinez" },
+      { title: "The Thin Red Line", composer: "Hans Zimmer" },
+      { title: "1917", composer: "Thomas Newman" },
+      { title: "Skyfall", composer: "Thomas Newman" },
+      { title: "Mad Max: Fury Road", composer: "Junkie XL" }
+    ];
+
+    const palette = [
+      ["#0c3b66", "#07172f"],
+      ["#4a1f56", "#171a3a"],
+      ["#7d1d2d", "#1a0f1d"],
+      ["#1a5a46", "#0e1e2e"],
+      ["#7a4b18", "#1a1113"],
+      ["#0c465f", "#10243f"],
+      ["#2f4e78", "#0c1226"],
+      ["#65436e", "#20152f"]
+    ];
+
+    const grid = document.getElementById("posterGrid");
+
+    films.forEach((film, idx) => {
+      const tile = document.createElement("article");
+      tile.className = "tile";
+      tile.style.setProperty("--idx", idx + 1);
+      const [c1, c2] = palette[idx % palette.length];
+      tile.style.setProperty("--c1", c1);
+      tile.style.setProperty("--c2", c2);
+
+      tile.innerHTML = `
+        <div class="meta">
+          <h2 class="title">${film.title}</h2>
+          <p class="composer">${film.composer}</p>
+        </div>
+      `;
+
+      grid.appendChild(tile);
+    });
+  </script>
+</body>
+</html>

@@ -2,51 +2,44 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-smoke-test:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
         with:
-          node-version: "20.x"
+          python-version: "3.11"
 
-      - name: Install dependencies (if any)
+      - name: Setup Lua 5.4 and luarocks
         run: |
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          sudo apt-get update
+          sudo apt-get install -y lua5.4 luarocks
+          sudo luarocks install luacheck
 
-      - name: Start server and smoke test API
-        run: |
-          nohup node server.js > /tmp/server.log 2>&1 &
-          SERVER_PID=$!
-          echo "Server PID: $SERVER_PID"
-          echo "Waiting for server..."
-          for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:3000/api/proposals >/dev/null 2>&1; then
-              echo "Server is healthy"
-              break
-            fi
-            if [ $i -eq 30 ]; then
-              echo "Server did not become available"
-              cat /tmp/server.log
-              kill $SERVER_PID || true
-              exit 1
-            fi
-            sleep 1
-          done
-          kill $SERVER_PID
+      - name: Install Python requirements
+        run: python -m pip install --upgrade pip && pip install -r tools/requirements.txt
+
+      - name: Lint Lua
+        run: luacheck mod/
+
+      - name: Validate mod
+        run: python tools/validate_mod.py
+
+      - name: Run unit tests
+        run: python -m unittest discover tests
+
+      - name: Package mod
+        run: python tools/pack_mod.py --version dev
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-dev
+          path: dist/mod-dev.zip

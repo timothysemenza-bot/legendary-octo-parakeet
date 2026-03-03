@@ -12,12 +12,9 @@ from dotenv import load_dotenv
 @dataclass(slots=True)
 class AppConfig:
     gmail_mode: str
+    allowed_gmail_account: str
     timezone: str
     friend_name: str
-
-    imap_host: str
-    imap_user: str
-    imap_app_password: str
 
     spreadsheet_id: str
     sheets_range: str
@@ -48,11 +45,9 @@ def load_config(base_dir: Path | None = None) -> AppConfig:
 
     return AppConfig(
         gmail_mode=os.getenv("GMAIL_MODE", "api").strip().lower(),
+        allowed_gmail_account=os.getenv("GOOGLE_ALLOWED_GMAIL_ACCOUNT", "timothy.semenza@gmail.com").strip().lower(),
         timezone=os.getenv("TIMEZONE", "America/New_York").strip(),
         friend_name=os.getenv("FRIEND_NAME", "Matt").strip(),
-        imap_host=os.getenv("IMAP_HOST", "imap.gmail.com").strip(),
-        imap_user=os.getenv("IMAP_USER", "").strip(),
-        imap_app_password=os.getenv("IMAP_APP_PASSWORD", "").strip(),
         spreadsheet_id=os.getenv("GOOGLE_SHEETS_SPREADSHEET_ID", "").strip(),
         sheets_range=os.getenv("GOOGLE_SHEETS_RANGE", "Ledger!A1").strip(),
         oauth_client_secret_json=os.getenv("GOOGLE_OAUTH_CLIENT_SECRET_JSON", "").strip(),
