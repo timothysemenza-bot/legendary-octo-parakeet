@@ -1,10 +1,10 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boss Key | Operational Systems That Protect Margin</title>
-  <meta name="description" content="Boss Key helps service businesses protect margin, reduce overhead, and improve day-to-day execution with practical workflow and automation support.">
+  <title>Boss Key LLC | Operating Systems for Service Businesses</title>
+  <meta name="description" content="Boss Key LLC helps service business leaders fix operational breakdowns, protect margin, and install execution systems that hold up under pressure.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,19 +14,16 @@
       --ink: #f3f5f8;
       --paper: #0a0a0b;
       --accent: #c5162e;
-      --accent-dark: #f2a8b3;
-      --steel: #3a3a40;
-      --card: #16171a;
+      --accent-soft: #ffd7dd;
       --line: #2d2f35;
+      --card: #16171a;
       --soft: #c3c8d3;
-      --max: 1100px;
-      --radius: 18px;
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+      --max: 1120px;
+      --radius: 16px;
+      --shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -34,7 +31,7 @@
       color: var(--ink);
       background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
       font-family: "Manrope", "Segoe UI", sans-serif;
-      line-height: 1.55;
+      line-height: 1.58;
       scroll-behavior: smooth;
     }
 
@@ -49,1246 +46,601 @@
     }
 
     header {
-      padding: 20px 0;
+      padding: 20px 0 12px;
+      border-bottom: 1px solid #1f2127;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(8px);
+      background: rgba(10, 10, 11, 0.8);
     }
 
-    .nav {
-      display: flex;
-      justify-content: space-between;
+    .nav-shell {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: 12px;
     }
 
     .brand {
       display: inline-flex;
-      gap: 10px;
       align-items: center;
+      gap: 10px;
       font-weight: 700;
       letter-spacing: 0.02em;
+      white-space: nowrap;
     }
 
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      display: inline-grid;
-      place-items: center;
-    }
-
-    .brand-mark img {
-      width: 100%;
-      height: 100%;
+    .brand img {
+      width: 32px;
+      height: 32px;
       display: block;
     }
 
-    .cta-top {
-      border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--ink);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
-
-    .mobile-menu-toggle {
-      display: none;
-      border: 1px solid var(--line);
-      background: #17191f;
-      color: var(--ink);
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .quick-contact {
-      margin: 8px auto 16px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #141518;
-      padding: 10px 14px;
+    .nav-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: flex-start;
-      color: var(--soft);
-      font-size: 0.95rem;
-    }
-
-    .quick-contact a {
-      color: #ffd7dc;
-      font-weight: 700;
-      text-decoration: none;
-      border: 1px solid #5a2a31;
-      background: #241518;
-      border-radius: 999px;
-      padding: 6px 10px;
-    }
-
-    .quick-contact a.quick-linkedin {
-      padding: 4px 9px;
-      font-size: 0.82rem;
-      background: #1a2d46;
-      border-color: #2f4d72;
-      color: #d7e9ff;
-    }
-
-    .quick-contact a.quick-trust {
-      padding: 4px 9px;
-      font-size: 0.82rem;
-      background: #2c1a20;
-      border-color: #74414a;
-      color: #ffe2e6;
-    }
-
-    .founder-photo-link {
-      display: inline-block;
-      line-height: 0;
-      border-radius: 10px;
-    }
-
-    .toc-nav {
-      margin: 0 auto 18px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(17, 18, 23, 0.94);
-      padding: 8px;
-      display: flex;
-      flex-wrap: wrap;
+      justify-content: center;
       gap: 8px;
-      position: sticky;
-      top: 10px;
-      z-index: 20;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
     }
 
-    .toc-nav a {
-      display: inline-flex;
-      align-items: center;
+    .nav-links a {
       border: 1px solid #343740;
       border-radius: 999px;
+      padding: 7px 12px;
       background: #1b1d22;
       color: var(--soft);
-      padding: 6px 11px;
       font-size: 0.88rem;
       font-weight: 700;
     }
 
-    .toc-nav a:hover {
-      color: #ffffff;
+    .nav-links a:hover {
+      color: #fff;
       border-color: #4a4e58;
       background: #21242b;
     }
 
-    main section[id] {
-      scroll-margin-top: 88px;
-    }
-
-    .hero {
-      padding: 24px 0 56px;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 26px;
-      align-items: stretch;
-    }
-
-    .hero-main h1 {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      line-height: 1.08;
-      margin: 14px 0;
-      letter-spacing: -0.02em;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #2b1619;
-      color: var(--accent-dark);
-      font-weight: 700;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .hero-main p {
-      color: var(--soft);
-      max-width: 56ch;
-      margin: 0 0 24px;
-    }
-
-    .btn-row {
+    .utility-links {
+      margin-top: 10px;
       display: flex;
+      gap: 10px;
+      justify-content: center;
       flex-wrap: wrap;
-      gap: 12px;
+      font-size: 0.85rem;
+      color: #c8cfda;
+    }
+
+    .utility-links a {
+      border: 1px solid #3a3d45;
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: #15181f;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 18px;
       border-radius: 12px;
+      border: 1px solid transparent;
+      padding: 12px 16px;
       font-weight: 700;
-      line-height: 1.15;
-      white-space: nowrap;
-      text-align: center;
-      transition: transform 120ms ease, box-shadow 120ms ease;
+      line-height: 1.1;
+      cursor: pointer;
     }
 
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(145deg, #c5162e, #a70f24);
       color: #fff;
-      box-shadow: 0 10px 22px rgba(197, 22, 46, 0.3);
+      box-shadow: 0 10px 22px rgba(197, 22, 46, 0.34);
     }
 
     .btn-secondary {
-      border: 1px solid var(--line);
-      background: #1c1d21;
-      color: #f3f5f8;
+      background: #181c24;
+      color: #dbe8ff;
+      border-color: #3b4350;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .hero-card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(155deg, #1a1c21 0%, #121317 100%);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .founder {
-      display: grid;
-      grid-template-columns: 84px 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #141518;
-      margin-bottom: 14px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .founder-photo {
-      width: 84px;
-      height: 84px;
-      border-radius: 10px;
-      object-fit: cover;
-      border: 1px solid var(--steel);
-      display: block;
-    }
-
-    .founder-meta strong {
-      display: block;
-      font-size: 0.98rem;
-      line-height: 1.2;
-    }
-
-    .founder-meta span {
-      color: var(--soft);
-      font-size: 0.9rem;
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      right: -60px;
-      top: -70px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 22, 46, 0.2) 0%, rgba(197, 22, 46, 0) 72%);
-    }
-
-    .metric {
-      margin: 12px 0;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed #3a3a40;
-    }
-
-    .metric strong {
-      font-size: 1.75rem;
-      font-family: "Fraunces", Georgia, serif;
-      line-height: 1;
-      display: block;
+    main {
+      padding: 30px 0 44px;
     }
 
     section {
-      padding: 18px 0 40px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .insights-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    .insight-card {
+      margin: 16px 0;
       border: 1px solid var(--line);
-      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
       border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      background: linear-gradient(165deg, #181a20 0%, #111318 100%);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      scroll-margin-top: 92px;
     }
 
-    .insight-card h3 {
-      margin: 6px 0 10px;
-      font-size: 1.08rem;
-      line-height: 1.35;
-    }
-
-    .insight-card p {
-      margin: 0 0 12px;
-      color: var(--soft);
-      font-size: 0.95rem;
-    }
-
-    .insight-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
-      color: #ffd7dc;
-      font-size: 0.8rem;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    .insight-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #ffd7dc;
-      font-weight: 700;
-      font-size: 0.92rem;
-      text-decoration: none;
-    }
-
-    .insight-link:hover {
-      text-decoration: underline;
-    }
-
-    .pricing-grid {
+    .hero {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .pricing-intro {
-      color: var(--soft);
-      max-width: 76ch;
-      margin: 6px 0 16px;
-    }
-
-    .pricing-tracks {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .track-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-    }
-
-    .track-card h3 {
-      margin: 0 0 8px;
-      font-size: 1.1rem;
-    }
-
-    .track-sub {
-      color: var(--soft);
-      margin: 0 0 12px;
-      font-size: 0.94rem;
-    }
-
-    .price-block {
-      border: 1px solid #2d313a;
-      background: #101115;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-
-    .price-block b {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .price-block p {
-      margin: 0;
-      color: var(--soft);
-      font-size: 0.92rem;
-    }
-
-    .comparison {
-      border: 1px solid var(--line);
-      background: var(--card);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .comparison table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.93rem;
-    }
-
-    .comparison th,
-    .comparison td {
-      border-bottom: 1px solid var(--line);
-      padding: 10px 12px;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    .comparison th {
-      color: #fff;
-      background: #15171d;
-      font-weight: 700;
-    }
-
-    .comparison td {
-      color: var(--soft);
-    }
-
-    .price-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .price-card::before {
-      content: "";
-      position: absolute;
-      right: -35px;
-      top: -35px;
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 22, 46, 0.26) 0%, rgba(197, 22, 46, 0) 75%);
-    }
-
-    .price-tag {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid #5a2a31;
-      background: #241518;
-      color: #ffd7dc;
-      font-weight: 700;
-      font-size: 0.78rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .price-amount {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: 2rem;
-      line-height: 1;
-      margin: 0 0 8px;
-      color: #ffffff;
-    }
-
-    .price-note {
-      color: var(--soft);
-      font-size: 0.92rem;
-      margin: 0 0 12px;
-    }
-
-    .price-list {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--soft);
-      font-size: 0.94rem;
-    }
-
-    .price-list li {
-      margin-bottom: 6px;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(31, 36, 48, 0.07);
-    }
-
-    .card h3 {
-      margin: 8px 0;
-      font-size: 1.05rem;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--soft);
-      font-size: 0.97rem;
-    }
-
-    .kicker {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(1.35rem, 2.3vw, 2rem);
-      margin: 0 0 16px;
-    }
-
-    .process {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .about-story {
-      display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 16px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
       align-items: start;
     }
 
-    .about-card {
-      border: 1px solid var(--line);
-      background: #0f172b;
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: 0 10px 24px rgba(31, 36, 48, 0.06);
+    .eyebrow {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #2b1619;
+      color: #f2a8b3;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
-    .about-card p {
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.08;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0 0 10px;
+      font-size: clamp(1.5rem, 2.9vw, 2.15rem);
+      line-height: 1.18;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+    }
+
+    p {
       margin: 0 0 12px;
       color: var(--soft);
     }
 
-    .about-card p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-points {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #0f172b;
-      padding: 16px;
-    }
-
-    .about-points b {
-      color: var(--accent-dark);
-      letter-spacing: 0.04em;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-    }
-
-    .about-points ul {
-      margin: 10px 0 0;
+    .hero-list,
+    .bullet-list {
+      margin: 0;
       padding-left: 18px;
-      color: var(--soft);
+      color: var(--accent-soft);
     }
 
-    .step {
-      border: 1px solid var(--line);
+    .hero-list li,
+    .bullet-list li {
+      margin: 7px 0;
+    }
+
+    .hero-card {
+      border: 1px solid #353944;
       border-radius: 14px;
-      background: #0f172b;
+      background: #14171f;
       padding: 16px;
     }
 
-    .step b {
-      color: var(--accent-dark);
-      letter-spacing: 0.04em;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-    }
-
-    .cred-strip {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #111217;
-      padding: 16px;
-      overflow: hidden;
-    }
-
-    .cred-strip p {
-      margin: 0 0 12px;
-      color: var(--soft);
-      font-size: 0.92rem;
-    }
-
-    .logo-carousel {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      border-top: 1px solid #2a2c31;
-      border-bottom: 1px solid #2a2c31;
-      padding: 12px 0;
-      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-    }
-
-    .logo-track {
-      display: flex;
-      width: max-content;
-      gap: 14px;
-      animation: scrollLogos 26s linear infinite;
-    }
-
-    .logo-card {
-      flex: 0 0 auto;
-      width: 230px;
-      height: 76px;
-      border: 1px solid #2d3036;
-      border-radius: 12px;
-      background: #16181e;
+    .founder {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 10px 12px;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .logo-card img {
-      max-width: 180px;
-      max-height: 40px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      filter: grayscale(1) brightness(1.05);
-      opacity: 0.95;
+    .founder img {
+      width: 66px;
+      height: 66px;
+      border-radius: 12px;
+      object-fit: cover;
     }
 
-    @keyframes scrollLogos {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .cta-block {
-      margin: 16px 0 40px;
-      background: linear-gradient(132deg, #101113 0%, #1b1c22 62%, #5a1f2a 100%);
-      color: #eef3ff;
-      border-radius: var(--radius);
-      padding: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-block::after {
-      content: "";
-      position: absolute;
-      right: -20px;
-      top: -18px;
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 22, 46, 0.45) 0%, rgba(197, 22, 46, 0) 72%);
-    }
-
-    .cta-block p {
+    .kpi {
       margin-top: 8px;
-      color: #e4ecff;
-      max-width: 70ch;
+      padding: 9px 10px;
+      border: 1px solid #353944;
+      border-radius: 10px;
+      background: #12151c;
     }
 
-    .contact-actions {
+    .kpi strong {
+      display: block;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .button-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
+      margin-top: 14px;
     }
 
-    .cta-block .btn-secondary {
-      background: #fff7f1;
-      color: #0a1021;
-      border-color: #f1b7c0;
-      box-shadow: 0 8px 18px rgba(7, 12, 28, 0.22);
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 14px;
     }
 
-    .cta-block .btn-secondary:hover {
-      background: #ffffff;
-      color: #0b1020;
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .panel {
+      border: 1px solid #343844;
+      border-radius: 12px;
+      padding: 14px;
+      background: #14171f;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      border: 1px solid #5d2230;
+      border-radius: 999px;
+      color: #ffdce2;
+      background: #2a1318;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 5px 8px;
+    }
+
+    .faq-item {
+      border-top: 1px solid #2e323d;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .proof-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #d7dce5;
+    }
+
+    form {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #d6dbe4;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #3a3f4c;
+      border-radius: 10px;
+      background: #0f1218;
+      color: #f3f5f8;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    textarea { min-height: 112px; resize: vertical; }
+
+    .small {
+      margin-top: 6px;
+      color: #a7afbf;
+      font-size: 0.83rem;
     }
 
     footer {
       border-top: 1px solid var(--line);
-      padding: 22px 0 34px;
-      color: var(--soft);
-      font-size: 0.9rem;
+      color: #afb6c3;
+      font-size: 0.88rem;
+      padding: 18px 0 28px;
     }
 
-    footer a {
-      color: #ffd9de;
-      text-decoration: underline;
-      text-decoration-color: #8a4a53;
-      text-underline-offset: 2px;
-    }
-
-    .bosskey-game-widget {
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 35;
-      width: 220px;
-      border: 1px solid #4e1d24;
-      border-radius: 14px;
-      background: linear-gradient(160deg, #141519 0%, #0f1012 100%);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
-      overflow: hidden;
-      font-family: "Courier New", Consolas, monospace;
-    }
-
-    .bosskey-game-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 10px;
-      border-bottom: 1px solid #3b1b22;
-      background: #1b0f12;
-      color: #ffd6dc;
-      font-size: 0.74rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    .bosskey-game-head button {
-      border: 1px solid #5f2a32;
-      background: #261518;
-      color: #ffd6dc;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.72rem;
-      padding: 4px 8px;
-      cursor: pointer;
-    }
-
-    .bosskey-game-body {
-      padding: 8px;
-    }
-
-    .bosskey-game-canvas-wrap {
-      border: 1px solid #3a1a21;
-      border-radius: 10px;
-      padding: 6px;
-      background: #0b0c0e;
-    }
-
-    #bossKeyCanvas {
-      width: 100%;
-      height: auto;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-      display: block;
-      border-radius: 6px;
-      background: #070709;
-    }
-
-    .bosskey-game-status {
-      margin-top: 7px;
-      color: #eab8c0;
-      font-size: 0.72rem;
-      min-height: 18px;
-    }
-
-    .bosskey-game-controls {
-      margin-top: 6px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .bosskey-game-controls .spacer {
-      visibility: hidden;
-    }
-
-    .bosskey-game-controls button {
-      border: 1px solid #4d2028;
-      background: #1c1114;
-      color: #ffdbe1;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      padding: 7px 0;
-      font-weight: 700;
-      touch-action: none;
-      cursor: pointer;
-    }
-
-    .bosskey-game-controls button:active {
-      background: #31171d;
-    }
-
-    .bosskey-game-widget.collapsed .bosskey-game-body {
-      display: none;
-    }
-
-    .fade {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: rise 700ms ease forwards;
-    }
-
-    .fade.d2 { animation-delay: 110ms; }
-    .fade.d3 { animation-delay: 200ms; }
-    .fade.d4 { animation-delay: 280ms; }
-
-    @keyframes rise {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 880px) {
-      .hero {
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .nav-shell {
         grid-template-columns: 1fr;
-      }
-
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
-
-      .process {
-        grid-template-columns: 1fr;
-      }
-
-      .about-story {
-        grid-template-columns: 1fr;
-      }
-
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .pricing-tracks {
-        grid-template-columns: 1fr;
-      }
-
-      .comparison {
-        overflow-x: auto;
-      }
-
-      .quick-contact {
-        justify-content: flex-start;
-        font-size: 0.92rem;
-      }
-
-      .toc-nav {
-        padding: 10px;
-        top: 8px;
-      }
-
-      .toc-nav a {
-        font-size: 0.84rem;
-      }
-
-      .mobile-menu-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .cta-top {
-        display: none;
-      }
-
-      .quick-contact,
-      .toc-nav {
-        display: none;
-      }
-
-      body.menu-open .quick-contact,
-      body.menu-open .toc-nav {
-        display: flex;
-      }
-
-      body.menu-open .quick-contact {
-        margin-bottom: 10px;
-      }
-
-      body.menu-open .toc-nav {
-        position: static;
-        top: auto;
-        z-index: auto;
-        backdrop-filter: none;
-        box-shadow: none;
-      }
-
-      .bosskey-game-widget {
-        width: 188px;
-        right: 8px;
-        bottom: 8px;
-      }
-
-      .bosskey-game-head {
-        font-size: 0.66rem;
-      }
-
-      .bosskey-game-controls button {
-        padding: 6px 0;
+        justify-items: center;
       }
     }
 
-    @media (max-width: 460px) {
-      .contact-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .contact-actions .btn {
-        width: 100%;
-      }
+    @media (max-width: 760px) {
+      section { padding: 18px; }
+      .grid-2,
+      .grid-3 { grid-template-columns: 1fr; }
+      .button-row .btn { width: 100%; }
+      .nav-links { justify-content: flex-start; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap nav">
-      <a class="brand" href="#">
-        <span class="brand-mark" aria-hidden="true">
+    <div class="wrap">
+      <div class="nav-shell">
+        <a class="brand" href="#top" aria-label="Boss Key home">
           <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
-        </span>
-        <span>Boss Key</span>
-      </a>
-      <a class="cta-top schedule-cta track-contact" data-channel="schedule" data-context="Top Nav Schedule Button" href="#">Book A Strategy Call</a>
-      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileHeaderSections">Menu</button>
-    </div>
-    <div class="wrap quick-contact" id="mobileHeaderSections" aria-label="Direct contact options">
-      <span>Schedule time with Timmy:</span>
-      <a class="schedule-cta track-contact" data-channel="schedule" data-context="Header Schedule Button" href="#">Open Scheduling Calendar</a>
-      <a class="email-cta" data-context="Header Quick Contact" href="#">timmy@bosskeyops.com</a>
-      <a class="quick-linkedin" href="https://www.linkedin.com/company/boss-key-llc" target="_blank" rel="noopener noreferrer">Boss Key on LinkedIn</a>
-      <a class="quick-trust" href="./trust/security-policy.html">Security Policy</a>
+          <span>Boss Key LLC</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="#problem">Problem</a>
+          <a href="#outcomes">Outcomes</a>
+          <a href="#process">How We Work</a>
+          <a href="#proof">Proof</a>
+          <a href="#contact">Book a Diagnostic</a>
+        </nav>
+        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Header Book Diagnostic" href="#">Book a diagnostic</a>
+      </div>
+      <div class="utility-links" aria-label="Secondary links">
+        <a href="./services.html">Services</a>
+        <a href="./trust/">Trust</a>
+        <a href="./insights/what-10-years-in-proposals-teaches-you.html">Insights</a>
+        <a class="email-cta" data-context="Header Email" href="#">timmy@bosskeyops.com</a>
+      </div>
     </div>
   </header>
 
-  <main class="wrap">
-    <nav class="toc-nav" aria-label="Jump to section">
-      <a href="#insights">Results</a>
-      <a href="#services">Offers</a>
-      <a href="#credentials">Background</a>
-      <a href="#pricing">How It Works</a>
-      <a href="#about">About Timmy</a>
-      <a href="#contact">Contact</a>
-      <a href="./trust/">Trust</a>
-    </nav>
-    <section class="hero">
-      <div class="hero-main fade">
-        <span class="eyebrow">Operations Improvement Partner</span>
-        <h1>Increase margin, reduce overhead, and run your business with less chaos.</h1>
-        <p>Boss Key helps service businesses fix the workflows that slow growth and drain profit. We implement practical systems and automation so your team can move faster with better consistency.</p>
-        <div class="btn-row">
-          <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Hero Schedule Button" href="#">Book A Strategy Call</a>
-          <a class="btn btn-secondary email-cta" data-context="Hero Email Button" href="#">Email Timmy</a>
-          <a class="btn btn-secondary" href="#services">See 3 Offers</a>
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div>
+        <span class="eyebrow">Executive Summary</span>
+        <h1 id="heroTitle">Operational clarity that protects margin and gets your team out of reactive mode.</h1>
+        <p>Boss Key LLC helps owner-led service businesses fix execution breakdowns, tighten handoffs, and install operating systems that hold up under real pressure.</p>
+        <ul class="hero-list">
+          <li>Stop losing profit to preventable process breakdowns.</li>
+          <li>Reduce leadership drag caused by unclear ownership and handoffs.</li>
+          <li>Create a practical operating cadence your team can actually maintain.</li>
+        </ul>
+        <div class="button-row">
+          <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Hero Book Diagnostic" href="#">Book a diagnostic</a>
+          <a class="btn btn-secondary" href="./services.html">Review services</a>
         </div>
       </div>
-      <aside class="hero-card fade d2">
-        <h2 class="kicker">Built for business owners who need results</h2>
+      <aside class="hero-card" aria-label="Credibility and fit">
         <div class="founder">
-          <a class="founder-photo-link" href="https://www.linkedin.com/in/timothy-semenza-82b35656/" target="_blank" rel="noopener noreferrer" aria-label="View Timmy Semenza on LinkedIn">
-            <img class="founder-photo" src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza, founder of Boss Key">
-          </a>
-          <div class="founder-meta">
-            <strong>Timmy Semenza</strong>
+          <img src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza headshot">
+          <div>
+            <strong>Timmy Semenza</strong><br>
             <span>Founder, Boss Key LLC</span>
           </div>
         </div>
-        <div class="metric">
-          <strong>Higher margins</strong>
-          <span>Fix operational leaks that quietly erode profit.</span>
+        <p>Led proposal and pursuit execution for 10+ years across complex service environments before launching Boss Key.</p>
+        <div class="kpi">
+          <strong>What buyers get</strong>
+          <span>Clearer decisions, tighter execution, and less avoidable margin leakage.</span>
         </div>
-        <div class="metric">
-          <strong>Lower admin load</strong>
-          <span>Cut repetitive work so your team can focus on high-value tasks.</span>
-        </div>
-        <div class="metric">
-          <strong>Better execution</strong>
-          <span>Create clear process ownership and cleaner handoffs across the team.</span>
+        <div class="kpi">
+          <strong>Positioning</strong>
+          <span>Judgment and operating systems first. Tools are secondary.</span>
         </div>
       </aside>
     </section>
 
-    <section id="services">
-      <h2 class="kicker fade d2">Three Ways To Work With Boss Key</h2>
+    <section id="problem" aria-labelledby="problemTitle">
+      <span class="eyebrow">Problem Definition</span>
+      <h2 id="problemTitle">If you are dealing with this, the operating system needs attention.</h2>
+      <ul class="bullet-list">
+        <li>Jobs are getting done, but margins keep leaking.</li>
+        <li>Too much tribal knowledge sits with one or two people.</li>
+        <li>Work is constantly urgent because upstream decisions are unclear.</li>
+        <li>Sales commitments and delivery reality are not aligned.</li>
+        <li>You are hiring around process problems instead of fixing them.</li>
+        <li>Reporting exists, but it does not drive decisions.</li>
+        <li>Your team is working hard, but execution still feels inconsistent.</li>
+      </ul>
+    </section>
+
+    <section id="outcomes" aria-labelledby="outcomesTitle">
+      <span class="eyebrow">Expected Change</span>
+      <h2 id="outcomesTitle">What changes after 30-60 days</h2>
+      <div class="grid-2">
+        <article class="panel">
+          <h3>Leadership rhythm is clearer</h3>
+          <p>You get a practical review cadence and escalation path for daily execution decisions.</p>
+        </article>
+        <article class="panel">
+          <h3>Handoffs are more reliable</h3>
+          <p>The highest-friction transitions are mapped, clarified, and stabilized.</p>
+        </article>
+        <article class="panel">
+          <h3>Ownership is easier to see</h3>
+          <p>Team roles and decision rights are explicit in day-to-day work.</p>
+        </article>
+        <article class="panel">
+          <h3>Core workflows run cleaner</h3>
+          <p>Priority processes are easier to execute without constant leadership intervention.</p>
+        </article>
+        <article class="panel">
+          <h3>Risk concentration is visible</h3>
+          <p>You can see where execution and margin risk are concentrated and act sooner.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="process" aria-labelledby="processTitle">
+      <span class="eyebrow">Solution Framing</span>
+      <h2 id="processTitle">How it works</h2>
       <div class="grid-3">
-        <article class="card fade d2">
-          <h3>Offer A: Margin Hardening Sprint (4-6 weeks)</h3>
-          <p>A focused engagement to find your biggest workflow leaks, implement 1-2 high-impact automations, and leave you with a practical action plan.</p>
+        <article class="panel">
+          <span class="tag">Step 1</span>
+          <h3>Diagnostic</h3>
+          <p>We map where operational bottlenecks are driving missed execution and margin leakage.</p>
         </article>
-        <article class="card fade d3">
-          <h3>Offer B: Managed Ops Layer (Monthly)</h3>
-          <p>Monthly support to keep systems running smoothly through monitoring, quality checks, issue resolution, and regular reporting.</p>
+        <article class="panel">
+          <span class="tag">Step 2</span>
+          <h3>Operating Sprint</h3>
+          <p>We implement focused workflow fixes and management routines in the highest-impact areas.</p>
         </article>
-        <article class="card fade d4">
-          <h3>Offer C: Outcome-Aligned Partnership</h3>
-          <p>For select clients ready for a deeper partnership with goals tied directly to business outcomes and long-term growth.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="insights">
-      <h2 class="kicker fade d2">Results We Focus On</h2>
-      <p class="pricing-intro fade d2">Every engagement is tied to practical metrics that reflect speed, quality, and profitability.</p>
-      <div class="insights-grid">
-        <article class="insight-card fade d2">
-          <div class="insight-meta">
-            <span>Result Area:</span>
-            <span>Speed</span>
-          </div>
-          <h3>Faster Sales And Delivery Cycles</h3>
-          <p>Shorten the time from estimate to award by improving handoffs and reducing delays.</p>
-          <a class="insight-link" href="#contact">Discuss your goals -></a>
-        </article>
-        <article class="insight-card fade d3">
-          <div class="insight-meta">
-            <span>Result Area:</span>
-            <span>Quality</span>
-          </div>
-          <h3>Stronger Win Quality</h3>
-          <p>Improve hit rates and reduce costly execution mistakes with better process discipline.</p>
-          <a class="insight-link" href="#contact">See if we're a fit -></a>
-        </article>
-        <article class="insight-card fade d4">
-          <div class="insight-meta">
-            <span>Result Area:</span>
-            <span>Efficiency</span>
-          </div>
-          <h3>Lower Overhead And Leakage</h3>
-          <p>Reduce admin hours, speed up cash collection, and tighten up rework and change-order leakage.</p>
-          <a class="insight-link" href="#contact">Talk through your priorities -></a>
+        <article class="panel">
+          <span class="tag">Step 3</span>
+          <h3>Stabilization</h3>
+          <p>We lock in ownership, cadence, and accountability so improvements stick.</p>
         </article>
       </div>
     </section>
 
-    <section id="credentials">
-      <h2 class="kicker fade d2">Selected Career Background</h2>
-      <div class="cred-strip fade d3">
-
-        <div class="logo-carousel" aria-label="Previous companies">
-          <div class="logo-track">
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGDn9gqgHN8Ng/company-logo_100_100/B4EZT33OFKGgAQ-/0/1739325236262/the_facilities_group_logo?e=2147483647&v=beta&t=teQXyp3i5kxoGpwEnNRUdWIIJFydBry60TxNZmWOeuU" alt="The Facilities Group logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D560BAQGeOKUDsaOYCw/company-logo_100_100/company-logo_100_100/0/1719801179620/sbm_site_services_llc_logo?e=2147483647&v=beta&t=jWOgiVWjPgHu0asyC0LUgdkhKp5amJUayp2eZVMyZ90" alt="SBM Site Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFNfbEd1buK4w/company-logo_100_100/company-logo_100_100/0/1630553862696/kellermeyer_bergensons_services_llc_logo?e=2147483647&v=beta&t=Py37dMcS-OsXX28erRrGjmSAgR2-WhE-4xQGk7owEsU" alt="Kellermeyer Bergensons Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGDn9gqgHN8Ng/company-logo_100_100/B4EZT33OFKGgAQ-/0/1739325236262/the_facilities_group_logo?e=2147483647&v=beta&t=teQXyp3i5kxoGpwEnNRUdWIIJFydBry60TxNZmWOeuU" alt="The Facilities Group logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D560BAQGeOKUDsaOYCw/company-logo_100_100/company-logo_100_100/0/1719801179620/sbm_site_services_llc_logo?e=2147483647&v=beta&t=jWOgiVWjPgHu0asyC0LUgdkhKp5amJUayp2eZVMyZ90" alt="SBM Site Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFNfbEd1buK4w/company-logo_100_100/company-logo_100_100/0/1630553862696/kellermeyer_bergensons_services_llc_logo?e=2147483647&v=beta&t=Py37dMcS-OsXX28erRrGjmSAgR2-WhE-4xQGk7owEsU" alt="Kellermeyer Bergensons Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
-            </div>
-          </div>
-        </div>
+    <section id="deliverables" aria-labelledby="deliverablesTitle">
+      <span class="eyebrow">What I Deliver</span>
+      <h2 id="deliverablesTitle">Deliverables framed as outcomes</h2>
+      <div class="grid-2">
+        <article class="panel">
+          <h3>Operating-risk map</h3>
+          <p>A prioritized view of where execution is breaking down and what it is costing.</p>
+        </article>
+        <article class="panel">
+          <h3>30-60 day action plan</h3>
+          <p>A practical sequence tied to business outcomes, not generic implementation checklists.</p>
+        </article>
+        <article class="panel">
+          <h3>Workflow and handoff redesign</h3>
+          <p>Updated structures for selected high-friction processes so teams move with less confusion.</p>
+        </article>
+        <article class="panel">
+          <h3>Leadership cadence artifacts</h3>
+          <p>Review rhythm, decision logs, and escalation rules to reduce avoidable firefighting.</p>
+        </article>
+        <article class="panel">
+          <h3>Optional automation recommendations</h3>
+          <p>Targeted use of automation where it removes recurring friction without adding complexity.</p>
+        </article>
       </div>
     </section>
 
-    <section id="pricing">
-      <h2 class="kicker fade d2">Simple Engagement Options</h2>
-      <p class="pricing-intro fade d2">Start with a focused build, then continue with monthly support if you want ongoing execution help.</p>
-      <div class="pricing-tracks">
-        <article class="track-card fade d2">
-          <span class="price-tag">Start Here</span>
-          <h3>Margin Hardening Sprint</h3>
-          <p class="track-sub">A clear 4-6 week project to diagnose issues and implement the highest-impact improvements first.</p>
-          <div class="price-block">
-            <b>What You Get</b>
-            <p>Workflow review, 1-2 automation wins, and a clear plan your team can execute.</p>
-          </div>
-          <div class="price-block">
-            <b>Best For</b>
-            <p>Owners who want fast improvements without a long, open-ended consulting project.</p>
-          </div>
-        </article>
-        <article class="track-card fade d3">
-          <span class="price-tag">Ongoing Support</span>
-          <h3>Managed Ops Layer</h3>
-          <p class="track-sub">Monthly support to maintain systems, improve workflows, and keep performance moving in the right direction.</p>
-          <div class="price-block">
-            <b>What You Get</b>
-            <p>Monitoring, QA, updates, issue management, and consistent leadership reporting.</p>
-          </div>
-          <div class="price-block">
-            <b>Best For</b>
-            <p>Teams that want a long-term implementation partner, not just one-off project support.</p>
-          </div>
-        </article>
-      </div>
-      <div class="btn-row fade d4">
-        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Pricing Fit Call Button" href="#">Book A Fit Call</a>
-      </div>
-    </section>
-
-    <section id="about">
-      <h2 class="kicker fade d2">About Timmy</h2>
-      <div class="about-story">
-        <article class="about-card fade d2">
-          <p>Before Boss Key, I spent 10+ years leading proposal and pursuit execution in complex operating environments. That work taught me how to build systems that perform under pressure, not just in planning meetings.</p>
-          <p>Today I help service business leaders install practical systems that improve day-to-day execution and reduce avoidable operational waste.</p>
-          <p>Boss Key is built for teams that want meaningful operational improvement without adding a large internal operations team too early.</p>
-        </article>
-        <aside class="about-points fade d3">
-          <b>Great Fit If You</b>
-          <ul>
-            <li>Want practical, measurable improvement, not theory.</li>
-            <li>Can give access to key workflows and tools.</li>
-            <li>Have one internal point person to move work forward.</li>
-            <li>Are ready to make decisions and implement quickly.</li>
+    <section id="proof" aria-labelledby="proofTitle">
+      <span class="eyebrow">Proof and Credibility</span>
+      <h2 id="proofTitle">Signals that reduce delivery risk</h2>
+      <p>Built from real operating environments where execution quality and decision speed directly affected outcomes.</p>
+      <div class="grid-3">
+        <article class="panel">
+          <h3>Testimonials</h3>
+          <ul class="proof-list">
+            <li>"[Placeholder testimonial]" - Name, Title, Company</li>
+            <li>"[Placeholder testimonial]" - Name, Title, Company</li>
+            <li>"[Placeholder testimonial]" - Name, Title, Company</li>
           </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="kicker fade d2">How We Work</h2>
-      <div class="process">
-        <article class="step fade d2">
-          <b>Step 1</b>
-          <h3>Assess</h3>
-          <p>Review your current process and identify the biggest opportunities to improve speed, quality, and margin.</p>
         </article>
-        <article class="step fade d3">
-          <b>Step 2</b>
-          <h3>Implement</h3>
-          <p>Build and launch the highest-impact workflow fixes and automation improvements.</p>
+        <article class="panel">
+          <h3>Who I have supported</h3>
+          <ul class="proof-list">
+            <li>[Company or portfolio placeholder]</li>
+            <li>[Company or portfolio placeholder]</li>
+            <li>[Company or portfolio placeholder]</li>
+            <li>[Company or portfolio placeholder]</li>
+          </ul>
         </article>
-        <article class="step fade d3">
-          <b>Step 3</b>
-          <h3>Stabilize</h3>
-          <p>Monitor results, handle issues, and fine-tune the system so improvements stick.</p>
-        </article>
-        <article class="step fade d4">
-          <b>Step 4</b>
-          <h3>Scale</h3>
-          <p>Expand what works and keep improving with a clear monthly rhythm.</p>
+        <article class="panel">
+          <h3>Case placeholders</h3>
+          <ul class="proof-list">
+            <li>Case Placeholder 01: Problem, intervention approach, observed shift.</li>
+            <li>Case Placeholder 02: Problem, intervention approach, observed shift.</li>
+          </ul>
         </article>
       </div>
     </section>
 
-    <section id="contact" class="cta-block fade d3">
-      <h2 class="kicker">Ready to improve operations and protect profitability?</h2>
-      <p>Use the scheduling calendar to book time directly with Timmy, or email <a class="email-cta" data-context="Contact Section Link" href="#" style="text-decoration: underline;">timmy@bosskeyops.com</a>. We start with a focused sprint and deliver practical improvements your team can use right away.</p>
-      <p class="contact-actions">
-        <a class="btn btn-secondary schedule-cta track-contact" data-channel="schedule" data-context="Contact Section Schedule Button" href="#">Book A Strategy Call</a>
-        <a class="btn btn-secondary email-cta" data-context="Contact Section Button" href="#">Email Timmy</a>
-      </p>
+    <section id="engagement" aria-labelledby="engagementTitle">
+      <span class="eyebrow">Engagement Model</span>
+      <h2 id="engagementTitle">Clear steps, timelines, and boundaries</h2>
+      <div class="grid-2">
+        <article class="panel">
+          <h3>Typical path</h3>
+          <ul class="proof-list">
+            <li>Week 0: Intro conversation and fit check</li>
+            <li>Weeks 1-2: Diagnostic and risk map</li>
+            <li>Weeks 3-8: Focused operating sprint</li>
+            <li>Post-sprint: Optional monthly advisory support</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Included vs excluded</h3>
+          <ul class="proof-list">
+            <li>Included: operating analysis, redesign, leadership cadence, implementation guidance</li>
+            <li>Excluded by default: full replatforming, staff augmentation, open-ended embedded delivery</li>
+          </ul>
+          <div class="button-row">
+            <a class="btn btn-secondary" href="./services.html">See detailed services</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" aria-labelledby="faqTitle">
+      <span class="eyebrow">FAQ</span>
+      <h2 id="faqTitle">Common buyer questions</h2>
+      <div class="faq-item">
+        <h3>Who do you work with?</h3>
+        <p>Owner-led and growth-stage service businesses that need stronger operating discipline.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does a diagnostic include?</h3>
+        <p>A focused review of how work is sold, handed off, executed, and managed.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do you replace an internal operations leader?</h3>
+        <p>No. Boss Key strengthens the operating system and leadership cadence your team runs on.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do you build AI tools?</h3>
+        <p>Where helpful, I can recommend selective automation. The engagement is led by operating priorities, not by tool adoption.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How quickly will we see change?</h3>
+        <p>Most clients see practical shifts in visibility and execution behavior within the first 30-60 days.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How do you price engagements?</h3>
+        <p>Pricing is scoped to decision complexity, execution load, and urgency. The structure aligns with outcomes instead of generic package tiers.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is not included by default?</h3>
+        <p>Large platform migrations, staff augmentation, and indefinite embedded delivery unless explicitly scoped.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What happens after I reach out?</h3>
+        <p>Conversation first, then diagnostic, then an engagement decision based on fit and expected impact.</p>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contactTitle">
+      <span class="eyebrow">Next Steps</span>
+      <h2 id="contactTitle">If operations feel heavier than they should, start with a diagnostic.</h2>
+      <p>First conversation -> diagnostic -> clear engagement decision.</p>
+      <div class="button-row">
+        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Final CTA Book Diagnostic" href="#">Book a diagnostic</a>
+        <a class="btn btn-secondary email-cta" data-context="Final CTA Email" href="#">Email Timmy</a>
+      </div>
+
+      <form id="diagnosticForm">
+        <label for="name">Name
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </label>
+        <label for="email">Email
+          <input id="email" name="email" type="email" autocomplete="email" required>
+        </label>
+        <label for="company">Company
+          <input id="company" name="company" type="text" autocomplete="organization">
+        </label>
+        <label for="problem">What are you trying to fix?
+          <textarea id="problem" name="problem" required></textarea>
+        </label>
+        <button class="btn btn-secondary track-contact" type="submit" data-channel="form" data-context="Diagnostic Form Submit">Request a diagnostic</button>
+      </form>
+      <p class="small">Form sends through your default email client to `timmy@bosskeyops.com`.</p>
     </section>
   </main>
 
   <footer>
     <div class="wrap">
-      Boss Key LLC | Timmy Semenza | Practical operations improvement for service businesses | <a href="./trust/">Trust Center</a> | <a href="./trust/security-policy.html">Information Security Policy</a>
+      Boss Key LLC | <a href="./services.html">Services</a> | <a href="./trust/">Trust Center</a> | <a href="./trust/security-policy.html">Information Security Policy</a>
     </div>
   </footer>
-
-  <aside class="bosskey-game-widget" id="bossKeyGame" aria-label="Boss Key mini game">
-    <div class="bosskey-game-head">
-      <span>Boss Key Mini</span>
-      <button type="button" id="bossKeyGameToggle" aria-expanded="true">Hide</button>
-    </div>
-    <div class="bosskey-game-body">
-      <div class="bosskey-game-canvas-wrap">
-        <canvas id="bossKeyCanvas" width="168" height="168" aria-label="Find the boss key"></canvas>
-      </div>
-      <div class="bosskey-game-status" id="bossKeyStatus">Find the key.</div>
-      <div class="bosskey-game-controls" aria-label="Game controls">
-        <span class="spacer">.</span>
-        <button type="button" data-dir="up" aria-label="Move up">Up</button>
-        <span class="spacer">.</span>
-        <button type="button" data-dir="left" aria-label="Move left">Left</button>
-        <button type="button" data-dir="down" aria-label="Move down">Down</button>
-        <button type="button" data-dir="right" aria-label="Move right">Right</button>
-      </div>
-    </div>
-  </aside>
 
   <script>
     (function () {
       const inboxAlias = "timmy@bosskeyops.com";
-      const calendarScheduleUrl = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+      const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+      const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
       const trackingEndpoint = "/api/contact-events";
-
-      function buildMailto(context) {
-        const subject = `[Boss Key Site] ${context}`;
-        const bodyLines = [
-          "Hi Timmy,",
-          "",
-          "I found Boss Key through your website and wanted to connect.",
-          "",
-          "Name:",
-          "Company:",
-          "Best phone number:",
-          "Best email address:",
-          "Location (town/county):",
-          "What I need help with:",
-          "Timeline:",
-          "",
-          `Inquiry context: ${context}`,
-          `Page URL: ${window.location.href}`,
-          `Sent from website on: ${new Date().toLocaleString()}`
-        ];
-
-        return `mailto:${inboxAlias}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-      }
 
       function trackContactEvent(channel, context) {
         const payload = {
@@ -1312,240 +664,77 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
           keepalive: true
-        }).catch(() => {});
+        }).catch(function () {});
       }
 
-      document.querySelectorAll(".email-cta").forEach((link) => {
+      function buildMailto(context, bodyLines) {
+        const subject = "[Boss Key] " + context;
+        const body = bodyLines.join("\n");
+        return "mailto:" + inboxAlias + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      }
+
+      document.querySelectorAll(".email-cta").forEach(function (link) {
         const context = link.dataset.context || "Website Inquiry";
-        link.href = buildMailto(context);
+        link.href = buildMailto(context, [
+          "Hi Timmy,",
+          "",
+          "I found Boss Key through your website and want to discuss a diagnostic.",
+          "",
+          "Name:",
+          "Company:",
+          "Primary operating issue:",
+          "Timeline:",
+          "",
+          "Context: " + context,
+          "Page URL: " + window.location.href
+        ]);
+
         link.addEventListener("click", function () {
           trackContactEvent("email", context);
-          this.href = buildMailto(context);
         });
       });
 
-      document.querySelectorAll(".schedule-cta").forEach((link) => {
+      document.querySelectorAll(".schedule-cta").forEach(function (link) {
         link.href = calendarScheduleUrl;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
       });
 
-      document.querySelectorAll(".track-contact").forEach((link) => {
+      document.querySelectorAll(".track-contact").forEach(function (link) {
         const context = link.dataset.context || "Website Contact";
-        const channel = link.dataset.channel || (link.href.startsWith("tel:") ? "call" : (link.href.startsWith("sms:") ? "sms" : "contact"));
+        const channel = link.dataset.channel || "contact";
         link.addEventListener("click", function () {
           trackContactEvent(channel, context);
         });
       });
 
-      const menuToggle = document.getElementById("mobileMenuToggle");
-      if (menuToggle) {
-        menuToggle.addEventListener("click", function () {
-          const open = document.body.classList.toggle("menu-open");
-          menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
-          menuToggle.textContent = open ? "Close" : "Menu";
+      const form = document.getElementById("diagnosticForm");
+      if (form) {
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const data = new FormData(form);
+          const name = (data.get("name") || "").toString().trim();
+          const email = (data.get("email") || "").toString().trim();
+          const company = (data.get("company") || "").toString().trim();
+          const problem = (data.get("problem") || "").toString().trim();
+
+          const mailto = buildMailto("Diagnostic Request", [
+            "Hi Timmy,",
+            "",
+            "I would like to request a diagnostic.",
+            "",
+            "Name: " + name,
+            "Email: " + email,
+            "Company: " + company,
+            "What we are trying to fix: " + problem,
+            "",
+            "Page URL: " + window.location.href,
+            "Submitted: " + new Date().toLocaleString()
+          ]);
+
+          trackContactEvent("form", "Diagnostic Form Submit");
+          window.location.href = mailto;
         });
-      }
-
-      document.querySelectorAll(".toc-nav a").forEach((link) => {
-        link.addEventListener("click", function () {
-          if (window.matchMedia("(max-width: 880px)").matches) {
-            document.body.classList.remove("menu-open");
-            if (menuToggle) {
-              menuToggle.setAttribute("aria-expanded", "false");
-              menuToggle.textContent = "Menu";
-            }
-          }
-        });
-      });
-
-      const gameRoot = document.getElementById("bossKeyGame");
-      const gameToggle = document.getElementById("bossKeyGameToggle");
-      const gameCanvas = document.getElementById("bossKeyCanvas");
-      const gameStatus = document.getElementById("bossKeyStatus");
-      if (gameRoot && gameToggle && gameCanvas && gameStatus) {
-        const ctx = gameCanvas.getContext("2d");
-        const size = 14;
-        const tile = 12;
-        let map = [];
-        let player = { x: 1, y: 1, facing: "down" };
-        let keySpot = { x: size - 2, y: size - 2 };
-        let won = false;
-        let wonAt = 0;
-        let moveAt = 0;
-        const keys = { up: false, down: false, left: false, right: false };
-
-        function makeMap() {
-          const next = [];
-          for (let y = 0; y < size; y += 1) {
-            const row = [];
-            for (let x = 0; x < size; x += 1) {
-              const edge = x === 0 || y === 0 || x === size - 1 || y === size - 1;
-              row.push(edge ? 1 : 0);
-            }
-            next.push(row);
-          }
-          for (let y = 2; y < size - 2; y += 2) {
-            for (let x = 2; x < size - 2; x += 2) {
-              if ((x + y) % 3 === 0) next[y][x] = 1;
-            }
-          }
-          map = next;
-        }
-
-        function pickOpenSpot() {
-          const open = [];
-          for (let y = 1; y < size - 1; y += 1) {
-            for (let x = 1; x < size - 1; x += 1) {
-              if (map[y][x] === 0 && !(x === player.x && y === player.y)) open.push({ x, y });
-            }
-          }
-          if (!open.length) return { x: size - 2, y: size - 2 };
-          return open[Math.floor(Math.random() * open.length)];
-        }
-
-        function resetGame() {
-          makeMap();
-          player = { x: 1, y: 1, facing: "down" };
-          keySpot = pickOpenSpot();
-          won = false;
-          wonAt = 0;
-          gameStatus.textContent = "Find the key.";
-        }
-
-        function walk(dir) {
-          if (won) return;
-          let dx = 0;
-          let dy = 0;
-          if (dir === "up") dy = -1;
-          if (dir === "down") dy = 1;
-          if (dir === "left") dx = -1;
-          if (dir === "right") dx = 1;
-          if (!dx && !dy) return;
-          const nx = player.x + dx;
-          const ny = player.y + dy;
-          player.facing = dir;
-          if (map[ny] && map[ny][nx] === 0) {
-            player.x = nx;
-            player.y = ny;
-            if (player.x === keySpot.x && player.y === keySpot.y) {
-              won = true;
-              wonAt = performance.now();
-              gameStatus.textContent = "Boss Key found.";
-            }
-          }
-        }
-
-        function drawTile(x, y, color) {
-          ctx.fillStyle = color;
-          ctx.fillRect(x * tile, y * tile, tile, tile);
-        }
-
-        function drawPlayer() {
-          const px = player.x * tile;
-          const py = player.y * tile;
-          ctx.fillStyle = "#f5f7fb";
-          ctx.fillRect(px + 4, py + 4, 4, 5);
-          ctx.fillStyle = "#e0a5b0";
-          ctx.fillRect(px + 3, py + 3, 6, 2);
-          ctx.fillStyle = "#121317";
-          ctx.fillRect(px + 4, py + 5, 1, 1);
-          ctx.fillRect(px + 7, py + 5, 1, 1);
-          if (won) {
-            ctx.fillStyle = "#ffd04f";
-            ctx.fillRect(px + 5, py - 2, 2, 3);
-            ctx.fillStyle = "#c5162e";
-            ctx.fillRect(px + 4, py - 1, 4, 2);
-          }
-        }
-
-        function drawKey() {
-          if (won) return;
-          const kx = keySpot.x * tile;
-          const ky = keySpot.y * tile;
-          ctx.fillStyle = "#ffd04f";
-          ctx.fillRect(kx + 5, ky + 3, 2, 6);
-          ctx.fillRect(kx + 4, ky + 2, 4, 2);
-          ctx.fillRect(kx + 7, ky + 6, 2, 1);
-        }
-
-        function render(ts) {
-          ctx.fillStyle = "#08090b";
-          ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-          for (let y = 0; y < size; y += 1) {
-            for (let x = 0; x < size; x += 1) {
-              if (map[y][x] === 1) {
-                drawTile(x, y, "#3d131a");
-                ctx.fillStyle = "#5b1b24";
-                ctx.fillRect(x * tile + 1, y * tile + 1, tile - 2, 2);
-              } else {
-                ctx.fillStyle = (x + y) % 2 === 0 ? "#0d0f12" : "#0a0c0f";
-                ctx.fillRect(x * tile, y * tile, tile, tile);
-              }
-            }
-          }
-
-          if (!won && ts - moveAt > 105) {
-            if (keys.up) { walk("up"); moveAt = ts; }
-            else if (keys.down) { walk("down"); moveAt = ts; }
-            else if (keys.left) { walk("left"); moveAt = ts; }
-            else if (keys.right) { walk("right"); moveAt = ts; }
-          }
-
-          drawKey();
-          drawPlayer();
-
-          if (won) {
-            ctx.fillStyle = "rgba(0,0,0,0.45)";
-            ctx.fillRect(12, 72, 144, 24);
-            ctx.fillStyle = "#ffdbe1";
-            ctx.font = 'bold 10px "Courier New", monospace';
-            ctx.fillText("BOSS KEY SECURED", 30, 87);
-            if (ts - wonAt > 1300) resetGame();
-          }
-
-          requestAnimationFrame(render);
-        }
-
-        function setDirectionFromKey(code, value) {
-          if (code === "ArrowUp" || code === "KeyW") keys.up = value;
-          if (code === "ArrowDown" || code === "KeyS") keys.down = value;
-          if (code === "ArrowLeft" || code === "KeyA") keys.left = value;
-          if (code === "ArrowRight" || code === "KeyD") keys.right = value;
-        }
-
-        window.addEventListener("keydown", function (e) {
-          setDirectionFromKey(e.code, true);
-        });
-        window.addEventListener("keyup", function (e) {
-          setDirectionFromKey(e.code, false);
-        });
-
-        gameRoot.querySelectorAll("[data-dir]").forEach((btn) => {
-          const d = btn.getAttribute("data-dir");
-          const on = function (ev) {
-            ev.preventDefault();
-            keys[d] = true;
-          };
-          const off = function (ev) {
-            ev.preventDefault();
-            keys[d] = false;
-          };
-          btn.addEventListener("pointerdown", on);
-          btn.addEventListener("pointerup", off);
-          btn.addEventListener("pointercancel", off);
-          btn.addEventListener("pointerleave", off);
-        });
-
-        gameToggle.addEventListener("click", function () {
-          const collapsed = gameRoot.classList.toggle("collapsed");
-          gameToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
-          gameToggle.textContent = collapsed ? "Play" : "Hide";
-        });
-
-        resetGame();
-        requestAnimationFrame(render);
       }
     })();
   </script>
