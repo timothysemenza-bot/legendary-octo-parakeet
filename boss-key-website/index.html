@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boss Key LLC | Operating Systems for Service Businesses</title>
-  <meta name="description" content="Boss Key LLC helps service business leaders fix operational breakdowns, protect margin, and install execution systems that hold up under pressure.">
+  <title>Executive Coach and Confidential Advisor for Founders | Boss Key LLC</title>
+  <meta name="description" content="Executive coaching and executive advisory for founder-led and operator-led teams. Boss Key provides a private cognitive workspace for clearer decisions and more consistent leadership.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,14 +13,12 @@
     :root {
       --ink: #f3f5f8;
       --paper: #0a0a0b;
-      --accent: #c5162e;
-      --accent-soft: #ffd7dd;
       --line: #2d2f35;
       --card: #16171a;
       --soft: #c3c8d3;
+      --accent: #c5162e;
+      --accent-soft: #ffd7dd;
       --max: 1120px;
-      --radius: 16px;
-      --shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
     }
 
     * { box-sizing: border-box; }
@@ -35,10 +33,7 @@
       scroll-behavior: smooth;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
     .wrap {
       width: min(var(--max), 92vw);
@@ -46,75 +41,51 @@
     }
 
     header {
-      padding: 20px 0 12px;
-      border-bottom: 1px solid #1f2127;
       position: sticky;
       top: 0;
       z-index: 40;
       backdrop-filter: blur(8px);
-      background: rgba(10, 10, 11, 0.8);
+      background: rgba(10, 10, 11, 0.82);
+      border-bottom: 1px solid #1f2127;
+      padding: 16px 0;
     }
 
-    .nav-shell {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
+    .nav {
+      display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       font-weight: 700;
       letter-spacing: 0.02em;
-      white-space: nowrap;
     }
 
     .brand img {
-      width: 32px;
-      height: 32px;
+      width: 31px;
+      height: 31px;
       display: block;
     }
 
-    .nav-links {
+    .links {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .nav-links a {
+    .links a {
       border: 1px solid #343740;
       border-radius: 999px;
-      padding: 7px 12px;
+      padding: 6px 11px;
       background: #1b1d22;
       color: var(--soft);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-      border-color: #4a4e58;
-      background: #21242b;
-    }
-
-    .utility-links {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      font-size: 0.85rem;
-      color: #c8cfda;
-    }
-
-    .utility-links a {
-      border: 1px solid #3a3d45;
-      border-radius: 999px;
-      padding: 5px 10px;
-      background: #15181f;
     }
 
     .btn {
@@ -123,10 +94,11 @@
       justify-content: center;
       border-radius: 12px;
       border: 1px solid transparent;
-      padding: 12px 16px;
+      padding: 11px 14px;
       font-weight: 700;
       line-height: 1.1;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .btn-primary {
@@ -141,138 +113,26 @@
       border-color: #3b4350;
     }
 
-    main {
-      padding: 30px 0 44px;
-    }
+    main { padding: 24px 0 42px; }
 
     section {
-      margin: 16px 0;
+      margin: 14px 0;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 16px;
       background: linear-gradient(165deg, #181a20 0%, #111318 100%);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      scroll-margin-top: 92px;
+      padding: 22px;
     }
 
     .hero {
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
-      gap: 22px;
+      gap: 18px;
       align-items: start;
     }
 
     .eyebrow {
       display: inline-block;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: #2b1619;
-      color: #f2a8b3;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
       margin-bottom: 10px;
-    }
-
-    h1 {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.08;
-      margin: 0 0 12px;
-      letter-spacing: -0.02em;
-    }
-
-    h2 {
-      font-family: "Fraunces", Georgia, serif;
-      margin: 0 0 10px;
-      font-size: clamp(1.5rem, 2.9vw, 2.15rem);
-      line-height: 1.18;
-    }
-
-    h3 {
-      margin: 0 0 8px;
-      font-size: 1.08rem;
-    }
-
-    p {
-      margin: 0 0 12px;
-      color: var(--soft);
-    }
-
-    .hero-list,
-    .bullet-list {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--accent-soft);
-    }
-
-    .hero-list li,
-    .bullet-list li {
-      margin: 7px 0;
-    }
-
-    .hero-card {
-      border: 1px solid #353944;
-      border-radius: 14px;
-      background: #14171f;
-      padding: 16px;
-    }
-
-    .founder {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .founder img {
-      width: 66px;
-      height: 66px;
-      border-radius: 12px;
-      object-fit: cover;
-    }
-
-    .kpi {
-      margin-top: 8px;
-      padding: 9px 10px;
-      border: 1px solid #353944;
-      border-radius: 10px;
-      background: #12151c;
-    }
-
-    .kpi strong {
-      display: block;
-      color: #fff;
-      font-size: 0.95rem;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .grid-2,
-    .grid-3 {
-      display: grid;
-      gap: 14px;
-    }
-
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-    .panel {
-      border: 1px solid #343844;
-      border-radius: 12px;
-      padding: 14px;
-      background: #14171f;
-    }
-
-    .tag {
-      display: inline-block;
-      margin-bottom: 8px;
       border: 1px solid #5d2230;
       border-radius: 999px;
       color: #ffdce2;
@@ -281,122 +141,123 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      padding: 5px 8px;
+      padding: 5px 9px;
     }
 
-    .faq-item {
-      border-top: 1px solid #2e323d;
-      padding-top: 12px;
-      margin-top: 12px;
+    h1, h2 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0 0 10px;
+      line-height: 1.15;
     }
 
-    .proof-list {
+    h1 { font-size: clamp(2.05rem, 4.2vw, 3.3rem); letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.42rem, 2.6vw, 2rem); }
+    h3 { margin: 0 0 8px; font-size: 1.06rem; }
+
+    p { margin: 0 0 10px; color: var(--soft); }
+
+    ul {
       margin: 0;
       padding-left: 18px;
-      color: #d7dce5;
+      color: #d9dee8;
     }
 
-    form {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
+    li { margin: 7px 0; }
+
+    .hero-side,
+    .panel {
+      border: 1px solid #343844;
+      border-radius: 12px;
+      background: #14171f;
+      padding: 14px;
     }
 
-    label {
-      display: grid;
-      gap: 6px;
-      font-size: 0.9rem;
-      color: #d6dbe4;
+    .founder {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 10px;
     }
 
-    input,
-    textarea {
-      width: 100%;
-      border: 1px solid #3a3f4c;
+    .founder img {
+      width: 64px;
+      height: 64px;
       border-radius: 10px;
-      background: #0f1218;
-      color: #f3f5f8;
-      padding: 10px 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
+      object-fit: cover;
     }
 
-    textarea { min-height: 112px; resize: vertical; }
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 12px;
+    }
 
-    .small {
-      margin-top: 6px;
-      color: #a7afbf;
-      font-size: 0.83rem;
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .buttons {
+      margin-top: 12px;
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
     }
 
     footer {
       border-top: 1px solid var(--line);
       color: #afb6c3;
       font-size: 0.88rem;
-      padding: 18px 0 28px;
+      padding: 16px 0 26px;
     }
 
-    @media (max-width: 980px) {
+    @media (max-width: 940px) {
       .hero { grid-template-columns: 1fr; }
       .grid-3 { grid-template-columns: 1fr 1fr; }
-      .nav-shell {
-        grid-template-columns: 1fr;
-        justify-items: center;
-      }
     }
 
     @media (max-width: 760px) {
-      section { padding: 18px; }
       .grid-2,
       .grid-3 { grid-template-columns: 1fr; }
-      .button-row .btn { width: 100%; }
-      .nav-links { justify-content: flex-start; }
+      .buttons .btn { width: 100%; }
+      section { padding: 18px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap">
-      <div class="nav-shell">
-        <a class="brand" href="#top" aria-label="Boss Key home">
-          <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
-          <span>Boss Key LLC</span>
-        </a>
-        <nav class="nav-links" aria-label="Primary">
-          <a href="#problem">Problem</a>
-          <a href="#outcomes">Outcomes</a>
-          <a href="#process">How We Work</a>
-          <a href="#proof">Proof</a>
-          <a href="#contact">Book a Diagnostic</a>
-        </nav>
-        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Header Book Diagnostic" href="#">Book a diagnostic</a>
-      </div>
-      <div class="utility-links" aria-label="Secondary links">
-        <a href="./services.html">Services</a>
-        <a href="./trust/">Trust</a>
-        <a href="./insights/what-10-years-in-proposals-teaches-you.html">Insights</a>
-        <a class="email-cta" data-context="Header Email" href="#">timmy@bosskeyops.com</a>
-      </div>
+    <div class="wrap nav">
+      <a class="brand" href="./index.html" aria-label="Boss Key home">
+        <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
+        <span>Boss Key LLC</span>
+      </a>
+      <nav class="links" aria-label="Main navigation">
+        <a href="./about.html">About</a>
+        <a href="./coaching.html">Coaching</a>
+        <a href="./engagements.html">Engagements</a>
+        <a href="./proof.html">Proof</a>
+        <a href="./faq.html">FAQ</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
+      <a class="btn btn-primary schedule-cta" href="#">Book intro</a>
     </div>
   </header>
 
-  <main id="top" class="wrap">
-    <section class="hero" aria-labelledby="heroTitle">
+  <main class="wrap">
+    <section class="hero" aria-labelledby="homeHeroTitle">
       <div>
-        <span class="eyebrow">Executive Summary</span>
-        <h1 id="heroTitle">Operational clarity that protects margin and gets your team out of reactive mode.</h1>
-        <p>Boss Key LLC helps owner-led service businesses fix execution breakdowns, tighten handoffs, and install operating systems that hold up under real pressure.</p>
-        <ul class="hero-list">
-          <li>Stop losing profit to preventable process breakdowns.</li>
-          <li>Reduce leadership drag caused by unclear ownership and handoffs.</li>
-          <li>Create a practical operating cadence your team can actually maintain.</li>
+        <span class="eyebrow">Executive Coaching and Executive Advisory</span>
+        <h1 id="homeHeroTitle">A private cognitive workspace for leaders to think clearly, decide well, and lead consistently.</h1>
+        <p>I work with founder-led and operator-led teams carrying real decision load. You bring the hardest leadership questions. I help you see patterns faster, pressure-test assumptions, and move with conviction.</p>
+        <ul>
+          <li>Get out of noisy, reactive decision loops.</li>
+          <li>Untangle political and stakeholder friction without theatrics.</li>
+          <li>Translate insight into clear next actions your team can execute.</li>
         </ul>
-        <div class="button-row">
-          <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Hero Book Diagnostic" href="#">Book a diagnostic</a>
-          <a class="btn btn-secondary" href="./services.html">Review services</a>
+        <div class="buttons">
+          <a class="btn btn-primary schedule-cta" href="#">Book intro</a>
+          <a class="btn btn-secondary email-cta" href="#">Send a private note</a>
         </div>
       </div>
-      <aside class="hero-card" aria-label="Credibility and fit">
+      <aside class="hero-side">
         <div class="founder">
           <img src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza headshot">
           <div>
@@ -404,235 +265,96 @@
             <span>Founder, Boss Key LLC</span>
           </div>
         </div>
-        <p>Led proposal and pursuit execution for 10+ years across complex service environments before launching Boss Key.</p>
-        <div class="kpi">
-          <strong>What buyers get</strong>
-          <span>Clearer decisions, tighter execution, and less avoidable margin leakage.</span>
-        </div>
-        <div class="kpi">
-          <strong>Positioning</strong>
-          <span>Judgment and operating systems first. Tools are secondary.</span>
-        </div>
+        <p>My edge is listening quality. I catch contradictions, incentive mismatches, and unspoken pressure points that distort leadership decisions.</p>
+        <p>Background: 10+ years in high-stakes proposal and business development environments, where decision quality and execution consistency determined outcomes.</p>
       </aside>
     </section>
 
-    <section id="problem" aria-labelledby="problemTitle">
-      <span class="eyebrow">Problem Definition</span>
-      <h2 id="problemTitle">If you are dealing with this, the operating system needs attention.</h2>
-      <ul class="bullet-list">
-        <li>Jobs are getting done, but margins keep leaking.</li>
-        <li>Too much tribal knowledge sits with one or two people.</li>
-        <li>Work is constantly urgent because upstream decisions are unclear.</li>
-        <li>Sales commitments and delivery reality are not aligned.</li>
-        <li>You are hiring around process problems instead of fixing them.</li>
-        <li>Reporting exists, but it does not drive decisions.</li>
-        <li>Your team is working hard, but execution still feels inconsistent.</li>
+    <section>
+      <h2>Who this is for</h2>
+      <div class="grid-3">
+        <article class="panel">
+          <h3>Founder / CEO</h3>
+          <p>You are carrying strategic choices with incomplete information and limited internal challenge.</p>
+        </article>
+        <article class="panel">
+          <h3>GM / President</h3>
+          <p>You need alignment across functions without losing speed or authority.</p>
+        </article>
+        <article class="panel">
+          <h3>Operator under load</h3>
+          <p>You are navigating complexity, politics, and execution drag at the same time.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>How it feels after</h2>
+      <div class="grid-3">
+        <article class="panel">
+          <h3>Calmer judgment</h3>
+          <p>Decisions feel deliberate instead of rushed or defensive.</p>
+        </article>
+        <article class="panel">
+          <h3>Cleaner priorities</h3>
+          <p>You know what matters now, what can wait, and what to stop.</p>
+        </article>
+        <article class="panel">
+          <h3>Stronger leadership consistency</h3>
+          <p>Your team experiences clearer direction and fewer mixed signals.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>What I do</h2>
+      <div class="grid-2">
+        <article class="panel">
+          <h3>Executive coaching</h3>
+          <p>Confidential sessions for leaders who need sharper thinking, better calibration, and higher-stakes decision support.</p>
+        </article>
+        <article class="panel">
+          <h3>Executive advisory</h3>
+          <p>Focused decision support for specific moments: reorganizations, key hires, role clarity, stakeholder conflict, and growth tradeoffs.</p>
+        </article>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-secondary" href="./coaching.html">See coaching model</a>
+        <a class="btn btn-secondary" href="./engagements.html">See engagement options</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Optional tools, used quietly</h2>
+      <p>Once leadership clarity exists, we can use lightweight tools to support follow-through: decision logs, meeting capture, accountability prompts, and simple execution aids. Tools never lead the engagement.</p>
+    </section>
+
+    <section>
+      <h2>Who this is not for</h2>
+      <ul>
+        <li>Leaders looking for motivational speeches instead of direct thinking partnership.</li>
+        <li>Teams that want someone else to own their decisions.</li>
+        <li>Organizations looking only for software implementation without leadership work.</li>
       </ul>
     </section>
 
-    <section id="outcomes" aria-labelledby="outcomesTitle">
-      <span class="eyebrow">Expected Change</span>
-      <h2 id="outcomesTitle">What changes after 30-60 days</h2>
-      <div class="grid-2">
-        <article class="panel">
-          <h3>Leadership rhythm is clearer</h3>
-          <p>You get a practical review cadence and escalation path for daily execution decisions.</p>
-        </article>
-        <article class="panel">
-          <h3>Handoffs are more reliable</h3>
-          <p>The highest-friction transitions are mapped, clarified, and stabilized.</p>
-        </article>
-        <article class="panel">
-          <h3>Ownership is easier to see</h3>
-          <p>Team roles and decision rights are explicit in day-to-day work.</p>
-        </article>
-        <article class="panel">
-          <h3>Core workflows run cleaner</h3>
-          <p>Priority processes are easier to execute without constant leadership intervention.</p>
-        </article>
-        <article class="panel">
-          <h3>Risk concentration is visible</h3>
-          <p>You can see where execution and margin risk are concentrated and act sooner.</p>
-        </article>
-      </div>
+    <section>
+      <h2>Boundary statement: coaching vs therapy</h2>
+      <p>This is executive coaching and business advisory. It is not psychotherapy, mental health treatment, or clinical care. I do not diagnose or treat mental health conditions.</p>
     </section>
 
-    <section id="process" aria-labelledby="processTitle">
-      <span class="eyebrow">Solution Framing</span>
-      <h2 id="processTitle">How it works</h2>
-      <div class="grid-3">
-        <article class="panel">
-          <span class="tag">Step 1</span>
-          <h3>Diagnostic</h3>
-          <p>We map where operational bottlenecks are driving missed execution and margin leakage.</p>
-        </article>
-        <article class="panel">
-          <span class="tag">Step 2</span>
-          <h3>Operating Sprint</h3>
-          <p>We implement focused workflow fixes and management routines in the highest-impact areas.</p>
-        </article>
-        <article class="panel">
-          <span class="tag">Step 3</span>
-          <h3>Stabilization</h3>
-          <p>We lock in ownership, cadence, and accountability so improvements stick.</p>
-        </article>
+    <section>
+      <h2>Start here</h2>
+      <p>Step 1: Book a private intro call. Step 2: Clarify the decision landscape. Step 3: Choose the right engagement.</p>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book intro</a>
+        <a class="btn btn-secondary" href="./contact.html">Request a private callback</a>
       </div>
-    </section>
-
-    <section id="deliverables" aria-labelledby="deliverablesTitle">
-      <span class="eyebrow">What I Deliver</span>
-      <h2 id="deliverablesTitle">Deliverables framed as outcomes</h2>
-      <div class="grid-2">
-        <article class="panel">
-          <h3>Operating-risk map</h3>
-          <p>A prioritized view of where execution is breaking down and what it is costing.</p>
-        </article>
-        <article class="panel">
-          <h3>30-60 day action plan</h3>
-          <p>A practical sequence tied to business outcomes, not generic implementation checklists.</p>
-        </article>
-        <article class="panel">
-          <h3>Workflow and handoff redesign</h3>
-          <p>Updated structures for selected high-friction processes so teams move with less confusion.</p>
-        </article>
-        <article class="panel">
-          <h3>Leadership cadence artifacts</h3>
-          <p>Review rhythm, decision logs, and escalation rules to reduce avoidable firefighting.</p>
-        </article>
-        <article class="panel">
-          <h3>Optional automation recommendations</h3>
-          <p>Targeted use of automation where it removes recurring friction without adding complexity.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="proof" aria-labelledby="proofTitle">
-      <span class="eyebrow">Proof and Credibility</span>
-      <h2 id="proofTitle">Signals that reduce delivery risk</h2>
-      <p>Built from real operating environments where execution quality and decision speed directly affected outcomes.</p>
-      <div class="grid-3">
-        <article class="panel">
-          <h3>Testimonials</h3>
-          <ul class="proof-list">
-            <li>"[Placeholder testimonial]" - Name, Title, Company</li>
-            <li>"[Placeholder testimonial]" - Name, Title, Company</li>
-            <li>"[Placeholder testimonial]" - Name, Title, Company</li>
-          </ul>
-        </article>
-        <article class="panel">
-          <h3>Who I have supported</h3>
-          <ul class="proof-list">
-            <li>[Company or portfolio placeholder]</li>
-            <li>[Company or portfolio placeholder]</li>
-            <li>[Company or portfolio placeholder]</li>
-            <li>[Company or portfolio placeholder]</li>
-          </ul>
-        </article>
-        <article class="panel">
-          <h3>Case placeholders</h3>
-          <ul class="proof-list">
-            <li>Case Placeholder 01: Problem, intervention approach, observed shift.</li>
-            <li>Case Placeholder 02: Problem, intervention approach, observed shift.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section id="engagement" aria-labelledby="engagementTitle">
-      <span class="eyebrow">Engagement Model</span>
-      <h2 id="engagementTitle">Clear steps, timelines, and boundaries</h2>
-      <div class="grid-2">
-        <article class="panel">
-          <h3>Typical path</h3>
-          <ul class="proof-list">
-            <li>Week 0: Intro conversation and fit check</li>
-            <li>Weeks 1-2: Diagnostic and risk map</li>
-            <li>Weeks 3-8: Focused operating sprint</li>
-            <li>Post-sprint: Optional monthly advisory support</li>
-          </ul>
-        </article>
-        <article class="panel">
-          <h3>Included vs excluded</h3>
-          <ul class="proof-list">
-            <li>Included: operating analysis, redesign, leadership cadence, implementation guidance</li>
-            <li>Excluded by default: full replatforming, staff augmentation, open-ended embedded delivery</li>
-          </ul>
-          <div class="button-row">
-            <a class="btn btn-secondary" href="./services.html">See detailed services</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="faq" aria-labelledby="faqTitle">
-      <span class="eyebrow">FAQ</span>
-      <h2 id="faqTitle">Common buyer questions</h2>
-      <div class="faq-item">
-        <h3>Who do you work with?</h3>
-        <p>Owner-led and growth-stage service businesses that need stronger operating discipline.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What does a diagnostic include?</h3>
-        <p>A focused review of how work is sold, handed off, executed, and managed.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Do you replace an internal operations leader?</h3>
-        <p>No. Boss Key strengthens the operating system and leadership cadence your team runs on.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Do you build AI tools?</h3>
-        <p>Where helpful, I can recommend selective automation. The engagement is led by operating priorities, not by tool adoption.</p>
-      </div>
-      <div class="faq-item">
-        <h3>How quickly will we see change?</h3>
-        <p>Most clients see practical shifts in visibility and execution behavior within the first 30-60 days.</p>
-      </div>
-      <div class="faq-item">
-        <h3>How do you price engagements?</h3>
-        <p>Pricing is scoped to decision complexity, execution load, and urgency. The structure aligns with outcomes instead of generic package tiers.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What is not included by default?</h3>
-        <p>Large platform migrations, staff augmentation, and indefinite embedded delivery unless explicitly scoped.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What happens after I reach out?</h3>
-        <p>Conversation first, then diagnostic, then an engagement decision based on fit and expected impact.</p>
-      </div>
-    </section>
-
-    <section id="contact" aria-labelledby="contactTitle">
-      <span class="eyebrow">Next Steps</span>
-      <h2 id="contactTitle">If operations feel heavier than they should, start with a diagnostic.</h2>
-      <p>First conversation -> diagnostic -> clear engagement decision.</p>
-      <div class="button-row">
-        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Final CTA Book Diagnostic" href="#">Book a diagnostic</a>
-        <a class="btn btn-secondary email-cta" data-context="Final CTA Email" href="#">Email Timmy</a>
-      </div>
-
-      <form id="diagnosticForm">
-        <label for="name">Name
-          <input id="name" name="name" type="text" autocomplete="name" required>
-        </label>
-        <label for="email">Email
-          <input id="email" name="email" type="email" autocomplete="email" required>
-        </label>
-        <label for="company">Company
-          <input id="company" name="company" type="text" autocomplete="organization">
-        </label>
-        <label for="problem">What are you trying to fix?
-          <textarea id="problem" name="problem" required></textarea>
-        </label>
-        <button class="btn btn-secondary track-contact" type="submit" data-channel="form" data-context="Diagnostic Form Submit">Request a diagnostic</button>
-      </form>
-      <p class="small">Form sends through your default email client to `timmy@bosskeyops.com`.</p>
     </section>
   </main>
 
   <footer>
-    <div class="wrap">
-      Boss Key LLC | <a href="./services.html">Services</a> | <a href="./trust/">Trust Center</a> | <a href="./trust/security-policy.html">Information Security Policy</a>
-    </div>
+    <div class="wrap">Boss Key LLC | Executive coach | Executive advisory | Founder coaching | Confidential advisor | <a href="./trust/">Trust Center</a></div>
   </footer>
 
   <script>
@@ -640,59 +362,6 @@
       const inboxAlias = "timmy@bosskeyops.com";
       const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
       const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
-      const trackingEndpoint = "/api/contact-events";
-
-      function trackContactEvent(channel, context) {
-        const payload = {
-          channel: (channel || "contact").toLowerCase(),
-          context: context || "Website Contact",
-          source_page: window.location.href,
-          referrer: document.referrer || "",
-          user_agent: navigator.userAgent || ""
-        };
-
-        try {
-          if (navigator.sendBeacon) {
-            const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-            navigator.sendBeacon(trackingEndpoint, blob);
-            return;
-          }
-        } catch (_e) {}
-
-        fetch(trackingEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          keepalive: true
-        }).catch(function () {});
-      }
-
-      function buildMailto(context, bodyLines) {
-        const subject = "[Boss Key] " + context;
-        const body = bodyLines.join("\n");
-        return "mailto:" + inboxAlias + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      }
-
-      document.querySelectorAll(".email-cta").forEach(function (link) {
-        const context = link.dataset.context || "Website Inquiry";
-        link.href = buildMailto(context, [
-          "Hi Timmy,",
-          "",
-          "I found Boss Key through your website and want to discuss a diagnostic.",
-          "",
-          "Name:",
-          "Company:",
-          "Primary operating issue:",
-          "Timeline:",
-          "",
-          "Context: " + context,
-          "Page URL: " + window.location.href
-        ]);
-
-        link.addEventListener("click", function () {
-          trackContactEvent("email", context);
-        });
-      });
 
       document.querySelectorAll(".schedule-cta").forEach(function (link) {
         link.href = calendarScheduleUrl;
@@ -700,42 +369,22 @@
         link.rel = "noopener noreferrer";
       });
 
-      document.querySelectorAll(".track-contact").forEach(function (link) {
-        const context = link.dataset.context || "Website Contact";
-        const channel = link.dataset.channel || "contact";
-        link.addEventListener("click", function () {
-          trackContactEvent(channel, context);
-        });
+      document.querySelectorAll(".email-cta").forEach(function (link) {
+        const subject = "[Boss Key] Private Leadership Inquiry";
+        const body = [
+          "Hi Timmy,",
+          "",
+          "I would like to discuss executive coaching/advisory.",
+          "",
+          "Name:",
+          "Company:",
+          "Leadership question I am working through:",
+          "Timeline:",
+          "",
+          "Page URL: " + window.location.href
+        ].join("\n");
+        link.href = "mailto:" + inboxAlias + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
       });
-
-      const form = document.getElementById("diagnosticForm");
-      if (form) {
-        form.addEventListener("submit", function (event) {
-          event.preventDefault();
-          const data = new FormData(form);
-          const name = (data.get("name") || "").toString().trim();
-          const email = (data.get("email") || "").toString().trim();
-          const company = (data.get("company") || "").toString().trim();
-          const problem = (data.get("problem") || "").toString().trim();
-
-          const mailto = buildMailto("Diagnostic Request", [
-            "Hi Timmy,",
-            "",
-            "I would like to request a diagnostic.",
-            "",
-            "Name: " + name,
-            "Email: " + email,
-            "Company: " + company,
-            "What we are trying to fix: " + problem,
-            "",
-            "Page URL: " + window.location.href,
-            "Submitted: " + new Date().toLocaleString()
-          ]);
-
-          trackContactEvent("form", "Diagnostic Form Submit");
-          window.location.href = mailto;
-        });
-      }
     })();
   </script>
 </body>
