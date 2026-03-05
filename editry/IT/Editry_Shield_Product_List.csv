@@ -1,0 +1,6 @@
+Name,SKU,Type,Price,Billing Frequency,Description
+Secure Site Assessment,ESH-SVC-SECASS-001,Service,499,One-time,"A full physical and digital security assessment for small businesses or residential properties. Includes threat evaluation, camera audit, and risk mitigation report."
+Business Continuity Plan (BCP) Template + Advisory,ESH-SVC-BCPADV-001,Service,1200,One-time,"Development of a tailored continuity plan (communications, backups, and recovery). Includes 2 consultation calls and final document delivery."
+Fleet & Facility Monitoring Add-on (NestNotes Pro),ESH-SUB-NNPRO-001,Subscription,199,Monthly,"Ongoing monitoring of critical facility updates, fleet reminders, and emergency alerts via SMS integration."
+Emergency Communication System (SafeSignal),ESH-SUB-SAFSIG-001,Subscription,399,Annual,"Customizable emergency contact and notification system for teams, schools, or senior living communities."
+Security Staffing Coordination (Managed Service),ESH-SVC-SECSTA-001,Service,45,Hourly,Coordination and management of licensed security personnel. Billed hourly; used for DF or franchise-style contracts.

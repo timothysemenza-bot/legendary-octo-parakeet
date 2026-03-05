@@ -23,22 +23,44 @@
     p{margin:0 0 10px;color:var(--soft)}ul{margin:0;padding-left:18px;color:#d9dee8}li{margin:7px 0}
     .grid-2,.grid-3{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .panel{border:1px solid #343844;border-radius:12px;background:#14171f;padding:14px}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;align-items:stretch}
+    .founder-card{display:flex;flex-direction:column;justify-content:space-between;min-height:100%}
+    .founder-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .founder-head img{width:72px;height:72px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+    .founder-meta strong{display:block;line-height:1.2}
+    .founder-meta span{color:var(--soft);font-size:.92rem}
+    .founder-card p{margin:0 0 8px}
     footer{border-top:1px solid var(--line);color:#afb6c3;font-size:.88rem;padding:16px 0 26px}
-    @media (max-width:860px){.grid-2,.grid-3{grid-template-columns:1fr}.buttons .btn{width:100%}}
+    @media (max-width:860px){.hero,.grid-2,.grid-3{grid-template-columns:1fr}.buttons .btn{width:100%}}
   </style>
 </head>
 <body>
 <header><div class="wrap nav"><a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a><nav class="links" aria-label="Main navigation"><a href="./about.html">About</a><a href="./coaching.html">Coaching</a><a href="./engagements.html">Engagements</a><a href="./proof.html">Proof</a><a href="./faq.html">FAQ</a><a href="./contact.html">Contact</a></nav><a class="btn btn-primary schedule-cta" href="#">Book intro</a></div></header>
 <main class="wrap">
-  <section>
-    <h1>Executive coaching for leaders who carry complex decisions.</h1>
-    <p>This is founder coaching and executive coaching built for real operating pressure. Sessions are confidential, direct, and anchored in leadership decision-making.</p>
-    <ul>
-      <li>Clarify what is strategic noise versus true priority.</li>
-      <li>Pressure-test choices before they become organizational commitments.</li>
-      <li>Turn insight into actions you can communicate and sustain.</li>
-    </ul>
-    <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book intro</a><a class="btn btn-secondary email-cta" href="#">Ask a private question</a></div>
+  <section class="hero">
+    <article>
+      <h1>Executive coaching for leaders who carry complex decisions.</h1>
+      <p>This is founder coaching and executive coaching built for real operating pressure. Sessions are confidential, direct, and anchored in leadership decision-making.</p>
+      <ul>
+        <li>Clarify what is strategic noise versus true priority.</li>
+        <li>Pressure-test choices before they become organizational commitments.</li>
+        <li>Turn insight into actions you can communicate and sustain.</li>
+      </ul>
+      <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book intro</a><a class="btn btn-secondary email-cta" href="#">Ask a private question</a></div>
+    </article>
+    <aside class="panel founder-card">
+      <div>
+        <div class="founder-head">
+          <img src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza headshot">
+          <div class="founder-meta">
+            <strong>Timmy Semenza</strong>
+            <span>Founder, Boss Key LLC</span>
+          </div>
+        </div>
+        <p>I work as a confidential advisor for founder-led and operator-led leaders carrying real decision load.</p>
+      </div>
+      <p>My edge is pattern recognition: surfacing contradictions, incentives, and blind spots that affect judgment and execution.</p>
+    </aside>
   </section>
 
   <section>

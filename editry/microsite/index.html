@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boss Key x Editry Collective Partnership Blueprint</title>
+  <style>
+    :root {
+      --teal: #0a4d4f;
+      --olive: #5f735a;
+      --blush: #e9afa3;
+      --clay: #f5ede6;
+      --paper: #fafaf9;
+      --graphite: #2c2c2e;
+      --signal: #b0373a;
+      --ink-soft: #424245;
+      --card: #fffdf9;
+      --line: #d8d0c6;
+      --shadow: 0 14px 34px rgba(10, 77, 79, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 10% 10%, rgba(233, 175, 163, 0.18), transparent 44%),
+                  radial-gradient(circle at 90% 25%, rgba(95, 115, 90, 0.18), transparent 40%),
+                  linear-gradient(180deg, #fefcf8 0%, #f5ede6 100%);
+      color: var(--graphite);
+      font-family: "Segoe UI", "Aptos", "Trebuchet MS", sans-serif;
+      line-height: 1.5;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 5rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(10, 77, 79, 0.98), rgba(44, 44, 46, 0.95));
+      border-radius: 24px;
+      color: var(--paper);
+      padding: 2.4rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -70px auto;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(233, 175, 163, 0.32), rgba(233, 175, 163, 0));
+      border-radius: 999px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-card {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+      padding: 0.35rem 0.55rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+    }
+
+    .logo-card img {
+      display: block;
+      width: auto;
+      max-height: 40px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .logo-plus {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #f2ebe4;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffc8be;
+      margin-bottom: 0.8rem;
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.15;
+      margin: 0 0 0.8rem;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      max-width: 18ch;
+    }
+
+    .hero p {
+      max-width: 66ch;
+      margin: 0;
+      color: #f2ebe4;
+    }
+
+    .chips {
+      margin-top: 1.2rem;
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    section {
+      margin-top: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.1rem;
+      box-shadow: 0 4px 18px rgba(44, 44, 46, 0.05);
+    }
+
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    .kicker {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--olive);
+      margin-bottom: 0.35rem;
+      font-weight: 700;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+
+    .card ul {
+      margin: 0.55rem 0 0;
+      padding-left: 1rem;
+    }
+
+    .card li {
+      margin-bottom: 0.35rem;
+    }
+
+    .table {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 680px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.72rem;
+      border-bottom: 1px solid #eee7de;
+      font-size: 0.93rem;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8f4ef;
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .phase {
+      border-left: 4px solid var(--teal);
+      padding-left: 0.8rem;
+    }
+
+    .cta {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border-radius: 999px;
+      padding: 0.62rem 1rem;
+      border: 1px solid transparent;
+    }
+
+    .btn.primary {
+      background: var(--teal);
+      color: #fff;
+    }
+
+    .btn.secondary {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: #ffffff;
+    }
+
+    .signal {
+      color: var(--signal);
+      font-weight: 700;
+    }
+
+    .footnote {
+      margin-top: 1.2rem;
+      color: #5c5c60;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 860px) {
+      .span-4, .span-6, .span-8 { grid-column: span 12; }
+      .wrap { width: min(1120px, calc(100% - 1rem)); }
+      .hero { padding: 1.5rem; }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .wrap {
+        width: 100%;
+        padding: 0;
+      }
+
+      .hero,
+      .card,
+      .table {
+        box-shadow: none;
+      }
+
+      .btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="logo-row" aria-label="Partner logos">
+        <span class="logo-card">
+          <img src="./assets/boss-key-linkedin-logo.jpg" alt="Boss Key logo" />
+        </span>
+        <span class="logo-plus">x</span>
+        <span class="logo-card">
+          <img src="./assets/editry-logo.png" alt="The Editry Collective logo" />
+        </span>
+      </div>
+      <span class="eyebrow">Boss Key x Editry Partnership Draft</span>
+      <h1>How Boss Key and The Editry Collective Can Partner for Growth</h1>
+      <p>
+        This blueprint frames a direct partnership between Boss Key and The Editry Collective, grounded in Editry's internal operating docs.
+        The core idea: Boss Key leads business development and channel growth while Editry leads delivery systems and product execution.
+      </p>
+      <div class="chips">
+        <span class="chip">Boss Key BD Lead</span>
+        <span class="chip">Editry Pro</span>
+        <span class="chip">Nest Notes / NestSignal</span>
+        <span class="chip">Editry Shield</span>
+        <span class="chip">Greater Atlanta GTM</span>
+      </div>
+    </header>
+
+    <section>
+      <h2>Partnership Thesis</h2>
+      <div class="grid">
+        <article class="card span-4">
+          <div class="kicker">Where To Win Fast</div>
+          <p>Sell an annual B2B school/daycare SMS service with low implementation friction and high immediate perceived value.</p>
+        </article>
+        <article class="card span-4">
+          <div class="kicker">Where To Build Moat</div>
+          <p>Convert institution trust into parent opt-ins, then expand into Editry Pro household and operations support.</p>
+        </article>
+        <article class="card span-4">
+          <div class="kicker">Where To Expand Margin</div>
+          <p>Layer premium services and add-ons (emergency overrides, RSVP campaigns, continuity planning, security advisory).</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Best-Fit Partnership Lanes</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <div class="kicker">Lane 1: Education & Childcare Revenue Engine</div>
+          <ul>
+            <li>Primary offer: Nest Notes annual plans ($399, $549, $599 tiers).</li>
+            <li>Initial market: Greater Atlanta daycare and early learning operators.</li>
+            <li>Boss Key role: outbound pipeline build, referral partner network, and school onboarding ops.</li>
+            <li>Editry role: product delivery, messaging templates, CRM routing, and parent opt-in experience.</li>
+          </ul>
+        </article>
+        <article class="card span-6">
+          <div class="kicker">Lane 2: Senior Living & Emergency Messaging</div>
+          <ul>
+            <li>Primary offer: NestSignal pilot + family reassurance communications.</li>
+            <li>Target buyers: multi-site senior communities and regional operators.</li>
+            <li>Boss Key role: enterprise introductions, pilot structuring, and expansion contracts.</li>
+            <li>Editry role: secure SMS workflow, contact validation, reporting, and deployment templates.</li>
+          </ul>
+        </article>
+        <article class="card span-12">
+          <div class="kicker">Lane 3: Shield + Pro Hybrid Deals</div>
+          <ul>
+            <li>Bundle physical security strategy, continuity planning, and communication tooling for SMB and facilities clients.</li>
+            <li>Use Editry Shield service SKUs as entry points: site assessments, BCP advisory, managed coordination.</li>
+            <li>Boss Key role: complex deal pursuit and multi-service packaging.</li>
+            <li>Editry role: service execution playbooks, compliance posture, and cross-team delivery cadence.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Offer Ladder (Joint Go-To-Market)</h2>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Offer</th>
+              <th>Buyer</th>
+              <th>Price Anchor</th>
+              <th>Sales Motion</th>
+              <th>Expansion Path</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>School Calendar-to-Text Pilot</td>
+              <td>Directors / Admin</td>
+              <td>$99 pilot or $399 annual</td>
+              <td>Warm referral + simple checklist onboarding</td>
+              <td>White-label, Pro tier, RSVP text campaigns</td>
+            </tr>
+            <tr>
+              <td>Nest Notes Annual Program</td>
+              <td>School leadership</td>
+              <td>$549-$599 annual premium tiers</td>
+              <td>Multi-campus contracts and renewals</td>
+              <td>District-level rollouts and parent upsell paths</td>
+            </tr>
+            <tr>
+              <td>NestSignal Seniors Pilot</td>
+              <td>Senior living operations</td>
+              <td>Pilot + optional add-on package</td>
+              <td>4-week readiness pilot with scorecard closeout</td>
+              <td>Everyday family updates and continuity retainers</td>
+            </tr>
+            <tr>
+              <td>Editry Shield Advisory + Services</td>
+              <td>SMB / facilities</td>
+              <td>$499-$1,200 advisory starts</td>
+              <td>Assessment-led consultative sales</td>
+              <td>Managed services and annual continuity contracts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>90-Day Business Development Plan</h2>
+      <div class="grid">
+        <article class="card span-4">
+          <div class="kicker">Days 1-30</div>
+          <div class="phase">
+            <p>Build target account lists, finalize one-pager collateral, lock CRM stages, and launch outreach to first 30 accounts.</p>
+          </div>
+        </article>
+        <article class="card span-4">
+          <div class="kicker">Days 31-60</div>
+          <div class="phase">
+            <p>Close first pilot cohort, document case-study outcomes, and convert pilot accounts into annual contracts.</p>
+          </div>
+        </article>
+        <article class="card span-4">
+          <div class="kicker">Days 61-90</div>
+          <div class="phase">
+            <p>Scale referral channels, launch second vertical (Seniors or Shield hybrid), and standardize onboarding playbook.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Operating Cadence Between Our Teams</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <div class="kicker">Weekly Rhythm</div>
+          <ul>
+            <li>Monday pipeline standup: targets, blockers, and active proposals.</li>
+            <li>Wednesday delivery sync: onboarding quality, customer feedback, and SLA checks.</li>
+            <li>Friday revenue review: deals moved, renewal risks, and next-week priorities.</li>
+          </ul>
+        </article>
+        <article class="card span-6">
+          <div class="kicker">Shared KPIs</div>
+          <ul>
+            <li>Qualified meetings booked per week.</li>
+            <li>Pilot-to-paid conversion rate.</li>
+            <li>Average contract value by vertical.</li>
+            <li>30-day onboarding completion rate.</li>
+            <li>Renewal forecast and churn early-warning signals.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Immediate Boss Key x Editry Decisions</h2>
+      <p><span class="signal">Decision 1:</span> Which lane leads Q2: schools/daycares, senior living, or Shield hybrid?</p>
+      <p><span class="signal">Decision 2:</span> Boss Key x Editry economics model: referral fee, rev-share, or performance milestone bonus.</p>
+      <p><span class="signal">Decision 3:</span> Brand execution model: co-branded prospecting versus white-labeled delivery by account type.</p>
+      <div class="cta">
+        <a class="btn primary" href="mailto:partnerships@theeditry.com">Start Boss Key x Editry Kickoff</a>
+        <button class="btn secondary" id="download-pdf" type="button">Download This Blueprint (PDF)</button>
+      </div>
+      <p class="footnote">
+        Built from internal Editry materials including outreach kits, taxonomy docs, site map/user stories,
+        pricing references, launch plans, and division charter notes.
+      </p>
+    </section>
+  </div>
+  <script>
+    (function () {
+      var pdfButton = document.getElementById("download-pdf");
+      if (!pdfButton) return;
+      pdfButton.addEventListener("click", function () {
+        window.print();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jenna Rosa | Consulting Break-In Microsite</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <style>
+    :root {
+      --bg: #0b1016;
+      --bg-soft: #141c25;
+      --panel: #121923;
+      --line: #263345;
+      --ink: #eaf1f8;
+      --muted: #b6c4d4;
+      --accent: #cf1f3b;
+      --accent-soft: #ffd9df;
+      --ok: #89d2a7;
+      --max: 1080px;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, #1a2430 0%, #0e151d 42%, #090d12 100%);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    .wrap {
+      width: min(var(--max), 94vw);
+      margin: 0 auto;
+      padding: 20px 0 36px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: linear-gradient(155deg, #151e29 0%, #111924 100%);
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero {
+      padding: 18px 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(140deg, #182331 0%, #121c27 56%, #0f1720 100%);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      border: 1px solid #3b4e68;
+      border-radius: 999px;
+      padding: 6px 11px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      background: #121d2a;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #5f2b36;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #1d1317;
+    }
+
+    .brand img { height: 22px; width: auto; display: block; }
+    .brand span {
+      font-size: 0.75rem;
+      color: #c9d6e5;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    h1, h2, h3 { margin: 0 0 8px; line-height: 1.2; }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: var(--accent-soft);
+      font-size: 1.06rem;
+    }
+    h3 {
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #d2deea;
+      max-width: 920px;
+    }
+
+    .meta {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.85rem;
+      color: #a8bbd1;
+    }
+
+    .section { padding: 16px 18px; }
+    .section + .section { border-top: 1px solid var(--line); }
+    .muted { color: var(--muted); }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 12px;
+    }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: var(--panel);
+    }
+
+    .panel.accent {
+      border-color: #7d2e3a;
+      box-shadow: 0 0 0 1px rgba(207, 31, 59, 0.25) inset;
+      background: #1a151b;
+    }
+
+    ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    li { margin: 4px 0; }
+
+    .kpi {
+      border-left: 4px solid #8f2f3d;
+      background: #17151a;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .phase {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: #111b27;
+    }
+
+    .phase strong { color: #ffe5ea; }
+    .small { font-size: 0.88rem; color: #a8bad0; }
+
+    .footer {
+      padding: 14px 18px 18px;
+      border-top: 1px solid var(--line);
+      color: #9db0c6;
+      font-size: 0.82rem;
+      background: #101720;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <article class="card">
+      <header class="hero">
+        <div class="top">
+          <span class="chip">Career Positioning Microsite</span>
+          <span class="brand">
+            <img src="./assets/boss-key-logo-refined.svg" alt="Boss Key logo">
+            <span>Prepared by Boss Key LLC</span>
+          </span>
+        </div>
+        <h1>Jenna Rosa: 90-Day Consulting Break-In Plan</h1>
+        <p>A focused, outcomes-first path to move from leadership operations roles into a clear consulting offer with immediate market traction.</p>
+        <div class="meta">
+          <span>Prepared for: Jenna Rosa</span>
+          <span>Date: March 4, 2026</span>
+          <span>Type: One-page action plan</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Positioning Thesis</h2>
+        <p class="muted">Start with one narrow lane where Jenna already has executive credibility: <strong>facilities and account-retention consulting for regulated pharma environments</strong>. Sell fixed outcomes first, then expand to broader strategic advisory after proof points.</p>
+      </section>
+
+      <section class="section">
+        <h2>Primary Action Items</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>1) Pick One Lane</h3>
+            <ul>
+              <li>Anchor on regulated operations + client retention.</li>
+              <li>Avoid broad "general consultant" messaging for now.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>2) Productize Two Offers</h3>
+            <ul>
+              <li><strong>Retention Diagnostic</strong> (2 weeks, fixed fee).</li>
+              <li><strong>90-Day Playbook Build</strong> (implementation roadmap).</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>3) Publish Proof Stories</h3>
+            <ul>
+              <li>Use three quantified wins from prior roles.</li>
+              <li>Format each as: problem, intervention, result.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>4) Tighten LinkedIn for Buyers</h3>
+            <ul>
+              <li>Lead with consulting outcomes and buyer language.</li>
+              <li>Name target stakeholders: COO, VP Ops, Account Leaders.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>5) Start Warm Outreach</h3>
+            <ul>
+              <li>20 targeted outreach messages to former clients and partners.</li>
+              <li>Ask each contact for one intro tied to renewal or transition risk.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>6) Use Pilot-First Pricing</h3>
+            <ul>
+              <li>Fixed-fee pilot for easy approval.</li>
+              <li>Expand to advisory retainer only after pilot outcomes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>90-Day Execution Timeline</h2>
+        <div class="timeline">
+          <div class="phase">
+            <strong>Days 1-14 | Foundation Build</strong>
+            <ul>
+              <li>Finalize consulting lane, offer names, and deliverables.</li>
+              <li>Draft one-page service sheet and discovery call script.</li>
+              <li>Update LinkedIn headline and summary for consulting intent.</li>
+            </ul>
+          </div>
+          <div class="phase">
+            <strong>Days 15-45 | Pipeline Activation</strong>
+            <ul>
+              <li>Run warm outreach cadence and book discovery calls weekly.</li>
+              <li>Close at least one paid diagnostic engagement.</li>
+              <li>Capture client language to refine offers and messaging.</li>
+            </ul>
+          </div>
+          <div class="phase">
+            <strong>Days 46-90 | Proof + Expansion</strong>
+            <ul>
+              <li>Convert first pilot into case study with clear metrics.</li>
+              <li>Launch second offer with tighter scope and stronger positioning.</li>
+              <li>Add testimonial-based credibility assets for ongoing outreach.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Suggested Initial Offers</h2>
+        <div class="grid-2">
+          <div class="panel accent">
+            <h3>Offer A: Account Retention Diagnostic</h3>
+            <p class="small">2-week fixed engagement focused on identifying renewal risk, communication gaps, and operational friction.</p>
+            <ul>
+              <li>Deliverables: risk map, top 5 interventions, executive readout.</li>
+              <li>Ideal buyer: account leader or operations executive under renewal pressure.</li>
+            </ul>
+          </div>
+          <div class="panel accent">
+            <h3>Offer B: Transition & Playbook Sprint</h3>
+            <p class="small">4-6 week sprint to design and implement a practical operating playbook for team handoff and service continuity.</p>
+            <ul>
+              <li>Deliverables: operating playbook, role ownership map, 30-day execution sequence.</li>
+              <li>Ideal buyer: multi-site teams handling launch, transition, or growth.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Success Metrics (First 90 Days)</h2>
+        <div class="grid-3">
+          <div class="panel kpi">
+            <h3>Pipeline</h3>
+            <ul>
+              <li>Qualified discovery calls: <strong>8-12</strong></li>
+            </ul>
+          </div>
+          <div class="panel kpi">
+            <h3>Revenue</h3>
+            <ul>
+              <li>Paid pilots closed: <strong>1-2</strong></li>
+            </ul>
+          </div>
+          <div class="panel kpi">
+            <h3>Credibility</h3>
+            <ul>
+              <li>Published case stories: <strong>2+</strong></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Formal Request</h2>
+        <div class="panel accent">
+          <h3>Executive Coaching Partnership Invitation</h3>
+          <p class="small">Jenna, I would like to formally request the opportunity to serve as your executive coach as you build this consulting practice. I believe we can create faster momentum together by combining structured strategy, weekly accountability, and practical execution support.</p>
+          <p class="small">If you are open to it, I would like to continue as your advisor and coaching partner through this transition and support you as an active client.</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        Prepared by Boss Key LLC for Jenna Rosa. This page is a planning draft intended for career strategy discussion.
+      </footer>
+    </article>
+  </main>
+</body>
+</html>

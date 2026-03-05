@@ -1,0 +1,15 @@
+Name,SKU,Description,Billing Frequency,Term,Product Type
+Phase 1: Brand Identity Refresh,EP-BEA-P1-V1,"Foundational branding elements including logo, palette, and typography.",One-time,N/A,Service
+Phase 2: Booking & Payment System Setup,EP-BEA-P2-V1,Setup of online booking and integrated payment system.,One-time,N/A,Service
+Phase 3: Marketing Strategy & Content,EP-BEA-P3-V1,Marketing engine setup with content roadmap.,One-time,N/A,Service
+Phase 4: Product Bundle Launch Strategy,EP-BEA-P4-V1,Launch strategy and assets for bundled offers.,One-time,N/A,Service
+Founding Client Bundle (All Phases),EP-BEA-BLD-V1,Bundled service package for Phases 1–4.,One-time,N/A,Service
+Monthly Strategic Support,EP-BEA-STR-V1,"Strategy calls, content updates, promo refresh.",Monthly,Ongoing,Service
+Stylist Payroll Management,EP-BEA-PAY-V1,Payroll tracking and execution support.,Monthly,Ongoing,Service
+Full Support Retainer,EP-BEA-FULL-V1,Includes strategic support and payroll management.,Monthly,Ongoing,Service
+Nest Notes – Standard Plan,NN-STD-SUB-V1,Basic calendar-to-text reminders for daycares and preschools.,Annually,1 year,Service
+Nest Notes – Pro Plan,NN-PRO-SUB-V1,Pro version with analytics and branding options.,Annually,1 year,Service
+Nest Notes – White-Labeled Plan,NN-WHT-SUB-V1,Fully branded and customizable calendar reminder system.,Annually,1 year,Service
+SafeSignal – Seniors Edition,SS-SENIORS-SUB-V1,Emergency messaging platform for senior living communities.,Annually,1 year,Service
+Add-On: Cybersecurity Audit,SS-ADD-CYBER-V1,Security risk assessment for client technology stack.,One-time,N/A,Service
+Add-On: Tech Stack Review,SS-ADD-TECH-V1,Evaluation of client tools and workflows.,One-time,N/A,Service

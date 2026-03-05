@@ -1,0 +1,17 @@
+CPA Packet - 2026-03-04
+
+Primary (send these first):
+1) BusinessRegistrationCertificate.pdf
+2) IRS-EIN-Confirmation-CP575G.pdf
+3) operating-agreement-single-member-nj.pdf
+4) W9-Boss-Key-LLC_signed.pdf
+5) Boss-Key-Financial-Architecture.xlsx (optional unless CPA asked for workbook)
+
+Backup (send only if requested):
+- IRS-EIN-Application-Receipt.pdf
+- BOSS_KEY_LLC_NJ_Organizing_Document.pdf
+- BOSS_KEY_LLC_IRS_EIN_CP575.pdf
+- W9-Boss-Key-LLC.pdf (unsigned)
+
+Note:
+- If CPA specifically needs Hawaii formation/election docs, those are not currently in this packet.
