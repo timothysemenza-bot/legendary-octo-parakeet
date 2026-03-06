@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Proposal Outline</h2>
+  <p><strong>Opportunity:</strong> {{ opportunity_id }}</p>
+  {% if outline %}
+  <p><strong>Current Version:</strong> {{ outline.version }}</p>
+  {% else %}
+  <p>No outline generated yet.</p>
+  {% endif %}
+
+  <h3>Generate New Outline Version</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/proposal-outline/generate">
+    <label>Actor <input name="actor" value="operator" /></label>
+    <label><input type="checkbox" name="include_unmapped" value="true" /> Include UNMAPPED rows</label>
+    <button type="submit">Generate Outline</button>
+  </form>
+
+  {% if sections %}
+  <h3>Current Sections</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Sequence</th>
+        <th>Proposal Section</th>
+        <th>Owner</th>
+        <th>Requirements</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for section in sections %}
+      <tr>
+        <td>{{ section.sequence }}</td>
+        <td>{{ section.proposal_section }}</td>
+        <td>{{ section.owner }}</td>
+        <td>{{ section.requirement_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <h3>Version History</h3>
+  {% if versions %}
+  <ul>
+    {% for version in versions %}
+    <li>Version {{ version.version }} | {{ version.source }} | {{ version.created_at }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No versions yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

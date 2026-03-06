@@ -1,0 +1,74 @@
+client_id: demo-facilities
+workspace_id: demo-facilities-main
+display_name: Demo Facilities Group
+terminology:
+  opportunity: pursuit
+  review_cycle: color_review
+stages:
+  - code: INTAKE
+    display_name: Intake
+  - code: QUALIFICATION
+    display_name: Bid Decision
+  - code: STRATEGY
+    display_name: Strategy
+  - code: COMPLIANCE
+    display_name: Compliance
+  - code: CONTENT_PLANNING
+    display_name: Content Plan
+  - code: DRAFTING
+    display_name: Drafting
+  - code: REVIEW
+    display_name: Review
+  - code: SUBMISSION
+    display_name: Submission
+  - code: ARCHIVE
+    display_name: Lessons Learned
+gates:
+  - code: GATE_A
+    stage: QUALIFICATION
+    required_roles: [proposal_manager]
+  - code: GATE_B
+    stage: STRATEGY
+    required_roles: [capture_strategy_lead]
+  - code: GATE_C
+    stage: COMPLIANCE
+    required_roles: [compliance_lead]
+  - code: GATE_D
+    stage: REVIEW
+    required_roles: [reviewer]
+  - code: GATE_E
+    stage: REVIEW
+    required_roles: [proposal_manager]
+  - code: GATE_F
+    stage: SUBMISSION
+    required_roles: [executive_approver]
+  - code: GATE_G
+    stage: ARCHIVE
+    required_roles: [knowledge_manager]
+scoring:
+  criteria:
+    - code: capability_fit
+      weight: 6
+    - code: past_performance_relevance
+      weight: 5
+    - code: timeline_feasibility
+      weight: 4
+artifacts:
+  required_by_stage:
+    COMPLIANCE: [compliance_matrix, response_matrix]
+    CONTENT_PLANNING: [content_plan]
+    DRAFTING: [section_drafts]
+    SUBMISSION: [submission_package, final_compliance_certificate]
+permissions:
+  roles:
+    proposal_manager:
+      can_approve: [GATE_A, GATE_E]
+    compliance_lead:
+      can_approve: [GATE_C]
+    executive_approver:
+      can_approve: [GATE_F]
+templates:
+  proposal_outline: templates/proposal-outline-v1.docx
+  compliance_matrix: templates/compliance-matrix-v1.xlsx
+branding:
+  primary_logo: templates/brand/logo-primary.svg

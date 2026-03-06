@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Review Dashboard</h2>
+  <p>Opportunity: {{ opportunity_id }}</p>
+
+  <h3>Gate Readiness</h3>
+  <p><strong>Gate D:</strong> {% if readiness.gate_d_ready %}READY{% else %}NOT READY{% endif %}</p>
+  {% if readiness.gate_d_blockers %}
+  <ul>
+    {% for blocker in readiness.gate_d_blockers %}
+    <li>{{ blocker }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <p><strong>Gate E:</strong> {% if readiness.gate_e_ready %}READY{% else %}NOT READY{% endif %}</p>
+  {% if readiness.gate_e_blockers %}
+  <ul>
+    {% for blocker in readiness.gate_e_blockers %}
+    <li>{{ blocker }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Create Review Cycle</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/reviews">
+    <label>Review Type
+      <select name="review_type">
+        <option value="PINK">PINK</option>
+        <option value="RED">RED</option>
+        <option value="GOLD">GOLD</option>
+      </select>
+    </label>
+    <label>Round <input type="number" name="round_number" value="1" min="1" max="20" /></label>
+    <label>Actor <input name="actor" value="operator" /></label>
+    <button type="submit">Create Cycle</button>
+  </form>
+
+  <h3>Cycles</h3>
+  {% if cycles %}
+  {% for cycle in cycles %}
+  <article>
+    <p><strong>{{ cycle.review_type }}</strong> Round {{ cycle.round_number }} | {{ cycle.status }}</p>
+    <p>Started: {{ cycle.started_at }} {% if cycle.closed_at %}| Closed: {{ cycle.closed_at }}{% endif %}</p>
+    {% if cycle.status != "CLOSED" %}
+    <form method="post" action="/opportunities/{{ opportunity_id }}/reviews/{{ cycle.id }}/close">
+      <input type="hidden" name="actor" value="operator" />
+      <button type="submit">Close Cycle</button>
+    </form>
+    {% endif %}
+
+    <h4>Add Comment</h4>
+    <form method="post" action="/reviews/{{ cycle.id }}/comments">
+      <input type="hidden" name="opportunity_id" value="{{ opportunity_id }}" />
+      <label>Section <input name="section_code" required /></label>
+      <label>Severity
+        <select name="severity">
+          <option value="LOW">LOW</option>
+          <option value="MEDIUM">MEDIUM</option>
+          <option value="HIGH">HIGH</option>
+          <option value="CRITICAL">CRITICAL</option>
+        </select>
+      </label>
+      <label>Comment <input name="comment_text" required /></label>
+      <label>Owner <input name="owner" value="UNASSIGNED" /></label>
+      <label>Created By <input name="created_by" value="reviewer" /></label>
+      <button type="submit">Add Comment</button>
+    </form>
+
+    <h4>Comments</h4>
+    {% set comments = comments_by_cycle[cycle.id] %}
+    {% if comments %}
+    <ul>
+      {% for c in comments %}
+      <li>
+        {{ c.severity }} | {{ c.section_code }} | {{ c.resolution_status }} | {{ c.comment_text }}
+        {% if c.resolution_status != "RESOLVED" %}
+        <form method="post" action="/reviews/comments/{{ c.id }}/resolve">
+          <input type="hidden" name="opportunity_id" value="{{ opportunity_id }}" />
+          <input type="hidden" name="actor" value="reviewer" />
+          <button type="submit">Resolve</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No comments yet.</p>
+    {% endif %}
+  </article>
+  <hr />
+  {% endfor %}
+  {% else %}
+  <p>No review cycles yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

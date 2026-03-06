@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Workflow Timeline</h2>
+  <p><strong>Opportunity:</strong> {{ detail.name }} ({{ detail.id }})</p>
+  <p><a href="/opportunities/{{ detail.id }}">Back to Opportunity</a></p>
+
+  <form method="get" action="/opportunities/{{ detail.id }}/timeline">
+    <label>Category
+      <select name="category">
+        {% for category in categories %}
+        <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Filter</button>
+  </form>
+
+  {% if events %}
+  <table>
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Category</th>
+        <th>Action</th>
+        <th>Actor</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>{{ event.timestamp }}</td>
+        <td>{{ event.category }}</td>
+        <td>{{ event.action }}</td>
+        <td>{{ event.actor }}</td>
+        <td>{{ event.summary }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No timeline events found for this filter.</p>
+  {% endif %}
+</section>
+{% endblock %}

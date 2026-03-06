@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Email Updates</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Email-Derived Bid Updates</h1>
+    <p><a href="/notifications/digest">Notification Digest</a> | <a href="/notifications/email/connections">Email Connections</a> | <a href="/">Opportunities</a></p>
+
+    <section>
+      <h2>Connection Sync</h2>
+      {% if connections %}
+        <ul>
+          {% for connection in connections %}
+            <li>
+              <strong>{{ connection.provider }}</strong> {{ connection.inbox_address }} ({{ connection.status }})
+              {% if connection.last_synced_at %} - last sync {{ connection.last_synced_at }}{% endif %}
+              <form method="post" action="/notifications/email/connections/{{ connection.id }}/sync" style="display:inline">
+                <button type="submit">Sync Now</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No email connections configured.</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2>Ingest Email</h2>
+      <form method="post" action="/notifications/email/ingest">
+        <label>From Address <input type="email" name="from_address" required></label>
+        <label>Opportunity ID (optional) <input type="text" name="opportunity_id"></label>
+        <label>External Message ID (optional) <input type="text" name="external_message_id"></label>
+        <label>Subject <input type="text" name="subject" required></label>
+        <label>Body <textarea name="body" rows="6" required></textarea></label>
+        <label><input type="checkbox" name="auto_apply" value="true"> Auto-apply high confidence bid status (>= 0.90)</label>
+        <button type="submit">Ingest</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Update Queue ({{ status }})</h2>
+      <p>
+        <a href="/notifications/email?status=PENDING">Pending</a> |
+        <a href="/notifications/email?status=APPLIED">Applied</a> |
+        <a href="/notifications/email?status=DISMISSED">Dismissed</a> |
+        <a href="/notifications/email?status=">All</a>
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Received</th>
+            <th>From</th>
+            <th>Opportunity</th>
+            <th>Signal</th>
+            <th>Proposed Bid Status</th>
+            <th>Confidence</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td>{{ row.received_at }}</td>
+              <td>{{ row.from_address }}</td>
+              <td>{{ row.opportunity_id or "UNRESOLVED" }}</td>
+              <td>{{ row.signal_type }}</td>
+              <td>{{ row.proposed_bid_status or "-" }}</td>
+              <td>{{ "%.2f"|format(row.confidence) }}</td>
+              <td>{{ row.status }}</td>
+              <td>
+                {% if row.status == "PENDING" %}
+                  <form method="post" action="/notifications/email/updates/{{ row.id }}/apply" style="display:inline">
+                    <button type="submit">Apply</button>
+                  </form>
+                  <form method="post" action="/notifications/email/updates/{{ row.id }}/dismiss" style="display:inline">
+                    <button type="submit">Dismiss</button>
+                  </form>
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="8">
+                <strong>Subject:</strong> {{ row.subject }}<br>
+                <strong>Rationale:</strong> {{ row.rationale }}<br>
+                <strong>Excerpt:</strong> {{ row.body_excerpt }}
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="8">No email updates found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

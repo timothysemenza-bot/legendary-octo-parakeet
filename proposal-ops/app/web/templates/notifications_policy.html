@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Notification Policy Editor</h2>
+  <p><a href="/notifications/digest">Back to Notification Digest</a></p>
+
+  {% if saved %}
+  <p>Policy saved successfully.</p>
+  {% endif %}
+  {% if errors %}
+  <ul>
+    {% for err in errors %}
+    <li>{{ err }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <form method="post" action="/notifications/policy">
+    <label>Policy JSON</label>
+    <textarea name="policy_json" rows="28" style="width:100%;font-family:monospace;">{{ policy_json }}</textarea>
+    <div style="margin-top:10px;">
+      <button type="submit">Save Policy</button>
+    </div>
+  </form>
+
+  <h3>Client Policy Mappings</h3>
+  <h3>Policy Keys</h3>
+  {% if policy_key_errors %}
+  <ul>
+    {% for err in policy_key_errors %}
+    <li>{{ err }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <form method="post" action="/notifications/policy/configs">
+    <label>New Policy Key <input type="text" name="policy_key" required /></label>
+    <label>Policy JSON</label>
+    <textarea name="policy_json" rows="8" style="width:100%;font-family:monospace;">{{ policy_json }}</textarea>
+    <button type="submit">Create Policy Key</button>
+  </form>
+
+  {% if policies %}
+  <table>
+    <thead>
+      <tr>
+        <th>Policy Key</th>
+        <th>Updated By</th>
+        <th>Updated At</th>
+        <th>Clone</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for policy in policies %}
+      <tr>
+        <td>{{ policy.policy_key }}</td>
+        <td>{{ policy.updated_by }}</td>
+        <td>{{ policy.updated_at }}</td>
+        <td>
+          <form method="post" action="/notifications/policy/configs/{{ policy.policy_key }}/clone">
+            <input type="text" name="target_policy_key" placeholder="new key" required />
+            <button type="submit">Clone</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="/notifications/policy/configs/{{ policy.policy_key }}/delete">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <h3>Client Policy Mappings</h3>
+  {% if mapping_errors %}
+  <ul>
+    {% for err in mapping_errors %}
+    <li>{{ err }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <form method="post" action="/notifications/policy/mappings">
+    <label>Client Name <input type="text" name="client_name" required /></label>
+    <label>Policy Key <input type="text" name="policy_key" required /></label>
+    <button type="submit">Save Mapping</button>
+  </form>
+
+  {% if mappings %}
+  <table>
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Policy Key</th>
+        <th>Updated By</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mapping in mappings %}
+      <tr>
+        <td>{{ mapping.client_name }}</td>
+        <td>{{ mapping.policy_key }}</td>
+        <td>{{ mapping.updated_by }}</td>
+        <td>
+          <form method="post" action="/notifications/policy/mappings/{{ mapping.client_name }}/delete">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No client mappings configured.</p>
+  {% endif %}
+</section>
+{% endblock %}

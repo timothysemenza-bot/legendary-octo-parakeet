@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tom Deans | Writing Center Operating Sprint</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <style>
+    :root {
+      --ink: #eef3fa;
+      --paper: #0c1219;
+      --panel: #131c27;
+      --line: #2a3a4d;
+      --soft: #b8c8db;
+      --accent: #c5162e;
+      --accent-soft: #ffd6dd;
+      --ok: #8fd5a8;
+      --max: 1080px;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 15% 0%, #1f2d3d 0%, #121a24 40%, #090c11 100%);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.55;
+    }
+    .wrap {
+      width: min(var(--max), 94vw);
+      margin: 0 auto;
+      padding: 20px 0 34px;
+    }
+    .card {
+      background: linear-gradient(155deg, #172230 0%, #121b26 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 38px rgba(0, 0, 0, 0.35);
+    }
+    .hero {
+      padding: 18px 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(140deg, #1b2837 0%, #141f2a 60%, #101821 100%);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .chip {
+      border: 1px solid #3d5169;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 0.78rem;
+      color: var(--soft);
+      background: #101824;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid #5f232b;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #1a1114;
+    }
+    .brand img {
+      height: 24px;
+      width: auto;
+      display: block;
+    }
+    .brand span {
+      font-size: 0.76rem;
+      color: var(--soft);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    h1, h2, h3 { margin: 0 0 8px; line-height: 1.2; }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      margin: 0;
+      color: #cfdaee;
+      max-width: 920px;
+    }
+    .meta {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      color: #aab7ce;
+      font-size: 0.85rem;
+    }
+    .section { padding: 16px 18px; }
+    .section + .section { border-top: 1px solid var(--line); }
+    h2 { color: var(--accent-soft); font-size: 1.07rem; }
+    h3 { color: #fff; font-size: 0.96rem; }
+    .muted { color: var(--soft); }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: #121a24;
+    }
+    .kpi {
+      border-left: 4px solid #8d2d3b;
+      background: #18131a;
+    }
+    .next {
+      border: 1px solid #4e2a31;
+      border-radius: 10px;
+      padding: 12px;
+      background: #1f1317;
+    }
+    .next strong { color: #ffe4e8; }
+    ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    li { margin: 4px 0; }
+    .foot {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: #a1b1c5;
+    }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <article class="card">
+      <header class="hero">
+        <div class="top">
+          <span class="chip">Operating Sprint Draft • One-Page Pilot Scope</span>
+          <span class="brand">
+            <img src="../assets/logos/brand/boss-key-logo-refined.svg" alt="Boss Key">
+            <span>Prepared by Boss Key LLC</span>
+          </span>
+        </div>
+        <h1>UConn Writing Center Operating Sprint</h1>
+        <p>A focused pilot scope based on the March 4, 2026 conversation with Tom Deans to improve alumni reactivation, reporting readiness, and operational alignment with Student Success workflows.</p>
+        <div class="meta">
+          <span>Prepared for: Tom Deans, University of Connecticut Writing Center</span>
+          <span>Date: March 6, 2026</span>
+          <span>Scope: 30-day pilot planning sprint</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Primary Objective</h2>
+        <p class="muted">Launch a practical pilot that helps the Writing Center recover and reactivate its alumni network, define Nexus integration boundaries, and produce leadership-ready impact reporting without adding unsustainable staff burden.</p>
+      </section>
+
+      <section class="section">
+        <h2>Call-Derived Action Items</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>1) Pilot Offer Definition</h3>
+            <ul>
+              <li>Package scope as alumni reactivation + impact reporting + fundraising readiness.</li>
+              <li>Keep pilot limited to one center and one term.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>2) Alumni Data Recovery Plan</h3>
+            <ul>
+              <li>Map 20 years of tutor/GA sources and contact data quality gaps.</li>
+              <li>Build segmented outreach cadence for re-engagement.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>3) 20th Anniversary Relaunch Path</h3>
+            <ul>
+              <li>Design event flow that captures updated alumni records.</li>
+              <li>Use event as community + development reactivation moment.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>4) Nexus Boundary Mapping</h3>
+            <ul>
+              <li>Define what enters Nexus vs stays in Writing Center workflow.</li>
+              <li>Document minimum compliant data fields and ownership.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>5) First-Gen Impact Reporting</h3>
+            <ul>
+              <li>Create aggregate reporting template tied to leadership needs.</li>
+              <li>Prioritize low-friction data capture.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>6) Stakeholder Alignment</h3>
+            <ul>
+              <li>Identify one co-owner in Student Success and one data stakeholder.</li>
+              <li>Secure intro pathways via Tom for pilot approvals and coordination.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>30-60-90 Execution</h2>
+        <div class="grid-3">
+          <div class="panel kpi">
+            <h3>30 Days</h3>
+            <ul>
+              <li>Pilot brief finalized.</li>
+              <li>Data-source map completed.</li>
+              <li>Nexus boundary draft produced.</li>
+            </ul>
+          </div>
+          <div class="panel kpi">
+            <h3>60 Days</h3>
+            <ul>
+              <li>Initial alumni outreach launched.</li>
+              <li>First reporting template tested.</li>
+              <li>Anniversary event model drafted.</li>
+            </ul>
+          </div>
+          <div class="panel kpi">
+            <h3>90 Days</h3>
+            <ul>
+              <li>Working alumni contact baseline established.</li>
+              <li>Leadership report delivered.</li>
+              <li>Expansion recommendation for regional/high-school pipeline.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Immediate Next Steps</h2>
+        <div class="next">
+          <p><strong>Within 24 hours:</strong> Send a one-page pilot brief to Tom (objective, timeline, deliverables, internal asks).</p>
+          <p><strong>Within 7 days:</strong> Confirm stakeholders and schedule a pilot kickoff session.</p>
+          <p><strong>Within 14 days:</strong> Deliver v1 alumni data recovery framework and Nexus integration boundary memo.</p>
+        </div>
+        <p class="foot">Draft prepared from call notes and transcript highlights. Intended for internal pilot planning discussion.</p>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: ProposalOps API
+  version: 0.1.0
+paths:
+  /opportunities/intake:
+    post:
+      summary: Create opportunity and solicitation intake record
+      responses:
+        "200":
+          description: Intake response
+  /opportunities/{id}/qualify:
+    post:
+      summary: Run qualification scoring
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Qualification response
+  /opportunities/{id}/compliance/shred:
+    post:
+      summary: Shred solicitation into requirements and matrices
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Shred response
+  /opportunities/{id}/gates/{gateCode}/decision:
+    post:
+      summary: Record human gate decision
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: gateCode
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Gate decision response
+  /opportunities/{id}/reviews/{cycleId}/comments:
+    post:
+      summary: Add review comment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: cycleId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Review comment response
+  /opportunities/{id}/submission/authorize:
+    post:
+      summary: Authorize final submission package
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Submission authorization response

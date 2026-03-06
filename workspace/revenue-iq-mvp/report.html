@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revenue-IQ MVP Weekly Report</title>
+  <style>
+    :root { --ink:#16221d; --muted:#51635b; --line:#d6e2dc; --bg:#f7fbf9; }
+    body { margin:0; font-family:"Avenir Next","Gill Sans","Trebuchet MS",sans-serif; color:var(--ink); background:var(--bg); }
+    .wrap { max-width:1000px; margin:0 auto; padding:24px; }
+    .head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .actions { display:flex; gap:8px; }
+    button { border:1px solid var(--line); background:#fff; border-radius:8px; padding:8px 12px; cursor:pointer; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:16px 0; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px; }
+    .card p { margin:0; color:var(--muted); font-size:12px; }
+    .card h3 { margin:6px 0 0; font-size:24px; }
+    table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+    th,td { text-align:left; padding:10px 8px; border-bottom:1px solid #edf3f0; font-size:13px; }
+    th { background:#f1f7f4; }
+    .muted { color:var(--muted); }
+    @media (max-width:900px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>Revenue-IQ x Boss Key Weekly MVP Report</h1>
+        <p class="muted" id="stamp"></p>
+      </div>
+      <div class="actions">
+        <button id="backBtn">Back to MVP</button>
+        <button id="printBtn">Print / Save PDF</button>
+      </div>
+    </div>
+
+    <div class="grid" id="metrics"></div>
+
+    <h2>Submission Snapshot</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Opportunity</th>
+          <th>Client</th>
+          <th>Due Date</th>
+          <th>Recommendation</th>
+          <th>Weighted Score</th>
+          <th>Draft Versions</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+
+    <h2>Audit Trail (Latest 25)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Event</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody id="auditRows"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "revenue-iq-proposal-agent-mvp-v1";
+    const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"submissions":[],"audit_trail":[]}');
+
+    document.getElementById("stamp").textContent = `Generated ${new Date().toLocaleString()}`;
+    document.getElementById("backBtn").addEventListener("click", () => window.location.href = "./index.html");
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+    const submissions = state.submissions || [];
+    const metrics = [
+      ["RFP Intakes", submissions.length],
+      ["Go", submissions.filter((s) => s.qualification_result?.recommendation === "Go").length],
+      ["Conditional", submissions.filter((s) => s.qualification_result?.recommendation === "Conditional").length],
+      ["No-Go", submissions.filter((s) => s.qualification_result?.recommendation === "No-Go").length]
+    ];
+
+    const metricEl = document.getElementById("metrics");
+    metrics.forEach(([label, value]) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `<p>${label}</p><h3>${value}</h3>`;
+      metricEl.appendChild(card);
+    });
+
+    const rows = document.getElementById("rows");
+    submissions.forEach((submission) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(submission.opportunity_title)}</td>
+        <td>${escapeHtml(submission.client_id)}</td>
+        <td>${escapeHtml(submission.due_date)}</td>
+        <td>${escapeHtml(submission.qualification_result?.recommendation || "n/a")}</td>
+        <td>${Number(submission.qualification_result?.weighted_score || 0).toFixed(1)}</td>
+        <td>${submission.drafts?.length || 0}</td>
+      `;
+      rows.appendChild(tr);
+    });
+
+    const auditRows = document.getElementById("auditRows");
+    (state.audit_trail || []).slice(0, 25).forEach((entry) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${new Date(entry.created_at).toLocaleString()}</td>
+        <td>${escapeHtml(entry.type)}</td>
+        <td>${escapeHtml(entry.message)}</td>
+      `;
+      auditRows.appendChild(tr);
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+  </script>
+</body>
+</html>

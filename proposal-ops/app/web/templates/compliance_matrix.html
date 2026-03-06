@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Compliance Matrix</h2>
+  <p>Opportunity: {{ opportunity_id }}</p>
+  <div>
+    <h3>Gate C Readiness</h3>
+    <p>Status: <strong>{% if quality.gate_c_ready %}READY{% else %}NOT READY{% endif %}</strong></p>
+    <p>
+      Rows: {{ quality.total_rows }}
+      | Compliance Required: {{ quality.compliance_required_rows }}
+      | Complete: {{ quality.complete_rows }}
+      | Unmapped: {{ quality.unmapped_rows }}
+      | Blocked: {{ quality.blocked_rows }}
+      | Missing Owners: {{ quality.missing_owner_rows }}
+    </p>
+    {% if quality.gate_c_blockers %}
+    <ul>
+      {% for blocker in quality.gate_c_blockers %}
+      <li>{{ blocker }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% if include_context %}
+  <p><a href="/opportunities/{{ opportunity_id }}/compliance-matrix">Hide Context-Only Rows</a></p>
+  {% else %}
+  <p><a href="/opportunities/{{ opportunity_id }}/compliance-matrix?include_context=true">Show Context-Only Rows</a></p>
+  {% endif %}
+  {% if rows %}
+  <table>
+    <thead>
+      <tr>
+        <th>Requirement ID</th>
+        <th>Requirement Text</th>
+        <th>Type</th>
+        <th>Proposal Section</th>
+        <th>Owner</th>
+        <th>Status</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.requirement_code }}</td>
+        <td>{{ row.requirement_text }}</td>
+        <td>{{ row.requirement_type }}</td>
+        <td>{{ row.proposal_section }}</td>
+        <td>{{ row.owner }}</td>
+        <td>{{ row.status }}</td>
+        <td>
+          <form method="post" action="/compliance-matrix/{{ row.id }}">
+            <input type="hidden" name="opportunity_id" value="{{ opportunity_id }}" />
+            <input type="text" name="proposal_section" value="{{ row.proposal_section }}" />
+            <input type="text" name="owner" value="{{ row.owner }}" />
+            <select name="status">
+              <option value="UNMAPPED" {% if row.status == "UNMAPPED" %}selected{% endif %}>UNMAPPED</option>
+              <option value="IN_PROGRESS" {% if row.status == "IN_PROGRESS" %}selected{% endif %}>IN_PROGRESS</option>
+              <option value="COMPLETE" {% if row.status == "COMPLETE" %}selected{% endif %}>COMPLETE</option>
+              <option value="BLOCKED" {% if row.status == "BLOCKED" %}selected{% endif %}>BLOCKED</option>
+            </select>
+            <input type="hidden" name="actor" value="operator" />
+            <button type="submit">Save</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No matrix rows yet. <a href="/opportunities/{{ opportunity_id }}/rfp-upload">Parse an RFP first</a>.</p>
+  {% endif %}
+</section>
+{% endblock %}

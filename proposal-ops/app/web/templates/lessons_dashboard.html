@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Lessons Learned</h2>
+  <p>Opportunity: {{ opportunity_id }}</p>
+  <p><strong>Gate G:</strong> {% if readiness.gate_g_ready %}READY{% else %}NOT READY{% endif %}</p>
+  {% if readiness.blockers %}
+  <ul>
+    {% for blocker in readiness.blockers %}
+    <li>{{ blocker }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Create Record</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/lessons">
+    <label>Outcome
+      <select name="outcome">
+        <option value="WIN">WIN</option>
+        <option value="LOSS">LOSS</option>
+        <option value="NO_AWARD">NO_AWARD</option>
+        <option value="WITHDRAWN">WITHDRAWN</option>
+      </select>
+    </label>
+    <label>Root Causes (one per line)
+      <textarea name="root_causes" rows="3" required></textarea>
+    </label>
+    <label>Actions (one per line)
+      <textarea name="actions" rows="3" required></textarea>
+    </label>
+    <label>Created By <input name="created_by" value="operator" /></label>
+    <label>Promotion Title <input name="promotion_title" /></label>
+    <label>Promotion Type <input name="promotion_type" /></label>
+    <label>Promotion Rationale <input name="promotion_rationale" /></label>
+    <button type="submit">Create Lessons Record</button>
+  </form>
+
+  <h3>Records</h3>
+  {% if records %}
+  {% for record in records %}
+  <article>
+    <p><strong>{{ record.outcome }}</strong> | {{ record.status }} | Created by {{ record.created_by }} at {{ record.created_at }}</p>
+    {% if record.status != "APPROVED" %}
+    <form method="post" action="/opportunities/{{ opportunity_id }}/lessons/{{ record.id }}/approve">
+      <label>Approver <input name="actor" value="knowledge_manager" /></label>
+      <button type="submit">Approve Record</button>
+    </form>
+    {% else %}
+    <p>Approved by {{ record.approved_by }} at {{ record.approved_at }}</p>
+    {% endif %}
+    <p><strong>Root Causes:</strong> {{ record.root_causes|join(", ") }}</p>
+    <p><strong>Actions:</strong> {{ record.actions|join(", ") }}</p>
+    <h4>Knowledge Promotions</h4>
+    {% if record.promotions %}
+    <ul>
+      {% for p in record.promotions %}
+      <li>
+        {{ p.asset_title }} ({{ p.asset_type }}) - {{ p.promotion_status }} - {{ p.rationale }}
+        {% if p.promotion_status == "PENDING" %}
+        <form method="post" action="/knowledge/promotions/{{ p.id }}/decision">
+          <input type="hidden" name="opportunity_id" value="{{ opportunity_id }}" />
+          <select name="decision">
+            <option value="APPROVED">APPROVED</option>
+            <option value="REJECTED">REJECTED</option>
+          </select>
+          <input name="actor" value="knowledge_manager" />
+          <button type="submit">Submit Decision</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No promotions attached.</p>
+    {% endif %}
+  </article>
+  <hr />
+  {% endfor %}
+  {% else %}
+  <p>No lessons records yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

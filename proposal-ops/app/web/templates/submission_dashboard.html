@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Submission Readiness</h2>
+  <p>Opportunity: {{ opportunity_id }}</p>
+  <p><strong>Status:</strong> {% if readiness.ready_for_gate_f %}READY FOR GATE F{% else %}NOT READY{% endif %}</p>
+  <p><strong>Deadline:</strong> {{ readiness.deadline or "Not parsed" }} {% if readiness.days_to_deadline is not none %}({{ readiness.days_to_deadline }} days){% endif %}</p>
+  <p><strong>Checklist Completion:</strong> {{ readiness.required_complete }} / {{ readiness.required_total }}</p>
+  {% if readiness.blockers %}
+  <h3>Blockers</h3>
+  <ul>
+    {% for blocker in readiness.blockers %}
+    <li>{{ blocker }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>File Naming Validation</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/submission/validate-filenames">
+    <label>Filenames (one per line)
+      <textarea name="file_names" rows="4" placeholder="Proposal_Main.docx&#10;Pricing_Sheet.xlsx"></textarea>
+    </label>
+    <label>Actor <input name="actor" value="operator" /></label>
+    <button type="submit">Validate Filenames</button>
+  </form>
+
+  <h3>Checklist Items</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th>Details</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.item_code }}</td>
+        <td>{{ item.item_label }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.details or "" }}</td>
+        <td>
+          <form method="post" action="/opportunities/{{ opportunity_id }}/submission/items/{{ item.id }}">
+            <select name="status">
+              <option value="PENDING" {% if item.status == "PENDING" %}selected{% endif %}>PENDING</option>
+              <option value="COMPLETE" {% if item.status == "COMPLETE" %}selected{% endif %}>COMPLETE</option>
+              <option value="BLOCKED" {% if item.status == "BLOCKED" %}selected{% endif %}>BLOCKED</option>
+            </select>
+            <input name="details" value="{{ item.details or '' }}" />
+            <input type="hidden" name="actor" value="operator" />
+            <button type="submit">Save</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

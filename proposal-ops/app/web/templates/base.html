@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Boss Key Pursuit OS</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Boss Key Pursuit OS</h1>
+      <nav>
+        <a href="/">Opportunities</a>
+        <a href="/intake">New Intake</a>
+        <a href="/gates/inbox">Gate Inbox</a>
+        <a href="/notifications/digest">Notifications</a>
+        <a href="/ops/dashboard">Ops Dashboard</a>
+        {% if request.session.get("is_admin") %}
+        <a href="/admin/users">User Admin</a>
+        {% endif %}
+        {% if request.session.get("user_id") %}
+        <span>Signed in: {{ request.session.get("display_name") }}</span>
+        <form method="post" action="/auth/logout" style="display:inline;">
+          <button type="submit">Logout</button>
+        </form>
+        {% else %}
+        <a href="/auth/login">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

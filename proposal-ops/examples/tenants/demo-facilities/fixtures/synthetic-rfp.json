@@ -1,0 +1,17 @@
+{
+  "rfp_id": "rfp_demo_001",
+  "title": "Regional Facilities Operations and Janitorial Services",
+  "source": "synthetic",
+  "documents": [
+    {
+      "doc_id": "doc_001",
+      "name": "RFP-main.txt",
+      "content": "Submit staffing plan with onboarding timeline. Provide past performance references for similar scope. Include compliance forms before due date 2026-04-30."
+    }
+  ],
+  "expected_requirements": [
+    "staffing plan with onboarding timeline",
+    "past performance references for similar scope",
+    "compliance forms before due date"
+  ]
+}

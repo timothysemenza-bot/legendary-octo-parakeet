@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Ops Dashboard</h2>
+  <p><strong>Generated:</strong> {{ metrics.generated_at }}</p>
+  <p><strong>Opportunities:</strong> {{ metrics.opportunities_total }} total, {{ metrics.open_opportunities }} open</p>
+  <p><a href="/api/ops/metrics/export.csv">Export CSV</a></p>
+
+  <h3>Gate Latency</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Gate</th>
+        <th>Approvals</th>
+        <th>Avg Hours to Approval</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in metrics.gate_latency %}
+      <tr>
+        <td>{{ row.gate_code }}</td>
+        <td>{{ row.approvals }}</td>
+        <td>{{ row.avg_hours_to_approval }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Rework Velocity</h3>
+  <p>Events: {{ metrics.rework_velocity.rework_events }}</p>
+  <p>Resolved: {{ metrics.rework_velocity.resolved_reworks }}</p>
+  <p>Unresolved: {{ metrics.rework_velocity.unresolved_reworks }}</p>
+  <p>Resolution Rate: {{ metrics.rework_velocity.resolution_rate }}%</p>
+  <p>Avg Hours to Resolve: {{ metrics.rework_velocity.avg_hours_to_resolve }}</p>
+
+  <h3>Defect Rates</h3>
+  <p>Total Comments: {{ metrics.defect_rates.total_comments }}</p>
+  <p>Open Comments: {{ metrics.defect_rates.open_comments }}</p>
+  <p>High/Critical Open: {{ metrics.defect_rates.high_or_critical_open }}</p>
+  <ul>
+    {% for severity, count in metrics.defect_rates.by_severity.items() %}
+    <li>{{ severity }}: {{ count }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Blocker Aging</h3>
+  <p>Pending Gate Items: {{ metrics.blocker_aging.pending_gate_items }}</p>
+  <p>SLA Breaches: {{ metrics.blocker_aging.breached_sla_items }}</p>
+  <p>Items with Blockers: {{ metrics.blocker_aging.items_with_blockers }}</p>
+  {% if metrics.blocker_aging.top_blockers %}
+  <ul>
+    {% for blocker in metrics.blocker_aging.top_blockers %}
+    <li>{{ blocker.blocker }} ({{ blocker.count }})</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No blockers.</p>
+  {% endif %}
+</section>
+{% endblock %}

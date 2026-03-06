@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Intake Result</h2>
+  <p><strong>Opportunity ID:</strong> {{ result.id }}</p>
+  <p><strong>Qualification Score:</strong> {{ result.qualification_score }}</p>
+  <p><strong>Tier:</strong> {{ result.tier }}</p>
+  <p><strong>Recommendation:</strong> {{ result.pursuit_recommendation }}</p>
+  <p><strong>Capture Plan ID:</strong> {{ result.capture_plan_id }}</p>
+  <h3>Score Breakdown</h3>
+  <ul>
+    <li>Strategic Alignment: {{ result.score_breakdown.strategic_alignment_component }}</li>
+    <li>Probability: {{ result.score_breakdown.probability_component }}</li>
+    <li>Lead Time: {{ result.score_breakdown.lead_time_component }}</li>
+    <li>Contract Value: {{ result.score_breakdown.contract_value_component }}</li>
+    <li>Incumbent: {{ result.score_breakdown.incumbent_component }}</li>
+  </ul>
+  {% if detail and detail.capture_plan %}
+  <h3>Initial Capture Plan</h3>
+  <p><strong>Summary:</strong> {{ detail.capture_plan.summary }}</p>
+  <p><strong>Client Priorities:</strong> {{ detail.capture_plan.client_priorities }}</p>
+  <p><strong>Competitive Landscape:</strong> {{ detail.capture_plan.competitive_landscape }}</p>
+  <p><strong>Win Themes:</strong> {{ detail.capture_plan.win_themes_draft }}</p>
+  <p><strong>Solution Positioning:</strong> {{ detail.capture_plan.solution_positioning }}</p>
+  <p><strong>Timeline:</strong> {{ detail.capture_plan.timeline }}</p>
+  {% endif %}
+  <p><a href="/opportunities/{{ result.id }}">View Opportunity Detail</a></p>
+</section>
+{% endblock %}

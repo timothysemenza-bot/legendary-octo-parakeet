@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Email Connections</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Email Connections</h1>
+    <p><a href="/notifications/email">Email Updates</a> | <a href="/notifications/digest">Notification Digest</a></p>
+
+    {% if errors %}
+      <section>
+        <h2>Errors</h2>
+        <ul>
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    <section>
+      <h2>Create Connection</h2>
+      <form method="post" action="/notifications/email/connections">
+        <label>Provider
+          <select name="provider" required>
+            <option value="MANUAL_FEED">MANUAL_FEED</option>
+            <option value="IMAP">IMAP (stub)</option>
+            <option value="OUTLOOK_GRAPH">OUTLOOK_GRAPH (stub)</option>
+            <option value="GMAIL_API">GMAIL_API (stub)</option>
+          </select>
+        </label>
+        <label>Inbox Address <input type="email" name="inbox_address" required></label>
+        <label>Connection Config JSON
+          <textarea name="config_json" rows="14">{
+  "seed_messages": [
+    {
+      "id": "sample-message-1",
+      "subject": "Bid approved - proceed",
+      "from_address": "capture.lead@example.test",
+      "body": "We are bidding this one. Proceed.",
+      "auto_apply": true
+    }
+  ]
+}</textarea>
+        </label>
+        <p>For OUTLOOK_GRAPH use config like:</p>
+        <pre>{
+  "tenant_id": "your-tenant-id",
+  "client_id": "your-client-id",
+  "mailbox": "shared-inbox@example.com",
+  "graph_mock_pages": [
+    {"cursor": "START", "messages": [], "next_cursor": null}
+  ]
+}</pre>
+        <button type="submit">Create Connection</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Configured Connections</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th>Inbox</th>
+            <th>Status</th>
+            <th>Last Synced</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in connections %}
+            <tr>
+              <td>{{ row.provider }}</td>
+              <td>{{ row.inbox_address }}</td>
+              <td>{{ row.status }}</td>
+              <td>{{ row.last_synced_at or "-" }}</td>
+              <td>
+                <form method="post" action="/notifications/email/connections/{{ row.id }}/sync">
+                  <button type="submit">Sync</button>
+                </form>
+                {% if row.provider == "OUTLOOK_GRAPH" %}
+                <form method="post" action="/notifications/email/connections/{{ row.id }}/outlook/token">
+                  <input type="text" name="access_token" placeholder="Access token" required>
+                  <input type="text" name="refresh_token" placeholder="Refresh token">
+                  <input type="text" name="expires_at" placeholder="ISO expiry">
+                  <button type="submit">Set Token</button>
+                </form>
+                <form method="post" action="/notifications/email/connections/{{ row.id }}/outlook/refresh">
+                  <label><input type="checkbox" name="force" value="true"> Force</label>
+                  <button type="submit">Refresh Token</button>
+                </form>
+                {% endif %}
+                <form method="post" action="/notifications/email/connections/{{ row.id }}/status">
+                  <select name="status">
+                    <option value="ACTIVE" {% if row.status == "ACTIVE" %}selected{% endif %}>ACTIVE</option>
+                    <option value="PAUSED" {% if row.status == "PAUSED" %}selected{% endif %}>PAUSED</option>
+                    <option value="DISABLED" {% if row.status == "DISABLED" %}selected{% endif %}>DISABLED</option>
+                  </select>
+                  <button type="submit">Set Status</button>
+                </form>
+                <form method="post" action="/notifications/email/connections/{{ row.id }}/delete">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5">No email connections configured.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

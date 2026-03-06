@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>{{ detail.name }}</h2>
+  <p><strong>Client:</strong> {{ detail.client }}</p>
+  <p><strong>Score:</strong> {{ detail.qualification_score }}</p>
+  <p><strong>Tier:</strong> {{ detail.tier }}</p>
+  <p><strong>Recommendation:</strong> {{ detail.pursuit_recommendation }}</p>
+  <p><strong>Current Stage:</strong> {{ detail.stage }}</p>
+  <p><strong>Lead Time:</strong> {{ detail.lead_time_days }} days</p>
+  <p><strong>Estimated Contract Value:</strong> {{ detail.estimated_contract_value }}</p>
+  <p><a href="/opportunities/{{ detail.id }}/capture-plan">Capture Plan</a> | <a href="/opportunities/{{ detail.id }}/proposal-outline">Proposal Outline</a> | <a href="/opportunities/{{ detail.id }}/rfp-upload">Parse RFP</a> | <a href="/opportunities/{{ detail.id }}/compliance-matrix">View Compliance Matrix</a> | <a href="/opportunities/{{ detail.id }}/reviews">Review Dashboard</a> | <a href="/opportunities/{{ detail.id }}/submission">Submission Readiness</a> | <a href="/opportunities/{{ detail.id }}/lessons">Lessons Learned</a> | <a href="/opportunities/{{ detail.id }}/timeline">Workflow Timeline</a></p>
+
+  <h3>Record Gate Decision</h3>
+  {% if session_user and not authorized_gates %}
+  <p>You are signed in as {{ session_user.display_name }} but have no authorized gate actions for this opportunity.</p>
+  {% endif %}
+  {% if (not session_user) or authorized_gates %}
+  <form method="post" action="/opportunities/{{ detail.id }}/gate-decisions">
+    <label>Gate
+      <select name="gate_code">
+        {% if session_user %}
+        {% if "GATE_A" in authorized_gates %}<option value="GATE_A">GATE_A (Intake/Bid-No-Bid)</option>{% endif %}
+        {% if "GATE_B" in authorized_gates %}<option value="GATE_B">GATE_B (Strategy)</option>{% endif %}
+        {% if "GATE_C" in authorized_gates %}<option value="GATE_C">GATE_C (Compliance Architecture)</option>{% endif %}
+        {% if "GATE_D" in authorized_gates %}<option value="GATE_D">GATE_D (Content QC/Factual)</option>{% endif %}
+        {% if "GATE_E" in authorized_gates %}<option value="GATE_E">GATE_E (Narrative Integrity)</option>{% endif %}
+        {% if "GATE_F" in authorized_gates %}<option value="GATE_F">GATE_F (Final Compliance + Authorization)</option>{% endif %}
+        {% if "GATE_G" in authorized_gates %}<option value="GATE_G">GATE_G (Lessons Learned)</option>{% endif %}
+        {% else %}
+        <option value="GATE_A">GATE_A (Intake/Bid-No-Bid)</option>
+        <option value="GATE_B">GATE_B (Strategy)</option>
+        <option value="GATE_C">GATE_C (Compliance Architecture)</option>
+        <option value="GATE_D">GATE_D (Content QC/Factual)</option>
+        <option value="GATE_E">GATE_E (Narrative Integrity)</option>
+        <option value="GATE_F">GATE_F (Final Compliance + Authorization)</option>
+        <option value="GATE_G">GATE_G (Lessons Learned)</option>
+        {% endif %}
+      </select>
+    </label>
+    <label>Decision
+      <select name="decision">
+        <option value="APPROVED">APPROVED</option>
+        <option value="REJECTED">REJECTED</option>
+        <option value="REWORK_REQUIRED">REWORK_REQUIRED</option>
+        <option value="PENDING">PENDING</option>
+      </select>
+    </label>
+    <label>Decider (fallback if not signed in) <input name="decider" value="operator" /></label>
+    <label>Decider Role
+      <select name="decider_role">
+        <option value="proposal_manager">proposal_manager</option>
+        <option value="capture_strategy_lead">capture_strategy_lead</option>
+        <option value="compliance_lead">compliance_lead</option>
+        <option value="review_lead">review_lead</option>
+        <option value="executive_approver">executive_approver</option>
+        <option value="knowledge_manager">knowledge_manager</option>
+        <option value="compliance_delegate">compliance_delegate</option>
+        <option value="review_delegate">review_delegate</option>
+        <option value="executive_delegate">executive_delegate</option>
+      </select>
+    </label>
+    <label>Rationale <input name="rationale" required /></label>
+    <label>Rework Instructions <input name="rework_instructions" /></label>
+    <label>Rework Owner <input name="rework_owner" /></label>
+    <label>Rework Due Date <input type="date" name="rework_due_date" /></label>
+    <button type="submit">Record Decision</button>
+  </form>
+  {% endif %}
+
+  {% if session_user %}
+  <h3>My Gate Permissions</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Gate</th>
+        <th>Allowed</th>
+        <th>Matched Role(s)</th>
+        <th>Required Role(s)</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in permission_reports %}
+      <tr>
+        <td>{{ p.gate_code }}</td>
+        <td>{% if p.allowed %}YES{% else %}NO{% endif %}</td>
+        <td>{{ ", ".join(p.matched_roles) if p.matched_roles else "-" }}</td>
+        <td>{{ ", ".join(p.required_roles) }}</td>
+        <td>{{ p.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <h3>Stage Transition</h3>
+  <form method="post" action="/opportunities/{{ detail.id }}/stage-transition">
+    <label>Next Stage
+      <select name="next_stage">
+        <option value="INTAKE">INTAKE</option>
+        <option value="QUALIFICATION">QUALIFICATION</option>
+        <option value="STRATEGY">STRATEGY</option>
+        <option value="COMPLIANCE">COMPLIANCE</option>
+        <option value="CONTENT_PLANNING">CONTENT_PLANNING</option>
+        <option value="DRAFTING">DRAFTING</option>
+        <option value="REVIEW">REVIEW</option>
+        <option value="SUBMISSION">SUBMISSION</option>
+        <option value="ARCHIVE">ARCHIVE</option>
+      </select>
+    </label>
+    {% if session_user %}
+    <p>Transition actor: {{ session_user.display_name }} (session-scoped authorization enforced)</p>
+    {% else %}
+    <label>Actor <input name="actor" value="operator" /></label>
+    <label>Actor Role
+      <select name="actor_role">
+        <option value="proposal_manager">proposal_manager</option>
+        <option value="capture_strategy_lead">capture_strategy_lead</option>
+        <option value="compliance_lead">compliance_lead</option>
+        <option value="review_lead">review_lead</option>
+        <option value="executive_approver">executive_approver</option>
+        <option value="knowledge_manager">knowledge_manager</option>
+        <option value="compliance_delegate">compliance_delegate</option>
+        <option value="review_delegate">review_delegate</option>
+        <option value="executive_delegate">executive_delegate</option>
+      </select>
+    </label>
+    {% endif %}
+    <label>Reason <input name="reason" value="Manual stage transition" /></label>
+    <button type="submit">Apply Stage Transition</button>
+  </form>
+
+  <h3>Gate Decisions</h3>
+  {% if detail.gate_decisions %}
+  <ul>
+    {% for d in detail.gate_decisions %}
+      <li>
+        {{ d.created_at }} | {{ d.gate_code }} | {{ d.decision }} by {{ d.decider }} [{{ d.decider_role }}] ({{ d.rationale }})
+        {% if d.decider_user_id %}
+        | User ID: {{ d.decider_user_id }}
+        {% endif %}
+        {% if d.approval_signature %}
+        | Signature: {{ d.approval_signature[:16] }}...
+        {% endif %}
+        {% if d.rework_instructions %}
+        | Rework: {{ d.rework_instructions }}
+        {% endif %}
+        {% if d.rework_owner %}
+        | Owner: {{ d.rework_owner }}
+        {% endif %}
+        {% if d.rework_due_date %}
+        | Due: {{ d.rework_due_date }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No decisions recorded.</p>
+  {% endif %}
+
+  <h3>Audit Events</h3>
+  {% if detail.audit_events %}
+  <ul>
+    {% for e in detail.audit_events %}
+      <li>{{ e.created_at }} | {{ e.actor }} | {{ e.action }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No audit events yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

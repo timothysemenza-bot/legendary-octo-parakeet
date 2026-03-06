@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: proposal_ops_postgres
+    environment:
+      POSTGRES_USER: proposal_ops
+      POSTGRES_PASSWORD: proposal_ops
+      POSTGRES_DB: proposal_ops
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  nats:
+    image: nats:2.10
+    container_name: proposal_ops_nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+volumes:
+  postgres_data:

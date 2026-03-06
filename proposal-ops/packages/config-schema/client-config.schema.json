@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proposal-ops.local/schemas/client-config.schema.json",
+  "title": "Client Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["client_id","display_name","terminology","stages","gates","scoring","artifacts","permissions","templates"],
+  "properties": {
+    "client_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$" },
+    "display_name": { "type": "string", "minLength": 2, "maxLength": 120 },
+    "terminology": { "type": "object", "additionalProperties": { "type": "string" } },
+    "stages": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "required": ["code", "display_name"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "enum": ["INTAKE","QUALIFICATION","STRATEGY","COMPLIANCE","CONTENT_PLANNING","DRAFTING","REVIEW","SUBMISSION","ARCHIVE"] },
+          "display_name": { "type": "string", "minLength": 2, "maxLength": 80 }
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["code", "stage", "required_roles"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "enum": ["GATE_A","GATE_B","GATE_C","GATE_D","GATE_E","GATE_F","GATE_G"] },
+          "stage": { "type": "string", "enum": ["QUALIFICATION","STRATEGY","COMPLIANCE","REVIEW","SUBMISSION","ARCHIVE"] },
+          "required_roles": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 2, "maxLength": 64 } }
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "required": ["criteria"],
+      "additionalProperties": false,
+      "properties": {
+        "criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["code", "weight"],
+            "additionalProperties": false,
+            "properties": {
+              "code": { "type": "string", "minLength": 2, "maxLength": 64 },
+              "weight": { "type": "integer", "minimum": 1, "maximum": 20 }
+            }
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "required": ["required_by_stage"],
+      "additionalProperties": false,
+      "properties": {
+        "required_by_stage": {
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string", "minLength": 2, "maxLength": 64 } }
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "required": ["roles"],
+      "additionalProperties": false,
+      "properties": {
+        "roles": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "can_approve": { "type": "array", "items": { "type": "string", "enum": ["GATE_A","GATE_B","GATE_C","GATE_D","GATE_E","GATE_F","GATE_G"] } }
+            }
+          }
+        }
+      }
+    },
+    "templates": { "type": "object", "additionalProperties": { "type": "string", "minLength": 3, "maxLength": 255 } },
+    "branding": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
+}

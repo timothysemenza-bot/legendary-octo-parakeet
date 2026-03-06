@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Capture Plan</h2>
+  <p><strong>Opportunity:</strong> {{ opportunity_id }}</p>
+  <p><strong>Current Version:</strong> {{ plan.version }}</p>
+
+  <h3>Edit Capture Plan (Creates New Version)</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/capture-plan">
+    <label>Summary
+      <textarea name="summary" rows="4" required>{{ plan.summary }}</textarea>
+    </label>
+    <label>Client Priorities
+      <textarea name="client_priorities" rows="4" required>{{ plan.client_priorities }}</textarea>
+    </label>
+    <label>Competitive Landscape
+      <textarea name="competitive_landscape" rows="4" required>{{ plan.competitive_landscape }}</textarea>
+    </label>
+    <label>Win Themes Draft
+      <textarea name="win_themes_draft" rows="4" required>{{ plan.win_themes_draft }}</textarea>
+    </label>
+    <label>Solution Positioning
+      <textarea name="solution_positioning" rows="4" required>{{ plan.solution_positioning }}</textarea>
+    </label>
+    <label>Timeline
+      <textarea name="timeline" rows="4" required>{{ plan.timeline }}</textarea>
+    </label>
+    <label>Actor
+      <input name="actor" value="operator" />
+    </label>
+    <button type="submit">Save New Version</button>
+  </form>
+
+  <h3>Version History</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Version</th>
+        <th>Created</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for version in versions %}
+      <tr>
+        <td>{{ version.version }}</td>
+        <td>{{ version.created_at }}</td>
+        <td>{{ version.summary }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

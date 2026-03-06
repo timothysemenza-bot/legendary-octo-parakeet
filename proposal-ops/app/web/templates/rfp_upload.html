@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>RFP Parser</h2>
+  <p>Opportunity: {{ opportunity_id }}</p>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/rfp-upload" enctype="multipart/form-data">
+    <label>Upload RFP File (TXT, PDF, DOCX)
+      <input type="file" name="file" />
+    </label>
+    <label>Or Paste RFP Text
+      <textarea name="raw_text" rows="10"></textarea>
+    </label>
+    <label>Source Filename
+      <input name="source_filename" value="manual-input.txt" />
+    </label>
+    <label>Actor
+      <input name="actor" value="operator" />
+    </label>
+    <button type="submit">Parse and Build Compliance Matrix</button>
+  </form>
+</section>
+{% endblock %}

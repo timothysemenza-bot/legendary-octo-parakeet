@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Opportunity Intake</h2>
+  <form method="post" action="/intake">
+    <label>Opportunity Name <input name="name" required minlength="3" /></label>
+    <label>Client <input name="client" required minlength="2" /></label>
+    <label>Estimated Contract Value <input type="number" step="0.01" min="1" name="estimated_contract_value" required /></label>
+    <label>Lead Time (days) <input type="number" min="1" name="lead_time_days" required /></label>
+    <label>Incumbent Exists <input type="checkbox" name="incumbent_status" value="true" /></label>
+    <label>Strategic Alignment (1-5) <input type="number" min="1" max="5" name="strategic_alignment" required /></label>
+    <label>Estimated Probability of Win (0-100) <input type="number" min="0" max="100" name="estimated_probability_win" required /></label>
+    <label>Actor <input name="actor" value="operator" required /></label>
+    <button type="submit">Score Opportunity</button>
+  </form>
+</section>
+{% endblock %}

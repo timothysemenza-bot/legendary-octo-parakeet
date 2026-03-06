@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revenue-IQ x Boss Key Proposal Agent MVP</title>
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <div class="bg-orb orb-a"></div>
+  <div class="bg-orb orb-b"></div>
+
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Revenue-IQ x Boss Key</p>
+      <h1>Proposal Agent MVP</h1>
+      <p class="subtext">RFP intake, disciplined go/no-go, and red-team draft acceleration.</p>
+    </div>
+    <div class="topbar-actions">
+      <button id="seedDataBtn" class="btn secondary">Seed Demo Data</button>
+      <button id="exportStateBtn" class="btn">Export Session JSON</button>
+      <button id="openReportBtn" class="btn secondary">Open Weekly Report</button>
+    </div>
+  </header>
+
+  <section class="kpi-grid" id="kpiGrid"></section>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>RFP Intake</h2>
+        <span class="chip">Step 1</span>
+      </div>
+      <form id="intakeForm" class="form-grid">
+        <select id="clientId" required></select>
+        <input id="opportunityTitle" required placeholder="Opportunity title">
+        <input id="industry" value="Facilities Management" required placeholder="Industry">
+        <input id="dueDate" required type="date">
+        <input id="priorityFlags" placeholder="Priority flags CSV (e.g. incumbent, tight timeline)">
+        <input id="sourceDocs" type="file" multiple accept=".pdf,.docx,.txt,.md,.csv,.json,.html,.xml,.rtf">
+        <textarea id="rfpText" placeholder="Paste RFP text excerpt (scope, evaluation criteria, due date, place of performance, required forms)."></textarea>
+        <button class="btn" type="submit">Create Intake and Run Qualification</button>
+      </form>
+      <p class="hint" id="intakeStatus">No RFP reviewed yet.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>SharePoint Asset Index</h2>
+        <span class="chip muted">Step 2</span>
+      </div>
+      <div id="assetIndex" class="empty">Select or create a submission to view client assets.</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Qualification Dashboard</h2>
+        <span class="chip muted">Step 3</span>
+      </div>
+      <select id="submissionSelect"></select>
+      <p id="selectedSubmissionLabel" class="hint">No submission selected.</p>
+      <div id="qualificationResult" class="empty">Run intake to generate qualification output.</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Go / No-Go Decision</h2>
+        <span class="chip muted">Step 4</span>
+      </div>
+      <div id="gatePanel" class="gate-panel hidden"></div>
+      <div id="scorecard" class="scorecard hidden">
+        <div id="criteriaRows" class="criteria-list"></div>
+      </div>
+      <div id="decisionSummary" class="empty">Complete qualification to score and decide.</div>
+      <button id="saveDecisionBtn" class="btn hidden" type="button">Save Decision</button>
+    </section>
+
+    <section class="panel full">
+      <div class="panel-head">
+        <h2>Red-Team Draft Workspace</h2>
+        <span class="chip muted">Step 5</span>
+      </div>
+      <div class="topbar-actions" style="margin-bottom:10px;">
+        <button id="generateDraftBtn" class="btn" type="button">Generate Draft Version</button>
+        <button id="saveDraftEditsBtn" class="btn secondary" type="button">Save Manual Edits</button>
+      </div>
+      <p id="draftStatus" class="hint">Draft generation requires a Go/Conditional recommendation.</p>
+      <div id="draftWorkspace" class="empty">No draft generated yet.</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Reviewer Notes</h2>
+      </div>
+      <form id="reviewNoteForm" class="form-grid compact">
+        <input id="reviewerName" placeholder="Reviewer name" value="Tim">
+        <input id="reviewerNote" placeholder="Add reviewer note">
+        <button class="btn" type="submit">Add Note</button>
+      </form>
+      <div id="reviewNotesList" class="empty">No notes yet.</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Version History</h2>
+      </div>
+      <div id="versionHistory" class="empty">No versions yet.</div>
+    </section>
+
+    <section class="panel full">
+      <div class="panel-head">
+        <h2>Audit Trail</h2>
+      </div>
+      <div id="auditTrail" class="empty">No audit entries yet.</div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.js"></script>
+  <script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script src="./assets/app.js"></script>
+</body>
+</html>

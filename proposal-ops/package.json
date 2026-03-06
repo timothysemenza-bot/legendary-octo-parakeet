@@ -1,0 +1,12 @@
+{
+  "name": "proposal-ops",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ProposalOps multi-tenant platform scaffold",
+  "scripts": {
+    "test": "node --test tests/contract/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

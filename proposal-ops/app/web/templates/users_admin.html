@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>User Admin</h2>
+
+  <h3>Create User</h3>
+  <form method="post" action="/admin/users">
+    <label>Display Name <input name="display_name" required /></label>
+    <label>Email <input name="email" type="email" required /></label>
+    <button type="submit">Create User</button>
+  </form>
+
+  <h3>Users</h3>
+  {% if users %}
+  {% for user in users %}
+  <article>
+    <p><strong>{{ user.display_name }}</strong> ({{ user.email }}) - {{ user.status }}</p>
+    <p>ID: {{ user.id }}</p>
+    <form method="post" action="/admin/users/{{ user.id }}/roles">
+      <label>Role <input name="role" required /></label>
+      <label>Scope
+        <select name="scope_type">
+          <option value="GLOBAL">GLOBAL</option>
+          <option value="OPPORTUNITY">OPPORTUNITY</option>
+        </select>
+      </label>
+      <label>Opportunity Scope
+        <select name="scope_id">
+          <option value="">(none)</option>
+          {% for opp in opportunities %}
+          <option value="{{ opp.id }}">{{ opp.name }} ({{ opp.id }})</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button type="submit">Assign Role</button>
+    </form>
+    {% set roles = user_roles[user.id] %}
+    {% if roles %}
+    <ul>
+      {% for role in roles %}
+      <li>{{ role.role }} | {{ role.scope_type }}{% if role.scope_id %}: {{ role.scope_id }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No roles assigned.</p>
+    {% endif %}
+  </article>
+  <hr />
+  {% endfor %}
+  {% else %}
+  <p>No users yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

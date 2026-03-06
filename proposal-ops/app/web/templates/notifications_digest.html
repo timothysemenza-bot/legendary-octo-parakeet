@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Notification Digest</h2>
+  <p><a href="/notifications/policy">Edit Notification Policy</a></p>
+  <form method="post" action="/notifications/scan" style="display:inline;">
+    <button type="submit">Run Scan</button>
+  </form>
+  <form method="post" action="/notifications/dispatch" style="display:inline;">
+    <button type="submit">Dispatch Open Notifications</button>
+  </form>
+  <form method="get" action="/notifications/digest" style="display:inline;">
+    <label>Status
+      <select name="status">
+        <option value="OPEN" {% if status == "OPEN" %}selected{% endif %}>OPEN</option>
+        <option value="ACKNOWLEDGED" {% if status == "ACKNOWLEDGED" %}selected{% endif %}>ACKNOWLEDGED</option>
+      </select>
+    </label>
+    <button type="submit">Apply</button>
+  </form>
+
+  {% if rows %}
+  <table>
+    <thead>
+      <tr>
+        <th>Created</th>
+        <th>Type</th>
+        <th>Severity</th>
+        <th>Tier</th>
+        <th>Recipients</th>
+        <th>Opportunity</th>
+        <th>Gate</th>
+        <th>Message</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.created_at }}</td>
+        <td>{{ row.notification_type }}</td>
+        <td>{{ row.severity }}</td>
+        <td>{{ row.escalation_tier or "-" }}</td>
+        <td>{% if row.recipients_json and row.recipients_json != "[]" %}targeted{% else %}none{% endif %}</td>
+        <td>{{ row.opportunity_id or "-" }}</td>
+        <td>{{ row.gate_code or "-" }}</td>
+        <td>{{ row.message }}</td>
+        <td>{{ row.status }}</td>
+        <td>
+          {% if row.status == "OPEN" %}
+          <form method="post" action="/notifications/{{ row.id }}/ack">
+            <input type="hidden" name="status" value="{{ status }}" />
+            <button type="submit">Acknowledge</button>
+          </form>
+          {% else %}
+          -
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No notifications found.</p>
+  {% endif %}
+
+  <h3>Delivery Log</h3>
+  {% if deliveries %}
+  <table>
+    <thead>
+      <tr>
+        <th>Created</th>
+        <th>Notification</th>
+        <th>Channel</th>
+        <th>Target</th>
+        <th>Status</th>
+        <th>Attempts</th>
+        <th>Error Code</th>
+        <th>Last Error</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for delivery in deliveries %}
+      <tr>
+        <td>{{ delivery.created_at }}</td>
+        <td>{{ delivery.notification_id }}</td>
+        <td>{{ delivery.channel }}</td>
+        <td>{{ delivery.target }}</td>
+        <td>{{ delivery.status }}</td>
+        <td>{{ delivery.attempt_count }}</td>
+        <td>{{ delivery.last_error_code or "-" }}</td>
+        <td>{{ delivery.last_error or "-" }}</td>
+        <td>
+          {% if delivery.status in ["RETRY_PENDING", "FAILED"] %}
+          <form method="post" action="/notifications/deliveries/{{ delivery.id }}/retry">
+            <button type="submit">Retry</button>
+          </form>
+          {% else %}
+          -
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No delivery records yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Gate Inbox</h2>
+  {% if items %}
+  <table>
+    <thead>
+      <tr>
+        <th>Opportunity</th>
+        <th>Client</th>
+        <th>Stage</th>
+        <th>Pending Gate</th>
+        <th>Current Status</th>
+        <th>SLA</th>
+        <th>Blockers</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td><a href="/opportunities/{{ item.opportunity_id }}">{{ item.opportunity_name }}</a></td>
+        <td>{{ item.client }}</td>
+        <td>{{ item.stage }}</td>
+        <td>{{ item.gate_code }}</td>
+        <td>
+          {{ item.gate_status }}
+          {% if item.latest_decider %}
+          <div><small>Last: {{ item.latest_decider }} @ {{ item.latest_decision_at }}</small></div>
+          {% endif %}
+        </td>
+        <td>
+          {{ item.days_in_stage }}d / {{ item.sla_days }}d
+          {% if item.sla_breached %}
+          <div><strong>BREACHED</strong></div>
+          {% endif %}
+        </td>
+        <td>
+          {% if item.blockers %}
+          <ul>
+            {% for blocker in item.blockers %}
+            <li>{{ blocker }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <span>None</span>
+          {% endif %}
+        </td>
+        <td>
+          {% set can_act = can_act_by_item[item.opportunity_id ~ ":" ~ item.gate_code] %}
+          {% if not can_act and session_user %}
+          <p>Not authorized for {{ item.gate_code }}</p>
+          {% else %}
+          <form method="post" action="/gates/inbox/decide">
+            <input type="hidden" name="opportunity_id" value="{{ item.opportunity_id }}" />
+            <input type="hidden" name="gate_code" value="{{ item.gate_code }}" />
+            <select name="decision">
+              <option value="APPROVED">APPROVED</option>
+              <option value="REWORK_REQUIRED">REWORK_REQUIRED</option>
+              <option value="REJECTED">REJECTED</option>
+              <option value="PENDING">PENDING</option>
+            </select>
+            <input type="text" name="decider" placeholder="Decider (fallback)" value="operator" />
+            <select name="decider_role">
+              <option value="proposal_manager">proposal_manager</option>
+              <option value="capture_strategy_lead">capture_strategy_lead</option>
+              <option value="compliance_lead">compliance_lead</option>
+              <option value="review_lead">review_lead</option>
+              <option value="executive_approver">executive_approver</option>
+              <option value="knowledge_manager">knowledge_manager</option>
+              <option value="compliance_delegate">compliance_delegate</option>
+              <option value="review_delegate">review_delegate</option>
+              <option value="executive_delegate">executive_delegate</option>
+            </select>
+            <input type="text" name="rationale" placeholder="Rationale" required />
+            <input type="text" name="rework_instructions" placeholder="Rework instructions (if needed)" />
+            <input type="text" name="rework_owner" placeholder="Rework owner" />
+            <input type="date" name="rework_due_date" />
+            <button type="submit">Submit</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No pending gates. Queue is clear.</p>
+  {% endif %}
+</section>
+{% endblock %}

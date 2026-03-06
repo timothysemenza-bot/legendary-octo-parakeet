@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Opportunities</h2>
+  {% if opportunities %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Client</th>
+        <th>Score</th>
+        <th>Tier</th>
+        <th>Recommendation</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for opp in opportunities %}
+      <tr>
+        <td><a href="/opportunities/{{ opp.id }}">{{ opp.name }}</a></td>
+        <td>{{ opp.client }}</td>
+        <td>{{ "%.2f"|format(opp.qualification_score) }}</td>
+        <td>{{ opp.tier }}</td>
+        <td>{{ opp.pursuit_recommendation }}</td>
+        <td>{{ opp.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No opportunities yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
