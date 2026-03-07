@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>{{ organization.name }}</h2>
+  <p><strong>Type:</strong> {{ organization.organization_type }}</p>
+  <p><strong>Location:</strong> {{ organization.city or '' }} {{ organization.state or '' }}</p>
+  <p><strong>Website:</strong> {{ organization.website_url or '-' }}</p>
+  <p><strong>Procurement URL:</strong> {{ organization.procurement_url or '-' }}</p>
+  <p><strong>Notes:</strong> {{ organization.notes or '-' }}</p>
+
+  <h3>Edit Organization</h3>
+  <form method="post" action="/organizations/{{ organization.id }}">
+    <label>Name <input name="name" value="{{ organization.name }}" required /></label>
+    <label>Type <input name="organization_type" value="{{ organization.organization_type }}" /></label>
+    <label>City <input name="city" value="{{ organization.city or '' }}" /></label>
+    <label>State <input name="state" value="{{ organization.state or '' }}" /></label>
+    <label>Website <input name="website_url" value="{{ organization.website_url or '' }}" /></label>
+    <label>Procurement URL <input name="procurement_url" value="{{ organization.procurement_url or '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ organization.notes or '' }}</textarea></label>
+    <button type="submit">Save Organization</button>
+  </form>
+
+  <h3>Facilities</h3>
+  {% if facilities %}
+  <ul>
+    {% for item in facilities %}
+    <li><a href="/facilities/{{ item.id }}">{{ item.name }}</a> | {{ item.facility_kind }} | {{ item.facility_type }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No facilities linked yet.</p>
+  {% endif %}
+
+  <h3>Contracts</h3>
+  {% if contracts %}
+  <ul>
+    {% for item in contracts %}
+    <li><a href="/contracts/{{ item.id }}">{{ item.title }}</a> | {{ item.incumbent_vendor or 'No incumbent recorded' }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No contracts linked yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

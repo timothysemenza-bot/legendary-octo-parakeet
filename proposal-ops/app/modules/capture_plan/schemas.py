@@ -26,3 +26,19 @@ class CapturePlanUpdateRequest(BaseModel):
     solution_positioning: str = Field(min_length=3)
     timeline: str = Field(min_length=3)
     actor: str = Field(default="operator", min_length=2, max_length=100)
+
+
+class CapturePlanGenerateRequest(BaseModel):
+    actor: str = Field(default="operator", min_length=2, max_length=100)
+
+
+class CapturePlanReadinessResponse(BaseModel):
+    opportunity_id: str
+    capture_plan_id: str | None
+    capture_plan_version: int | None
+    solicitation_id: str | None
+    matrix_row_count: int
+    win_theme_count: int
+    uses_bootstrap_template: bool
+    ready_for_gate_b: bool
+    blockers: list[str]

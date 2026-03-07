@@ -9,6 +9,8 @@ from app.modules.submission_checklist.schemas import (
     FileNameValidationResponse,
     SubmissionChecklistItemResponse,
     SubmissionChecklistItemUpdateRequest,
+    SubmissionPackageValidationRequest,
+    SubmissionPackageValidationResponse,
     SubmissionChecklistResponse,
     SubmissionReadinessResponse,
 )
@@ -55,6 +57,15 @@ def validate_submission_filenames(
     db: Session = Depends(get_db),
 ) -> FileNameValidationResponse:
     return SubmissionChecklistService(db).validate_file_names(opportunity_id, payload)
+
+
+@api_router.post("/{opportunity_id}/submission/validate-package", response_model=SubmissionPackageValidationResponse)
+def validate_submission_package(
+    opportunity_id: str,
+    payload: SubmissionPackageValidationRequest,
+    db: Session = Depends(get_db),
+) -> SubmissionPackageValidationResponse:
+    return SubmissionChecklistService(db).validate_package_structure(opportunity_id, payload)
 
 
 @api_router.get("/{opportunity_id}/submission/readiness", response_model=SubmissionReadinessResponse)
@@ -107,3 +118,15 @@ def validate_submission_filenames_web(
     SubmissionChecklistService(db).validate_file_names(opportunity_id, payload)
     return RedirectResponse(url=f"/opportunities/{opportunity_id}/submission", status_code=303)
 
+
+@web_router.post("/opportunities/{opportunity_id}/submission/validate-package")
+def validate_submission_package_web(
+    opportunity_id: str,
+    section_names: str = Form(""),
+    actor: str = Form("operator"),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    parsed = [name.strip() for name in section_names.splitlines() if name.strip()]
+    payload = SubmissionPackageValidationRequest(section_names=parsed, actor=actor)
+    SubmissionChecklistService(db).validate_package_structure(opportunity_id, payload)
+    return RedirectResponse(url=f"/opportunities/{opportunity_id}/submission", status_code=303)

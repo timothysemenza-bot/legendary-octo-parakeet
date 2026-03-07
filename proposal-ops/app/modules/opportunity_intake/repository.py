@@ -5,6 +5,7 @@ from app.modules.opportunity_intake.models import (
     AuditEvent,
     CapturePlan,
     GateDecisionRecord,
+    IntakeRfpDraft,
     Opportunity,
 )
 
@@ -33,12 +34,20 @@ class OpportunityRepository:
         self.db.flush()
         return event
 
+    def add_intake_rfp_draft(self, draft: IntakeRfpDraft) -> IntakeRfpDraft:
+        self.db.add(draft)
+        self.db.flush()
+        return draft
+
     def list_opportunities(self) -> list[Opportunity]:
         stmt = select(Opportunity).order_by(Opportunity.created_at.desc())
         return list(self.db.scalars(stmt))
 
     def get_opportunity(self, opportunity_id: str) -> Opportunity | None:
         return self.db.get(Opportunity, opportunity_id)
+
+    def get_intake_rfp_draft(self, draft_id: str) -> IntakeRfpDraft | None:
+        return self.db.get(IntakeRfpDraft, draft_id)
 
     def get_latest_capture_plan(self, opportunity_id: str) -> CapturePlan | None:
         stmt = (
@@ -63,4 +72,3 @@ class OpportunityRepository:
             .order_by(AuditEvent.created_at.desc())
         )
         return list(self.db.scalars(stmt))
-

@@ -12,8 +12,10 @@ from app.modules.review_manager.schemas import (
     ReviewCycleCreateRequest,
     ReviewCycleResponse,
     ReviewReadinessResponse,
+    ReviewSeedFromOutlineRequest,
+    ReviewSeedFromOutlineResponse,
 )
-from app.modules.review_manager.service import ReviewManagerService
+from app.modules.review_manager.service import ReviewManagerService, ReviewSeedConflictError
 
 
 api_router = APIRouter(prefix="/api/opportunities", tags=["review-manager"])
@@ -48,6 +50,31 @@ def close_review(
     if not cycle:
         raise HTTPException(status_code=404, detail="Review cycle not found")
     return ReviewCycleResponse.model_validate(cycle, from_attributes=True)
+
+
+@api_router.post(
+    "/{opportunity_id}/reviews/{cycle_id}/seed-from-outline",
+    response_model=ReviewSeedFromOutlineResponse,
+)
+def seed_review_comments_from_outline(
+    opportunity_id: str,
+    cycle_id: str,
+    payload: ReviewSeedFromOutlineRequest,
+    db: Session = Depends(get_db),
+) -> ReviewSeedFromOutlineResponse:
+    service = ReviewManagerService(db)
+    try:
+        result = service.seed_comments_from_outline(opportunity_id, cycle_id, payload)
+    except ReviewSeedConflictError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    if not result:
+        raise HTTPException(status_code=404, detail="Review cycle not found")
+    seeded_count, skipped_count = result
+    return ReviewSeedFromOutlineResponse(
+        review_cycle_id=cycle_id,
+        seeded_count=seeded_count,
+        skipped_count=skipped_count,
+    )
 
 
 @api_router.get("/{opportunity_id}/reviews/readiness", response_model=ReviewReadinessResponse)
@@ -128,6 +155,24 @@ def close_review_web(
     return RedirectResponse(url=f"/opportunities/{opportunity_id}/reviews", status_code=303)
 
 
+@web_router.post("/opportunities/{opportunity_id}/reviews/{cycle_id}/seed-from-outline")
+def seed_review_comments_from_outline_web(
+    opportunity_id: str,
+    cycle_id: str,
+    actor: str = Form("operator"),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    payload = ReviewSeedFromOutlineRequest(actor=actor)
+    service = ReviewManagerService(db)
+    try:
+        result = service.seed_comments_from_outline(opportunity_id, cycle_id, payload)
+    except ReviewSeedConflictError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    if not result:
+        raise HTTPException(status_code=404, detail="Review cycle not found")
+    return RedirectResponse(url=f"/opportunities/{opportunity_id}/reviews", status_code=303)
+
+
 @web_router.post("/reviews/{cycle_id}/comments")
 def create_review_comment_web(
     cycle_id: str,
@@ -166,4 +211,3 @@ def resolve_review_comment_web(
     if not comment:
         raise HTTPException(status_code=404, detail="Review comment not found")
     return RedirectResponse(url=f"/opportunities/{opportunity_id}/reviews", status_code=303)
-

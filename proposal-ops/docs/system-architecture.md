@@ -12,6 +12,7 @@
 4. Knowledge layer (`app/knowledge/*`)
 
 ## Module boundaries
+- `janitorial_os`: market radar, contract records, contractor profiles, matching, capture workbench, dashboard, and commercials
 - `opportunity_intake`: intake scoring, persistence, capture plan bootstrap
 - `rfp_parser`: document extraction and structured RFP model (planned)
 - `compliance_matrix`: requirement-to-section matrix orchestration (planned)
@@ -31,3 +32,4 @@
 - SQLAlchemy ORM models
 - Alembic migrations in `migrations/versions`
 - Startup preflight validates schema state and fails fast on unstamped DBs
+- Janitorial pursuit fields extend `opportunities` and keep the downstream proposal workflow as a separate `proposal_stage`

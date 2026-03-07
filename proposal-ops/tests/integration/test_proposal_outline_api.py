@@ -90,3 +90,74 @@ def test_proposal_outline_generation_and_versioning(client: TestClient) -> None:
     detail = client.get(f"/api/opportunities/{opportunity_id}").json()
     actions = [event["action"] for event in detail["audit_events"]]
     assert "proposal_outline_generated" in actions
+
+
+def test_proposal_outline_manual_version_happy_path_and_invalid_requirement(client: TestClient) -> None:
+    opportunity_id = _create_opportunity(client)
+    _parse_rfp(client, opportunity_id)
+    rows = client.get(f"/api/opportunities/{opportunity_id}/compliance-matrix").json()
+    assert rows
+    for row in rows:
+        patched = client.patch(
+            f"/api/compliance-matrix/{row['id']}",
+            json={
+                "proposal_section": row["proposal_section"],
+                "owner": "Section Owner",
+                "status": "COMPLETE",
+                "actor": "operator",
+            },
+        )
+        assert patched.status_code == 200
+
+    generated = client.post(
+        f"/api/opportunities/{opportunity_id}/proposal-outline/generate",
+        json={"actor": "outline_bot"},
+    )
+    assert generated.status_code == 200
+
+    invalid = client.post(
+        f"/api/opportunities/{opportunity_id}/proposal-outline/manual",
+        json={
+            "actor": "manual_editor",
+            "sections": [
+                {
+                    "sequence": 1,
+                    "proposal_section": "Executive Summary",
+                    "owner": "Manual Owner",
+                    "requirement_ids": ["not-a-real-requirement-id"],
+                }
+            ],
+        },
+    )
+    assert invalid.status_code == 422
+
+    req_ids = [row["requirement_id"] for row in rows[:2]]
+    manual = client.post(
+        f"/api/opportunities/{opportunity_id}/proposal-outline/manual",
+        json={
+            "actor": "manual_editor",
+            "sections": [
+                {
+                    "sequence": 20,
+                    "proposal_section": "Pricing Narrative",
+                    "owner": "Pricing Lead",
+                    "requirement_ids": [req_ids[0]],
+                },
+                {
+                    "sequence": 10,
+                    "proposal_section": "Executive Summary",
+                    "owner": "PM",
+                    "requirement_ids": [req_ids[1]],
+                },
+            ],
+        },
+    )
+    assert manual.status_code == 200
+    payload = manual.json()
+    assert payload["version"] == 2
+    assert payload["source"] == "MANUAL"
+    assert [s["sequence"] for s in payload["sections"]] == [1, 2]
+
+    detail = client.get(f"/api/opportunities/{opportunity_id}").json()
+    actions = [event["action"] for event in detail["audit_events"]]
+    assert "proposal_outline_manual_version_created" in actions

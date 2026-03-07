@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
@@ -12,13 +13,17 @@ from app.modules.opportunity_intake.schemas import (
     GateDecisionRequest,
     GateDecisionResponse,
     OpportunityDetailResponse,
+    OpportunityIntakeDraftConfirmRequest,
+    OpportunityIntakeDraftResponse,
     OpportunityIntakeRequest,
     OpportunityIntakeResult,
+    OpportunityIntakeWithRfpResult,
     StageTransitionRequest,
     StageTransitionResponse,
     WorkflowTimelineEventResponse,
 )
 from app.modules.opportunity_intake.service import OpportunityIntakeService
+from app.modules.rfp_parser.document_reader import extract_text_from_upload_batch
 
 
 api_router = APIRouter(prefix="/api/opportunities", tags=["opportunity-intake"])
@@ -26,10 +31,181 @@ web_router = APIRouter(tags=["web"])
 templates = Jinja2Templates(directory="app/web/templates")
 
 
+def _build_intake_payload(
+    *,
+    name: str,
+    client: str,
+    estimated_contract_value: float,
+    lead_time_days: int,
+    incumbent_status: bool,
+    strategic_alignment: int,
+    estimated_probability_win: int,
+    actor: str,
+) -> OpportunityIntakeRequest:
+    return OpportunityIntakeRequest(
+        name=name,
+        client=client,
+        estimated_contract_value=estimated_contract_value,
+        lead_time_days=lead_time_days,
+        incumbent_status=incumbent_status,
+        strategic_alignment=strategic_alignment,
+        estimated_probability_win=estimated_probability_win,
+        actor=actor,
+    )
+
+
+def _render_intake_form(
+    request: Request,
+    *,
+    errors: list[str],
+    form_data: dict,
+    status_code: int = 200,
+) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request=request,
+        name="opportunity_form.html",
+        context={"errors": errors, "form_data": form_data},
+        status_code=status_code,
+    )
+
+
+def _render_intake_draft_review(
+    request: Request,
+    *,
+    draft: OpportunityIntakeDraftResponse,
+    errors: list[str],
+    form_data: dict,
+    status_code: int = 200,
+) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request=request,
+        name="opportunity_intake_draft.html",
+        context={"draft": draft, "errors": errors, "form_data": form_data},
+        status_code=status_code,
+    )
+
+
+def _draft_form_data(draft: OpportunityIntakeDraftResponse, overrides: dict | None = None) -> dict:
+    form_data = draft.suggested_fields.model_dump()
+    form_data["actor"] = draft.actor
+    if overrides:
+        form_data.update(overrides)
+    return form_data
+
+
+def _validation_errors(exc: ValidationError) -> list[str]:
+    errors: list[str] = []
+    for issue in exc.errors():
+        field_name = str(issue["loc"][-1]).replace("_", " ")
+        errors.append(f"{field_name.title()}: {issue['msg']}")
+    return errors
+
+
+def _build_draft_confirm_payload(
+    *,
+    name: str,
+    client: str,
+    estimated_contract_value: str,
+    lead_time_days: str,
+    incumbent_status: str | None,
+    strategic_alignment: str,
+    estimated_probability_win: str,
+    actor: str,
+) -> OpportunityIntakeDraftConfirmRequest:
+    normalized = {
+        "name": name,
+        "client": client,
+        "estimated_contract_value": estimated_contract_value,
+        "lead_time_days": lead_time_days,
+        "incumbent_status": False if incumbent_status is None else incumbent_status,
+        "strategic_alignment": strategic_alignment,
+        "estimated_probability_win": estimated_probability_win,
+        "actor": actor or None,
+    }
+    return OpportunityIntakeDraftConfirmRequest.model_validate(normalized)
+
+
 @api_router.post("/intake", response_model=OpportunityIntakeResult)
 def intake_opportunity(payload: OpportunityIntakeRequest, db: Session = Depends(get_db)) -> OpportunityIntakeResult:
     service = OpportunityIntakeService(db)
     return service.intake(payload)
+
+
+@api_router.post("/intake-rfp-drafts", response_model=OpportunityIntakeDraftResponse)
+async def create_intake_rfp_draft_api(
+    actor: str = Form("operator"),
+    files: list[UploadFile] | None = File(None),
+    db: Session = Depends(get_db),
+) -> OpportunityIntakeDraftResponse:
+    upload_payloads: list[tuple[str, bytes]] = []
+    for file in files or []:
+        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
+    batch = extract_text_from_upload_batch(upload_payloads)
+
+    service = OpportunityIntakeService(db)
+    try:
+        return service.create_intake_rfp_draft(actor, batch)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@api_router.get("/intake-rfp-drafts/{draft_id}", response_model=OpportunityIntakeDraftResponse)
+def get_intake_rfp_draft_api(draft_id: str, db: Session = Depends(get_db)) -> OpportunityIntakeDraftResponse:
+    service = OpportunityIntakeService(db)
+    draft = service.get_intake_rfp_draft(draft_id)
+    if not draft:
+        raise HTTPException(status_code=404, detail="RFP intake draft not found")
+    return draft
+
+
+@api_router.post("/intake-rfp-drafts/{draft_id}/confirm", response_model=OpportunityIntakeWithRfpResult)
+def confirm_intake_rfp_draft_api(
+    draft_id: str,
+    payload: OpportunityIntakeDraftConfirmRequest,
+    db: Session = Depends(get_db),
+) -> OpportunityIntakeWithRfpResult:
+    service = OpportunityIntakeService(db)
+    try:
+        return service.confirm_intake_rfp_draft(draft_id, payload)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@api_router.post("/intake-with-rfp", response_model=OpportunityIntakeWithRfpResult)
+async def intake_opportunity_with_rfp(
+    name: str = Form(...),
+    client: str = Form(...),
+    estimated_contract_value: float = Form(...),
+    lead_time_days: int = Form(...),
+    incumbent_status: bool = Form(False),
+    strategic_alignment: int = Form(...),
+    estimated_probability_win: int = Form(...),
+    actor: str = Form("operator"),
+    files: list[UploadFile] | None = File(None),
+    db: Session = Depends(get_db),
+) -> OpportunityIntakeWithRfpResult:
+    payload = _build_intake_payload(
+        name=name,
+        client=client,
+        estimated_contract_value=estimated_contract_value,
+        lead_time_days=lead_time_days,
+        incumbent_status=incumbent_status,
+        strategic_alignment=strategic_alignment,
+        estimated_probability_win=estimated_probability_win,
+        actor=actor,
+    )
+    upload_payloads: list[tuple[str, bytes]] = []
+    for file in files or []:
+        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
+    batch = extract_text_from_upload_batch(upload_payloads)
+
+    service = OpportunityIntakeService(db)
+    try:
+        return service.intake_with_rfp_batch(payload, batch)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @api_router.get("", response_model=list[OpportunityDetailResponse])
@@ -128,22 +304,49 @@ def preview_stage_transition(
 
 
 @web_router.get("/", response_class=HTMLResponse)
-def home(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
-    service = OpportunityIntakeService(db)
-    opportunities = service.list_opportunities()
-    return templates.TemplateResponse(
-        request=request,
-        name="opportunity_list.html",
-        context={"opportunities": opportunities},
-    )
+def home() -> RedirectResponse:
+    return RedirectResponse(url="/dashboard", status_code=303)
 
 
 @web_router.get("/intake", response_class=HTMLResponse)
 def intake_form(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse(
-        request=request,
-        name="opportunity_form.html",
-        context={"errors": []},
+    return _render_intake_form(request, errors=[], form_data={"actor": "operator"})
+
+
+@web_router.post("/intake/rfp-drafts")
+async def intake_rfp_draft_submit(
+    request: Request,
+    actor: str = Form("operator"),
+    files: list[UploadFile] | None = File(None),
+    db: Session = Depends(get_db),
+) -> Response:
+    upload_payloads: list[tuple[str, bytes]] = []
+    for file in files or []:
+        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
+    batch = extract_text_from_upload_batch(upload_payloads)
+    service = OpportunityIntakeService(db)
+    try:
+        draft = service.create_intake_rfp_draft(actor, batch)
+    except ValueError as exc:
+        errors = [str(exc)]
+        for warning in batch.warnings:
+            if warning not in errors:
+                errors.append(warning)
+        return _render_intake_form(request, errors=errors, form_data={"actor": actor}, status_code=422)
+    return RedirectResponse(url=f"/intake/rfp-drafts/{draft.draft_id}", status_code=303)
+
+
+@web_router.get("/intake/rfp-drafts/{draft_id}", response_class=HTMLResponse)
+def intake_rfp_draft_review(request: Request, draft_id: str, db: Session = Depends(get_db)) -> HTMLResponse:
+    service = OpportunityIntakeService(db)
+    draft = service.get_intake_rfp_draft(draft_id)
+    if not draft:
+        raise HTTPException(status_code=404, detail="RFP intake draft not found")
+    return _render_intake_draft_review(
+        request,
+        draft=draft,
+        errors=[],
+        form_data=_draft_form_data(draft),
     )
 
 
@@ -160,7 +363,7 @@ def intake_submit(
     actor: str = Form("operator"),
     db: Session = Depends(get_db),
 ) -> HTMLResponse:
-    payload = OpportunityIntakeRequest(
+    payload = _build_intake_payload(
         name=name,
         client=client,
         estimated_contract_value=estimated_contract_value,
@@ -177,6 +380,121 @@ def intake_submit(
         request=request,
         name="opportunity_result.html",
         context={"result": result, "detail": detail},
+    )
+
+
+@web_router.post("/intake/rfp-drafts/{draft_id}/confirm", response_class=HTMLResponse)
+def intake_rfp_draft_confirm(
+    request: Request,
+    draft_id: str,
+    name: str = Form(""),
+    client: str = Form(""),
+    estimated_contract_value: str = Form(""),
+    lead_time_days: str = Form(""),
+    incumbent_status: str | None = Form(None),
+    strategic_alignment: str = Form(""),
+    estimated_probability_win: str = Form(""),
+    actor: str = Form("operator"),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    service = OpportunityIntakeService(db)
+    draft = service.get_intake_rfp_draft(draft_id)
+    if not draft:
+        raise HTTPException(status_code=404, detail="RFP intake draft not found")
+
+    raw_form_data = {
+        "name": name,
+        "client": client,
+        "estimated_contract_value": estimated_contract_value,
+        "lead_time_days": lead_time_days,
+        "incumbent_status": incumbent_status is not None,
+        "strategic_alignment": strategic_alignment,
+        "estimated_probability_win": estimated_probability_win,
+        "actor": actor,
+    }
+    try:
+        payload = _build_draft_confirm_payload(
+            name=name,
+            client=client,
+            estimated_contract_value=estimated_contract_value,
+            lead_time_days=lead_time_days,
+            incumbent_status=incumbent_status,
+            strategic_alignment=strategic_alignment,
+            estimated_probability_win=estimated_probability_win,
+            actor=actor,
+        )
+    except ValidationError as exc:
+        return _render_intake_draft_review(
+            request,
+            draft=draft,
+            errors=_validation_errors(exc),
+            form_data=raw_form_data,
+            status_code=422,
+        )
+
+    try:
+        result = service.confirm_intake_rfp_draft(draft_id, payload)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+    detail = service.get_detail(result.id)
+    return templates.TemplateResponse(
+        request=request,
+        name="opportunity_result.html",
+        context={"result": result, "detail": detail, "rfp_result": result},
+    )
+
+
+@web_router.post("/intake-with-rfp", response_class=HTMLResponse)
+async def intake_with_rfp_submit(
+    request: Request,
+    name: str = Form(...),
+    client: str = Form(...),
+    estimated_contract_value: float = Form(...),
+    lead_time_days: int = Form(...),
+    incumbent_status: bool = Form(False),
+    strategic_alignment: int = Form(...),
+    estimated_probability_win: int = Form(...),
+    actor: str = Form("operator"),
+    files: list[UploadFile] | None = File(None),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    payload = _build_intake_payload(
+        name=name,
+        client=client,
+        estimated_contract_value=estimated_contract_value,
+        lead_time_days=lead_time_days,
+        incumbent_status=incumbent_status,
+        strategic_alignment=strategic_alignment,
+        estimated_probability_win=estimated_probability_win,
+        actor=actor,
+    )
+    upload_payloads: list[tuple[str, bytes]] = []
+    for file in files or []:
+        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
+    batch = extract_text_from_upload_batch(upload_payloads)
+    service = OpportunityIntakeService(db)
+    try:
+        result = service.intake_with_rfp_batch(payload, batch)
+    except ValueError as exc:
+        errors = [str(exc)]
+        for warning in batch.warnings:
+            if warning not in errors:
+                errors.append(warning)
+        return _render_intake_form(
+            request,
+            errors=errors,
+            form_data=payload.model_dump(),
+            status_code=422,
+        )
+
+    detail = service.get_detail(result.id)
+    return templates.TemplateResponse(
+        request=request,
+        name="opportunity_result.html",
+        context={"result": result, "detail": detail, "rfp_result": result},
     )
 
 

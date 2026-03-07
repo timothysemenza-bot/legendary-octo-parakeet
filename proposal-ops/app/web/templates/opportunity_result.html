@@ -24,6 +24,49 @@
   <p><strong>Solution Positioning:</strong> {{ detail.capture_plan.solution_positioning }}</p>
   <p><strong>Timeline:</strong> {{ detail.capture_plan.timeline }}</p>
   {% endif %}
+  {% if rfp_result %}
+  <h3>RFP Parse Summary</h3>
+  <p><strong>Solicitation ID:</strong> {{ rfp_result.solicitation_id }}</p>
+  <p><strong>Requirements Extracted:</strong> {{ rfp_result.requirement_count }}</p>
+  <p><strong>Parsed Files:</strong> {{ rfp_result.parsed_files | join(", ") }}</p>
+  {% if rfp_result.skipped_files %}
+  <p><strong>Skipped Files:</strong> {{ rfp_result.skipped_files | join(", ") }}</p>
+  {% endif %}
+  {% if rfp_result.warnings %}
+  <h4>Warnings</h4>
+  <ul>
+      {% for warning in rfp_result.warnings %}
+      <li>{{ warning }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if rfp_result.source_documents %}
+  <h4>Source Document Manifest</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Order</th>
+        <th>File</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Text Length</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rfp_result.source_documents %}
+      <tr>
+        <td>{{ row.upload_order }}</td>
+        <td>{{ row.source_filename }}</td>
+        <td>{{ row.parse_status }}</td>
+        <td>{{ row.content_type }}</td>
+        <td>{{ row.extracted_text_length }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <p><a href="/opportunities/{{ result.id }}/compliance-matrix">Open Compliance Matrix</a></p>
+  {% endif %}
   <p><a href="/opportunities/{{ result.id }}">View Opportunity Detail</a></p>
 </section>
 {% endblock %}

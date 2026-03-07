@@ -13,7 +13,7 @@ class ComplianceMatrixService:
         latest_solicitation = (
             self.db.query(Solicitation)
             .filter(Solicitation.opportunity_id == opportunity_id)
-            .order_by(Solicitation.created_at.desc())
+            .order_by(Solicitation.version.desc(), Solicitation.created_at.desc())
             .first()
         )
         if not latest_solicitation:

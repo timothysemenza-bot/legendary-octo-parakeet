@@ -3,109 +3,284 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engagements and Packages | Executive Advisory | Boss Key LLC</title>
-  <meta name="description" content="Executive advisory engagement options: Executive Coaching, Executive Advisory Sprint, and Ongoing Advisory Retainer for founder-led and operator-led teams.">
+  <title>Proposal Management Support | Pursuit Cadence and Proposal Operations | Boss Key LLC</title>
+  <meta name="description" content="Proposal management support for live pursuits: diagnostic sprint, pursuit cadence support, managed pursuit operations, and embedded capture partnership.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    :root{--ink:#f3f5f8;--paper:#0a0a0b;--line:#2d2f35;--soft:#c3c8d3;--max:1120px}*{box-sizing:border-box}
-    html,body{margin:0;padding:0;color:var(--ink);background:radial-gradient(circle at 14% 8%,#23252b 0%,var(--paper) 42%),linear-gradient(145deg,#121316 0%,#09090a 100%);font-family:"Manrope","Segoe UI",sans-serif;line-height:1.58}
-    a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),92vw);margin:0 auto}
-    header{padding:16px 0;border-bottom:1px solid #1f2127;position:sticky;top:0;background:rgba(10,10,11,.82);backdrop-filter:blur(8px)}
-    .nav{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}.brand{display:inline-flex;align-items:center;gap:9px;font-weight:700}.brand img{width:31px;height:31px}
-    .links{display:flex;flex-wrap:wrap;gap:8px}.links a{border:1px solid #343740;border-radius:999px;padding:6px 11px;background:#1b1d22;color:var(--soft);font-size:.86rem;font-weight:700}
-    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid transparent;padding:11px 14px;font-weight:700;line-height:1.1}.btn-primary{background:linear-gradient(145deg,#c5162e,#a70f24);color:#fff}.btn-secondary{background:#181c24;color:#dbe8ff;border-color:#3b4350}
-    main{padding:24px 0 40px}section{margin:14px 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(165deg,#181a20 0%,#111318 100%);padding:22px}
-    h1,h2{font-family:"Fraunces",Georgia,serif;margin:0 0 10px;line-height:1.15}h1{font-size:clamp(2rem,4vw,3rem)}h2{font-size:clamp(1.36rem,2.5vw,1.9rem)}h3{margin:0 0 8px;font-size:1.06rem}
-    p{margin:0 0 10px;color:var(--soft)}ul{margin:0;padding-left:18px;color:#d9dee8}li{margin:7px 0}
-    .grid-3,.grid-2{display:grid;gap:12px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .panel{border:1px solid #343844;border-radius:12px;background:#14171f;padding:14px}.pill{display:inline-block;margin-bottom:8px;border:1px solid #5d2230;border-radius:999px;color:#ffdce2;background:#2a1318;font-size:.74rem;font-weight:700;padding:5px 8px}
-    .buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
-    footer{border-top:1px solid var(--line);color:#afb6c3;font-size:.88rem;padding:16px 0 26px}
-    @media (max-width:920px){.grid-3,.grid-2{grid-template-columns:1fr}.buttons .btn{width:100%}}
+    :root {
+      --ink: #f3f5f8;
+      --paper: #0a0a0b;
+      --line: #2d2f35;
+      --soft: #c3c8d3;
+      --max: 1120px;
+      --accent: #3d8bff;
+      --accent-soft: #d6e6ff;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 14% 8%, #202935 0%, var(--paper) 42%), linear-gradient(145deg, #121722 0%, #090a0d 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid #1f2430;
+      position: sticky;
+      top: 0;
+      background: rgba(9, 10, 13, 0.84);
+      backdrop-filter: blur(8px);
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+    }
+    .brand img { width: 31px; height: 31px; }
+    .links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .links a {
+      border: 1px solid #324154;
+      border-radius: 999px;
+      padding: 6px 11px;
+      background: #141c27;
+      color: var(--soft);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      padding: 11px 14px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, #3d8bff, #2560ca);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(61, 139, 255, 0.3);
+    }
+    .btn-secondary {
+      background: #181c24;
+      color: #dbe8ff;
+      border-color: #3b4350;
+    }
+    main { padding: 24px 0 40px; }
+    section {
+      margin: 14px 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(165deg, #181d27 0%, #10141c 100%);
+      padding: 22px;
+    }
+    h1, h2 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); }
+    h2 { font-size: clamp(1.36rem, 2.5vw, 1.9rem); }
+    h3 { margin: 0 0 8px; font-size: 1.06rem; }
+    p { margin: 0 0 10px; color: var(--soft); }
+    ul { margin: 0; padding-left: 18px; color: #d9dee8; }
+    li { margin: 7px 0; }
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: 12px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .panel {
+      border: 1px solid #334256;
+      border-radius: 12px;
+      background: #121924;
+      padding: 14px;
+    }
+    .pill {
+      display: inline-block;
+      margin-bottom: 8px;
+      border: 1px solid rgba(61, 139, 255, 0.35);
+      border-radius: 999px;
+      color: var(--accent-soft);
+      background: rgba(61, 139, 255, 0.14);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 5px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .buttons { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 12px; }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #afb6c3;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 920px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .buttons .btn { width: 100%; }
+    }
   </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a><nav class="links" aria-label="Main navigation"><a href="./about.html">About</a><a href="./coaching.html">Coaching</a><a href="./engagements.html">Engagements</a><a href="./proof.html">Proof</a><a href="./faq.html">FAQ</a><a href="./contact.html">Contact</a></nav><a class="btn btn-primary schedule-cta" href="#">Book intro</a></div></header>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="./about.html">About</a>
+      <a href="./engagements.html">Proposal Support</a>
+      <a href="./coaching.html">Coaching</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book proposal intro</a>
+  </div>
+</header>
 <main class="wrap">
-<section>
-  <h1>Simple engagement options for executive coaching and executive advisory.</h1>
-  <p>Choose the structure that matches your urgency, decision load, and leadership context.</p>
-  <ul>
-    <li>Option A: Executive Coaching</li>
-    <li>Option B: Executive Advisory Sprint</li>
-    <li>Option C: Ongoing Advisory Retainer</li>
-  </ul>
-  <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book intro</a><a class="btn btn-secondary email-cta" href="#">Discuss fit privately</a></div>
-</section>
+  <section>
+    <span class="pill">Proposal Management Support</span>
+    <h1>Structured proposal support for teams that need sharper go/no-go decisions and cleaner pursuit execution.</h1>
+    <p>This work sits inside active pipeline reality. I help teams tighten qualification, run a repeatable weekly pursuit cadence, reduce late-cycle proposal chaos, and give leadership clearer visibility into what needs a decision now.</p>
+    <ul>
+      <li>Run the cadence around live pursuits instead of selling a generic process deck.</li>
+      <li>Support proposal throughput, milestone discipline, and escalation handling.</li>
+      <li>Separate this work from executive coaching so buyers know exactly what they are engaging.</li>
+    </ul>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book proposal intro</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=proposal-support">Request proposal scope</a>
+      <a class="btn btn-secondary" href="./coaching.html">Need coaching instead?</a>
+    </div>
+  </section>
 
-<section>
-  <h2>Packages</h2>
-  <div class="grid-3">
-    <article class="panel">
-      <span class="pill">Option A</span>
-      <h3>Executive Coaching (weekly or biweekly)</h3>
-      <p><strong>Who it fits:</strong> Founders and operators with sustained decision pressure.</p>
-      <p><strong>Included:</strong> 1:1 sessions, decision calibration, between-session accountability notes.</p>
-      <p><strong>Cadence:</strong> Weekly or biweekly.</p>
-      <p><strong>Typical duration:</strong> 3-6 months.</p>
-      <p><strong>Pricing:</strong> Shared after intro based on scope, cadence, and support depth.</p>
-    </article>
-    <article class="panel">
-      <span class="pill">Option B</span>
-      <h3>Executive Advisory Sprint (2-4 weeks)</h3>
-      <p><strong>Who it fits:</strong> Leaders facing one critical decision cycle right now.</p>
-      <p><strong>Included:</strong> Decision map, stakeholder pressure-test, options memo, action sequence.</p>
-      <p><strong>Cadence:</strong> 1-2 sessions per week plus focused async support.</p>
-      <p><strong>Typical duration:</strong> 2-4 weeks.</p>
-      <p><strong>Pricing:</strong> Shared after intro based on scope, cadence, and support depth.</p>
-    </article>
-    <article class="panel">
-      <span class="pill">Option C</span>
-      <h3>Ongoing Advisory Retainer (lightweight)</h3>
-      <p><strong>Who it fits:</strong> Leaders who want continuing confidential advisory coverage.</p>
-      <p><strong>Included:</strong> Monthly calls, async check-ins, decision support on active leadership issues.</p>
-      <p><strong>Cadence:</strong> Monthly call + async channel.</p>
-      <p><strong>Typical duration:</strong> 6+ months.</p>
-      <p><strong>Pricing:</strong> Shared after intro based on scope, cadence, and support depth.</p>
-    </article>
-  </div>
-</section>
+  <section>
+    <h2>Where proposal support helps most</h2>
+    <div class="grid-3">
+      <article class="panel">
+        <h3>Qualification discipline</h3>
+        <p>Reduce weak-fit pursuits and tighten how go/no-go calls actually get made.</p>
+      </article>
+      <article class="panel">
+        <h3>Proposal cadence</h3>
+        <p>Keep active submissions moving with named owners, milestone checks, and fewer surprises.</p>
+      </article>
+      <article class="panel">
+        <h3>Leadership visibility</h3>
+        <p>Translate pursuit status, risk, and resource load into concrete executive decisions.</p>
+      </article>
+    </div>
+  </section>
 
-<section>
-  <h2>How it feels after</h2>
-  <div class="grid-3">
-    <article class="panel"><h3>You stop second-guessing every move</h3><p>You act with cleaner internal alignment.</p></article>
-    <article class="panel"><h3>You handle stakeholder friction better</h3><p>Conversations become firmer and less draining.</p></article>
-    <article class="panel"><h3>You maintain leadership rhythm</h3><p>Priority decisions do not stall in ambiguity.</p></article>
-  </div>
-</section>
+  <section>
+    <h2>Ways to work together</h2>
+    <div class="grid-4">
+      <article class="panel">
+        <span class="pill">Entry Sprint</span>
+        <h3>Live Pursuit Diagnostic Sprint (30 days)</h3>
+        <p><strong>Best for:</strong> Teams that need immediate clarity on 1-2 live pursuits before choosing a longer support model.</p>
+        <p><strong>Cadence:</strong> Weekly decision checkpoints plus applied support across live opportunities.</p>
+        <p><strong>You get:</strong> Baseline snapshot, weekly decision memos, bottleneck map, and next-phase recommendation.</p>
+      </article>
+      <article class="panel">
+        <span class="pill">Light Retainer</span>
+        <h3>Pursuit Cadence Support</h3>
+        <p><strong>Best for:</strong> Teams needing decision discipline without daily embedded support.</p>
+        <p><strong>Cadence:</strong> 1 weekly operating review plus async decision support.</p>
+        <p><strong>You get:</strong> Go/no-go support, milestone QA, and clearer handoffs on active pursuits.</p>
+      </article>
+      <article class="panel">
+        <span class="pill">Standard Retainer</span>
+        <h3>Managed Pursuit Operations</h3>
+        <p><strong>Best for:</strong> Teams running multiple active pursuits each month and needing stronger throughput control.</p>
+        <p><strong>Cadence:</strong> 2 weekly operating blocks, pursuit-specific checkpoints, and a weekly leadership summary.</p>
+        <p><strong>You get:</strong> Recurring operating support, active proposal coverage, QA discipline, and leadership visibility.</p>
+      </article>
+      <article class="panel">
+        <span class="pill">Embedded Support</span>
+        <h3>Embedded Capture Partner</h3>
+        <p><strong>Best for:</strong> High-volume or high-stakes environments where close day-to-day support is required.</p>
+        <p><strong>Cadence:</strong> Multi-touch weekly engagement plus a leadership escalation channel.</p>
+        <p><strong>You get:</strong> Embedded pursuit leadership, cross-functional coordination, QA gates, and reduced late-cycle churn.</p>
+      </article>
+    </div>
+  </section>
 
-<section>
-  <h2>Who this is not for</h2>
-  <ul>
-    <li>Leaders who want a consultant to make decisions for them.</li>
-    <li>Teams unwilling to commit time for reflection and follow-through.</li>
-    <li>Buyers seeking only operational tooling work.</li>
-  </ul>
-</section>
+  <section>
+    <h2>Cadence, frequency, and operating rhythm</h2>
+    <div class="grid-2">
+      <article class="panel">
+        <h3>Weekly pursuit checkpoint</h3>
+        <p>Structured review of active pursuits to confirm priority, unblock work, assign owners, and set next decisions.</p>
+      </article>
+      <article class="panel">
+        <h3>Go/no-go review rhythm</h3>
+        <p>Standing decision review to evaluate fit, resource load, and win path before drafting capacity gets committed.</p>
+      </article>
+      <article class="panel">
+        <h3>Proposal readiness QA gates</h3>
+        <p>Predefined quality gates at key milestones so teams catch compliance and execution risk before submission week.</p>
+      </article>
+      <article class="panel">
+        <h3>Leadership visibility loop</h3>
+        <p>Weekly decision memo covering status, risks, escalations, and required executive actions.</p>
+      </article>
+    </div>
+  </section>
 
-<section>
-  <h2>Boundary statement</h2>
-  <p>All packages are business coaching and advisory engagements. They do not provide psychotherapy, mental health treatment, or medical services.</p>
-</section>
+  <section>
+    <h2>What gets measured</h2>
+    <div class="grid-3">
+      <article class="panel"><h3>Decision cycle time</h3><p>How quickly opportunities move from intake to a real go/no-go decision.</p></article>
+      <article class="panel"><h3>Time to first compliant draft</h3><p>Whether proposal production is getting faster without increasing chaos.</p></article>
+      <article class="panel"><h3>Leadership decision latency</h3><p>How long escalations sit before someone resolves them clearly.</p></article>
+    </div>
+  </section>
 
-<section>
-  <h2>Next step</h2>
-  <p>Book a short intro to choose the right package for your current decision environment.</p>
-  <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book intro</a><a class="btn btn-secondary" href="./contact.html">Request private callback</a></div>
-</section>
+  <section>
+    <h2>What this is not</h2>
+    <ul>
+      <li>No software sale or implementation-led engagement.</li>
+      <li>No documentation-only scope detached from live pursuits.</li>
+      <li>No daily task execution substitute for internal ownership unless explicitly scoped as embedded support.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How engagements start</h2>
+    <p>Intro conversation -> live pursuit diagnostic -> retainer recommendation if ongoing support makes sense. That keeps the work grounded in your actual pursuit environment instead of guessing from the outside.</p>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book proposal intro</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=proposal-support">Request proposal scope</a>
+    </div>
+  </section>
 </main>
-<footer><div class="wrap">Boss Key LLC | executive advisory | confidential advisor | founder coaching</div></footer>
+<footer><div class="wrap">Boss Key LLC | Proposal management support | Pursuit cadence | Managed proposal operations</div></footer>
 <script>
-(function(){const inboxAlias='timmy@bosskeyops.com';const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;document.querySelectorAll('.schedule-cta').forEach(function(l){l.href=calendarScheduleUrl;l.target='_blank';l.rel='noopener noreferrer';});document.querySelectorAll('.email-cta').forEach(function(l){const s='[Boss Key] Engagement Fit';const b='Hi Timmy,\n\nI would like help choosing an engagement.\n\nName:\nCompany:\nCurrent decision context:\n';l.href='mailto:'+inboxAlias+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);});})();
+(function(){
+  const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';
+  const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;
+  document.querySelectorAll('.schedule-cta').forEach(function(l){
+    l.href=calendarScheduleUrl;
+    l.target='_blank';
+    l.rel='noopener noreferrer';
+  });
+})();
 </script>
 </body>
 </html>

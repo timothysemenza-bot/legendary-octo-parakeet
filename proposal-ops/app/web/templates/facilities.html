@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Facilities</h2>
+  {% if errors %}
+  <ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <form method="post" action="/facilities">
+    <label>Organization
+      <select name="organization_id" required>
+        <option value="">Select</option>
+        {% for org in organizations %}
+        <option value="{{ org.id }}" {% if form_data.organization_id == org.id %}selected{% endif %}>{{ org.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Parent Facility ID <input name="parent_facility_id" value="{{ form_data.parent_facility_id or '' }}" /></label>
+    <label>Name <input name="name" value="{{ form_data.name or '' }}" required /></label>
+    <label>Kind <input name="facility_kind" value="{{ form_data.facility_kind or 'FACILITY' }}" /></label>
+    <label>Type <input name="facility_type" value="{{ form_data.facility_type or 'GENERAL' }}" /></label>
+    <label>City <input name="city" value="{{ form_data.city or '' }}" /></label>
+    <label>State <input name="state" value="{{ form_data.state or '' }}" /></label>
+    <label>Complexity <input name="service_complexity" value="{{ form_data.service_complexity or 'MEDIUM' }}" /></label>
+    <label>Square Footage <input name="square_footage" value="{{ form_data.square_footage or '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ form_data.notes or '' }}</textarea></label>
+    <button type="submit">Create Facility</button>
+  </form>
+
+  {% if facilities %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Organization</th>
+        <th>Kind</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in facilities %}
+      <tr>
+        <td><a href="/facilities/{{ item.id }}">{{ item.name }}</a></td>
+        <td>{{ item.organization.name if item.organization else item.organization_id }}</td>
+        <td>{{ item.facility_kind }}</td>
+        <td>{{ item.city or '' }} {{ item.state or '' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No facilities yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
+

@@ -6,3 +6,4 @@ Current MVP:
 - Build ordered sections grouped by `proposal_section` and `owner`
 - Persist immutable outline versions
 - Expose API and web dashboard for generation and history
+- Support manual JSON-based section editing that creates new immutable versions

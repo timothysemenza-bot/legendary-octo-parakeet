@@ -4,8 +4,13 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
-from app.modules.capture_plan.schemas import CapturePlanResponse, CapturePlanUpdateRequest
-from app.modules.capture_plan.service import CapturePlanService
+from app.modules.capture_plan.schemas import (
+    CapturePlanGenerateRequest,
+    CapturePlanReadinessResponse,
+    CapturePlanResponse,
+    CapturePlanUpdateRequest,
+)
+from app.modules.capture_plan.service import CapturePlanGenerationError, CapturePlanService
 
 
 api_router = APIRouter(prefix="/api/opportunities", tags=["capture-plan"])
@@ -31,6 +36,15 @@ def list_capture_plan_versions(opportunity_id: str, db: Session = Depends(get_db
     return [CapturePlanResponse.model_validate(p, from_attributes=True) for p in plans]
 
 
+@api_router.get("/{opportunity_id}/capture-plan/readiness", response_model=CapturePlanReadinessResponse)
+def get_capture_plan_readiness(opportunity_id: str, db: Session = Depends(get_db)) -> CapturePlanReadinessResponse:
+    service = CapturePlanService(db)
+    try:
+        return service.readiness(opportunity_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
 @api_router.post("/{opportunity_id}/capture-plan", response_model=CapturePlanResponse)
 def create_capture_plan_version(
     opportunity_id: str,
@@ -45,6 +59,22 @@ def create_capture_plan_version(
     return CapturePlanResponse.model_validate(plan, from_attributes=True)
 
 
+@api_router.post("/{opportunity_id}/capture-plan/generate", response_model=CapturePlanResponse)
+def generate_capture_plan_version(
+    opportunity_id: str,
+    payload: CapturePlanGenerateRequest,
+    db: Session = Depends(get_db),
+) -> CapturePlanResponse:
+    service = CapturePlanService(db)
+    try:
+        plan = service.generate_enriched_version(opportunity_id, payload)
+    except CapturePlanGenerationError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return CapturePlanResponse.model_validate(plan, from_attributes=True)
+
+
 @web_router.get("/opportunities/{opportunity_id}/capture-plan", response_class=HTMLResponse)
 def capture_plan_view(opportunity_id: str, request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
     service = CapturePlanService(db)
@@ -52,6 +82,7 @@ def capture_plan_view(opportunity_id: str, request: Request, db: Session = Depen
     if not latest:
         raise HTTPException(status_code=404, detail="Capture plan not found")
     versions = service.list_versions(opportunity_id)
+    readiness = service.readiness(opportunity_id)
     return templates.TemplateResponse(
         request=request,
         name="capture_plan.html",
@@ -59,6 +90,7 @@ def capture_plan_view(opportunity_id: str, request: Request, db: Session = Depen
             "opportunity_id": opportunity_id,
             "plan": latest,
             "versions": versions,
+            "readiness": readiness,
         },
     )
 
@@ -87,6 +119,23 @@ def capture_plan_update_web(
     service = CapturePlanService(db)
     try:
         service.create_version(opportunity_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return RedirectResponse(url=f"/opportunities/{opportunity_id}/capture-plan", status_code=303)
+
+
+@web_router.post("/opportunities/{opportunity_id}/capture-plan/generate")
+def capture_plan_generate_web(
+    opportunity_id: str,
+    actor: str = Form("operator"),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    payload = CapturePlanGenerateRequest(actor=actor)
+    service = CapturePlanService(db)
+    try:
+        service.generate_enriched_version(opportunity_id, payload)
+    except CapturePlanGenerationError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     return RedirectResponse(url=f"/opportunities/{opportunity_id}/capture-plan", status_code=303)

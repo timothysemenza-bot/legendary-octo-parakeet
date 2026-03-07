@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Janitorial Capture Dashboard</h2>
+  <p><strong>Generated:</strong> {{ summary.generated_at }}</p>
+  <p><strong>Organizations:</strong> {{ summary.organizations_total }} | <strong>Facilities:</strong> {{ summary.facilities_total }} | <strong>Contracts:</strong> {{ summary.contracts_total }} | <strong>Contractors:</strong> {{ summary.contractors_total }} | <strong>Pursuits:</strong> {{ summary.pursuits_total }}</p>
+  <p><strong>Weighted Pipeline:</strong> {{ summary.total_weighted_pipeline_value }} | <strong>Expected Consulting Revenue:</strong> {{ summary.expected_consulting_revenue }}</p>
+  {% if summary.organizations_total == 0 %}
+  <form method="post" action="/dashboard/seed-demo">
+    <button type="submit">Load Demo Data</button>
+  </form>
+  {% endif %}
+
+  <h3>Upcoming Rebids</h3>
+  {% if summary.upcoming_rebids %}
+  <table>
+    <thead>
+      <tr>
+        <th>Contract</th>
+        <th>Organization</th>
+        <th>Rebid Window</th>
+        <th>Expiration</th>
+        <th>Annual Value</th>
+        <th>State</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.upcoming_rebids %}
+      <tr>
+        <td><a href="/contracts/{{ item.contract_id }}">{{ item.title }}</a></td>
+        <td>{{ item.organization_name }}</td>
+        <td>{{ item.rebid_window_start or "-" }}</td>
+        <td>{{ item.expiration_date or "-" }}</td>
+        <td>{{ item.estimated_annual_value or "-" }}</td>
+        <td>{{ item.state or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No rebids tracked yet.</p>
+  {% endif %}
+
+  <h3>Hottest Pursuits</h3>
+  {% if summary.hottest_opportunities %}
+  <table>
+    <thead>
+      <tr>
+        <th>Pursuit</th>
+        <th>Organization</th>
+        <th>Stage</th>
+        <th>Score</th>
+        <th>Weighted Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.hottest_opportunities %}
+      <tr>
+        <td><a href="/opportunities/{{ item.opportunity_id }}">{{ item.name }}</a></td>
+        <td>{{ item.organization_name }}</td>
+        <td>{{ item.pursuit_stage }}</td>
+        <td>{{ item.qualification_score }}</td>
+        <td>{{ item.weighted_pipeline_value or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No pursuits yet.</p>
+  {% endif %}
+
+  <h3>Top Contractor Matches</h3>
+  {% if summary.top_matches %}
+  <ul>
+    {% for item in summary.top_matches %}
+    <li><a href="/opportunities/{{ item.opportunity_id }}/capture-workbench">{{ item.opportunity_name }}</a> -> {{ item.contractor_name }} ({{ item.match_score }})</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No match snapshots yet.</p>
+  {% endif %}
+
+  <h3>Active Pursuit Counts</h3>
+  <ul>
+    {% for stage, count in summary.active_pursuit_counts.items() %}
+    <li>{{ stage }}: {{ count }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Recent Opportunities</h3>
+  {% if opportunities %}
+  <ul>
+    {% for opp in opportunities %}
+    <li><a href="/opportunities/{{ opp.id }}">{{ opp.name }}</a> | {{ opp.client }} | {{ opp.pursuit_stage }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No opportunities yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
+

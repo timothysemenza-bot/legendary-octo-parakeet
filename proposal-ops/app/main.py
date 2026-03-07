@@ -16,6 +16,8 @@ from app.modules.compliance_matrix.api import api_router as compliance_api_route
 from app.modules.compliance_matrix.api import web_router as compliance_web_router
 from app.modules.identity.api import api_router as identity_api_router
 from app.modules.identity.api import web_router as identity_web_router
+from app.modules.janitorial_os.api import api_router as janitorial_api_router
+from app.modules.janitorial_os.api import web_router as janitorial_web_router
 from app.modules.knowledge.api import api_router as knowledge_api_router
 from app.modules.knowledge.api import web_router as knowledge_web_router
 from app.modules.notifications.api import api_router as notifications_api_router
@@ -48,6 +50,8 @@ app.include_router(api_router)
 app.include_router(web_router)
 app.include_router(capture_api_router)
 app.include_router(capture_web_router)
+app.include_router(janitorial_api_router)
+app.include_router(janitorial_web_router)
 app.include_router(rfp_api_router)
 app.include_router(rfp_web_router)
 app.include_router(compliance_api_router)

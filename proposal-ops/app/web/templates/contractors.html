@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Contractors</h2>
+  {% if errors %}
+  <ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <form method="post" action="/contractors">
+    <label>Name <input name="name" value="{{ form_data.name or '' }}" required /></label>
+    <label>Service Geographies <input name="service_geographies" value="{{ form_data.service_geographies or '' }}" /></label>
+    <label>HQ City <input name="headquarters_city" value="{{ form_data.headquarters_city or '' }}" /></label>
+    <label>HQ State <input name="headquarters_state" value="{{ form_data.headquarters_state or '' }}" /></label>
+    <label>Vertical Experience <textarea name="vertical_experience">{{ form_data.vertical_experience or '' }}</textarea></label>
+    <label>Labor Profile <input name="labor_profile" value="{{ form_data.labor_profile or '' }}" /></label>
+    <label>Union Profile <input name="union_profile" value="{{ form_data.union_profile or '' }}" /></label>
+    <label>Diversity Certs <input name="diversity_certs" value="{{ form_data.diversity_certs or '' }}" /></label>
+    <label>Airport Experience <input type="checkbox" name="airport_experience" value="true" {% if form_data.airport_experience %}checked{% endif %} /></label>
+    <label>Healthcare Experience <input type="checkbox" name="healthcare_experience" value="true" {% if form_data.healthcare_experience %}checked{% endif %} /></label>
+    <label>Education Experience <input type="checkbox" name="education_experience" value="true" {% if form_data.education_experience %}checked{% endif %} /></label>
+    <label>Municipal Experience <input type="checkbox" name="municipal_experience" value="true" {% if form_data.municipal_experience %}checked{% endif %} /></label>
+    <label>Scale Band <input name="scale_band" value="{{ form_data.scale_band or 'REGIONAL' }}" /></label>
+    <label>Relationship Strength <input name="relationship_strength" value="{{ form_data.relationship_strength or '3' }}" /></label>
+    <label>Relationship Notes <textarea name="relationship_notes">{{ form_data.relationship_notes or '' }}</textarea></label>
+    <label>Strategic Fit Notes <textarea name="strategic_fit_notes">{{ form_data.strategic_fit_notes or '' }}</textarea></label>
+    <button type="submit">Create Contractor</button>
+  </form>
+
+  {% if contractors %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Geographies</th>
+        <th>Scale</th>
+        <th>Relationship</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in contractors %}
+      <tr>
+        <td><a href="/contractors/{{ item.id }}">{{ item.name }}</a></td>
+        <td>{{ item.service_geographies or '-' }}</td>
+        <td>{{ item.scale_band }}</td>
+        <td>{{ item.relationship_strength }}/5</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No contractors yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
+

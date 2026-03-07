@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Review Intake Draft</h2>
+  <p>Confirm or adjust the inferred intake fields before the opportunity is created.</p>
+  {% if errors %}
+  <section>
+    <h3>Submission Errors</h3>
+    <ul>
+      {% for error in errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  <section>
+    <h3>Draft Signals</h3>
+    <p><strong>Draft ID:</strong> {{ draft.draft_id }}</p>
+    <p><strong>Status:</strong> {{ draft.status }}</p>
+    <p><strong>Actor:</strong> {{ draft.actor }}</p>
+    {% if draft.extracted_deadline %}
+    <p><strong>Extracted Deadline:</strong> {{ draft.extracted_deadline }}</p>
+    {% endif %}
+    <p><strong>Parsed Files:</strong> {{ draft.parsed_files | join(", ") }}</p>
+    {% if draft.skipped_files %}
+    <p><strong>Skipped Files:</strong> {{ draft.skipped_files | join(", ") }}</p>
+    {% endif %}
+    {% if draft.warnings %}
+    <h4>Warnings</h4>
+    <ul>
+      {% for warning in draft.warnings %}
+      <li>{{ warning }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if draft.source_documents %}
+    <h4>Source Document Manifest</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>File</th>
+          <th>Status</th>
+          <th>Type</th>
+          <th>Text Length</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in draft.source_documents %}
+        <tr>
+          <td>{{ row.upload_order }}</td>
+          <td>{{ row.source_filename }}</td>
+          <td>{{ row.parse_status }}</td>
+          <td>{{ row.content_type }}</td>
+          <td>{{ row.extracted_text_length }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </section>
+  <form method="post" action="/intake/rfp-drafts/{{ draft.draft_id }}/confirm">
+    <label>Opportunity Name <input name="name" required minlength="3" value="{{ form_data.name or '' }}" /></label>
+    <p><strong>Name Status:</strong> {{ draft.field_statuses.name }}</p>
+    <label>Client <input name="client" required minlength="2" value="{{ form_data.client or '' }}" /></label>
+    <p><strong>Client Status:</strong> {{ draft.field_statuses.client }}</p>
+    <label>Estimated Contract Value <input type="number" step="0.01" min="1" name="estimated_contract_value" required value="{{ form_data.estimated_contract_value or '' }}" /></label>
+    <p><strong>Contract Value Status:</strong> {{ draft.field_statuses.estimated_contract_value }}</p>
+    <label>Lead Time (days) <input type="number" min="1" name="lead_time_days" required value="{{ form_data.lead_time_days or '' }}" /></label>
+    <p><strong>Lead Time Status:</strong> {{ draft.field_statuses.lead_time_days }}</p>
+    <label>Incumbent Exists <input type="checkbox" name="incumbent_status" value="true" {% if form_data.incumbent_status %}checked{% endif %} /></label>
+    <p><strong>Incumbent Status Source:</strong> {{ draft.field_statuses.incumbent_status }}</p>
+    <label>Strategic Alignment (1-5) <input type="number" min="1" max="5" name="strategic_alignment" required value="{{ form_data.strategic_alignment or '' }}" /></label>
+    <p><strong>Strategic Alignment Source:</strong> {{ draft.field_statuses.strategic_alignment }}</p>
+    <label>Estimated Probability of Win (0-100) <input type="number" min="0" max="100" name="estimated_probability_win" required value="{{ form_data.estimated_probability_win or '' }}" /></label>
+    <p><strong>Probability Source:</strong> {{ draft.field_statuses.estimated_probability_win }}</p>
+    <label>Actor <input name="actor" value="{{ form_data.actor or draft.actor }}" required /></label>
+    <button type="submit">Create Opportunity From Draft</button>
+  </form>
+  <p><a href="/intake">Back to Intake</a></p>
+</section>
+{% endblock %}

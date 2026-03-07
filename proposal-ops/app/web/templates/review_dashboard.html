@@ -49,6 +49,11 @@
     </form>
     {% endif %}
 
+    <form method="post" action="/opportunities/{{ opportunity_id }}/reviews/{{ cycle.id }}/seed-from-outline">
+      <input type="hidden" name="actor" value="operator" />
+      <button type="submit">Seed Comments From Outline</button>
+    </form>
+
     <h4>Add Comment</h4>
     <form method="post" action="/reviews/{{ cycle.id }}/comments">
       <input type="hidden" name="opportunity_id" value="{{ opportunity_id }}" />

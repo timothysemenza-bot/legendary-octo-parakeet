@@ -1,11 +1,17 @@
+import json
+
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
-from app.modules.proposal_outline.schemas import ProposalOutlineGenerateRequest, ProposalOutlineResponse
-from app.modules.proposal_outline.service import ProposalOutlineService
+from app.modules.proposal_outline.schemas import (
+    ProposalOutlineGenerateRequest,
+    ProposalOutlineManualCreateRequest,
+    ProposalOutlineResponse,
+)
+from app.modules.proposal_outline.service import ManualOutlineValidationError, ProposalOutlineService
 
 
 api_router = APIRouter(prefix="/api/opportunities", tags=["proposal-outline"])
@@ -54,6 +60,20 @@ def generate_proposal_outline(
     return _to_response(service, outline)
 
 
+@api_router.post("/{opportunity_id}/proposal-outline/manual", response_model=ProposalOutlineResponse)
+def create_manual_outline_version(
+    opportunity_id: str,
+    payload: ProposalOutlineManualCreateRequest,
+    db: Session = Depends(get_db),
+) -> ProposalOutlineResponse:
+    service = ProposalOutlineService(db)
+    try:
+        outline = service.create_manual_version(opportunity_id, payload)
+    except ManualOutlineValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return _to_response(service, outline)
+
+
 @web_router.get("/opportunities/{opportunity_id}/proposal-outline", response_class=HTMLResponse)
 def proposal_outline_dashboard(opportunity_id: str, request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
     service = ProposalOutlineService(db)
@@ -68,6 +88,20 @@ def proposal_outline_dashboard(opportunity_id: str, request: Request, db: Sessio
             "outline": latest,
             "versions": versions,
             "sections": sections,
+            "manual_sections_json": json.dumps(
+                [
+                    {
+                        "sequence": s.sequence,
+                        "proposal_section": s.proposal_section,
+                        "owner": s.owner,
+                        "requirement_ids": s.requirement_ids,
+                    }
+                    for s in sections
+                ],
+                indent=2,
+            )
+            if sections
+            else "[]",
         },
     )
 
@@ -85,4 +119,25 @@ def generate_proposal_outline_web(
         service.generate(opportunity_id, payload)
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+    return RedirectResponse(url=f"/opportunities/{opportunity_id}/proposal-outline", status_code=303)
+
+
+@web_router.post("/opportunities/{opportunity_id}/proposal-outline/manual")
+def create_manual_outline_version_web(
+    opportunity_id: str,
+    actor: str = Form("operator"),
+    sections_json: str = Form("[]"),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    try:
+        parsed_sections = json.loads(sections_json)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(status_code=422, detail="sections_json must be valid JSON") from exc
+
+    payload = ProposalOutlineManualCreateRequest(actor=actor, sections=parsed_sections)
+    service = ProposalOutlineService(db)
+    try:
+        service.create_manual_version(opportunity_id, payload)
+    except ManualOutlineValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     return RedirectResponse(url=f"/opportunities/{opportunity_id}/proposal-outline", status_code=303)

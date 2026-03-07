@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact | Book Executive Coaching Intro | Boss Key LLC</title>
-  <meta name="description" content="Book an intro for executive coaching or executive advisory. Short private intake form for founder-led and operator-led leaders.">
+  <title>Contact | Proposal Support or Executive Coaching | Boss Key LLC</title>
+  <meta name="description" content="Start the right conversation with Boss Key LLC. Choose proposal management support or executive coaching and send a private intake.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,20 +20,29 @@
     main{padding:24px 0 40px}section{margin:14px 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(165deg,#181a20 0%,#111318 100%);padding:22px}
     h1,h2{font-family:"Fraunces",Georgia,serif;margin:0 0 10px;line-height:1.15}h1{font-size:clamp(2rem,4vw,2.8rem)}h2{font-size:clamp(1.3rem,2.4vw,1.8rem)}h3{margin:0 0 8px;font-size:1.04rem}
     p{margin:0 0 10px;color:var(--soft)}ul{margin:0;padding-left:18px;color:#d9dee8}li{margin:7px 0}
-    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.panel{border:1px solid #343844;border-radius:12px;background:#14171f;padding:14px}
-    form{display:grid;gap:10px}label{display:grid;gap:6px;font-size:.9rem;color:#d6dbe4}input,textarea{width:100%;border:1px solid #3a3f4c;border-radius:10px;background:#0f1218;color:#f3f5f8;padding:10px 12px;font-family:inherit;font-size:.95rem}textarea{min-height:110px;resize:vertical}
+    .grid-2,.grid-3{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .panel{border:1px solid #343844;border-radius:12px;background:#14171f;padding:14px}
+    form{display:grid;gap:10px}label{display:grid;gap:6px;font-size:.9rem;color:#d6dbe4}input,textarea,select{width:100%;border:1px solid #3a3f4c;border-radius:10px;background:#0f1218;color:#f3f5f8;padding:10px 12px;font-family:inherit;font-size:.95rem}textarea{min-height:110px;resize:vertical}
     .buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.small{color:#a7afbf;font-size:.83rem}
     footer{border-top:1px solid var(--line);color:#afb6c3;font-size:.88rem;padding:16px 0 26px}
-    @media (max-width:860px){.grid-3{grid-template-columns:1fr}.buttons .btn{width:100%}}
+    @media (max-width:860px){.grid-2,.grid-3{grid-template-columns:1fr}.buttons .btn{width:100%}}
   </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a><nav class="links" aria-label="Main navigation"><a href="./about.html">About</a><a href="./coaching.html">Coaching</a><a href="./engagements.html">Engagements</a><a href="./proof.html">Proof</a><a href="./faq.html">FAQ</a><a href="./contact.html">Contact</a></nav><a class="btn btn-primary schedule-cta" href="#">Book intro</a></div></header>
+<header><div class="wrap nav"><a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a><nav class="links" aria-label="Main navigation"><a href="./about.html">About</a><a href="./engagements.html">Proposal Support</a><a href="./coaching.html">Coaching</a><a href="./proof.html">Proof</a><a href="./faq.html">FAQ</a><a href="./contact.html">Contact</a></nav><a class="btn btn-primary schedule-cta" href="#">Book intro</a></div></header>
 <main class="wrap">
 <section>
-  <h1>Book an intro for executive coaching or executive advisory.</h1>
-  <p>Share your context briefly. I will respond privately.</p>
-  <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book intro</a><a class="btn btn-secondary email-cta" href="#">Send direct email</a></div>
+  <h1>Start with the right conversation.</h1>
+  <p>Choose whether you need proposal management support or executive coaching. The intake below keeps those paths separate from the first touch.</p>
+  <div class="buttons"><a class="btn btn-secondary" href="./engagements.html">Proposal support details</a><a class="btn btn-primary" href="./coaching.html">Coaching details</a></div>
+</section>
+
+<section>
+  <h2>What each inquiry is for</h2>
+  <div class="grid-2">
+    <article class="panel"><h3>Proposal support</h3><p>Use this if the pressure is in active pursuits, proposal deadlines, qualification calls, handoffs, or leadership visibility.</p></article>
+    <article class="panel"><h3>Executive coaching</h3><p>Use this if the pressure is in leadership decisions, stakeholder friction, judgment under uncertainty, or execution follow-through.</p></article>
+  </div>
 </section>
 
 <section>
@@ -42,45 +51,76 @@
     <label for="name">Name<input id="name" name="name" type="text" autocomplete="name" required></label>
     <label for="email">Email<input id="email" name="email" type="email" autocomplete="email" required></label>
     <label for="company">Company<input id="company" name="company" type="text" autocomplete="organization"></label>
-    <label for="question">What leadership decision or challenge are you trying to navigate?<textarea id="question" name="question" required></textarea></label>
-    <button class="btn btn-secondary" type="submit">Request private callback</button>
+    <label for="offering">Which offering do you need?
+      <select id="offering" name="offering" required>
+        <option value="">Select one</option>
+        <option value="proposal-support">Proposal management support</option>
+        <option value="executive-coaching">Executive coaching</option>
+      </select>
+    </label>
+    <label for="timeline">Timeline or urgency<input id="timeline" name="timeline" type="text" placeholder="Example: active pursuit this month / decision in 2 weeks"></label>
+    <label for="question">What are you trying to improve or decide?<textarea id="question" name="question" required></textarea></label>
+    <button class="btn btn-secondary" type="submit">Send private intake</button>
   </form>
   <p class="small">Submitting opens your email client with the intake details prefilled.</p>
 </section>
 
 <section>
-  <h2>How it feels after</h2>
+  <h2>How the first step works</h2>
   <div class="grid-3">
-    <article class="panel"><h3>Relief from decision fog</h3><p>You can see the real decision more clearly.</p></article>
-    <article class="panel"><h3>Stronger conviction</h3><p>You know why you are choosing a direction.</p></article>
-    <article class="panel"><h3>Cleaner leadership communication</h3><p>Your team hears fewer mixed messages.</p></article>
+    <article class="panel"><h3>Choose the lane</h3><p>Proposal support and coaching start from different problems, so the first step is naming which one you need.</p></article>
+    <article class="panel"><h3>Share the context</h3><p>Brief notes are enough. I just need the pressure point, timing, and business context.</p></article>
+    <article class="panel"><h3>Get the right next step</h3><p>You will get either a proposal-support intro path or a coaching intro path, not a vague one-size-fits-all response.</p></article>
   </div>
 </section>
-
-<section>
-  <h2>Who this is not for</h2>
-  <ul>
-    <li>General information seekers not facing a real leadership decision.</li>
-    <li>People looking for clinical therapy or mental health care.</li>
-    <li>Teams seeking only software/tool implementation.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Boundary statement</h2>
-  <p>Boss Key provides executive coaching and executive advisory in business contexts. This is not psychotherapy or mental health treatment.</p>
-</section>
 </main>
-<footer><div class="wrap">Boss Key LLC | confidential advisor | executive coach | founder coaching</div></footer>
+<footer><div class="wrap">Boss Key LLC | Proposal support inquiries | Coaching inquiries | Confidential intake</div></footer>
 <script>
 (function(){
  const inboxAlias='timmy@bosskeyops.com';
  const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';
  const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;
+ const offeringField=document.getElementById('offering');
+ const params=new URLSearchParams(window.location.search);
+ const presetOffering=params.get('offering');
+ if(presetOffering&&offeringField){
+   offeringField.value=presetOffering;
+ }
  document.querySelectorAll('.schedule-cta').forEach(function(l){l.href=calendarScheduleUrl;l.target='_blank';l.rel='noopener noreferrer';});
- document.querySelectorAll('.email-cta').forEach(function(l){const s='[Boss Key] Intro Request';const b='Hi Timmy,\n\nI would like to request an intro call.\n\nName:\nCompany:\nDecision context:\n';l.href='mailto:'+inboxAlias+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);});
  const form=document.getElementById('intakeForm');
- if(form){form.addEventListener('submit',function(e){e.preventDefault();const d=new FormData(form);const subject='[Boss Key] Private Callback Request';const body=['Hi Timmy,','','I would like to request a private callback.','','Name: '+(d.get('name')||''),'Email: '+(d.get('email')||''),'Company: '+(d.get('company')||''),'Leadership decision/challenge: '+(d.get('question')||''),'','Page URL: '+window.location.href].join('\n');window.location.href='mailto:'+inboxAlias+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);});}
+ if(form){
+   form.addEventListener('submit',function(e){
+     e.preventDefault();
+     const d=new FormData(form);
+     const offering=d.get('offering')||'general-inquiry';
+     const subjectMap={
+       'proposal-support':'[Boss Key] Proposal Support Inquiry',
+       'executive-coaching':'[Boss Key] Executive Coaching Inquiry',
+       'general-inquiry':'[Boss Key] Inquiry'
+     };
+     const labelMap={
+       'proposal-support':'Proposal management support',
+       'executive-coaching':'Executive coaching',
+       'general-inquiry':'General inquiry'
+     };
+     const subject=subjectMap[offering]||subjectMap['general-inquiry'];
+     const body=[
+       'Hi Timmy,',
+       '',
+       'I would like to start a conversation with Boss Key.',
+       '',
+       'Name: '+(d.get('name')||''),
+       'Email: '+(d.get('email')||''),
+       'Company: '+(d.get('company')||''),
+       'Offering: '+(labelMap[offering]||labelMap['general-inquiry']),
+       'Timeline: '+(d.get('timeline')||''),
+       'What I am trying to improve or decide: '+(d.get('question')||''),
+       '',
+       'Page URL: '+window.location.href
+     ].join('\n');
+     window.location.href='mailto:'+inboxAlias+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+   });
+ }
 })();
 </script>
 </body>

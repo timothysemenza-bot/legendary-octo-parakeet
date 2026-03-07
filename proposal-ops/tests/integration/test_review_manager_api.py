@@ -20,14 +20,21 @@ def _create_opportunity(client: TestClient) -> str:
 
 
 def _prepare_gate_c_ready(client: TestClient, opportunity_id: str) -> None:
-    client.post(
+    parsed = client.post(
         f"/api/opportunities/{opportunity_id}/rfp/parse",
         data={
-            "raw_text": "The Contractor shall provide staffing plan. The Bidder must submit pricing sheet.",
+            "raw_text": (
+                "Proposal due date is 2026-05-30 and submissions must be uploaded electronically.\n"
+                "Evaluation criteria include technical approach, management, and pricing.\n"
+                "The Contractor shall provide staffing plan.\n"
+                "The Bidder must submit pricing sheet.\n"
+                "Offeror must provide past performance references."
+            ),
             "source_filename": "rfp.txt",
             "actor": "operator",
         },
     )
+    assert parsed.status_code == 200
     rows = client.get(f"/api/opportunities/{opportunity_id}/compliance-matrix").json()
     for row in rows:
         client.patch(
@@ -39,6 +46,20 @@ def _prepare_gate_c_ready(client: TestClient, opportunity_id: str) -> None:
                 "actor": "operator",
             },
         )
+    generated = client.post(
+        f"/api/opportunities/{opportunity_id}/capture-plan/generate",
+        json={"actor": "capture-lead"},
+    )
+    assert generated.status_code == 200
+
+
+def _prepare_outline(client: TestClient, opportunity_id: str) -> None:
+    _prepare_gate_c_ready(client, opportunity_id)
+    generated = client.post(
+        f"/api/opportunities/{opportunity_id}/proposal-outline/generate",
+        json={"actor": "operator"},
+    )
+    assert generated.status_code == 200
 
 
 def test_review_cycle_comment_and_readiness_flow(client: TestClient) -> None:
@@ -87,7 +108,7 @@ def test_review_cycle_comment_and_readiness_flow(client: TestClient) -> None:
 def test_gate_d_and_e_enforced_by_review_readiness(client: TestClient) -> None:
     opportunity_id = _create_opportunity(client)
     _prepare_gate_c_ready(client, opportunity_id)
-    client.post(
+    gate_a = client.post(
         f"/api/opportunities/{opportunity_id}/gate-decisions",
         json={
             "gate_code": "GATE_A",
@@ -97,7 +118,8 @@ def test_gate_d_and_e_enforced_by_review_readiness(client: TestClient) -> None:
             "rationale": "Proceed to strategy.",
         },
     )
-    client.post(
+    assert gate_a.status_code == 200
+    gate_b = client.post(
         f"/api/opportunities/{opportunity_id}/gate-decisions",
         json={
             "gate_code": "GATE_B",
@@ -107,7 +129,8 @@ def test_gate_d_and_e_enforced_by_review_readiness(client: TestClient) -> None:
             "rationale": "Strategy approved.",
         },
     )
-    client.post(
+    assert gate_b.status_code == 200
+    gate_c = client.post(
         f"/api/opportunities/{opportunity_id}/gate-decisions",
         json={
             "gate_code": "GATE_C",
@@ -117,7 +140,8 @@ def test_gate_d_and_e_enforced_by_review_readiness(client: TestClient) -> None:
             "rationale": "Compliance architecture approved.",
         },
     )
-    client.post(
+    assert gate_c.status_code == 200
+    drafting = client.post(
         f"/api/opportunities/{opportunity_id}/stage-transition",
         json={
             "next_stage": "DRAFTING",
@@ -126,6 +150,7 @@ def test_gate_d_and_e_enforced_by_review_readiness(client: TestClient) -> None:
             "reason": "Start drafting after planning.",
         },
     )
+    assert drafting.status_code == 200
 
     blocked_d = client.post(
         f"/api/opportunities/{opportunity_id}/gate-decisions",
@@ -192,3 +217,59 @@ def test_gate_d_and_e_enforced_by_review_readiness(client: TestClient) -> None:
         },
     )
     assert approved_e.status_code == 200
+
+
+def test_seed_review_comments_from_outline_flow(client: TestClient) -> None:
+    opportunity_id = _create_opportunity(client)
+    _prepare_outline(client, opportunity_id)
+    cycle = client.post(
+        f"/api/opportunities/{opportunity_id}/reviews",
+        json={"review_type": "PINK", "round_number": 1, "actor": "review-lead"},
+    )
+    assert cycle.status_code == 200
+    cycle_id = cycle.json()["id"]
+
+    seeded = client.post(
+        f"/api/opportunities/{opportunity_id}/reviews/{cycle_id}/seed-from-outline",
+        json={"actor": "review-lead"},
+    )
+    assert seeded.status_code == 200
+    payload = seeded.json()
+    assert payload["review_cycle_id"] == cycle_id
+    assert payload["seeded_count"] > 0
+    assert payload["skipped_count"] == 0
+
+    comments = client.get(f"/api/opportunities/reviews/{cycle_id}/comments")
+    assert comments.status_code == 200
+    rows = comments.json()
+    assert rows
+    assert all(row["created_by"] == "outline_seed" for row in rows)
+
+    second_seed = client.post(
+        f"/api/opportunities/{opportunity_id}/reviews/{cycle_id}/seed-from-outline",
+        json={"actor": "review-lead"},
+    )
+    assert second_seed.status_code == 200
+    payload_second = second_seed.json()
+    assert payload_second["seeded_count"] == 0
+    assert payload_second["skipped_count"] == len(rows)
+
+    detail = client.get(f"/api/opportunities/{opportunity_id}").json()
+    actions = [event["action"] for event in detail["audit_events"]]
+    assert "review_comments_seeded_from_outline" in actions
+
+
+def test_seed_review_comments_returns_409_when_outline_missing(client: TestClient) -> None:
+    opportunity_id = _create_opportunity(client)
+    cycle = client.post(
+        f"/api/opportunities/{opportunity_id}/reviews",
+        json={"review_type": "PINK", "round_number": 1, "actor": "review-lead"},
+    )
+    assert cycle.status_code == 200
+    cycle_id = cycle.json()["id"]
+
+    seeded = client.post(
+        f"/api/opportunities/{opportunity_id}/reviews/{cycle_id}/seed-from-outline",
+        json={"actor": "review-lead"},
+    )
+    assert seeded.status_code == 409

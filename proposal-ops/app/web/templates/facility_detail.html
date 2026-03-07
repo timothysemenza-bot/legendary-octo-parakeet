@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>{{ facility.name }}</h2>
+  <p><strong>Organization ID:</strong> {{ facility.organization_id }}</p>
+  <p><strong>Kind:</strong> {{ facility.facility_kind }}</p>
+  <p><strong>Type:</strong> {{ facility.facility_type }}</p>
+  <p><strong>Location:</strong> {{ facility.city or '' }} {{ facility.state or '' }}</p>
+  <p><strong>Complexity:</strong> {{ facility.service_complexity }}</p>
+  <p><strong>Square Footage:</strong> {{ facility.square_footage or '-' }}</p>
+  <p><strong>Notes:</strong> {{ facility.notes or '-' }}</p>
+
+  <h3>Edit Facility</h3>
+  <form method="post" action="/facilities/{{ facility.id }}">
+    <label>Organization
+      <select name="organization_id" required>
+        {% for org in organizations %}
+        <option value="{{ org.id }}" {% if facility.organization_id == org.id %}selected{% endif %}>{{ org.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Parent Facility ID <input name="parent_facility_id" value="{{ facility.parent_facility_id or '' }}" /></label>
+    <label>Name <input name="name" value="{{ facility.name }}" required /></label>
+    <label>Kind <input name="facility_kind" value="{{ facility.facility_kind }}" /></label>
+    <label>Type <input name="facility_type" value="{{ facility.facility_type }}" /></label>
+    <label>City <input name="city" value="{{ facility.city or '' }}" /></label>
+    <label>State <input name="state" value="{{ facility.state or '' }}" /></label>
+    <label>Complexity <input name="service_complexity" value="{{ facility.service_complexity }}" /></label>
+    <label>Square Footage <input name="square_footage" value="{{ facility.square_footage or '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ facility.notes or '' }}</textarea></label>
+    <button type="submit">Save Facility</button>
+  </form>
+</section>
+{% endblock %}
+

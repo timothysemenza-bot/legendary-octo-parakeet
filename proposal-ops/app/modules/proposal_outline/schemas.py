@@ -25,3 +25,15 @@ class ProposalOutlineResponse(BaseModel):
 class ProposalOutlineGenerateRequest(BaseModel):
     actor: str = Field(default="operator", min_length=2, max_length=100)
     include_unmapped: bool = False
+
+
+class ProposalOutlineManualSectionInput(BaseModel):
+    sequence: int = Field(ge=1)
+    proposal_section: str = Field(min_length=1)
+    owner: str = Field(min_length=1)
+    requirement_ids: list[str]
+
+
+class ProposalOutlineManualCreateRequest(BaseModel):
+    actor: str = Field(default="operator", min_length=2, max_length=100)
+    sections: list[ProposalOutlineManualSectionInput] = Field(min_length=1)

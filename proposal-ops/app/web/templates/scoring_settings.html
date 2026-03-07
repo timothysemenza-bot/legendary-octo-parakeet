@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Scoring Settings</h2>
+
+  <h3>Opportunity Scoring</h3>
+  {% for profile in opportunity_profiles %}
+  <form method="post" action="/settings/scoring/{{ profile.id }}">
+    <h4>{{ profile.name }}</h4>
+    {% for criterion in profile.criteria %}
+    <label>{{ criterion.label }} <input name="criterion_{{ criterion.code }}" value="{{ criterion.weight }}" /></label>
+    {% endfor %}
+    <button type="submit">Save Opportunity Weights</button>
+  </form>
+  {% endfor %}
+
+  <h3>Contractor Fit Scoring</h3>
+  {% for profile in contractor_profiles %}
+  <form method="post" action="/settings/scoring/{{ profile.id }}">
+    <h4>{{ profile.name }}</h4>
+    {% for criterion in profile.criteria %}
+    <label>{{ criterion.label }} <input name="criterion_{{ criterion.code }}" value="{{ criterion.weight }}" /></label>
+    {% endfor %}
+    <button type="submit">Save Contractor Weights</button>
+  </form>
+  {% endfor %}
+</section>
+{% endblock %}
+

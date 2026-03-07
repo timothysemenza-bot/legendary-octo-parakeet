@@ -10,7 +10,15 @@ REQUIREMENT_PATTERNS = [
     re.compile(r"\bfailure to\b", re.IGNORECASE),
 ]
 
-DEADLINE_PATTERN = re.compile(r"\b(\d{4}-\d{2}-\d{2}|\d{1,2}/\d{1,2}/\d{2,4})\b")
+DEADLINE_PATTERN = re.compile(
+    r"\b("
+    r"\d{4}-\d{2}-\d{2}"
+    r"|\d{1,2}/\d{1,2}/\d{2,4}"
+    r"|(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|"
+    r"sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2},\s+\d{4}"
+    r")\b",
+    re.IGNORECASE,
+)
 
 ACTION_VERBS = (
     "submit",
@@ -96,6 +104,19 @@ SIMILARITY_STOPWORDS = {
     "within",
     "through",
 }
+
+
+def _deadline_priority(line: str) -> int:
+    lowered = line.lower()
+    if "proposal due" in lowered or "proposals due" in lowered:
+        return 4
+    if "submission due" in lowered or "submissions due" in lowered:
+        return 3
+    if "bid due" in lowered or "bids due" in lowered or "deadline" in lowered:
+        return 2
+    if "questions due" in lowered or "written questions due" in lowered:
+        return 1
+    return 0
 
 
 def _classify_requirement(text: str) -> str:
@@ -326,15 +347,18 @@ def parse_rfp_text(raw_text: str) -> dict:
     lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
 
     deadline = None
+    deadline_priority = -1
     criteria_hits: list[str] = []
     instructions_hits: list[str] = []
     requirements: list[dict] = []
 
     for line in lines:
-        if not deadline:
-            deadline_match = DEADLINE_PATTERN.search(line)
-            if deadline_match and any(x in line.lower() for x in ["due", "deadline", "submit"]):
+        deadline_match = DEADLINE_PATTERN.search(line)
+        if deadline_match and any(x in line.lower() for x in ["due", "deadline", "submit"]):
+            line_priority = _deadline_priority(line)
+            if line_priority > deadline_priority:
                 deadline = deadline_match.group(1)
+                deadline_priority = line_priority
 
         lowered = line.lower()
         if "evaluation" in lowered or "factor" in lowered or "criteria" in lowered:

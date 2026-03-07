@@ -18,5 +18,157 @@
     </label>
     <button type="submit">Parse and Build Compliance Matrix</button>
   </form>
+  <section>
+    <h3>Parsed Solicitation Versions</h3>
+    {% if versions %}
+    <form method="get" action="/opportunities/{{ opportunity_id }}/rfp-upload">
+      <label>Base Version
+        <select name="base_solicitation_id">
+          {% for row in versions %}
+          <option value="{{ row.solicitation_id }}" {% if row.solicitation_id == selected_base_id %}selected{% endif %}>
+            Version {{ row.version }} - {{ row.source_filename }}
+          </option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Compare Version
+        <select name="compare_solicitation_id">
+          {% for row in versions %}
+          <option value="{{ row.solicitation_id }}" {% if row.solicitation_id == selected_compare_id %}selected{% endif %}>
+            Version {{ row.version }} - {{ row.source_filename }}
+          </option>
+          {% endfor %}
+        </select>
+      </label>
+      <button type="submit">Compare Versions</button>
+    </form>
+    {% if comparison %}
+    <div>
+      <h4>Version Comparison</h4>
+      <p>Version {{ comparison.compare_version }} compared to Version {{ comparison.base_version }}</p>
+      <p><strong>Added Requirement Codes:</strong> {{ comparison.added_requirement_codes | join(", ") if comparison.added_requirement_codes else "None" }}</p>
+      <p><strong>Removed Requirement Codes:</strong> {{ comparison.removed_requirement_codes | join(", ") if comparison.removed_requirement_codes else "None" }}</p>
+      <p><strong>Added Documents:</strong> {{ comparison.added_documents | join(", ") if comparison.added_documents else "None" }}</p>
+      <p><strong>Removed Documents:</strong> {{ comparison.removed_documents | join(", ") if comparison.removed_documents else "None" }}</p>
+      <p><strong>Changed Documents:</strong> {{ comparison.changed_documents | join(", ") if comparison.changed_documents else "None" }}</p>
+      {% if comparison.added_document_records or comparison.removed_document_records or comparison.changed_document_records %}
+      <div>
+        <strong>Document Diff Records:</strong>
+        <ul>
+          {% for item in comparison.added_document_records %}
+          <li>Added: {{ item.label }} (family {{ item.document_family_id[:8] }})</li>
+          {% endfor %}
+          {% for item in comparison.removed_document_records %}
+          <li>Removed: {{ item.label }} (family {{ item.document_family_id[:8] }})</li>
+          {% endfor %}
+          {% for item in comparison.changed_document_records %}
+          <li>Changed: {{ item.label }} (family {{ item.document_family_id[:8] }})</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div>
+        <strong>Changed Requirements:</strong>
+        {% if comparison.changed_requirements %}
+        <ul>
+          {% for item in comparison.changed_requirements %}
+          <li>
+            {{ item.base_requirement_code }} to {{ item.compare_requirement_code }}:
+            "{{ item.base_requirement_text }}" -> "{{ item.compare_requirement_text }}"
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        None
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    <table>
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Source</th>
+          <th>Requirements</th>
+          <th>Documents</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in versions %}
+        <tr>
+          <td>{{ row.version }}</td>
+          <td>{{ row.source_filename }}</td>
+          <td>{{ row.requirement_count }}</td>
+          <td>
+            {{ row.source_documents | length }}
+            {% if row.source_documents %}
+            <ul>
+              {% for doc in row.source_documents %}
+              <li>
+                {{ doc.source_filename }} ({{ doc.parse_status }})
+                family={{ doc.document_family_id[:8] }}
+                {% if doc.has_stored_binary %}
+                [stored binary]
+                <a href="/api/opportunities/{{ opportunity_id }}/rfp/source-documents/{{ doc.id }}/download">Download Original</a>
+                {% endif %}
+                {% if doc.source_sha256 %}
+                sha256={{ doc.source_sha256[:12] }}
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </td>
+          <td>
+            <form method="post" action="/opportunities/{{ opportunity_id }}/rfp/reparse">
+              <input type="hidden" name="source_solicitation_id" value="{{ row.solicitation_id }}" />
+              <label>
+                <input type="checkbox" name="include_parsed_only" value="true" />
+                Parsed documents only
+              </label>
+              <label>
+                Override next source filename
+                <input type="text" name="override_source_filename" value="" />
+              </label>
+              <input type="hidden" name="actor" value="operator" />
+              <button type="submit">Reparse This Version</button>
+            </form>
+            <form method="post" action="/opportunities/{{ opportunity_id }}/rfp/reparse-document-set" enctype="multipart/form-data">
+              <input type="hidden" name="source_solicitation_id" value="{{ row.solicitation_id }}" />
+              <input type="hidden" name="actor" value="operator" />
+              <fieldset>
+                <legend>Retain source documents</legend>
+                {% for doc in row.source_documents %}
+                <label>
+                  <input type="checkbox" name="retain_document_ids" value="{{ doc.id }}" {% if doc.parse_status == "PARSED" %}checked{% endif %} />
+                  {{ doc.source_filename }} ({{ doc.parse_status }})
+                </label>
+                {% endfor %}
+              </fieldset>
+              <label>Add or replace source files
+                <input type="file" name="files" multiple />
+              </label>
+              <button type="submit">Reparse Edited Document Set</button>
+            </form>
+            {% for doc in row.source_documents %}
+            <form method="post" action="/opportunities/{{ opportunity_id }}/rfp/source-documents/{{ doc.id }}/replace" enctype="multipart/form-data">
+              <input type="hidden" name="source_solicitation_id" value="{{ row.solicitation_id }}" />
+              <input type="hidden" name="actor" value="operator" />
+              <label>Replace {{ doc.source_filename }}
+                <input type="file" name="file" />
+              </label>
+              <button type="submit">Replace This Document</button>
+            </form>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No parsed solicitation versions yet.</p>
+    {% endif %}
+  </section>
 </section>
 {% endblock %}

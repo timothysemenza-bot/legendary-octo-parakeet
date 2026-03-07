@@ -16,6 +16,15 @@
     <button type="submit">Generate Outline</button>
   </form>
 
+  <h3>Manual Outline Version (JSON Editor)</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/proposal-outline/manual">
+    <label>Actor <input name="actor" value="operator" /></label>
+    <label>Sections JSON
+      <textarea name="sections_json" rows="16" required>{{ manual_sections_json }}</textarea>
+    </label>
+    <button type="submit">Save Manual Version</button>
+  </form>
+
   {% if sections %}
   <h3>Current Sections</h3>
   <table>

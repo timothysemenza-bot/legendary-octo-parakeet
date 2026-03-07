@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Capture Workbench: {{ detail.name }}</h2>
+  <p><strong>Pursuit Stage:</strong> {{ detail.pursuit_stage }} | <strong>Proposal Stage:</strong> {{ detail.proposal_stage }}</p>
+  <p><strong>Organization:</strong> {{ detail.buying_organization_name or detail.client }} | <strong>Contract:</strong> {{ detail.primary_contract_title or '-' }} | <strong>Facility:</strong> {{ detail.primary_facility_name or '-' }}</p>
+  <p><strong>Confidence:</strong> {{ detail.confidence_level }} | <strong>Expected RFP Date:</strong> {{ detail.expected_rfp_date or '-' }}</p>
+  <p><strong>Provenance:</strong> {{ detail.provenance_summary or '-' }}</p>
+
+  <h3>Contractor Matching</h3>
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/matches">
+    <button type="submit">Refresh Matches</button>
+  </form>
+  {% if matches %}
+  <ul>
+    {% for item in matches %}
+    <li>
+      {{ item.contractor_name }} ({{ item.match_score }})
+      <ul>
+        {% for factor in item.factors %}
+        <li>{{ factor.code }}: {{ factor.score }} | {{ factor.reason }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No match snapshots yet.</p>
+  {% endif %}
+
+  <h3>Contacts</h3>
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/contacts">
+    <label>Organization ID <input name="organization_id" value="{{ detail.buying_organization_id or '' }}" /></label>
+    <label>Contractor
+      <select name="contractor_id">
+        <option value="">None</option>
+        {% for contractor in contractors %}
+        <option value="{{ contractor.id }}">{{ contractor.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Name <input name="full_name" required /></label>
+    <label>Role <input name="role_title" /></label>
+    <label>Email <input name="email" /></label>
+    <label>Phone <input name="phone" /></label>
+    <label>Side <input name="contact_side" value="BUYER" /></label>
+    <label>Source Type <input name="source_type" value="PUBLIC" /></label>
+    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Notes <textarea name="notes"></textarea></label>
+    <button type="submit">Add Contact</button>
+  </form>
+  {% if contacts %}
+  <ul>
+    {% for item in contacts %}
+    <li>{{ item.full_name }} | {{ item.role_title or '-' }} | {{ item.contact_side }} | {{ item.confidence_level }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Intelligence Notes</h3>
+  <p>{{ notes[0].ethics_guidance_text if notes else "Use only lawful and ethical intelligence sources." }}</p>
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/intelligence">
+    <label>Title <input name="title" required /></label>
+    <label>Type <input name="note_type" value="INTELLIGENCE" /></label>
+    <label>Source Class <input name="source_class" value="PUBLIC" /></label>
+    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Provenance <textarea name="provenance" required></textarea></label>
+    <label>Note <textarea name="note_text" required></textarea></label>
+    <button type="submit">Add Intelligence Note</button>
+  </form>
+  {% if notes %}
+  <ul>
+    {% for item in notes %}
+    <li>{{ item.title }} | {{ item.source_class }} | {{ item.confidence_level }} | {{ item.note_text }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Evidence</h3>
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/evidence">
+    <label>Intelligence Note ID <input name="intelligence_note_id" /></label>
+    <label>Contract ID <input name="contract_id" value="{{ detail.primary_contract_id or '' }}" /></label>
+    <label>Source Class <input name="source_class" value="PUBLIC" /></label>
+    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Source URL <input name="source_url" /></label>
+    <label>Provenance <textarea name="provenance" required></textarea></label>
+    <label>Summary <textarea name="summary" required></textarea></label>
+    <button type="submit">Add Evidence</button>
+  </form>
+  {% if evidence %}
+  <ul>
+    {% for item in evidence %}
+    <li>{{ item.source_class }} | {{ item.confidence_level }} | {{ item.summary }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Capture Actions</h3>
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/actions">
+    <label>Title <input name="title" required /></label>
+    <label>Type <input name="action_type" value="RESEARCH" /></label>
+    <label>Status <input name="status" value="OPEN" /></label>
+    <label>Owner <input name="owner" value="operator" /></label>
+    <label>Due Date <input type="date" name="due_date" /></label>
+    <label>Notes <textarea name="notes"></textarea></label>
+    <button type="submit">Add Capture Action</button>
+  </form>
+  {% if actions %}
+  <ul>
+    {% for item in actions %}
+    <li>{{ item.title }} | {{ item.status }} | {{ item.owner }} | {{ item.due_date or '-' }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Commercials</h3>
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/commercials">
+    <label>Advised Contractor
+      <select name="contractor_id">
+        <option value="">None</option>
+        {% for contractor in contractors %}
+        <option value="{{ contractor.id }}" {% if commercial and commercial.contractor_id == contractor.id %}selected{% endif %}>{{ contractor.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Retainer Amount <input name="retainer_amount" value="{{ commercial.retainer_amount if commercial else '' }}" /></label>
+    <label>Success Fee Type <input name="success_fee_type" value="{{ commercial.success_fee_type if commercial else '' }}" /></label>
+    <label>Success Fee Value <input name="success_fee_value" value="{{ commercial.success_fee_value if commercial else '' }}" /></label>
+    <label>Projected Payout Date <input type="date" name="projected_payout_date" value="{{ commercial.projected_payout_date if commercial else '' }}" /></label>
+    <label>Projected Payout Amount <input name="projected_payout_amount" value="{{ commercial.projected_payout_amount if commercial else '' }}" /></label>
+    <label>Realized Revenue <input name="realized_revenue" value="{{ commercial.realized_revenue if commercial else '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ commercial.notes if commercial else '' }}</textarea></label>
+    <button type="submit">Save Commercials</button>
+  </form>
+  {% if commercial %}
+  <p><strong>Weighted Expected Value:</strong> {{ commercial.weighted_expected_value }}</p>
+  {% endif %}
+</section>
+{% endblock %}

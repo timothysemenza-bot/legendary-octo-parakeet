@@ -4,6 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from app.core.db import Base
+from app.modules.janitorial_os import models as janitorial_models  # noqa: F401
 from app.modules.opportunity_intake import models  # noqa: F401
 
 config = context.config
@@ -45,4 +46,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-

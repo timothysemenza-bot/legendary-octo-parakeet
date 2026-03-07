@@ -1,7 +1,7 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db import Base
@@ -25,6 +25,20 @@ class Opportunity(Base):
     stage: Mapped[str] = mapped_column(
         String(30), nullable=False, default=OpportunityStage.INTAKE.value
     )
+    pursuit_stage: Mapped[str] = mapped_column(String(30), nullable=False, default="INTELLIGENCE", index=True)
+    proposal_stage: Mapped[str] = mapped_column(
+        String(30), nullable=False, default=OpportunityStage.INTAKE.value, index=True
+    )
+    buying_organization_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    primary_contract_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    primary_facility_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    confidence_level: Mapped[str] = mapped_column(String(20), nullable=False, default="MEDIUM")
+    expected_rfp_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    provenance_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    provenance_last_verified_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    score_breakdown_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    bidder_fit_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    weighted_pipeline_value: Mapped[float | None] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
@@ -33,6 +47,10 @@ class Opportunity(Base):
     capture_plans: Mapped[list["CapturePlan"]] = relationship(back_populates="opportunity")
     gate_decisions: Mapped[list["GateDecisionRecord"]] = relationship(back_populates="opportunity")
     audit_events: Mapped[list["AuditEvent"]] = relationship(back_populates="opportunity")
+    consumed_intake_rfp_drafts: Mapped[list["IntakeRfpDraft"]] = relationship(
+        back_populates="consumed_opportunity",
+        foreign_keys="IntakeRfpDraft.consumed_opportunity_id",
+    )
 
 
 class CapturePlan(Base):
@@ -90,3 +108,28 @@ class AuditEvent(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     opportunity: Mapped[Opportunity | None] = relationship(back_populates="audit_events")
+
+
+class IntakeRfpDraft(Base):
+    __tablename__ = "intake_rfp_drafts"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="PENDING", index=True)
+    actor: Mapped[str] = mapped_column(String(100), nullable=False)
+    combined_text: Mapped[str] = mapped_column(Text, nullable=False)
+    source_filename: Mapped[str] = mapped_column(String(255), nullable=False)
+    suggested_payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+    field_status_json: Mapped[str] = mapped_column(Text, nullable=False)
+    parsed_files_json: Mapped[str] = mapped_column(Text, nullable=False)
+    skipped_files_json: Mapped[str] = mapped_column(Text, nullable=False)
+    warnings_json: Mapped[str] = mapped_column(Text, nullable=False)
+    consumed_opportunity_id: Mapped[str | None] = mapped_column(
+        String(36), ForeignKey("opportunities.id"), nullable=True, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    consumed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+    consumed_opportunity: Mapped[Opportunity | None] = relationship(
+        back_populates="consumed_intake_rfp_drafts",
+        foreign_keys=[consumed_opportunity_id],
+    )

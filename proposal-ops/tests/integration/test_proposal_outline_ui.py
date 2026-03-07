@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+import json
 
 
 def _create_opportunity(client: TestClient) -> str:
@@ -66,3 +67,31 @@ def test_proposal_outline_dashboard_generate_flow(client: TestClient) -> None:
     assert refreshed.status_code == 200
     assert "Current Version:" in refreshed.text
     assert "Current Sections" in refreshed.text
+
+    rows = client.get(f"/api/opportunities/{opportunity_id}/compliance-matrix").json()
+    assert rows
+    manual_sections = [
+        {
+            "sequence": 2,
+            "proposal_section": "Technical Approach",
+            "owner": "UI Manual Owner",
+            "requirement_ids": [rows[0]["requirement_id"]],
+        },
+        {
+            "sequence": 1,
+            "proposal_section": "Executive Summary",
+            "owner": "UI PM",
+            "requirement_ids": [rows[-1]["requirement_id"]],
+        },
+    ]
+    manual = client.post(
+        f"/opportunities/{opportunity_id}/proposal-outline/manual",
+        data={"actor": "ui-manual", "sections_json": json.dumps(manual_sections)},
+        follow_redirects=False,
+    )
+    assert manual.status_code == 303
+
+    refreshed_again = client.get(f"/opportunities/{opportunity_id}/proposal-outline")
+    assert refreshed_again.status_code == 200
+    assert "MANUAL" in refreshed_again.text
+    assert "Version 2" in refreshed_again.text

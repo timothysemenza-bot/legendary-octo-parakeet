@@ -6,8 +6,17 @@ from sqlalchemy.orm import Session
 
 from app.core.audit import log_audit_event
 from app.modules.proposal_outline.models import ProposalOutline
-from app.modules.proposal_outline.schemas import ProposalOutlineGenerateRequest, ProposalOutlineSection
+from app.modules.proposal_outline.schemas import (
+    ProposalOutlineGenerateRequest,
+    ProposalOutlineManualCreateRequest,
+    ProposalOutlineManualSectionInput,
+    ProposalOutlineSection,
+)
 from app.modules.rfp_parser.models import ComplianceMatrixRow, Requirement
+
+
+class ManualOutlineValidationError(ValueError):
+    pass
 
 
 class ProposalOutlineService:
@@ -81,6 +90,82 @@ class ProposalOutlineService:
             opportunity_id=opportunity_id,
             actor=payload.actor,
             action="proposal_outline_generated",
+            before_state_json=json.dumps(
+                {"previous_outline_id": latest.id if latest else None, "previous_version": latest.version if latest else None}
+            ),
+            after_state_json=json.dumps({"outline_id": outline.id, "version": outline.version, "section_count": len(sections)}),
+        )
+        self.db.commit()
+        self.db.refresh(outline)
+        return outline
+
+    def _normalize_manual_sections(
+        self, opportunity_id: str, sections: list[ProposalOutlineManualSectionInput]
+    ) -> list[ProposalOutlineSection]:
+        if not sections:
+            raise ManualOutlineValidationError("sections must not be empty")
+        input_sequences = [s.sequence for s in sections]
+        if len(set(input_sequences)) != len(input_sequences):
+            raise ManualOutlineValidationError("sequence values must be unique")
+
+        valid_requirement_ids = set(
+            self.db.scalars(
+                select(ComplianceMatrixRow.requirement_id).where(
+                    ComplianceMatrixRow.opportunity_id == opportunity_id
+                )
+            )
+        )
+
+        ordered = sorted(sections, key=lambda item: item.sequence)
+        normalized: list[ProposalOutlineSection] = []
+        for idx, section in enumerate(ordered, start=1):
+            proposal_section = section.proposal_section.strip()
+            owner = section.owner.strip()
+            if not proposal_section:
+                raise ManualOutlineValidationError("proposal_section must not be empty")
+            if not owner:
+                raise ManualOutlineValidationError("owner must not be empty")
+
+            req_ids = [rid.strip() for rid in section.requirement_ids if rid and rid.strip()]
+            if len(set(req_ids)) != len(req_ids):
+                raise ManualOutlineValidationError(
+                    f"requirement_ids must be unique within section '{proposal_section}'"
+                )
+            invalid_ids = [rid for rid in req_ids if rid not in valid_requirement_ids]
+            if invalid_ids:
+                raise ManualOutlineValidationError(
+                    f"requirement_ids not in opportunity scope: {', '.join(invalid_ids)}"
+                )
+            normalized.append(
+                ProposalOutlineSection(
+                    sequence=idx,
+                    proposal_section=proposal_section,
+                    owner=owner,
+                    requirement_ids=req_ids,
+                    requirement_count=len(req_ids),
+                )
+            )
+        return normalized
+
+    def create_manual_version(
+        self, opportunity_id: str, payload: ProposalOutlineManualCreateRequest
+    ) -> ProposalOutline:
+        sections = self._normalize_manual_sections(opportunity_id, payload.sections)
+        latest = self.get_latest(opportunity_id)
+        next_version = 1 if latest is None else latest.version + 1
+        outline = ProposalOutline(
+            opportunity_id=opportunity_id,
+            version=next_version,
+            source="MANUAL",
+            sections_json=json.dumps([s.model_dump() for s in sections]),
+        )
+        self.db.add(outline)
+        self.db.flush()
+        log_audit_event(
+            self.db,
+            opportunity_id=opportunity_id,
+            actor=payload.actor,
+            action="proposal_outline_manual_version_created",
             before_state_json=json.dumps(
                 {"previous_outline_id": latest.id if latest else None, "previous_version": latest.version if latest else None}
             ),

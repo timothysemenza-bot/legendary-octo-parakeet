@@ -38,6 +38,16 @@ class ReviewCommentResolveRequest(BaseModel):
     actor: str = Field(default="reviewer")
 
 
+class ReviewSeedFromOutlineRequest(BaseModel):
+    actor: str = Field(default="operator")
+
+
+class ReviewSeedFromOutlineResponse(BaseModel):
+    review_cycle_id: str
+    seeded_count: int
+    skipped_count: int
+
+
 class ReviewCommentResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -60,4 +70,3 @@ class ReviewReadinessResponse(BaseModel):
     gate_d_blockers: list[str]
     gate_e_ready: bool
     gate_e_blockers: list[str]
-

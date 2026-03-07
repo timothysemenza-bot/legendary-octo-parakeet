@@ -6,10 +6,19 @@
   <p><strong>Score:</strong> {{ detail.qualification_score }}</p>
   <p><strong>Tier:</strong> {{ detail.tier }}</p>
   <p><strong>Recommendation:</strong> {{ detail.pursuit_recommendation }}</p>
+  <p><strong>Pursuit Stage:</strong> {{ detail.pursuit_stage }}</p>
   <p><strong>Current Stage:</strong> {{ detail.stage }}</p>
+  <p><strong>Proposal Stage:</strong> {{ detail.proposal_stage }}</p>
+  <p><strong>Buying Organization:</strong> {{ detail.buying_organization_name or detail.client }}</p>
+  <p><strong>Primary Contract:</strong> {{ detail.primary_contract_title or '-' }}</p>
+  <p><strong>Primary Facility:</strong> {{ detail.primary_facility_name or '-' }}</p>
+  <p><strong>Confidence:</strong> {{ detail.confidence_level }}</p>
+  <p><strong>Expected RFP Date:</strong> {{ detail.expected_rfp_date or '-' }}</p>
+  <p><strong>Provenance:</strong> {{ detail.provenance_summary or '-' }}</p>
+  <p><strong>Weighted Pipeline Value:</strong> {{ detail.weighted_pipeline_value or '-' }}</p>
   <p><strong>Lead Time:</strong> {{ detail.lead_time_days }} days</p>
   <p><strong>Estimated Contract Value:</strong> {{ detail.estimated_contract_value }}</p>
-  <p><a href="/opportunities/{{ detail.id }}/capture-plan">Capture Plan</a> | <a href="/opportunities/{{ detail.id }}/proposal-outline">Proposal Outline</a> | <a href="/opportunities/{{ detail.id }}/rfp-upload">Parse RFP</a> | <a href="/opportunities/{{ detail.id }}/compliance-matrix">View Compliance Matrix</a> | <a href="/opportunities/{{ detail.id }}/reviews">Review Dashboard</a> | <a href="/opportunities/{{ detail.id }}/submission">Submission Readiness</a> | <a href="/opportunities/{{ detail.id }}/lessons">Lessons Learned</a> | <a href="/opportunities/{{ detail.id }}/timeline">Workflow Timeline</a></p>
+  <p><a href="/opportunities/{{ detail.id }}/capture-workbench">Capture Workbench</a> | <a href="/opportunities/{{ detail.id }}/capture-plan">Capture Plan</a> | <a href="/opportunities/{{ detail.id }}/proposal-outline">Proposal Outline</a> | <a href="/opportunities/{{ detail.id }}/rfp-upload">Parse RFP</a> | <a href="/opportunities/{{ detail.id }}/compliance-matrix">View Compliance Matrix</a> | <a href="/opportunities/{{ detail.id }}/reviews">Review Dashboard</a> | <a href="/opportunities/{{ detail.id }}/submission">Submission Readiness</a> | <a href="/opportunities/{{ detail.id }}/lessons">Lessons Learned</a> | <a href="/opportunities/{{ detail.id }}/timeline">Workflow Timeline</a></p>
 
   <h3>Record Gate Decision</h3>
   {% if session_user and not authorized_gates %}

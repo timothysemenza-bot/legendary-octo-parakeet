@@ -1,5 +1,6 @@
 import json
 import re
+from collections import Counter
 from datetime import date, datetime
 
 from sqlalchemy import select
@@ -7,12 +8,15 @@ from sqlalchemy.orm import Session
 
 from app.core.audit import log_audit_event
 from app.modules.compliance_matrix.service import ComplianceMatrixService
+from app.modules.proposal_outline.service import ProposalOutlineService
 from app.modules.review_manager.service import ReviewManagerService
 from app.modules.rfp_parser.models import Solicitation
 from app.modules.submission_checklist.models import SubmissionChecklist, SubmissionChecklistItem
 from app.modules.submission_checklist.schemas import (
     FileNameValidationRequest,
     FileNameValidationResponse,
+    SubmissionPackageValidationRequest,
+    SubmissionPackageValidationResponse,
     SubmissionChecklistItemUpdateRequest,
     SubmissionReadinessResponse,
 )
@@ -44,11 +48,22 @@ class SubmissionChecklistService:
     def __init__(self, db: Session) -> None:
         self.db = db
 
+    @staticmethod
+    def _unique_in_order(values: list[str]) -> list[str]:
+        seen: set[str] = set()
+        ordered: list[str] = []
+        for value in values:
+            if value in seen:
+                continue
+            seen.add(value)
+            ordered.append(value)
+        return ordered
+
     def _latest_solicitation(self, opportunity_id: str) -> Solicitation | None:
         stmt = (
             select(Solicitation)
             .where(Solicitation.opportunity_id == opportunity_id)
-            .order_by(Solicitation.created_at.desc())
+            .order_by(Solicitation.version.desc(), Solicitation.created_at.desc())
         )
         return self.db.scalars(stmt).first()
 
@@ -143,6 +158,128 @@ class SubmissionChecklistService:
         self.db.commit()
         message = "All file names valid." if valid else "One or more file names failed validation."
         return FileNameValidationResponse(valid=valid, invalid_names=invalid, message=message)
+
+    def validate_package_structure(
+        self, opportunity_id: str, payload: SubmissionPackageValidationRequest
+    ) -> SubmissionPackageValidationResponse:
+        normalized_sections = [name.strip() for name in payload.section_names if name and name.strip()]
+        checklist, items = self.list_checklist_items(opportunity_id)
+        _ = checklist
+        structure_item = next((i for i in items if i.item_code == "DOCUMENT_STRUCTURE_VALIDATED"), None)
+
+        outline_service = ProposalOutlineService(self.db)
+        outline = outline_service.get_latest(opportunity_id)
+        if not outline:
+            if structure_item:
+                structure_item.status = "BLOCKED"
+                structure_item.details = "No proposal outline exists for package validation."
+                structure_item.updated_by = payload.actor
+                self.db.flush()
+            log_audit_event(
+                self.db,
+                opportunity_id=opportunity_id,
+                actor=payload.actor,
+                action="submission_package_structure_validation_ran",
+                after_state_json=json.dumps(
+                    {
+                        "valid": False,
+                        "outline_version": None,
+                        "missing_sections": [],
+                        "unexpected_sections": [],
+                        "duplicate_sections": [],
+                        "out_of_order": False,
+                        "reason": "missing_outline",
+                    }
+                ),
+            )
+            self.db.commit()
+            return SubmissionPackageValidationResponse(
+                valid=False,
+                outline_version=None,
+                missing_sections=[],
+                unexpected_sections=[],
+                duplicate_sections=[],
+                out_of_order=False,
+                message="No proposal outline exists for package validation.",
+            )
+
+        expected_sections = [section.proposal_section.strip() for section in outline_service.parse_sections(outline)]
+        expected_counter = Counter(expected_sections)
+        actual_counter = Counter(normalized_sections)
+
+        missing_sections = self._unique_in_order(
+            [name for name in expected_sections if actual_counter[name] < expected_counter[name]]
+        )
+        unexpected_sections = self._unique_in_order(
+            [name for name in normalized_sections if name not in expected_counter]
+        )
+        duplicate_sections = sorted(
+            [name for name, count in actual_counter.items() if count > expected_counter.get(name, 0)]
+        )
+        out_of_order = (
+            not missing_sections
+            and not unexpected_sections
+            and not duplicate_sections
+            and normalized_sections != expected_sections
+        )
+        valid = (
+            bool(normalized_sections)
+            and not missing_sections
+            and not unexpected_sections
+            and not duplicate_sections
+            and not out_of_order
+        )
+
+        if valid:
+            details = f"Validated against outline v{outline.version}: {' | '.join(expected_sections)}"
+            message = "Package structure matches the latest proposal outline."
+        else:
+            detail_parts = [f"Validated against outline v{outline.version}."]
+            if not normalized_sections:
+                detail_parts.append("No submitted sections provided.")
+            if missing_sections:
+                detail_parts.append(f"Missing: {', '.join(missing_sections)}.")
+            if unexpected_sections:
+                detail_parts.append(f"Unexpected: {', '.join(unexpected_sections)}.")
+            if duplicate_sections:
+                detail_parts.append(f"Duplicates: {', '.join(duplicate_sections)}.")
+            if out_of_order:
+                detail_parts.append("Section order does not match the outline.")
+            details = " ".join(detail_parts)
+            message = "Package structure does not match the latest proposal outline."
+
+        if structure_item:
+            structure_item.status = "COMPLETE" if valid else "BLOCKED"
+            structure_item.details = details
+            structure_item.updated_by = payload.actor
+            self.db.flush()
+
+        log_audit_event(
+            self.db,
+            opportunity_id=opportunity_id,
+            actor=payload.actor,
+            action="submission_package_structure_validation_ran",
+            after_state_json=json.dumps(
+                {
+                    "valid": valid,
+                    "outline_version": outline.version,
+                    "missing_sections": missing_sections,
+                    "unexpected_sections": unexpected_sections,
+                    "duplicate_sections": duplicate_sections,
+                    "out_of_order": out_of_order,
+                }
+            ),
+        )
+        self.db.commit()
+        return SubmissionPackageValidationResponse(
+            valid=valid,
+            outline_version=outline.version,
+            missing_sections=missing_sections,
+            unexpected_sections=unexpected_sections,
+            duplicate_sections=duplicate_sections,
+            out_of_order=out_of_order,
+            message=message,
+        )
 
     def readiness(self, opportunity_id: str) -> SubmissionReadinessResponse:
         checklist, items = self.list_checklist_items(opportunity_id)

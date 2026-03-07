@@ -5,6 +5,9 @@ def test_intake_form_renders(client: TestClient) -> None:
     response = client.get("/intake")
     assert response.status_code == 200
     assert "Opportunity Intake" in response.text
+    assert "Start From RFP Files" in response.text
+    assert "Manual Intake Backup" in response.text
+    assert "Build Intake Draft From RFP Files" in response.text
 
 
 def test_successful_web_submission_shows_score(client: TestClient) -> None:
@@ -23,6 +26,196 @@ def test_successful_web_submission_shows_score(client: TestClient) -> None:
     assert response.status_code == 200
     assert "Intake Result" in response.text
     assert "Qualification Score" in response.text
+
+
+def test_rfp_first_web_submission_redirects_to_review_draft(client: TestClient) -> None:
+    response = client.post(
+        "/intake/rfp-drafts",
+        data={"actor": "operator"},
+        files=[
+            (
+                "files",
+                (
+                    "regional-ops-rfp.txt",
+                    (
+                        "REQUEST FOR PROPOSALS\n"
+                        "Regional Operations Support Services\n"
+                        "Issued by: City of Springfield\n"
+                        "The estimated contract value is $1,250,000.\n"
+                        "Proposal due date is 2026-04-20.\n"
+                        "The contractor shall provide a staffing plan.\n"
+                    ).encode("utf-8"),
+                    "text/plain",
+                ),
+            ),
+            ("files", ("legacy.xls", b"binary", "application/vnd.ms-excel")),
+        ],
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+    assert "/intake/rfp-drafts/" in response.headers["location"]
+
+    review = client.get(response.headers["location"])
+    assert review.status_code == 200
+    assert "Review Intake Draft" in review.text
+    assert "Regional Operations Support Services" in review.text
+    assert "legacy.xls" in review.text
+    assert "DEFAULTED" in review.text
+    assert "Source Document Manifest" in review.text
+    assert "application/vnd.ms-excel" in review.text
+
+
+def test_rfp_first_review_confirm_creates_opportunity(client: TestClient) -> None:
+    create = client.post(
+        "/intake/rfp-drafts",
+        data={"actor": "operator"},
+        files=[
+            (
+                "files",
+                (
+                    "regional-ops-rfp.txt",
+                    (
+                        "REQUEST FOR PROPOSALS\n"
+                        "Regional Operations Support Services\n"
+                        "Issued by: City of Springfield\n"
+                        "The estimated contract value is $1,250,000.\n"
+                        "Proposal due date is 2026-04-20.\n"
+                        "Evaluation criteria include technical approach and pricing.\n"
+                        "The contractor shall provide a staffing plan.\n"
+                    ).encode("utf-8"),
+                    "text/plain",
+                ),
+            ),
+        ],
+        follow_redirects=False,
+    )
+    draft_path = create.headers["location"]
+    draft_page = client.get(draft_path)
+    assert draft_page.status_code == 200
+
+    confirm = client.post(
+        f"{draft_path}/confirm",
+        data={
+            "name": "Regional Operations Support Services",
+            "client": "City of Springfield",
+            "estimated_contract_value": "1250000",
+            "lead_time_days": "45",
+            "strategic_alignment": "3",
+            "estimated_probability_win": "50",
+            "actor": "operator",
+        },
+    )
+    assert confirm.status_code == 200
+    assert "Intake Result" in confirm.text
+    assert "RFP Parse Summary" in confirm.text
+    assert "Source Document Manifest" in confirm.text
+    assert "Open Compliance Matrix" in confirm.text
+
+
+def test_rfp_first_review_blocks_missing_required_fields(client: TestClient) -> None:
+    create = client.post(
+        "/intake/rfp-drafts",
+        data={"actor": "operator"},
+        files=[
+            (
+                "files",
+                (
+                    "minimal-rfp.txt",
+                    (
+                        "REQUEST FOR PROPOSALS\n"
+                        "Operations Support Services\n"
+                        "Proposal due date is 2026-04-20.\n"
+                        "The contractor shall provide a staffing plan.\n"
+                    ).encode("utf-8"),
+                    "text/plain",
+                ),
+            ),
+        ],
+        follow_redirects=False,
+    )
+    draft_path = create.headers["location"]
+
+    confirm = client.post(
+        f"{draft_path}/confirm",
+        data={
+            "name": "Operations Support Services",
+            "client": "",
+            "estimated_contract_value": "",
+            "lead_time_days": "45",
+            "strategic_alignment": "3",
+            "estimated_probability_win": "50",
+            "actor": "operator",
+        },
+    )
+    assert confirm.status_code == 422
+    assert "Submission Errors" in confirm.text
+    assert "Client:" in confirm.text
+    assert "Estimated Contract Value:" in confirm.text
+    assert "MISSING" in confirm.text
+
+    listing = client.get("/api/opportunities")
+    assert listing.status_code == 200
+    assert listing.json() == []
+
+
+def test_successful_web_submission_with_rfp_batch_shows_parse_summary(client: TestClient) -> None:
+    response = client.post(
+        "/intake-with-rfp",
+        data={
+            "name": "Operations Pursuit",
+            "client": "Metro Transit",
+            "estimated_contract_value": "900000",
+            "lead_time_days": "35",
+            "strategic_alignment": "4",
+            "estimated_probability_win": "70",
+            "actor": "operator",
+        },
+        files=[
+            (
+                "files",
+                (
+                    "scope.txt",
+                    (
+                        "Proposal due date is 2026-08-01.\n"
+                        "Evaluation criteria include technical approach and pricing.\n"
+                        "The contractor shall provide staffing plan.\n"
+                    ).encode("utf-8"),
+                    "text/plain",
+                ),
+            ),
+            ("files", ("legacy.xls", b"binary", "application/vnd.ms-excel")),
+        ],
+    )
+    assert response.status_code == 200
+    assert "RFP Parse Summary" in response.text
+    assert "Source Document Manifest" in response.text
+    assert "scope.txt" in response.text
+    assert "legacy.xls" in response.text
+    assert "Open Compliance Matrix" in response.text
+
+
+def test_web_submission_with_only_invalid_rfp_files_returns_form_errors(client: TestClient) -> None:
+    response = client.post(
+        "/intake-with-rfp",
+        data={
+            "name": "Operations Pursuit",
+            "client": "Metro Transit",
+            "estimated_contract_value": "900000",
+            "lead_time_days": "35",
+            "strategic_alignment": "4",
+            "estimated_probability_win": "70",
+            "actor": "operator",
+        },
+        files=[("files", ("legacy.xls", b"binary", "application/vnd.ms-excel"))],
+    )
+    assert response.status_code == 422
+    assert "Submission Errors" in response.text
+    assert "No uploaded RFP files produced parsable text." in response.text
+    assert "Unsupported file type" in response.text
+
+    listing = client.get("/api/opportunities")
+    assert listing.status_code == 200
+    assert listing.json() == []
 
 
 def test_detail_page_shows_gate_decision_history(client: TestClient) -> None:

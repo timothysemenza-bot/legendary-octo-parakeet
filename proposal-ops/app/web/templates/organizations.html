@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Organizations</h2>
+  {% if errors %}
+  <ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <form method="post" action="/organizations">
+    <label>Name <input name="name" value="{{ form_data.name or '' }}" required /></label>
+    <label>Type <input name="organization_type" value="{{ form_data.organization_type or 'OTHER' }}" /></label>
+    <label>City <input name="city" value="{{ form_data.city or '' }}" /></label>
+    <label>State <input name="state" value="{{ form_data.state or '' }}" /></label>
+    <label>Website <input name="website_url" value="{{ form_data.website_url or '' }}" /></label>
+    <label>Procurement URL <input name="procurement_url" value="{{ form_data.procurement_url or '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ form_data.notes or '' }}</textarea></label>
+    <button type="submit">Create Organization</button>
+  </form>
+
+  {% if organizations %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in organizations %}
+      <tr>
+        <td><a href="/organizations/{{ item.id }}">{{ item.name }}</a></td>
+        <td>{{ item.organization_type }}</td>
+        <td>{{ item.city or '' }} {{ item.state or '' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No organizations yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
+

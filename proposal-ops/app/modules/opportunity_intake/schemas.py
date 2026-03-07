@@ -3,6 +3,8 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.modules.rfp_parser.schemas import RfpSourceDocumentRecord
+
 
 class Tier(StrEnum):
     TIER_1 = "TIER_1"
@@ -14,6 +16,28 @@ class PursuitRecommendation(StrEnum):
     BID = "BID"
     CONDITIONAL = "CONDITIONAL"
     NO_BID = "NO_BID"
+
+
+class PursuitStage(StrEnum):
+    INTELLIGENCE = "INTELLIGENCE"
+    EARLY_QUALIFICATION = "EARLY_QUALIFICATION"
+    PRE_RFP_CAPTURE = "PRE_RFP_CAPTURE"
+    ACTIVE_RFP = "ACTIVE_RFP"
+    SUBMITTED = "SUBMITTED"
+    AWARD = "AWARD"
+    LOST = "LOST"
+    DORMANT = "DORMANT"
+
+
+class IntakeRfpDraftStatus(StrEnum):
+    PENDING = "PENDING"
+    CONSUMED = "CONSUMED"
+
+
+class IntakeRfpFieldStatus(StrEnum):
+    INFERRED = "INFERRED"
+    DEFAULTED = "DEFAULTED"
+    MISSING = "MISSING"
 
 
 class OpportunityIntakeRequest(BaseModel):
@@ -41,7 +65,62 @@ class OpportunityIntakeResult(BaseModel):
     tier: Tier
     pursuit_recommendation: PursuitRecommendation
     capture_plan_id: str
+    pursuit_stage: PursuitStage
+    proposal_stage: str
     score_breakdown: ScoreBreakdown
+
+
+class OpportunityIntakeWithRfpResult(OpportunityIntakeResult):
+    solicitation_id: str
+    requirement_count: int
+    parsed_files: list[str]
+    skipped_files: list[str]
+    warnings: list[str]
+    source_documents: list[RfpSourceDocumentRecord] = Field(default_factory=list)
+
+
+class OpportunityIntakeDraftFields(BaseModel):
+    name: str | None = Field(default=None, max_length=255)
+    client: str | None = Field(default=None, max_length=255)
+    estimated_contract_value: float | None = Field(default=None, gt=0)
+    lead_time_days: int | None = Field(default=None, ge=1, le=3650)
+    incumbent_status: bool
+    strategic_alignment: int = Field(ge=1, le=5)
+    estimated_probability_win: int = Field(ge=0, le=100)
+
+
+class OpportunityIntakeDraftFieldStatuses(BaseModel):
+    name: IntakeRfpFieldStatus
+    client: IntakeRfpFieldStatus
+    estimated_contract_value: IntakeRfpFieldStatus
+    lead_time_days: IntakeRfpFieldStatus
+    incumbent_status: IntakeRfpFieldStatus
+    strategic_alignment: IntakeRfpFieldStatus
+    estimated_probability_win: IntakeRfpFieldStatus
+
+
+class OpportunityIntakeDraftResponse(BaseModel):
+    draft_id: str
+    status: IntakeRfpDraftStatus
+    actor: str
+    suggested_fields: OpportunityIntakeDraftFields
+    field_statuses: OpportunityIntakeDraftFieldStatuses
+    parsed_files: list[str]
+    skipped_files: list[str]
+    warnings: list[str]
+    extracted_deadline: str | None
+    source_documents: list[RfpSourceDocumentRecord] = Field(default_factory=list)
+
+
+class OpportunityIntakeDraftConfirmRequest(BaseModel):
+    name: str = Field(min_length=3, max_length=255)
+    client: str = Field(min_length=2, max_length=255)
+    estimated_contract_value: float = Field(gt=0)
+    lead_time_days: int = Field(ge=1, le=3650)
+    incumbent_status: bool
+    strategic_alignment: int = Field(ge=1, le=5)
+    estimated_probability_win: int = Field(ge=0, le=100)
+    actor: str | None = Field(default=None)
 
 
 class GateDecisionRequest(BaseModel):
@@ -157,6 +236,21 @@ class OpportunityDetailResponse(BaseModel):
     tier: Tier
     pursuit_recommendation: PursuitRecommendation
     stage: str
+    pursuit_stage: PursuitStage
+    proposal_stage: str
+    buying_organization_id: str | None
+    buying_organization_name: str | None
+    primary_contract_id: str | None
+    primary_contract_title: str | None
+    primary_facility_id: str | None
+    primary_facility_name: str | None
+    confidence_level: str
+    expected_rfp_date: date | None
+    provenance_summary: str | None
+    provenance_last_verified_at: datetime | None
+    score_breakdown_json: str | None
+    bidder_fit_score: float | None
+    weighted_pipeline_value: float | None
     created_at: datetime
     updated_at: datetime
     capture_plan: CapturePlanTemplate | None

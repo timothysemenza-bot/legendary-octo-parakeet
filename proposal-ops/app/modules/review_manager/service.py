@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.audit import log_audit_event
+from app.modules.proposal_outline.models import ProposalOutline
 from app.modules.review_manager.models import ReviewComment, ReviewCycle
 from app.modules.review_manager.schemas import (
     ReviewCommentCreateRequest,
@@ -12,7 +13,12 @@ from app.modules.review_manager.schemas import (
     ReviewCycleCloseRequest,
     ReviewCycleCreateRequest,
     ReviewReadinessResponse,
+    ReviewSeedFromOutlineRequest,
 )
+
+
+class ReviewSeedConflictError(RuntimeError):
+    pass
 
 
 class ReviewManagerService:
@@ -108,6 +114,73 @@ class ReviewManagerService:
         )
         self.db.commit()
         return comment
+
+    def seed_comments_from_outline(
+        self, opportunity_id: str, cycle_id: str, payload: ReviewSeedFromOutlineRequest
+    ) -> tuple[int, int] | None:
+        cycle = self.db.get(ReviewCycle, cycle_id)
+        if not cycle or cycle.opportunity_id != opportunity_id:
+            return None
+
+        latest_outline = self.db.scalars(
+            select(ProposalOutline)
+            .where(ProposalOutline.opportunity_id == opportunity_id)
+            .order_by(ProposalOutline.version.desc(), ProposalOutline.created_at.desc())
+        ).first()
+        if not latest_outline:
+            raise ReviewSeedConflictError("No proposal outline exists for this opportunity.")
+
+        outline_sections = json.loads(latest_outline.sections_json)
+        existing_seeded_section_codes = set(
+            self.db.scalars(
+                select(ReviewComment.section_code)
+                .where(ReviewComment.review_cycle_id == cycle_id)
+                .where(ReviewComment.created_by == "outline_seed")
+            )
+        )
+
+        seeded_count = 0
+        skipped_count = 0
+        for section in outline_sections:
+            section_code = str(section.get("proposal_section", "")).strip()
+            if not section_code:
+                skipped_count += 1
+                continue
+            if section_code in existing_seeded_section_codes:
+                skipped_count += 1
+                continue
+            owner = str(section.get("owner", "")).strip() or "UNASSIGNED"
+            comment = ReviewComment(
+                review_cycle_id=cycle_id,
+                requirement_id=None,
+                section_code=section_code,
+                severity="MEDIUM",
+                comment_text="Seeded from proposal outline section.",
+                resolution_status="OPEN",
+                owner=owner,
+                created_by="outline_seed",
+            )
+            self.db.add(comment)
+            existing_seeded_section_codes.add(section_code)
+            seeded_count += 1
+
+        self.db.flush()
+        log_audit_event(
+            self.db,
+            opportunity_id=opportunity_id,
+            actor=payload.actor,
+            action="review_comments_seeded_from_outline",
+            after_state_json=json.dumps(
+                {
+                    "review_cycle_id": cycle_id,
+                    "outline_id": latest_outline.id,
+                    "seeded_count": seeded_count,
+                    "skipped_count": skipped_count,
+                }
+            ),
+        )
+        self.db.commit()
+        return seeded_count, skipped_count
 
     def resolve_comment(self, comment_id: str, payload: ReviewCommentResolveRequest) -> ReviewComment | None:
         comment = self.db.get(ReviewComment, comment_id)

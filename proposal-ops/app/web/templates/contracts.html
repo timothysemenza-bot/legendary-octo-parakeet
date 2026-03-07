@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Contract Radar</h2>
+  {% if errors %}
+  <ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Filters</h3>
+  <form method="get" action="/contracts">
+    <label>State <input name="state" value="{{ filters.state }}" /></label>
+    <label>Facility Kind <input name="facility_kind" value="{{ filters.facility_kind }}" /></label>
+    <label>Incumbent <input name="incumbent" value="{{ filters.incumbent }}" /></label>
+    <label>Rebid Within Days <input name="rebid_within_days" value="{{ filters.rebid_within_days }}" /></label>
+    <button type="submit">Apply Filters</button>
+  </form>
+
+  <h3>Import CSV</h3>
+  <form method="post" action="/contracts/import" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required />
+    <button type="submit">Import Radar CSV</button>
+  </form>
+
+  <h3>Create Contract</h3>
+  <form method="post" action="/contracts">
+    <label>Organization
+      <select name="organization_id" required>
+        <option value="">Select</option>
+        {% for org in organizations %}
+        <option value="{{ org.id }}" {% if form_data.organization_id == org.id %}selected{% endif %}>{{ org.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Title <input name="title" value="{{ form_data.title or '' }}" required /></label>
+    <label>Incumbent Vendor <input name="incumbent_vendor" value="{{ form_data.incumbent_vendor or '' }}" /></label>
+    <label>Annual Value <input name="estimated_annual_value" value="{{ form_data.estimated_annual_value or '' }}" /></label>
+    <label>Total Value <input name="estimated_total_value" value="{{ form_data.estimated_total_value or '' }}" /></label>
+    <label>Start Date <input type="date" name="start_date" value="{{ form_data.start_date or '' }}" /></label>
+    <label>Expiration Date <input type="date" name="expiration_date" value="{{ form_data.expiration_date or '' }}" /></label>
+    <label>Rebid Window Start <input type="date" name="rebid_window_start" value="{{ form_data.rebid_window_start or '' }}" /></label>
+    <label>Rebid Window End <input type="date" name="rebid_window_end" value="{{ form_data.rebid_window_end or '' }}" /></label>
+    <label>Procurement Source URL <input name="procurement_source_url" value="{{ form_data.procurement_source_url or '' }}" /></label>
+    <label>Source Type <input name="source_type" value="{{ form_data.source_type or 'PUBLIC' }}" /></label>
+    <label>Facilities
+      <select name="facility_ids" multiple>
+        {% for facility in facilities %}
+        <option value="{{ facility.id }}">{{ facility.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Source Notes <textarea name="source_notes">{{ form_data.source_notes or '' }}</textarea></label>
+    <button type="submit">Create Contract</button>
+  </form>
+
+  {% if contracts %}
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Organization</th>
+        <th>Rebid Window</th>
+        <th>Expiration</th>
+        <th>Incumbent</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in contracts %}
+      <tr>
+        <td><a href="/contracts/{{ item.id }}">{{ item.title }}</a></td>
+        <td>{{ item.organization_name }}</td>
+        <td>{{ item.rebid_window_start or '-' }} to {{ item.rebid_window_end or '-' }}</td>
+        <td>{{ item.expiration_date or '-' }}</td>
+        <td>{{ item.incumbent_vendor or '-' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No contracts yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

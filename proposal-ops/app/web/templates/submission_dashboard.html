@@ -24,6 +24,15 @@
     <button type="submit">Validate Filenames</button>
   </form>
 
+  <h3>Package Structure Validation</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/submission/validate-package">
+    <label>Section names in package order (one per line)
+      <textarea name="section_names" rows="6" placeholder="Executive Summary&#10;Technical Approach&#10;Pricing Narrative"></textarea>
+    </label>
+    <label>Actor <input name="actor" value="operator" /></label>
+    <button type="submit">Validate Package Structure</button>
+  </form>
+
   <h3>Checklist Items</h3>
   <table>
     <thead>

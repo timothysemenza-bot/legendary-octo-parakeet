@@ -16,6 +16,26 @@ def test_parse_rfp_text_extracts_requirements_and_metadata() -> None:
     assert any(r["category"] == "PRICING" for r in parsed["requirements"])
 
 
+def test_parse_rfp_text_extracts_month_name_deadline() -> None:
+    sample = """
+    Proposals Due: January 5, 2026.
+    Evaluation criteria include technical approach and pricing.
+    The contractor shall provide a staffing plan.
+    """
+    parsed = parse_rfp_text(sample)
+    assert parsed["deadline"] == "January 5, 2026"
+
+
+def test_parse_rfp_text_prefers_proposal_due_over_question_due_dates() -> None:
+    sample = """
+    Written Questions Due: December 8, 2025.
+    Proposals Due: January 5, 2026.
+    The contractor shall provide a staffing plan.
+    """
+    parsed = parse_rfp_text(sample)
+    assert parsed["deadline"] == "January 5, 2026"
+
+
 def test_parse_rfp_text_filters_boilerplate_but_keeps_actionable_obligations() -> None:
     sample = """
     Bidders are strongly encouraged to visit the NJSTART Vendor Support Page.

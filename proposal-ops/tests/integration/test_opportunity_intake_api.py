@@ -14,6 +14,28 @@ def _payload() -> dict:
     }
 
 
+def _draft_upload_files() -> list[tuple[str, tuple[str, bytes, str]]]:
+    return [
+        (
+            "files",
+            (
+                "regional-ops-rfp.txt",
+                (
+                    "REQUEST FOR PROPOSALS\n"
+                    "Regional Operations Support Services\n"
+                    "Issued by: City of Springfield\n"
+                    "The estimated contract value is $1,250,000.\n"
+                    "Proposal due date is 2026-04-20.\n"
+                    "Evaluation criteria include technical approach and pricing.\n"
+                    "The contractor shall provide a staffing plan.\n"
+                ).encode("utf-8"),
+                "text/plain",
+            ),
+        ),
+        ("files", ("legacy.xls", b"binary", "application/vnd.ms-excel")),
+    ]
+
+
 def test_intake_persists_records_and_audit(client: TestClient) -> None:
     response = client.post("/api/opportunities/intake", json=_payload())
     assert response.status_code == 200
@@ -36,6 +58,231 @@ def test_invalid_payload_returns_422(client: TestClient) -> None:
         json={"name": "x", "client": "y", "estimated_contract_value": -1},
     )
     assert response.status_code == 422
+
+
+def test_intake_rfp_draft_api_create_and_get_returns_inferred_fields(client: TestClient) -> None:
+    response = client.post(
+        "/api/opportunities/intake-rfp-drafts",
+        data={"actor": "operator"},
+        files=_draft_upload_files(),
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["draft_id"]
+    assert body["status"] == "PENDING"
+    assert body["actor"] == "operator"
+    assert body["suggested_fields"]["name"] == "Regional Operations Support Services"
+    assert body["suggested_fields"]["client"] == "City of Springfield"
+    assert body["suggested_fields"]["estimated_contract_value"] == 1250000.0
+    assert body["suggested_fields"]["lead_time_days"] > 0
+    assert body["suggested_fields"]["strategic_alignment"] == 3
+    assert body["field_statuses"]["name"] == "INFERRED"
+    assert body["field_statuses"]["strategic_alignment"] == "DEFAULTED"
+    assert body["parsed_files"] == ["regional-ops-rfp.txt"]
+    assert body["skipped_files"] == ["legacy.xls"]
+    assert len(body["source_documents"]) == 2
+    assert body["source_documents"][0]["source_filename"] == "regional-ops-rfp.txt"
+    assert body["source_documents"][0]["parse_status"] == "PARSED"
+    assert body["source_documents"][1]["source_filename"] == "legacy.xls"
+    assert body["source_documents"][1]["parse_status"] == "SKIPPED"
+
+    fetched = client.get(f"/api/opportunities/intake-rfp-drafts/{body['draft_id']}")
+    assert fetched.status_code == 200
+    fetched_body = fetched.json()
+    assert fetched_body["draft_id"] == body["draft_id"]
+    assert fetched_body["parsed_files"] == body["parsed_files"]
+    assert fetched_body["source_documents"] == body["source_documents"]
+
+
+def test_intake_rfp_draft_confirm_creates_opportunity_and_artifacts(client: TestClient) -> None:
+    draft = client.post(
+        "/api/opportunities/intake-rfp-drafts",
+        data={"actor": "operator"},
+        files=_draft_upload_files(),
+    ).json()
+
+    confirm = client.post(
+        f"/api/opportunities/intake-rfp-drafts/{draft['draft_id']}/confirm",
+        json={
+            "name": draft["suggested_fields"]["name"],
+            "client": draft["suggested_fields"]["client"],
+            "estimated_contract_value": draft["suggested_fields"]["estimated_contract_value"],
+            "lead_time_days": draft["suggested_fields"]["lead_time_days"],
+            "incumbent_status": draft["suggested_fields"]["incumbent_status"],
+            "strategic_alignment": draft["suggested_fields"]["strategic_alignment"],
+            "estimated_probability_win": draft["suggested_fields"]["estimated_probability_win"],
+        },
+    )
+    assert confirm.status_code == 200
+    body = confirm.json()
+    assert body["id"]
+    assert body["solicitation_id"]
+    assert body["requirement_count"] >= 1
+    assert len(body["source_documents"]) == 2
+    assert body["source_documents"][0]["source_filename"] == "regional-ops-rfp.txt"
+    assert body["source_documents"][1]["parse_status"] == "SKIPPED"
+
+    detail = client.get(f"/api/opportunities/{body['id']}")
+    assert detail.status_code == 200
+    actions = [event["action"] for event in detail.json()["audit_events"]]
+    assert "intake_rfp_draft_confirmed" in actions
+    assert "intake_rfp_batch_ingested" in actions
+    assert "rfp_parsed" in actions
+
+    fetched_draft = client.get(f"/api/opportunities/intake-rfp-drafts/{draft['draft_id']}")
+    assert fetched_draft.status_code == 200
+    assert fetched_draft.json()["status"] == "CONSUMED"
+
+
+def test_intake_rfp_draft_confirm_fails_with_missing_required_fields(client: TestClient) -> None:
+    draft = client.post(
+        "/api/opportunities/intake-rfp-drafts",
+        data={"actor": "operator"},
+        files=[
+            (
+                "files",
+                (
+                    "minimal-rfp.txt",
+                    (
+                        "REQUEST FOR PROPOSALS\n"
+                        "Operations Support Services\n"
+                        "Proposal due date is 2026-04-20.\n"
+                        "The contractor shall provide a staffing plan.\n"
+                    ).encode("utf-8"),
+                    "text/plain",
+                ),
+            ),
+        ],
+    ).json()
+
+    confirm = client.post(
+        f"/api/opportunities/intake-rfp-drafts/{draft['draft_id']}/confirm",
+        json={
+            "name": draft["suggested_fields"]["name"],
+            "client": "",
+            "estimated_contract_value": 0,
+            "lead_time_days": draft["suggested_fields"]["lead_time_days"],
+            "incumbent_status": draft["suggested_fields"]["incumbent_status"],
+            "strategic_alignment": draft["suggested_fields"]["strategic_alignment"],
+            "estimated_probability_win": draft["suggested_fields"]["estimated_probability_win"],
+        },
+    )
+    assert confirm.status_code == 422
+
+    listing = client.get("/api/opportunities")
+    assert listing.status_code == 200
+    assert listing.json() == []
+
+
+def test_intake_rfp_draft_cannot_be_confirmed_twice(client: TestClient) -> None:
+    draft = client.post(
+        "/api/opportunities/intake-rfp-drafts",
+        data={"actor": "operator"},
+        files=_draft_upload_files(),
+    ).json()
+
+    payload = {
+        "name": draft["suggested_fields"]["name"],
+        "client": draft["suggested_fields"]["client"],
+        "estimated_contract_value": draft["suggested_fields"]["estimated_contract_value"],
+        "lead_time_days": draft["suggested_fields"]["lead_time_days"],
+        "incumbent_status": draft["suggested_fields"]["incumbent_status"],
+        "strategic_alignment": draft["suggested_fields"]["strategic_alignment"],
+        "estimated_probability_win": draft["suggested_fields"]["estimated_probability_win"],
+    }
+    first = client.post(f"/api/opportunities/intake-rfp-drafts/{draft['draft_id']}/confirm", json=payload)
+    assert first.status_code == 200
+
+    second = client.post(f"/api/opportunities/intake-rfp-drafts/{draft['draft_id']}/confirm", json=payload)
+    assert second.status_code == 409
+    assert second.json()["detail"] == "RFP intake draft has already been consumed."
+
+
+def test_intake_with_rfp_batch_creates_opportunity_and_compliance_artifacts(client: TestClient) -> None:
+    response = client.post(
+        "/api/opportunities/intake-with-rfp",
+        data={
+            "name": "Regional Operations Support",
+            "client": "City of Springfield",
+            "estimated_contract_value": "1200000",
+            "lead_time_days": "50",
+            "strategic_alignment": "5",
+            "estimated_probability_win": "80",
+            "actor": "tim",
+        },
+        files=[
+            (
+                "files",
+                (
+                    "scope.txt",
+                    (
+                        "Proposal due date is 2026-07-15.\n"
+                        "Evaluation criteria include technical approach and pricing.\n"
+                        "The offeror shall provide a technical transition plan.\n"
+                    ).encode("utf-8"),
+                    "text/plain",
+                ),
+            ),
+            (
+                "files",
+                (
+                    "pricing.md",
+                    "The offeror must submit a pricing narrative and past performance references.".encode("utf-8"),
+                    "text/markdown",
+                ),
+            ),
+            ("files", ("budget.xlsx", b"binary", "application/vnd.ms-excel")),
+        ],
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["id"]
+    assert body["capture_plan_id"]
+    assert body["solicitation_id"]
+    assert body["requirement_count"] >= 2
+    assert body["parsed_files"] == ["scope.txt", "pricing.md"]
+    assert body["skipped_files"] == ["budget.xlsx"]
+    assert len(body["source_documents"]) == 3
+    assert [row["source_filename"] for row in body["source_documents"]] == ["scope.txt", "pricing.md", "budget.xlsx"]
+    assert body["source_documents"][2]["parse_status"] == "SKIPPED"
+    assert any("Unsupported file type" in warning for warning in body["warnings"])
+
+    detail = client.get(f"/api/opportunities/{body['id']}")
+    assert detail.status_code == 200
+    data = detail.json()
+    actions = [event["action"] for event in data["audit_events"]]
+    assert "intake_rfp_batch_ingested" in actions
+    assert "rfp_parsed" in actions
+
+    matrix = client.get(f"/api/opportunities/{body['id']}/compliance-matrix")
+    assert matrix.status_code == 200
+    rows = matrix.json()
+    assert len(rows) == body["requirement_count"]
+
+
+def test_intake_with_rfp_batch_rejects_when_no_upload_yields_usable_text(client: TestClient) -> None:
+    response = client.post(
+        "/api/opportunities/intake-with-rfp",
+        data={
+            "name": "Regional Operations Support",
+            "client": "City of Springfield",
+            "estimated_contract_value": "1200000",
+            "lead_time_days": "50",
+            "strategic_alignment": "5",
+            "estimated_probability_win": "80",
+            "actor": "tim",
+        },
+        files=[
+            ("files", ("budget.xlsx", b"binary", "application/vnd.ms-excel")),
+            ("files", ("note.txt", b"too short", "text/plain")),
+        ],
+    )
+    assert response.status_code == 422
+    assert response.json()["detail"] == "No uploaded RFP files produced parsable text."
+
+    listing = client.get("/api/opportunities")
+    assert listing.status_code == 200
+    assert listing.json() == []
 
 
 def test_gate_decision_creates_audit_event(client: TestClient) -> None:
@@ -105,6 +352,72 @@ def test_gate_c_approval_blocked_when_matrix_not_ready(client: TestClient) -> No
         },
     )
     assert gate_c.status_code == 409
+
+
+def test_gate_b_approval_blocked_until_capture_plan_strategy_is_ready(client: TestClient) -> None:
+    intake = client.post("/api/opportunities/intake", json=_payload()).json()
+    opportunity_id = intake["id"]
+
+    gate_a = client.post(
+        f"/api/opportunities/{opportunity_id}/gate-decisions",
+        json={
+            "gate_code": "GATE_A",
+            "decision": "APPROVED",
+            "decider": "principal",
+            "rationale": "Proceed to strategy.",
+        },
+    )
+    assert gate_a.status_code == 200
+
+    blocked_gate_b = client.post(
+        f"/api/opportunities/{opportunity_id}/gate-decisions",
+        json={
+            "gate_code": "GATE_B",
+            "decision": "APPROVED",
+            "decider": "capture-lead",
+            "decider_role": "capture_strategy_lead",
+            "rationale": "Initial strategy review complete.",
+        },
+    )
+    assert blocked_gate_b.status_code == 409
+    assert "Gate B cannot be approved" in blocked_gate_b.json()["detail"]
+
+    parse = client.post(
+        f"/api/opportunities/{opportunity_id}/rfp/parse",
+        data={
+            "raw_text": (
+                "Proposal due date is 2026-05-30 and submissions must be uploaded electronically.\n"
+                "Evaluation criteria include technical approach, management, and pricing.\n"
+                "The contractor shall provide a staffing plan and must submit past performance references.\n"
+                "Offeror must submit a technical approach narrative.\n"
+                "Offeror must provide a detailed pricing narrative."
+            ),
+            "source_filename": "gate-b-rfp.txt",
+            "actor": "operator",
+        },
+    )
+    assert parse.status_code == 200
+
+    generate = client.post(
+        f"/api/opportunities/{opportunity_id}/capture-plan/generate",
+        json={"actor": "capture_lead"},
+    )
+    assert generate.status_code == 200
+
+    approved_gate_b = client.post(
+        f"/api/opportunities/{opportunity_id}/gate-decisions",
+        json={
+            "gate_code": "GATE_B",
+            "decision": "APPROVED",
+            "decider": "capture-lead",
+            "decider_role": "capture_strategy_lead",
+            "rationale": "Strategy is fully developed and ready for compliance.",
+        },
+    )
+    assert approved_gate_b.status_code == 200
+
+    detail = client.get(f"/api/opportunities/{opportunity_id}").json()
+    assert detail["stage"] == "COMPLIANCE"
 
 
 def test_non_active_gate_decision_is_blocked_and_audited(client: TestClient) -> None:

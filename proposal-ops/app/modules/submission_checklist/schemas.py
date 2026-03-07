@@ -20,6 +20,21 @@ class FileNameValidationResponse(BaseModel):
     message: str
 
 
+class SubmissionPackageValidationRequest(BaseModel):
+    section_names: list[str] = Field(default_factory=list)
+    actor: str = Field(default="operator")
+
+
+class SubmissionPackageValidationResponse(BaseModel):
+    valid: bool
+    outline_version: int | None
+    missing_sections: list[str]
+    unexpected_sections: list[str]
+    duplicate_sections: list[str]
+    out_of_order: bool
+    message: str
+
+
 class SubmissionChecklistItemResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -52,4 +67,3 @@ class SubmissionReadinessResponse(BaseModel):
     blocked_items: int
     ready_for_gate_f: bool
     blockers: list[str]
-

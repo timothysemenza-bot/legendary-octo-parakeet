@@ -5,6 +5,31 @@
   <p><strong>Opportunity:</strong> {{ opportunity_id }}</p>
   <p><strong>Current Version:</strong> {{ plan.version }}</p>
 
+  <h3>Strategy Readiness</h3>
+  <p><strong>Gate B Ready:</strong> {% if readiness.ready_for_gate_b %}YES{% else %}NO{% endif %}</p>
+  <p><strong>Matrix Rows:</strong> {{ readiness.matrix_row_count }}</p>
+  <p><strong>Win Themes Detected:</strong> {{ readiness.win_theme_count }}</p>
+  {% if readiness.uses_bootstrap_template %}
+  <p><strong>Template State:</strong> Latest plan still matches the intake bootstrap.</p>
+  {% endif %}
+  {% if readiness.blockers %}
+  <ul>
+    {% for blocker in readiness.blockers %}
+    <li>{{ blocker }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Strategy artifacts are ready for Gate B approval.</p>
+  {% endif %}
+
+  <h3>Generate Enriched Version</h3>
+  <form method="post" action="/opportunities/{{ opportunity_id }}/capture-plan/generate">
+    <label>Actor
+      <input name="actor" value="operator" />
+    </label>
+    <button type="submit">Generate Enriched Version</button>
+  </form>
+
   <h3>Edit Capture Plan (Creates New Version)</h3>
   <form method="post" action="/opportunities/{{ opportunity_id }}/capture-plan">
     <label>Summary
