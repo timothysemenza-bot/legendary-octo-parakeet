@@ -76,6 +76,11 @@ The system computes:
 
 Operator-facing contractor pipeline fields use controlled categories for stage, scale, labor profile, and union profile so follow-up reporting remains consistent.
 
+The contract-detail pursuit bootstrap also uses controlled choices for:
+- `pursuit_stage`
+- `confidence_level`
+- initial 1-5 qualification score inputs
+
 ### 4. Tune scoring
 
 Use `/settings/scoring` to edit default weights for:
@@ -99,7 +104,10 @@ Recommended operator sequence:
 2. Set the initial `prospect_stage`.
 3. Log each outreach, meeting, or note as a touchpoint.
 4. Carry the next follow-up date forward from the most recent confirmed next step.
-5. Move into pursuit-specific commercials only once an active engagement exists.
+5. Once the contractor is `ENGAGED`, use `/contractors/{id}` to either:
+   - create a new pursuit handoff from a contract and seed the advised contractor automatically, or
+   - link the contractor to an existing opportunity without creating a duplicate commercial row.
+6. Move into pursuit-specific commercials only once an active engagement exists.
 
 ### 6. Run the capture workbench
 
@@ -120,6 +128,14 @@ Recommended operator sequence:
 4. Attach evidence to notes where possible.
 5. Create next capture actions with owners and dates.
 6. Update commercials once a contractor engagement is real.
+
+The workbench now uses controlled choice lists for the repetitive operator fields that were generating most validation noise:
+- contact side
+- confidence level
+- evidence/intelligence source class
+- commercial success fee type
+
+The contractor handoff form on `/contractors/{id}` uses the same controlled pursuit-stage, confidence, and 1-5 score selections as the contract-detail bootstrap.
 
 ## Pursuit stages
 

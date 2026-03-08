@@ -61,6 +61,10 @@ def test_contract_radar_ui_and_create_pursuit_from_contract_flow(client: TestCli
     detail = client.get(f"/contracts/{contract['id']}")
     assert detail.status_code == 200
     assert "Create Pursuit From Contract" in detail.text
+    assert '<select name="source_type">' in detail.text
+    assert '<select name="pursuit_stage">' in detail.text
+    assert '<select name="confidence_level">' in detail.text
+    assert '<select name="strategic_fit">' in detail.text
 
     create = client.post(
         f"/contracts/{contract['id']}/pursuits",
@@ -123,6 +127,9 @@ def test_capture_workbench_ui_forms(client: TestClient) -> None:
     assert workbench.status_code == 200
     assert "Capture Workbench" in workbench.text
     assert "Use only lawful and ethical intelligence sources." in workbench.text
+    assert '<select name="contact_side">' in workbench.text
+    assert '<select name="source_class">' in workbench.text
+    assert '<select name="success_fee_type">' in workbench.text
 
     refresh = client.post(f"{workbench_path}/matches", follow_redirects=True)
     assert refresh.status_code == 200
@@ -270,6 +277,9 @@ def test_contractor_handoff_ui(client: TestClient) -> None:
     assert "Create Pursuit Handoff" in detail.text
     assert "Link To Existing Opportunity" in detail.text
     assert "Linked Opportunities" in detail.text
+    assert '<select name="pursuit_stage">' in detail.text
+    assert '<select name="confidence_level">' in detail.text
+    assert '<select name="strategic_fit">' in detail.text
 
     handoff = client.post(
         f"{detail_path}/pursuits",

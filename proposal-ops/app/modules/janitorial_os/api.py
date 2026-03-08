@@ -22,8 +22,10 @@ from app.modules.janitorial_os.schemas import (
     CaptureActionResponse,
     CommercialCreate,
     CommercialResponse,
+    ConfidenceLevel,
     ContactCreate,
     ContactResponse,
+    ContractSourceType,
     ContractRecordCreate,
     ContractRecordResponse,
     ContractRecordUpdate,
@@ -55,8 +57,10 @@ from app.modules.janitorial_os.schemas import (
     OrganizationResponse,
     OrganizationUpdate,
     ProfileType,
+    PursuitStageOption,
     ScoringProfileResponse,
     ScoringProfileUpdateRequest,
+    SourceClass,
 )
 from app.modules.janitorial_os.service import JanitorialOsService
 from app.modules.opportunity_intake.schemas import OpportunityDetailResponse
@@ -82,6 +86,19 @@ CONTRACTOR_FORM_OPTIONS = {
     "scale_bands": _enum_options(ContractorScaleBand),
     "prospect_stages": _enum_options(ContractorProspectStage),
     "touchpoint_types": _enum_options(ContractorTouchpointType),
+    "contract_source_types": _enum_options(ContractSourceType),
+    "confidence_levels": _enum_options(ConfidenceLevel),
+    "source_classes": _enum_options(SourceClass),
+    "pursuit_stages": _enum_options(PursuitStageOption),
+    "contact_sides": [
+        {"value": "BUYER", "label": "Buyer"},
+        {"value": "CONTRACTOR", "label": "Contractor"},
+    ],
+    "success_fee_types": [
+        {"value": "FIXED", "label": "Fixed"},
+        {"value": "PERCENT_ANNUAL", "label": "Percent Annual"},
+        {"value": "PERCENT_TOTAL", "label": "Percent Total"},
+    ],
     "score_choices": [{"value": str(value), "label": str(value)} for value in range(1, 6)],
 }
 
@@ -964,12 +981,14 @@ def contract_detail_view(request: Request, contract_id: str, db: Session = Depen
     return templates.TemplateResponse(
         request=request,
         name="contract_detail.html",
-        context={
-            "contract": contract,
-            "organizations": service.list_organizations(),
-            "facilities": service.list_facilities(),
-            "errors": [],
-        },
+        context=_with_contractor_form_options(
+            {
+                "contract": contract,
+                "organizations": service.list_organizations(),
+                "facilities": service.list_facilities(),
+                "errors": [],
+            }
+        ),
     )
 
 
@@ -1412,18 +1431,20 @@ def capture_workbench_view(request: Request, opportunity_id: str, db: Session = 
     return templates.TemplateResponse(
         request=request,
         name="capture_workbench.html",
-        context={
-            "detail": detail,
-            "matches": [_match_response(row) for row in matches],
-            "contacts": contacts,
-            "notes": notes,
-            "evidence": evidence,
-            "actions": actions,
-            "commercial": _commercial_response(db, commercial) if commercial else None,
-            "contractors": service.list_contractors(),
-            "contractor_context": contractor_context,
-            "advised_contractor_id": contractor_context.contractor.id if contractor_context else None,
-        },
+        context=_with_contractor_form_options(
+            {
+                "detail": detail,
+                "matches": [_match_response(row) for row in matches],
+                "contacts": contacts,
+                "notes": notes,
+                "evidence": evidence,
+                "actions": actions,
+                "commercial": _commercial_response(db, commercial) if commercial else None,
+                "contractors": service.list_contractors(),
+                "contractor_context": contractor_context,
+                "advised_contractor_id": contractor_context.contractor.id if contractor_context else None,
+            }
+        ),
     )
 
 

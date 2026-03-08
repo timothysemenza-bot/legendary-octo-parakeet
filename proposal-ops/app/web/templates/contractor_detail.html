@@ -76,6 +76,7 @@
   </form>
 
   <h3>Create Pursuit Handoff</h3>
+  {% set relationship_access_value = handoff_form_data.relationship_access or (contractor.relationship_strength ~ '') %}
   <form method="post" action="/contractors/{{ contractor.id }}/pursuits">
     <label>Contract
       <select name="contract_id" required>
@@ -94,19 +95,85 @@
         {% endfor %}
       </select>
     </label>
-    <label>Pursuit Stage <input name="pursuit_stage" value="{{ handoff_form_data.pursuit_stage or 'INTELLIGENCE' }}" /></label>
-    <label>Confidence <input name="confidence_level" value="{{ handoff_form_data.confidence_level or 'MEDIUM' }}" /></label>
+    <label>Pursuit Stage
+      <select name="pursuit_stage">
+        {% for option in form_options.pursuit_stages %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.pursuit_stage or 'INTELLIGENCE') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Confidence
+      <select name="confidence_level">
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.confidence_level or 'MEDIUM') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Expected RFP Date <input type="date" name="expected_rfp_date" value="{{ handoff_form_data.expected_rfp_date or '' }}" /></label>
     <label>Provenance Summary <textarea name="provenance_summary" required>{{ handoff_form_data.provenance_summary or ('Contractor handoff from ' ~ contractor.name ~ '.') }}</textarea></label>
-    <label>Strategic Fit <input name="strategic_fit" value="{{ handoff_form_data.strategic_fit or '3' }}" /></label>
-    <label>Incumbent Vulnerability <input name="incumbent_vulnerability" value="{{ handoff_form_data.incumbent_vulnerability or '3' }}" /></label>
-    <label>Rebid Probability <input name="rebid_probability" value="{{ handoff_form_data.rebid_probability or '3' }}" /></label>
-    <label>Relationship Access <input name="relationship_access" value="{{ handoff_form_data.relationship_access or contractor.relationship_strength }}" /></label>
-    <label>Contractor Fit <input name="contractor_fit" value="{{ handoff_form_data.contractor_fit or '4' }}" /></label>
-    <label>Operational Complexity <input name="operational_complexity" value="{{ handoff_form_data.operational_complexity or '3' }}" /></label>
-    <label>Margin Potential <input name="margin_potential" value="{{ handoff_form_data.margin_potential or '3' }}" /></label>
-    <label>Pre-RFP Influence <input name="pre_rfp_influence" value="{{ handoff_form_data.pre_rfp_influence or '3' }}" /></label>
-    <label>Timeline Urgency <input name="timeline_urgency" value="{{ handoff_form_data.timeline_urgency or '3' }}" /></label>
+    <label>Strategic Fit
+      <select name="strategic_fit">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.strategic_fit or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Incumbent Vulnerability
+      <select name="incumbent_vulnerability">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.incumbent_vulnerability or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Rebid Probability
+      <select name="rebid_probability">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.rebid_probability or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Relationship Access
+      <select name="relationship_access">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if relationship_access_value == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Contractor Fit
+      <select name="contractor_fit">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.contractor_fit or '4') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Operational Complexity
+      <select name="operational_complexity">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.operational_complexity or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Margin Potential
+      <select name="margin_potential">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.margin_potential or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Pre-RFP Influence
+      <select name="pre_rfp_influence">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.pre_rfp_influence or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Timeline Urgency
+      <select name="timeline_urgency">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if (handoff_form_data.timeline_urgency or '3') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Actor <input name="actor" value="{{ handoff_form_data.actor or 'operator' }}" /></label>
     <button type="submit">Create Pursuit Handoff</button>
   </form>

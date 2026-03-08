@@ -30,7 +30,13 @@
     <label>Rebid Window Start <input type="date" name="rebid_window_start" value="{{ contract.rebid_window_start or '' }}" /></label>
     <label>Rebid Window End <input type="date" name="rebid_window_end" value="{{ contract.rebid_window_end or '' }}" /></label>
     <label>Procurement Source URL <input name="procurement_source_url" value="{{ contract.procurement_source_url or '' }}" /></label>
-    <label>Source Type <input name="source_type" value="{{ contract.source_type }}" /></label>
+    <label>Source Type
+      <select name="source_type">
+        {% for option in form_options.contract_source_types %}
+        <option value="{{ option.value }}" {% if contract.source_type == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Facilities
       <select name="facility_ids" multiple>
         {% for facility in facilities %}
@@ -53,19 +59,85 @@
         {% endfor %}
       </select>
     </label>
-    <label>Pursuit Stage <input name="pursuit_stage" value="INTELLIGENCE" /></label>
-    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Pursuit Stage
+      <select name="pursuit_stage">
+        {% for option in form_options.pursuit_stages %}
+        <option value="{{ option.value }}" {% if option.value == 'INTELLIGENCE' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Confidence
+      <select name="confidence_level">
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if option.value == 'MEDIUM' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Expected RFP Date <input type="date" name="expected_rfp_date" value="{{ contract.rebid_window_start or '' }}" /></label>
     <label>Provenance Summary <textarea name="provenance_summary" required>Created from contract radar record tied to {{ contract.organization_name }}.</textarea></label>
-    <label>Strategic Fit <input name="strategic_fit" value="3" /></label>
-    <label>Incumbent Vulnerability <input name="incumbent_vulnerability" value="3" /></label>
-    <label>Rebid Probability <input name="rebid_probability" value="4" /></label>
-    <label>Relationship Access <input name="relationship_access" value="3" /></label>
-    <label>Contractor Fit <input name="contractor_fit" value="3" /></label>
-    <label>Operational Complexity <input name="operational_complexity" value="3" /></label>
-    <label>Margin Potential <input name="margin_potential" value="3" /></label>
-    <label>Pre-RFP Influence <input name="pre_rfp_influence" value="3" /></label>
-    <label>Timeline Urgency <input name="timeline_urgency" value="3" /></label>
+    <label>Strategic Fit
+      <select name="strategic_fit">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '3' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Incumbent Vulnerability
+      <select name="incumbent_vulnerability">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '3' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Rebid Probability
+      <select name="rebid_probability">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '4' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Relationship Access
+      <select name="relationship_access">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '3' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Contractor Fit
+      <select name="contractor_fit">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '3' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Operational Complexity
+      <select name="operational_complexity">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '3' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Margin Potential
+      <select name="margin_potential">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '3' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Pre-RFP Influence
+      <select name="pre_rfp_influence">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '4' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Timeline Urgency
+      <select name="timeline_urgency">
+        {% for option in form_options.score_choices %}
+        <option value="{{ option.value }}" {% if option.value == '4' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Actor <input name="actor" value="operator" /></label>
     <button type="submit">Create Pursuit</button>
   </form>

@@ -74,9 +74,21 @@
     <label>Role <input name="role_title" /></label>
     <label>Email <input name="email" /></label>
     <label>Phone <input name="phone" /></label>
-    <label>Side <input name="contact_side" value="BUYER" /></label>
+    <label>Side
+      <select name="contact_side">
+        {% for option in form_options.contact_sides %}
+        <option value="{{ option.value }}" {% if option.value == 'BUYER' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Source Type <input name="source_type" value="PUBLIC" /></label>
-    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Confidence
+      <select name="confidence_level">
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if option.value == 'MEDIUM' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Notes <textarea name="notes"></textarea></label>
     <button type="submit">Add Contact</button>
   </form>
@@ -93,8 +105,20 @@
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/intelligence">
     <label>Title <input name="title" required /></label>
     <label>Type <input name="note_type" value="INTELLIGENCE" /></label>
-    <label>Source Class <input name="source_class" value="PUBLIC" /></label>
-    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Source Class
+      <select name="source_class">
+        {% for option in form_options.source_classes %}
+        <option value="{{ option.value }}" {% if option.value == 'PUBLIC' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Confidence
+      <select name="confidence_level">
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if option.value == 'MEDIUM' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Provenance <textarea name="provenance" required></textarea></label>
     <label>Note <textarea name="note_text" required></textarea></label>
     <button type="submit">Add Intelligence Note</button>
@@ -111,8 +135,20 @@
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/evidence">
     <label>Intelligence Note ID <input name="intelligence_note_id" /></label>
     <label>Contract ID <input name="contract_id" value="{{ detail.primary_contract_id or '' }}" /></label>
-    <label>Source Class <input name="source_class" value="PUBLIC" /></label>
-    <label>Confidence <input name="confidence_level" value="MEDIUM" /></label>
+    <label>Source Class
+      <select name="source_class">
+        {% for option in form_options.source_classes %}
+        <option value="{{ option.value }}" {% if option.value == 'PUBLIC' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Confidence
+      <select name="confidence_level">
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if option.value == 'MEDIUM' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Source URL <input name="source_url" /></label>
     <label>Provenance <textarea name="provenance" required></textarea></label>
     <label>Summary <textarea name="summary" required></textarea></label>
@@ -155,7 +191,14 @@
       </select>
     </label>
     <label>Retainer Amount <input name="retainer_amount" value="{{ commercial.retainer_amount if commercial else '' }}" /></label>
-    <label>Success Fee Type <input name="success_fee_type" value="{{ commercial.success_fee_type if commercial else '' }}" /></label>
+    <label>Success Fee Type
+      <select name="success_fee_type">
+        <option value="">None</option>
+        {% for option in form_options.success_fee_types %}
+        <option value="{{ option.value }}" {% if commercial and commercial.success_fee_type == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Success Fee Value <input name="success_fee_value" value="{{ commercial.success_fee_value if commercial else '' }}" /></label>
     <label>Projected Payout Date <input type="date" name="projected_payout_date" value="{{ commercial.projected_payout_date if commercial else '' }}" /></label>
     <label>Projected Payout Amount <input name="projected_payout_amount" value="{{ commercial.projected_payout_amount if commercial else '' }}" /></label>
