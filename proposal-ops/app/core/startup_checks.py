@@ -34,6 +34,7 @@ REQUIRED_TABLES = {
     "scoring_profiles",
     "scoring_criteria",
     "contractors",
+    "contractor_touchpoints",
     "opportunity_matches",
     "contacts",
     "intelligence_notes",

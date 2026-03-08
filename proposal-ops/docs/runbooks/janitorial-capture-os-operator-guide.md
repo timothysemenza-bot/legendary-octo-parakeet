@@ -74,6 +74,8 @@ The system computes:
 - `pursuit_stage`
 - downstream `proposal_stage`
 
+Operator-facing contractor pipeline fields use controlled categories for stage, scale, labor profile, and union profile so follow-up reporting remains consistent.
+
 ### 4. Tune scoring
 
 Use `/settings/scoring` to edit default weights for:
@@ -82,7 +84,24 @@ Use `/settings/scoring` to edit default weights for:
 
 Opportunity scoring is intended for prioritization, not precision forecasting. Use it to decide where pre-RFP effort is justified.
 
-### 5. Run the capture workbench
+### 5. Manage contractor prospects
+
+Use `/contractors` and `/contractors/{id}` to maintain a contractor-side prospect pipeline before a specific pursuit is active.
+
+Track on each contractor:
+- `prospect_stage`
+- `next_follow_up_date`
+- `last_touch_at`
+- touchpoint history with contact name, interaction type, summary, and next step
+
+Recommended operator sequence:
+1. Create the contractor prospect record.
+2. Set the initial `prospect_stage`.
+3. Log each outreach, meeting, or note as a touchpoint.
+4. Carry the next follow-up date forward from the most recent confirmed next step.
+5. Move into pursuit-specific commercials only once an active engagement exists.
+
+### 6. Run the capture workbench
 
 Use `/opportunities/{id}/capture-workbench` once a pursuit is active.
 
@@ -152,6 +171,7 @@ Track:
 - Upcoming rebids
 - Hottest pursuits
 - Top contractor matches
+- Overdue and upcoming contractor follow-ups
 - Active proposal workload
 - Weighted pipeline value
 - Expected consulting revenue

@@ -150,12 +150,35 @@ class Contractor(Base):
     municipal_experience: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     scale_band: Mapped[str] = mapped_column(String(30), nullable=False, default="REGIONAL")
     relationship_strength: Mapped[int] = mapped_column(Integer, nullable=False, default=3)
+    prospect_stage: Mapped[str] = mapped_column(String(30), nullable=False, default="TARGET", index=True)
+    next_follow_up_date: Mapped[date | None] = mapped_column(Date, nullable=True, index=True)
+    last_touch_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, index=True)
     relationship_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     strategic_fit_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=_utcnow, onupdate=_utcnow, nullable=False
     )
+
+    touchpoints: Mapped[list["ContractorTouchpoint"]] = relationship(back_populates="contractor")
+
+
+class ContractorTouchpoint(Base):
+    __tablename__ = "contractor_touchpoints"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    contractor_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("contractors.id"), nullable=False, index=True
+    )
+    contact_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    touchpoint_type: Mapped[str] = mapped_column(String(30), nullable=False, default="NOTE", index=True)
+    touchpoint_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False, index=True)
+    summary: Mapped[str] = mapped_column(Text, nullable=False)
+    next_step: Mapped[str | None] = mapped_column(Text, nullable=True)
+    next_follow_up_date: Mapped[date | None] = mapped_column(Date, nullable=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+
+    contractor: Mapped[Contractor] = relationship(back_populates="touchpoints")
 
 
 class OpportunityMatch(Base):

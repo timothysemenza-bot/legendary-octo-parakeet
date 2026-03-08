@@ -1,3 +1,5 @@
+from datetime import date, datetime, time, timedelta
+
 from fastapi.testclient import TestClient
 
 
@@ -71,6 +73,133 @@ def test_market_data_crud_and_contract_import_api(client: TestClient) -> None:
     )
     assert imported.status_code == 200
     assert imported.json()["imported_count"] == 1
+
+
+def test_contractor_prospect_pipeline_api(client: TestClient) -> None:
+    today = date.today()
+    initial_follow_up = today + timedelta(days=33)
+    next_follow_up = today + timedelta(days=10)
+    overdue_follow_up = today - timedelta(days=7)
+    touchpoint_at = datetime.combine(today, time(hour=9, minute=30))
+
+    contractor = client.post(
+        "/api/contractors",
+        json={
+            "name": "Tri-State Janitorial Partners",
+            "service_geographies": "NJ PA",
+            "headquarters_city": "Newark",
+            "headquarters_state": "NJ",
+            "vertical_experience": "airport education",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "mixed",
+            "diversity_certs": "MWBE",
+            "airport_experience": True,
+            "healthcare_experience": False,
+            "education_experience": True,
+            "municipal_experience": False,
+            "scale_band": "REGIONAL",
+            "relationship_strength": 3,
+            "prospect_stage": "OUTREACH",
+            "next_follow_up_date": initial_follow_up.isoformat(),
+            "relationship_notes": "Warm intro through local operator.",
+            "strategic_fit_notes": "Good airport crossover potential.",
+        },
+    )
+    assert contractor.status_code == 200
+    contractor_id = contractor.json()["id"]
+    assert contractor.json()["prospect_stage"] == "OUTREACH"
+    assert contractor.json()["labor_profile"] == "W2 self-perform"
+    assert contractor.json()["union_profile"] == "Mixed"
+
+    touchpoint = client.post(
+        f"/api/contractors/{contractor_id}/touchpoints",
+        json={
+            "contact_name": "Alex Rivera",
+            "touchpoint_type": "CALL",
+            "touchpoint_at": touchpoint_at.isoformat(),
+            "summary": "Intro call completed with regional growth lead.",
+            "next_step": "Send airport case-study summary.",
+            "next_follow_up_date": next_follow_up.isoformat(),
+        },
+    )
+    assert touchpoint.status_code == 200
+    assert touchpoint.json()["touchpoint_type"] == "CALL"
+
+    detail = client.get(f"/api/contractors/{contractor_id}")
+    assert detail.status_code == 200
+    assert detail.json()["last_touch_at"].startswith(touchpoint_at.isoformat())
+    assert detail.json()["next_follow_up_date"] == next_follow_up.isoformat()
+
+    updated = client.put(
+        f"/api/contractors/{contractor_id}",
+        json={
+            "name": "Tri-State Janitorial Partners",
+            "service_geographies": "NJ PA",
+            "headquarters_city": "Newark",
+            "headquarters_state": "NJ",
+            "vertical_experience": "airport education",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "mixed",
+            "diversity_certs": "MWBE",
+            "airport_experience": True,
+            "healthcare_experience": False,
+            "education_experience": True,
+            "municipal_experience": False,
+            "scale_band": "REGIONAL",
+            "relationship_strength": 4,
+            "prospect_stage": "DISCOVERY",
+            "next_follow_up_date": next_follow_up.isoformat(),
+            "relationship_notes": "Warm intro through local operator.",
+            "strategic_fit_notes": "Good airport crossover potential.",
+        },
+    )
+    assert updated.status_code == 200
+    assert updated.json()["prospect_stage"] == "DISCOVERY"
+
+    filtered = client.get(
+        "/api/contractors",
+        params={"prospect_stage": "DISCOVERY", "follow_up_before": (today + timedelta(days=20)).isoformat()},
+    )
+    assert filtered.status_code == 200
+    assert any(item["id"] == contractor_id for item in filtered.json())
+
+    touchpoints = client.get(f"/api/contractors/{contractor_id}/touchpoints")
+    assert touchpoints.status_code == 200
+    assert len(touchpoints.json()) == 1
+    assert touchpoints.json()[0]["summary"].startswith("Intro call completed")
+
+    overdue = client.post(
+        "/api/contractors",
+        json={
+            "name": "Dormant Prospect Services",
+            "service_geographies": "NJ",
+            "headquarters_city": "Vineland",
+            "headquarters_state": "NJ",
+            "vertical_experience": "municipal",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "non-union",
+            "diversity_certs": "",
+            "airport_experience": False,
+            "healthcare_experience": False,
+            "education_experience": False,
+            "municipal_experience": True,
+            "scale_band": "LOCAL",
+            "relationship_strength": 2,
+            "prospect_stage": "OUTREACH",
+            "next_follow_up_date": overdue_follow_up.isoformat(),
+            "relationship_notes": "Initial outreach stalled.",
+            "strategic_fit_notes": "Keep warm for municipal small-balance work.",
+        },
+    )
+    assert overdue.status_code == 200
+
+    dashboard = client.get("/api/dashboard/summary")
+    assert dashboard.status_code == 200
+    body = dashboard.json()
+    assert any(item["contractor_id"] == contractor_id for item in body["upcoming_contractor_follow_ups"])
+    upcoming_item = next(item for item in body["upcoming_contractor_follow_ups"] if item["contractor_id"] == contractor_id)
+    assert upcoming_item["next_step"] == "Send airport case-study summary."
+    assert any(item["contractor_id"] == overdue.json()["id"] for item in body["overdue_contractor_follow_ups"])
 
 
 def test_pursuit_creation_matching_capture_workbench_and_dashboard_api(client: TestClient) -> None:
@@ -188,6 +317,8 @@ def test_pursuit_creation_matching_capture_workbench_and_dashboard_api(client: T
     assert body["pursuits_total"] >= 1
     assert body["expected_consulting_revenue"] >= 6000
     assert len(body["top_matches"]) >= 1
+    assert "overdue_contractor_follow_ups" in body
+    assert "upcoming_contractor_follow_ups" in body
 
 
 def test_scoring_profile_update_api(client: TestClient) -> None:

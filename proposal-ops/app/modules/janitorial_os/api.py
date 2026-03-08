@@ -1,4 +1,5 @@
 import json
+from datetime import date
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
@@ -7,7 +8,15 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
-from app.modules.janitorial_os.models import CommercialEngagement, ContractRecord, Contractor, Facility, OpportunityMatch, Organization
+from app.modules.janitorial_os.models import (
+    CommercialEngagement,
+    ContractRecord,
+    Contractor,
+    ContractorTouchpoint,
+    Facility,
+    OpportunityMatch,
+    Organization,
+)
 from app.modules.janitorial_os.schemas import (
     CaptureActionCreate,
     CaptureActionResponse,
@@ -18,8 +27,15 @@ from app.modules.janitorial_os.schemas import (
     ContractRecordCreate,
     ContractRecordResponse,
     ContractRecordUpdate,
+    ContractorLaborProfile,
+    ContractorProspectStage,
     ContractorCreate,
     ContractorResponse,
+    ContractorScaleBand,
+    ContractorTouchpointCreate,
+    ContractorTouchpointResponse,
+    ContractorTouchpointType,
+    ContractorUnionProfile,
     ContractorUpdate,
     CreatePursuitFromContractRequest,
     DashboardSummaryResponse,
@@ -49,6 +65,28 @@ web_router = APIRouter(tags=["web"])
 templates = Jinja2Templates(directory="app/web/templates")
 
 
+def _choice_label(value: str) -> str:
+    return value if any(char.islower() for char in value) else value.replace("_", " ").title()
+
+
+def _enum_options(enum_cls: type) -> list[dict[str, str]]:
+    return [{"value": item.value, "label": _choice_label(item.value)} for item in enum_cls]
+
+
+CONTRACTOR_FORM_OPTIONS = {
+    "labor_profiles": _enum_options(ContractorLaborProfile),
+    "union_profiles": _enum_options(ContractorUnionProfile),
+    "scale_bands": _enum_options(ContractorScaleBand),
+    "prospect_stages": _enum_options(ContractorProspectStage),
+    "touchpoint_types": _enum_options(ContractorTouchpointType),
+    "score_choices": [{"value": str(value), "label": str(value)} for value in range(1, 6)],
+}
+
+
+def _with_contractor_form_options(context: dict) -> dict:
+    return {**context, "form_options": CONTRACTOR_FORM_OPTIONS}
+
+
 def _organization_response(row: Organization) -> OrganizationResponse:
     return OrganizationResponse.model_validate(row, from_attributes=True)
 
@@ -75,6 +113,10 @@ def _facility_response(db: Session, row: Facility) -> FacilityResponse:
 
 def _contractor_response(row: Contractor) -> ContractorResponse:
     return ContractorResponse.model_validate(row, from_attributes=True)
+
+
+def _touchpoint_response(row: ContractorTouchpoint) -> ContractorTouchpointResponse:
+    return ContractorTouchpointResponse.model_validate(row, from_attributes=True)
 
 
 def _match_response(row: OpportunityMatch) -> OpportunityMatchResponse:
@@ -297,9 +339,19 @@ async def import_contracts(
 
 
 @api_router.get("/api/contractors", response_model=list[ContractorResponse])
-def list_contractors(db: Session = Depends(get_db)) -> list[ContractorResponse]:
+def list_contractors(
+    prospect_stage: ContractorProspectStage | None = Query(None),
+    follow_up_before: date | None = Query(None),
+    db: Session = Depends(get_db),
+) -> list[ContractorResponse]:
     service = JanitorialOsService(db)
-    return [_contractor_response(row) for row in service.list_contractors()]
+    return [
+        _contractor_response(row)
+        for row in service.list_contractors(
+            prospect_stage=prospect_stage.value if prospect_stage else None,
+            follow_up_before=follow_up_before,
+        )
+    ]
 
 
 @api_router.post("/api/contractors", response_model=ContractorResponse)
@@ -329,6 +381,27 @@ def update_contractor(
         return _contractor_response(service.update_contractor(contractor_id, payload))
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@api_router.get("/api/contractors/{contractor_id}/touchpoints", response_model=list[ContractorTouchpointResponse])
+def list_contractor_touchpoints(
+    contractor_id: str, db: Session = Depends(get_db)
+) -> list[ContractorTouchpointResponse]:
+    service = JanitorialOsService(db)
+    if not service.get_contractor(contractor_id):
+        raise HTTPException(status_code=404, detail="Contractor not found")
+    return [_touchpoint_response(row) for row in service.list_contractor_touchpoints(contractor_id)]
+
+
+@api_router.post("/api/contractors/{contractor_id}/touchpoints", response_model=ContractorTouchpointResponse)
+def create_contractor_touchpoint(
+    contractor_id: str, payload: ContractorTouchpointCreate, db: Session = Depends(get_db)
+) -> ContractorTouchpointResponse:
+    service = JanitorialOsService(db)
+    try:
+        return _touchpoint_response(service.add_contractor_touchpoint(contractor_id, payload))
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @api_router.get("/api/scoring/profiles", response_model=list[ScoringProfileResponse])
@@ -904,12 +977,30 @@ def create_pursuit_from_contract_web(
 
 
 @web_router.get("/contractors", response_class=HTMLResponse)
-def contractors_view(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
+def contractors_view(
+    request: Request,
+    prospect_stage: str | None = Query(None),
+    follow_up_before: date | None = Query(None),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
     service = JanitorialOsService(db)
     return templates.TemplateResponse(
         request=request,
         name="contractors.html",
-        context={"contractors": service.list_contractors(), "errors": [], "form_data": {}},
+        context=_with_contractor_form_options(
+            {
+                "contractors": service.list_contractors(
+                    prospect_stage=prospect_stage or None,
+                    follow_up_before=follow_up_before,
+                ),
+                "errors": [],
+                "form_data": {},
+                "filters": {
+                    "prospect_stage": prospect_stage or "",
+                    "follow_up_before": follow_up_before.isoformat() if follow_up_before else "",
+                },
+            }
+        ),
     )
 
 
@@ -930,6 +1021,8 @@ def contractors_create_web(
     municipal_experience: bool = Form(False),
     scale_band: str = Form("REGIONAL"),
     relationship_strength: str = Form("3"),
+    prospect_stage: str = Form("TARGET"),
+    next_follow_up_date: str = Form(""),
     relationship_notes: str = Form(""),
     strategic_fit_notes: str = Form(""),
     db: Session = Depends(get_db),
@@ -950,6 +1043,8 @@ def contractors_create_web(
         "municipal_experience": municipal_experience,
         "scale_band": scale_band,
         "relationship_strength": relationship_strength,
+        "prospect_stage": prospect_stage,
+        "next_follow_up_date": next_follow_up_date or None,
         "relationship_notes": relationship_notes or None,
         "strategic_fit_notes": strategic_fit_notes or None,
     }
@@ -962,7 +1057,14 @@ def contractors_create_web(
         return templates.TemplateResponse(
             request=request,
             name="contractors.html",
-            context={"contractors": service.list_contractors(), "errors": errors, "form_data": raw},
+            context=_with_contractor_form_options(
+                {
+                    "contractors": service.list_contractors(),
+                    "errors": errors,
+                    "form_data": raw,
+                    "filters": {"prospect_stage": "", "follow_up_before": ""},
+                }
+            ),
             status_code=422,
         )
 
@@ -976,12 +1078,19 @@ def contractor_detail_view(request: Request, contractor_id: str, db: Session = D
     return templates.TemplateResponse(
         request=request,
         name="contractor_detail.html",
-        context={"contractor": contractor, "errors": []},
+        context=_with_contractor_form_options(
+            {
+                "contractor": contractor,
+                "touchpoints": service.list_contractor_touchpoints(contractor_id),
+                "errors": [],
+            }
+        ),
     )
 
 
 @web_router.post("/contractors/{contractor_id}")
 def contractor_update_web(
+    request: Request,
     contractor_id: str,
     name: str = Form(...),
     service_geographies: str = Form(""),
@@ -997,33 +1106,101 @@ def contractor_update_web(
     municipal_experience: bool = Form(False),
     scale_band: str = Form("REGIONAL"),
     relationship_strength: str = Form("3"),
+    prospect_stage: str = Form("TARGET"),
+    next_follow_up_date: str = Form(""),
     relationship_notes: str = Form(""),
     strategic_fit_notes: str = Form(""),
     db: Session = Depends(get_db),
-) -> RedirectResponse:
+) -> Response:
     service = JanitorialOsService(db)
-    payload = ContractorUpdate.model_validate(
-        {
-            "name": name,
-            "service_geographies": service_geographies or None,
-            "headquarters_city": headquarters_city or None,
-            "headquarters_state": headquarters_state or None,
-            "vertical_experience": vertical_experience or None,
-            "labor_profile": labor_profile or None,
-            "union_profile": union_profile or None,
-            "diversity_certs": diversity_certs or None,
-            "airport_experience": airport_experience,
-            "healthcare_experience": healthcare_experience,
-            "education_experience": education_experience,
-            "municipal_experience": municipal_experience,
-            "scale_band": scale_band,
-            "relationship_strength": relationship_strength,
-            "relationship_notes": relationship_notes or None,
-            "strategic_fit_notes": strategic_fit_notes or None,
-        }
-    )
-    service.update_contractor(contractor_id, payload)
-    return RedirectResponse(url=f"/contractors/{contractor_id}", status_code=303)
+    raw = {
+        "name": name,
+        "service_geographies": service_geographies or None,
+        "headquarters_city": headquarters_city or None,
+        "headquarters_state": headquarters_state or None,
+        "vertical_experience": vertical_experience or None,
+        "labor_profile": labor_profile or None,
+        "union_profile": union_profile or None,
+        "diversity_certs": diversity_certs or None,
+        "airport_experience": airport_experience,
+        "healthcare_experience": healthcare_experience,
+        "education_experience": education_experience,
+        "municipal_experience": municipal_experience,
+        "scale_band": scale_band,
+        "relationship_strength": relationship_strength,
+        "prospect_stage": prospect_stage,
+        "next_follow_up_date": next_follow_up_date or None,
+        "relationship_notes": relationship_notes or None,
+        "strategic_fit_notes": strategic_fit_notes or None,
+    }
+    try:
+        payload = ContractorUpdate.model_validate(raw)
+        service.update_contractor(contractor_id, payload)
+        return RedirectResponse(url=f"/contractors/{contractor_id}", status_code=303)
+    except ValidationError as exc:
+        contractor = service.get_contractor(contractor_id)
+        if not contractor:
+            raise HTTPException(status_code=404, detail="Contractor not found") from exc
+        errors = _validation_errors(exc)
+        return templates.TemplateResponse(
+            request=request,
+            name="contractor_detail.html",
+            context=_with_contractor_form_options(
+                {
+                    "contractor": contractor,
+                    "touchpoints": service.list_contractor_touchpoints(contractor_id),
+                    "errors": errors,
+                }
+            ),
+            status_code=422,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@web_router.post("/contractors/{contractor_id}/touchpoints")
+def contractor_touchpoint_create_web(
+    request: Request,
+    contractor_id: str,
+    contact_name: str = Form(""),
+    touchpoint_type: str = Form("NOTE"),
+    touchpoint_at: str = Form(...),
+    summary: str = Form(...),
+    next_step: str = Form(""),
+    next_follow_up_date: str = Form(""),
+    db: Session = Depends(get_db),
+) -> Response:
+    service = JanitorialOsService(db)
+    try:
+        payload = ContractorTouchpointCreate.model_validate(
+            {
+                "contact_name": contact_name or None,
+                "touchpoint_type": touchpoint_type,
+                "touchpoint_at": touchpoint_at,
+                "summary": summary,
+                "next_step": next_step or None,
+                "next_follow_up_date": next_follow_up_date or None,
+            }
+        )
+        service.add_contractor_touchpoint(contractor_id, payload)
+        return RedirectResponse(url=f"/contractors/{contractor_id}", status_code=303)
+    except (ValidationError, ValueError) as exc:
+        contractor = service.get_contractor(contractor_id)
+        if not contractor:
+            raise HTTPException(status_code=404, detail="Contractor not found") from exc
+        errors = _validation_errors(exc) if isinstance(exc, ValidationError) else [str(exc)]
+        return templates.TemplateResponse(
+            request=request,
+            name="contractor_detail.html",
+            context=_with_contractor_form_options(
+                {
+                    "contractor": contractor,
+                    "touchpoints": service.list_contractor_touchpoints(contractor_id),
+                    "errors": errors,
+                }
+            ),
+            status_code=422,
+        )
 
 
 @web_router.get("/settings/scoring", response_class=HTMLResponse)

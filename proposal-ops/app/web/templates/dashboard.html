@@ -80,6 +80,62 @@
   <p>No match snapshots yet.</p>
   {% endif %}
 
+  <h3>Overdue Contractor Follow-Ups</h3>
+  {% if summary.overdue_contractor_follow_ups %}
+  <table>
+    <thead>
+      <tr>
+        <th>Contractor</th>
+        <th>Stage</th>
+        <th>Follow Up Date</th>
+        <th>Last Touch</th>
+        <th>Next Step</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.overdue_contractor_follow_ups %}
+      <tr>
+        <td><a href="/contractors/{{ item.contractor_id }}">{{ item.contractor_name }}</a></td>
+        <td>{{ item.prospect_stage }}</td>
+        <td>{{ item.next_follow_up_date }}</td>
+        <td>{{ item.last_touch_at or "-" }}</td>
+        <td>{{ item.next_step or item.last_touchpoint_summary or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No overdue contractor follow-ups.</p>
+  {% endif %}
+
+  <h3>Upcoming Contractor Follow-Ups</h3>
+  {% if summary.upcoming_contractor_follow_ups %}
+  <table>
+    <thead>
+      <tr>
+        <th>Contractor</th>
+        <th>Stage</th>
+        <th>Follow Up Date</th>
+        <th>Last Touch</th>
+        <th>Next Step</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.upcoming_contractor_follow_ups %}
+      <tr>
+        <td><a href="/contractors/{{ item.contractor_id }}">{{ item.contractor_name }}</a></td>
+        <td>{{ item.prospect_stage }}</td>
+        <td>{{ item.next_follow_up_date }}</td>
+        <td>{{ item.last_touch_at or "-" }}</td>
+        <td>{{ item.next_step or item.last_touchpoint_summary or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No upcoming contractor follow-ups in the next 14 days.</p>
+  {% endif %}
+
   <h3>Active Pursuit Counts</h3>
   <ul>
     {% for stage, count in summary.active_pursuit_counts.items() %}

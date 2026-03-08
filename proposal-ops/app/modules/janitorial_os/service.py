@@ -1,7 +1,7 @@
 import csv
 import json
 from collections import Counter
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from typing import Any
 
@@ -18,6 +18,7 @@ from app.modules.janitorial_os.models import (
     ContractFacility,
     ContractRecord,
     Contractor,
+    ContractorTouchpoint,
     EvidenceRecord,
     Facility,
     IntelligenceNote,
@@ -35,8 +36,10 @@ from app.modules.janitorial_os.schemas import (
     ContractRecordCreate,
     ContractRecordResponse,
     ContractRecordUpdate,
+    ContractorTouchpointCreate,
     CreatePursuitFromContractRequest,
     DashboardContractSummary,
+    DashboardContractorFollowUpSummary,
     DashboardMatchSummary,
     DashboardOpportunitySummary,
     DashboardSummaryResponse,
@@ -447,8 +450,21 @@ class JanitorialOsService:
             contract_ids=contract_ids,
         )
 
-    def list_contractors(self) -> list[Contractor]:
-        stmt = select(Contractor).order_by(Contractor.name.asc())
+    def list_contractors(
+        self,
+        *,
+        prospect_stage: str | None = None,
+        follow_up_before: date | None = None,
+    ) -> list[Contractor]:
+        stmt = select(Contractor)
+        if prospect_stage:
+            stmt = stmt.where(Contractor.prospect_stage == prospect_stage)
+        if follow_up_before:
+            stmt = stmt.where(
+                Contractor.next_follow_up_date.is_not(None),
+                Contractor.next_follow_up_date <= follow_up_before,
+            )
+        stmt = stmt.order_by(Contractor.name.asc())
         return list(self.db.scalars(stmt))
 
     def get_contractor(self, contractor_id: str) -> Contractor | None:
@@ -473,6 +489,47 @@ class JanitorialOsService:
         self.db.commit()
         self.db.refresh(contractor)
         return contractor
+
+    def list_contractor_touchpoints(self, contractor_id: str) -> list[ContractorTouchpoint]:
+        stmt = (
+            select(ContractorTouchpoint)
+            .where(ContractorTouchpoint.contractor_id == contractor_id)
+            .order_by(ContractorTouchpoint.touchpoint_at.desc(), ContractorTouchpoint.created_at.desc())
+        )
+        return list(self.db.scalars(stmt))
+
+    def add_contractor_touchpoint(
+        self, contractor_id: str, payload: ContractorTouchpointCreate
+    ) -> ContractorTouchpoint:
+        contractor = self.db.get(Contractor, contractor_id)
+        if not contractor:
+            raise ValueError("Contractor not found.")
+        touchpoint = ContractorTouchpoint(contractor_id=contractor_id, **payload.model_dump())
+        self.db.add(touchpoint)
+        if contractor.last_touch_at is None or payload.touchpoint_at >= contractor.last_touch_at:
+            contractor.last_touch_at = payload.touchpoint_at
+        if payload.next_follow_up_date:
+            contractor.next_follow_up_date = payload.next_follow_up_date
+        self.db.commit()
+        self.db.refresh(touchpoint)
+        self.db.refresh(contractor)
+        return touchpoint
+
+    def _dashboard_follow_up_summary(self, contractor: Contractor) -> DashboardContractorFollowUpSummary:
+        latest_touchpoint = self.db.scalars(
+            select(ContractorTouchpoint)
+            .where(ContractorTouchpoint.contractor_id == contractor.id)
+            .order_by(ContractorTouchpoint.touchpoint_at.desc(), ContractorTouchpoint.created_at.desc())
+        ).first()
+        return DashboardContractorFollowUpSummary(
+            contractor_id=contractor.id,
+            contractor_name=contractor.name,
+            prospect_stage=contractor.prospect_stage,
+            next_follow_up_date=contractor.next_follow_up_date,
+            last_touch_at=contractor.last_touch_at,
+            last_touchpoint_summary=latest_touchpoint.summary if latest_touchpoint else None,
+            next_step=latest_touchpoint.next_step if latest_touchpoint else None,
+        )
 
     def _contract_value_factor(self, contract: ContractRecord) -> float:
         value = contract.estimated_annual_value or contract.estimated_total_value or 0.0
@@ -822,6 +879,8 @@ class JanitorialOsService:
         return commercial
 
     def dashboard_summary(self) -> DashboardSummaryResponse:
+        today = date.today()
+        upcoming_cutoff = today + timedelta(days=14)
         upcoming_contracts = self.list_contracts(rebid_within_days=180)[:8]
         opportunities = list(self.db.scalars(select(Opportunity).order_by(Opportunity.qualification_score.desc())))
         matches = list(
@@ -830,6 +889,13 @@ class JanitorialOsService:
             )
         )
         commercials = list(self.db.scalars(select(CommercialEngagement)))
+        contractors_with_follow_up = list(
+            self.db.scalars(
+                select(Contractor)
+                .where(Contractor.next_follow_up_date.is_not(None))
+                .order_by(Contractor.next_follow_up_date.asc(), Contractor.name.asc())
+            )
+        )
         organizations_total = self.db.scalar(select(func.count()).select_from(Organization)) or 0
         facilities_total = self.db.scalar(select(func.count()).select_from(Facility)) or 0
         contracts_total = self.db.scalar(select(func.count()).select_from(ContractRecord)) or 0
@@ -892,6 +958,17 @@ class JanitorialOsService:
                 )
             )
 
+        overdue_follow_ups = [
+            self._dashboard_follow_up_summary(contractor)
+            for contractor in contractors_with_follow_up
+            if contractor.next_follow_up_date and contractor.next_follow_up_date < today
+        ][:8]
+        upcoming_follow_ups = [
+            self._dashboard_follow_up_summary(contractor)
+            for contractor in contractors_with_follow_up
+            if contractor.next_follow_up_date and today <= contractor.next_follow_up_date <= upcoming_cutoff
+        ][:8]
+
         return DashboardSummaryResponse(
             generated_at=_utcnow(),
             organizations_total=organizations_total,
@@ -902,6 +979,8 @@ class JanitorialOsService:
             upcoming_rebids=upcoming_rebids,
             hottest_opportunities=hottest_opportunities,
             top_matches=top_matches,
+            overdue_contractor_follow_ups=overdue_follow_ups,
+            upcoming_contractor_follow_ups=upcoming_follow_ups,
             active_pursuit_counts=dict(active_counts),
             total_weighted_pipeline_value=total_pipeline,
             expected_consulting_revenue=expected_revenue,
@@ -999,6 +1078,8 @@ class JanitorialOsService:
                     municipal_experience=True,
                     scale_band="REGIONAL",
                     relationship_strength=4,
+                    prospect_stage="OUTREACH",
+                    next_follow_up_date=date.today(),
                     relationship_notes="Known local airport operations relationship.",
                 ),
                 Contractor(
@@ -1013,6 +1094,8 @@ class JanitorialOsService:
                     education_experience=True,
                     scale_band="REGIONAL",
                     relationship_strength=3,
+                    prospect_stage="DISCOVERY",
+                    next_follow_up_date=date.today(),
                 ),
             ]
         )

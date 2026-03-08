@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class OrganizationType(StrEnum):
@@ -42,6 +42,25 @@ class ProfileType(StrEnum):
     CONTRACTOR_FIT = "CONTRACTOR_FIT"
 
 
+class ContractorProspectStage(StrEnum):
+    TARGET = "TARGET"
+    OUTREACH = "OUTREACH"
+    DISCOVERY = "DISCOVERY"
+    QUALIFIED = "QUALIFIED"
+    ENGAGED = "ENGAGED"
+    PARKED = "PARKED"
+    DECLINED = "DECLINED"
+
+
+class ContractorTouchpointType(StrEnum):
+    EMAIL = "EMAIL"
+    CALL = "CALL"
+    MEETING = "MEETING"
+    INTRO = "INTRO"
+    FOLLOW_UP = "FOLLOW_UP"
+    NOTE = "NOTE"
+
+
 class PursuitStageOption(StrEnum):
     INTELLIGENCE = "INTELLIGENCE"
     EARLY_QUALIFICATION = "EARLY_QUALIFICATION"
@@ -51,6 +70,44 @@ class PursuitStageOption(StrEnum):
     AWARD = "AWARD"
     LOST = "LOST"
     DORMANT = "DORMANT"
+
+
+class ContractorScaleBand(StrEnum):
+    LOCAL = "LOCAL"
+    REGIONAL = "REGIONAL"
+    NATIONAL = "NATIONAL"
+
+
+class ContractorLaborProfile(StrEnum):
+    W2_SELF_PERFORM = "W2 self-perform"
+    MIXED_SELF_PERFORM_SUBS = "Mixed self-perform/subs"
+    SUBCONTRACT_HEAVY = "Subcontract-heavy"
+    FRANCHISE_NETWORK = "Franchise network"
+    UNKNOWN = "Unknown"
+
+
+class ContractorUnionProfile(StrEnum):
+    UNION = "Union"
+    NON_UNION = "Non-union"
+    MIXED = "Mixed"
+    UNKNOWN = "Unknown"
+
+
+def _choice_token(value: str) -> str:
+    return str(value).strip().upper().replace("-", "_").replace("/", "_").replace(" ", "_")
+
+
+def _coerce_enum_value(value: object, enum_cls: type[StrEnum]) -> object:
+    if value is None or isinstance(value, enum_cls):
+        return value
+    text = str(value).strip()
+    if not text:
+        return value
+    token = _choice_token(text)
+    for member in enum_cls:
+        if token in {_choice_token(member.name), _choice_token(member.value)}:
+            return member.value
+    return value
 
 
 class OrganizationBase(BaseModel):
@@ -199,33 +256,112 @@ class ContractorBase(BaseModel):
     headquarters_city: str | None = Field(default=None, max_length=120)
     headquarters_state: str | None = Field(default=None, max_length=40)
     vertical_experience: str | None = None
-    labor_profile: str | None = Field(default=None, max_length=80)
-    union_profile: str | None = Field(default=None, max_length=80)
+    labor_profile: ContractorLaborProfile | None = None
+    union_profile: ContractorUnionProfile | None = None
     diversity_certs: str | None = None
     airport_experience: bool = False
     healthcare_experience: bool = False
     education_experience: bool = False
     municipal_experience: bool = False
-    scale_band: str = Field(default="REGIONAL", min_length=2, max_length=30)
+    scale_band: ContractorScaleBand = ContractorScaleBand.REGIONAL
     relationship_strength: int = Field(default=3, ge=1, le=5)
+    prospect_stage: ContractorProspectStage = ContractorProspectStage.TARGET
+    next_follow_up_date: date | None = None
     relationship_notes: str | None = None
     strategic_fit_notes: str | None = None
 
 
 class ContractorCreate(ContractorBase):
-    pass
+    @field_validator("labor_profile", mode="before")
+    @classmethod
+    def _normalize_labor_profile(cls, value: object) -> object:
+        if value in {None, ""}:
+            return None
+        return _coerce_enum_value(value, ContractorLaborProfile)
+
+    @field_validator("union_profile", mode="before")
+    @classmethod
+    def _normalize_union_profile(cls, value: object) -> object:
+        if value in {None, ""}:
+            return None
+        return _coerce_enum_value(value, ContractorUnionProfile)
+
+    @field_validator("scale_band", mode="before")
+    @classmethod
+    def _normalize_scale_band(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContractorScaleBand)
+
+    @field_validator("prospect_stage", mode="before")
+    @classmethod
+    def _normalize_prospect_stage(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContractorProspectStage)
 
 
 class ContractorUpdate(ContractorBase):
-    pass
+    @field_validator("labor_profile", mode="before")
+    @classmethod
+    def _normalize_labor_profile(cls, value: object) -> object:
+        if value in {None, ""}:
+            return None
+        return _coerce_enum_value(value, ContractorLaborProfile)
+
+    @field_validator("union_profile", mode="before")
+    @classmethod
+    def _normalize_union_profile(cls, value: object) -> object:
+        if value in {None, ""}:
+            return None
+        return _coerce_enum_value(value, ContractorUnionProfile)
+
+    @field_validator("scale_band", mode="before")
+    @classmethod
+    def _normalize_scale_band(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContractorScaleBand)
+
+    @field_validator("prospect_stage", mode="before")
+    @classmethod
+    def _normalize_prospect_stage(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContractorProspectStage)
 
 
 class ContractorResponse(ContractorBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
+    labor_profile: str | None = None
+    union_profile: str | None = None
+    scale_band: str
+    prospect_stage: str
+    last_touch_at: datetime | None = None
     created_at: datetime
     updated_at: datetime
+
+
+class ContractorTouchpointCreate(BaseModel):
+    contact_name: str | None = Field(default=None, max_length=120)
+    touchpoint_type: ContractorTouchpointType = ContractorTouchpointType.NOTE
+    touchpoint_at: datetime
+    summary: str = Field(min_length=5)
+    next_step: str | None = None
+    next_follow_up_date: date | None = None
+
+    @field_validator("touchpoint_type", mode="before")
+    @classmethod
+    def _normalize_touchpoint_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContractorTouchpointType)
+
+
+class ContractorTouchpointResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    contractor_id: str
+    contact_name: str | None
+    touchpoint_type: ContractorTouchpointType
+    touchpoint_at: datetime
+    summary: str
+    next_step: str | None
+    next_follow_up_date: date | None
+    created_at: datetime
 
 
 class CreatePursuitFromContractRequest(BaseModel):
@@ -420,6 +556,16 @@ class DashboardMatchSummary(BaseModel):
     match_score: float
 
 
+class DashboardContractorFollowUpSummary(BaseModel):
+    contractor_id: str
+    contractor_name: str
+    prospect_stage: str
+    next_follow_up_date: date
+    last_touch_at: datetime | None
+    last_touchpoint_summary: str | None
+    next_step: str | None
+
+
 class DashboardSummaryResponse(BaseModel):
     generated_at: datetime
     organizations_total: int
@@ -430,6 +576,8 @@ class DashboardSummaryResponse(BaseModel):
     upcoming_rebids: list[DashboardContractSummary]
     hottest_opportunities: list[DashboardOpportunitySummary]
     top_matches: list[DashboardMatchSummary]
+    overdue_contractor_follow_ups: list[DashboardContractorFollowUpSummary]
+    upcoming_contractor_follow_ups: list[DashboardContractorFollowUpSummary]
     active_pursuit_counts: dict[str, int]
     total_weighted_pipeline_value: float
     expected_consulting_revenue: float
