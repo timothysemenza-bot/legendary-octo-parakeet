@@ -7,6 +7,37 @@
   <p><strong>Confidence:</strong> {{ detail.confidence_level }} | <strong>Expected RFP Date:</strong> {{ detail.expected_rfp_date or '-' }}</p>
   <p><strong>Provenance:</strong> {{ detail.provenance_summary or '-' }}</p>
 
+  <h3>Advised Contractor Context</h3>
+  {% if contractor_context %}
+  <p>
+    <a href="/contractors/{{ contractor_context.contractor.id }}">{{ contractor_context.contractor.name }}</a>
+    | {{ contractor_context.contractor.prospect_stage }}
+    | Next Follow Up {{ contractor_context.contractor.next_follow_up_date or '-' }}
+    | Last Touch {{ contractor_context.contractor.last_touch_at or '-' }}
+  </p>
+  <p><strong>Relationship Notes:</strong> {{ contractor_context.contractor.relationship_notes or '-' }}</p>
+  <p><strong>Strategic Fit Notes:</strong> {{ contractor_context.contractor.strategic_fit_notes or '-' }}</p>
+  {% if contractor_context.recent_touchpoints %}
+  <ul>
+    {% for item in contractor_context.recent_touchpoints %}
+    <li>{{ item.touchpoint_at }} | {{ item.touchpoint_type }} | {{ item.summary }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No recent touchpoints logged for this contractor.</p>
+  {% endif %}
+  {% if contractor_context.linked_opportunities %}
+  <p><strong>Other Linked Opportunities:</strong></p>
+  <ul>
+    {% for item in contractor_context.linked_opportunities %}
+    <li><a href="/opportunities/{{ item.opportunity_id }}/capture-workbench">{{ item.opportunity_name }}</a> | {{ item.pursuit_stage }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% else %}
+  <p>No advised contractor linked yet.</p>
+  {% endif %}
+
   <h3>Contractor Matching</h3>
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/matches">
     <button type="submit">Refresh Matches</button>
@@ -35,7 +66,7 @@
       <select name="contractor_id">
         <option value="">None</option>
         {% for contractor in contractors %}
-        <option value="{{ contractor.id }}">{{ contractor.name }}</option>
+        <option value="{{ contractor.id }}" {% if advised_contractor_id == contractor.id %}selected{% endif %}>{{ contractor.name }}</option>
         {% endfor %}
       </select>
     </label>

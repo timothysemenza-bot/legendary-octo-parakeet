@@ -1408,6 +1408,7 @@ def capture_workbench_view(request: Request, opportunity_id: str, db: Session = 
     evidence = service.list_evidence(opportunity_id)
     actions = service.list_capture_actions(opportunity_id)
     commercial = service.get_commercial(opportunity_id)
+    contractor_context = service.get_capture_workbench_contractor_context(opportunity_id)
     return templates.TemplateResponse(
         request=request,
         name="capture_workbench.html",
@@ -1420,6 +1421,8 @@ def capture_workbench_view(request: Request, opportunity_id: str, db: Session = 
             "actions": actions,
             "commercial": _commercial_response(db, commercial) if commercial else None,
             "contractors": service.list_contractors(),
+            "contractor_context": contractor_context,
+            "advised_contractor_id": contractor_context.contractor.id if contractor_context else None,
         },
     )
 

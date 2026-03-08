@@ -306,6 +306,8 @@ def test_contractor_handoff_and_opportunity_link_api(client: TestClient) -> None
     assert linked.status_code == 200
     assert linked.json()["opportunity_id"] == existing_opp_id
     assert linked.json()["commercial_id"] == commercial_id
+    assert linked.json()["organization_name"]
+    assert linked.json()["weighted_expected_value"] is not None
 
     linked_again = client.post(
         f"/api/contractors/{contractor_id}/opportunity-links",

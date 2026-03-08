@@ -131,7 +131,11 @@
     {% for item in linked_opportunities %}
     <li>
       <a href="/opportunities/{{ item.opportunity_id }}">{{ item.opportunity_name }}</a>
-      | {{ item.pursuit_stage }}
+      | {{ item.organization_name or '-' }}
+      | {{ item.pursuit_stage }} / {{ item.proposal_stage }}
+      | Confidence {{ item.confidence_level }}
+      | Weighted Pipeline {{ item.weighted_pipeline_value or '-' }}
+      | Weighted EV {{ item.weighted_expected_value or '-' }}
       | <a href="/opportunities/{{ item.opportunity_id }}/capture-workbench">Capture Workbench</a>
     </li>
     {% endfor %}

@@ -405,6 +405,12 @@ class ContractorOpportunityLinkResponse(BaseModel):
     contractor_name: str
 
 
+class ContractorWorkbenchContextResponse(BaseModel):
+    contractor: ContractorResponse
+    recent_touchpoints: list[ContractorTouchpointResponse]
+    linked_opportunities: list[ContractorOpportunityLinkResponse]
+
+
 class CreatePursuitFromContractRequest(BaseModel):
     title: str | None = Field(default=None, max_length=255)
     primary_facility_id: str | None = None

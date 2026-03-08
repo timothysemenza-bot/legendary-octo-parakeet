@@ -225,6 +225,7 @@ def test_contractor_prospecting_ui(client: TestClient) -> None:
 def test_contractor_handoff_ui(client: TestClient) -> None:
     client.post("/api/dashboard/seed-demo")
     today = date.today()
+    touchpoint_at = datetime.combine(today, time(hour=10, minute=15)).isoformat()
 
     contractor = client.post(
         "/api/contractors",
@@ -249,6 +250,18 @@ def test_contractor_handoff_ui(client: TestClient) -> None:
             "strategic_fit_notes": "Strong airport positioning.",
         },
     ).json()
+    touchpoint = client.post(
+        f"/api/contractors/{contractor['id']}/touchpoints",
+        json={
+            "contact_name": "Jordan Lee",
+            "touchpoint_type": "MEETING",
+            "touchpoint_at": touchpoint_at,
+            "summary": "Reviewed capture posture and transition expectations.",
+            "next_step": "Move contractor into active pursuit planning.",
+            "next_follow_up_date": (today + timedelta(days=5)).isoformat(),
+        },
+    )
+    assert touchpoint.status_code == 200
     contract = client.get("/api/contracts").json()[0]
 
     detail_path = f"/contractors/{contractor['id']}"
@@ -287,11 +300,16 @@ def test_contractor_handoff_ui(client: TestClient) -> None:
     workbench = client.get(handoff.headers["location"])
     assert workbench.status_code == 200
     assert "UI Handoff Pursuit" in workbench.text
+    assert "Advised Contractor Context" in workbench.text
+    assert "UI Handoff Services" in workbench.text
+    assert "Reviewed capture posture and transition expectations." in workbench.text
+    assert f"/contractors/{contractor['id']}" in workbench.text
 
     refreshed_detail = client.get(detail_path)
     assert refreshed_detail.status_code == 200
     assert "UI Handoff Pursuit" in refreshed_detail.text
     assert "/capture-workbench" in refreshed_detail.text
+    assert "Weighted Pipeline" in refreshed_detail.text
 
     existing = client.post(
         f"/api/contracts/{contract['id']}/pursuits",

@@ -39,7 +39,10 @@ from app.modules.janitorial_os.schemas import (
     ContractorOpportunityLinkCreate,
     ContractorOpportunityLinkResponse,
     ContractorPursuitHandoffCreate,
+    ContractorResponse,
     ContractorTouchpointCreate,
+    ContractorTouchpointResponse,
+    ContractorWorkbenchContextResponse,
     CreatePursuitFromContractRequest,
     DashboardContractSummary,
     DashboardContractorFollowUpSummary,
@@ -580,6 +583,30 @@ class JanitorialOsService:
             if summary:
                 links.append(summary)
         return links
+
+    def get_capture_workbench_contractor_context(
+        self, opportunity_id: str
+    ) -> ContractorWorkbenchContextResponse | None:
+        commercial = self.get_commercial(opportunity_id)
+        if not commercial or not commercial.contractor_id:
+            return None
+        contractor = self.db.get(Contractor, commercial.contractor_id)
+        if not contractor:
+            return None
+        recent_touchpoints = [
+            ContractorTouchpointResponse.model_validate(row, from_attributes=True)
+            for row in self.list_recent_contractor_touchpoints(contractor.id, limit=5)
+        ]
+        linked_opportunities = [
+            item
+            for item in self.list_contractor_opportunity_links(contractor.id)
+            if item.opportunity_id != opportunity_id
+        ]
+        return ContractorWorkbenchContextResponse(
+            contractor=ContractorResponse.model_validate(contractor, from_attributes=True),
+            recent_touchpoints=recent_touchpoints,
+            linked_opportunities=linked_opportunities,
+        )
 
     def create_pursuit_from_contractor_handoff(
         self, contractor_id: str, payload: ContractorPursuitHandoffCreate
