@@ -36,6 +36,9 @@ from app.modules.janitorial_os.schemas import (
     ContractRecordCreate,
     ContractRecordResponse,
     ContractRecordUpdate,
+    ContractorOpportunityLinkCreate,
+    ContractorOpportunityLinkResponse,
+    ContractorPursuitHandoffCreate,
     ContractorTouchpointCreate,
     CreatePursuitFromContractRequest,
     DashboardContractSummary,
@@ -470,6 +473,14 @@ class JanitorialOsService:
     def get_contractor(self, contractor_id: str) -> Contractor | None:
         return self.db.get(Contractor, contractor_id)
 
+    def list_linkable_opportunities(self) -> list[Opportunity]:
+        stmt = (
+            select(Opportunity)
+            .where(Opportunity.pursuit_stage.not_in(["AWARD", "LOST", "DORMANT"]))
+            .order_by(Opportunity.expected_rfp_date.asc().nulls_last(), Opportunity.updated_at.desc())
+        )
+        return list(self.db.scalars(stmt))
+
     def create_contractor(self, payload: Any) -> Contractor:
         existing = self.db.scalars(select(Contractor).where(Contractor.name == payload.name)).first()
         if existing:
@@ -498,6 +509,17 @@ class JanitorialOsService:
         )
         return list(self.db.scalars(stmt))
 
+    def list_recent_contractor_touchpoints(
+        self, contractor_id: str, *, limit: int = 5
+    ) -> list[ContractorTouchpoint]:
+        stmt = (
+            select(ContractorTouchpoint)
+            .where(ContractorTouchpoint.contractor_id == contractor_id)
+            .order_by(ContractorTouchpoint.touchpoint_at.desc(), ContractorTouchpoint.created_at.desc())
+            .limit(limit)
+        )
+        return list(self.db.scalars(stmt))
+
     def add_contractor_touchpoint(
         self, contractor_id: str, payload: ContractorTouchpointCreate
     ) -> ContractorTouchpoint:
@@ -514,6 +536,109 @@ class JanitorialOsService:
         self.db.refresh(touchpoint)
         self.db.refresh(contractor)
         return touchpoint
+
+    def _contractor_opportunity_link_summary(
+        self, contractor: Contractor, commercial: CommercialEngagement
+    ) -> ContractorOpportunityLinkResponse | None:
+        opportunity = self.db.get(Opportunity, commercial.opportunity_id)
+        if not opportunity:
+            return None
+        organization = self.db.get(Organization, opportunity.buying_organization_id) if opportunity.buying_organization_id else None
+        contract = self.db.get(ContractRecord, opportunity.primary_contract_id) if opportunity.primary_contract_id else None
+        return ContractorOpportunityLinkResponse(
+            commercial_id=commercial.id,
+            opportunity_id=opportunity.id,
+            opportunity_name=opportunity.name,
+            organization_name=organization.name if organization else opportunity.client,
+            pursuit_stage=opportunity.pursuit_stage,
+            proposal_stage=opportunity.proposal_stage,
+            confidence_level=opportunity.confidence_level,
+            expected_rfp_date=opportunity.expected_rfp_date,
+            primary_contract_title=contract.title if contract else None,
+            weighted_pipeline_value=opportunity.weighted_pipeline_value,
+            weighted_expected_value=commercial.weighted_expected_value,
+            contractor_id=contractor.id,
+            contractor_name=contractor.name,
+        )
+
+    def list_contractor_opportunity_links(
+        self, contractor_id: str
+    ) -> list[ContractorOpportunityLinkResponse]:
+        contractor = self.db.get(Contractor, contractor_id)
+        if not contractor:
+            raise ValueError("Contractor not found.")
+        commercials = list(
+            self.db.scalars(
+                select(CommercialEngagement)
+                .where(CommercialEngagement.contractor_id == contractor_id)
+                .order_by(CommercialEngagement.updated_at.desc())
+            )
+        )
+        links: list[ContractorOpportunityLinkResponse] = []
+        for commercial in commercials:
+            summary = self._contractor_opportunity_link_summary(contractor, commercial)
+            if summary:
+                links.append(summary)
+        return links
+
+    def create_pursuit_from_contractor_handoff(
+        self, contractor_id: str, payload: ContractorPursuitHandoffCreate
+    ) -> Opportunity:
+        contractor = self.db.get(Contractor, contractor_id)
+        if not contractor:
+            raise ValueError("Contractor not found.")
+        opportunity = self.create_pursuit_from_contract(
+            payload.contract_id,
+            CreatePursuitFromContractRequest.model_validate(payload.model_dump(exclude={"contract_id"})),
+        )
+        commercial = self.link_contractor_to_opportunity(
+            contractor_id,
+            ContractorOpportunityLinkCreate(opportunity_id=opportunity.id, actor=payload.actor),
+        )
+        log_audit_event(
+            self.db,
+            opportunity_id=opportunity.id,
+            actor=payload.actor,
+            action="contractor_handoff_seeded",
+            after_state_json=json.dumps(
+                {
+                    "contractor_id": contractor.id,
+                    "commercial_id": commercial.id,
+                }
+            ),
+        )
+        self.db.commit()
+        self.db.refresh(opportunity)
+        return opportunity
+
+    def link_contractor_to_opportunity(
+        self, contractor_id: str, payload: ContractorOpportunityLinkCreate
+    ) -> CommercialEngagement:
+        contractor = self.db.get(Contractor, contractor_id)
+        if not contractor:
+            raise ValueError("Contractor not found.")
+        opportunity = self.db.get(Opportunity, payload.opportunity_id)
+        if not opportunity:
+            raise ValueError("Opportunity not found.")
+        commercial = self.upsert_commercial(
+            payload.opportunity_id,
+            CommercialCreate(contractor_id=contractor_id),
+        )
+        log_audit_event(
+            self.db,
+            opportunity_id=opportunity.id,
+            actor=payload.actor,
+            action="contractor_linked_to_opportunity",
+            after_state_json=json.dumps(
+                {
+                    "contractor_id": contractor.id,
+                    "commercial_id": commercial.id,
+                }
+            ),
+        )
+        self.db.commit()
+        self.db.refresh(commercial)
+        return commercial
 
     def _dashboard_follow_up_summary(self, contractor: Contractor) -> DashboardContractorFollowUpSummary:
         latest_touchpoint = self.db.scalars(
@@ -863,7 +988,7 @@ class JanitorialOsService:
         if not commercial:
             commercial = CommercialEngagement(opportunity_id=opportunity_id)
             self.db.add(commercial)
-        for key, value in payload.model_dump().items():
+        for key, value in payload.model_dump(exclude_unset=True).items():
             setattr(commercial, key, value)
         if commercial.projected_payout_amount is None:
             if commercial.success_fee_type == "FIXED":

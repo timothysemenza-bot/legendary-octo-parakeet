@@ -27,7 +27,10 @@ from app.modules.janitorial_os.schemas import (
     ContractRecordCreate,
     ContractRecordResponse,
     ContractRecordUpdate,
+    ContractorOpportunityLinkCreate,
+    ContractorOpportunityLinkResponse,
     ContractorLaborProfile,
+    ContractorPursuitHandoffCreate,
     ContractorProspectStage,
     ContractorCreate,
     ContractorResponse,
@@ -117,6 +120,35 @@ def _contractor_response(row: Contractor) -> ContractorResponse:
 
 def _touchpoint_response(row: ContractorTouchpoint) -> ContractorTouchpointResponse:
     return ContractorTouchpointResponse.model_validate(row, from_attributes=True)
+
+
+def _contractor_detail_context(
+    db: Session,
+    service: JanitorialOsService,
+    contractor: Contractor,
+    *,
+    errors: list[str] | None = None,
+    handoff_form_data: dict | None = None,
+    link_form_data: dict | None = None,
+) -> dict:
+    contracts = [
+        response
+        for row in service.list_contracts()
+        if (response := service.get_contract_response(row.id)) is not None
+    ]
+    return _with_contractor_form_options(
+        {
+            "contractor": contractor,
+            "touchpoints": service.list_contractor_touchpoints(contractor.id),
+            "contracts": contracts,
+            "facilities": service.list_facilities(),
+            "opportunities": service.list_linkable_opportunities(),
+            "linked_opportunities": service.list_contractor_opportunity_links(contractor.id),
+            "errors": errors or [],
+            "handoff_form_data": handoff_form_data or {},
+            "link_form_data": link_form_data or {},
+        }
+    )
 
 
 def _match_response(row: OpportunityMatch) -> OpportunityMatchResponse:
@@ -404,6 +436,38 @@ def create_contractor_touchpoint(
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
+@api_router.get(
+    "/api/contractors/{contractor_id}/opportunity-links",
+    response_model=list[ContractorOpportunityLinkResponse],
+)
+def list_contractor_opportunity_links(
+    contractor_id: str, db: Session = Depends(get_db)
+) -> list[ContractorOpportunityLinkResponse]:
+    service = JanitorialOsService(db)
+    try:
+        return service.list_contractor_opportunity_links(contractor_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@api_router.post(
+    "/api/contractors/{contractor_id}/opportunity-links",
+    response_model=ContractorOpportunityLinkResponse,
+)
+def create_contractor_opportunity_link(
+    contractor_id: str,
+    payload: ContractorOpportunityLinkCreate,
+    db: Session = Depends(get_db),
+) -> ContractorOpportunityLinkResponse:
+    service = JanitorialOsService(db)
+    try:
+        service.link_contractor_to_opportunity(contractor_id, payload)
+        links = service.list_contractor_opportunity_links(contractor_id)
+        return next(item for item in links if item.opportunity_id == payload.opportunity_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
 @api_router.get("/api/scoring/profiles", response_model=list[ScoringProfileResponse])
 def list_scoring_profiles(profile_type: ProfileType, db: Session = Depends(get_db)) -> list[ScoringProfileResponse]:
     service = JanitorialOsService(db)
@@ -431,6 +495,23 @@ def create_pursuit_from_contract(
     service = JanitorialOsService(db)
     try:
         opportunity = service.create_pursuit_from_contract(contract_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    detail = OpportunityIntakeService(db).get_detail(opportunity.id)
+    if not detail:
+        raise HTTPException(status_code=404, detail="Created opportunity was not found")
+    return detail
+
+
+@api_router.post("/api/contractors/{contractor_id}/pursuits", response_model=OpportunityDetailResponse)
+def create_pursuit_from_contractor_handoff(
+    contractor_id: str,
+    payload: ContractorPursuitHandoffCreate,
+    db: Session = Depends(get_db),
+) -> OpportunityDetailResponse:
+    service = JanitorialOsService(db)
+    try:
+        opportunity = service.create_pursuit_from_contractor_handoff(contractor_id, payload)
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     detail = OpportunityIntakeService(db).get_detail(opportunity.id)
@@ -1078,13 +1159,7 @@ def contractor_detail_view(request: Request, contractor_id: str, db: Session = D
     return templates.TemplateResponse(
         request=request,
         name="contractor_detail.html",
-        context=_with_contractor_form_options(
-            {
-                "contractor": contractor,
-                "touchpoints": service.list_contractor_touchpoints(contractor_id),
-                "errors": [],
-            }
-        ),
+        context=_contractor_detail_context(db, service, contractor),
     )
 
 
@@ -1145,13 +1220,7 @@ def contractor_update_web(
         return templates.TemplateResponse(
             request=request,
             name="contractor_detail.html",
-            context=_with_contractor_form_options(
-                {
-                    "contractor": contractor,
-                    "touchpoints": service.list_contractor_touchpoints(contractor_id),
-                    "errors": errors,
-                }
-            ),
+            context=_contractor_detail_context(db, service, contractor, errors=errors),
             status_code=422,
         )
     except ValueError as exc:
@@ -1192,12 +1261,105 @@ def contractor_touchpoint_create_web(
         return templates.TemplateResponse(
             request=request,
             name="contractor_detail.html",
-            context=_with_contractor_form_options(
-                {
-                    "contractor": contractor,
-                    "touchpoints": service.list_contractor_touchpoints(contractor_id),
-                    "errors": errors,
-                }
+            context=_contractor_detail_context(db, service, contractor, errors=errors),
+            status_code=422,
+        )
+
+
+@web_router.post("/contractors/{contractor_id}/pursuits")
+def contractor_create_pursuit_handoff_web(
+    request: Request,
+    contractor_id: str,
+    contract_id: str = Form(...),
+    title: str = Form(""),
+    primary_facility_id: str = Form(""),
+    pursuit_stage: str = Form("INTELLIGENCE"),
+    confidence_level: str = Form("MEDIUM"),
+    expected_rfp_date: str = Form(""),
+    provenance_summary: str = Form(...),
+    strategic_fit: str = Form("3"),
+    incumbent_vulnerability: str = Form("3"),
+    rebid_probability: str = Form("3"),
+    relationship_access: str = Form("3"),
+    contractor_fit: str = Form("3"),
+    operational_complexity: str = Form("3"),
+    margin_potential: str = Form("3"),
+    pre_rfp_influence: str = Form("3"),
+    timeline_urgency: str = Form("3"),
+    actor: str = Form("operator"),
+    db: Session = Depends(get_db),
+) -> Response:
+    service = JanitorialOsService(db)
+    raw = {
+        "contract_id": contract_id,
+        "title": title or None,
+        "primary_facility_id": primary_facility_id or None,
+        "pursuit_stage": pursuit_stage,
+        "confidence_level": confidence_level,
+        "expected_rfp_date": expected_rfp_date or None,
+        "provenance_summary": provenance_summary,
+        "strategic_fit": strategic_fit,
+        "incumbent_vulnerability": incumbent_vulnerability,
+        "rebid_probability": rebid_probability,
+        "relationship_access": relationship_access,
+        "contractor_fit": contractor_fit,
+        "operational_complexity": operational_complexity,
+        "margin_potential": margin_potential,
+        "pre_rfp_influence": pre_rfp_influence,
+        "timeline_urgency": timeline_urgency,
+        "actor": actor,
+    }
+    try:
+        payload = ContractorPursuitHandoffCreate.model_validate(raw)
+        opportunity = service.create_pursuit_from_contractor_handoff(contractor_id, payload)
+        return RedirectResponse(url=f"/opportunities/{opportunity.id}/capture-workbench", status_code=303)
+    except (ValidationError, ValueError) as exc:
+        contractor = service.get_contractor(contractor_id)
+        if not contractor:
+            raise HTTPException(status_code=404, detail="Contractor not found") from exc
+        errors = _validation_errors(exc) if isinstance(exc, ValidationError) else [str(exc)]
+        return templates.TemplateResponse(
+            request=request,
+            name="contractor_detail.html",
+            context=_contractor_detail_context(
+                db,
+                service,
+                contractor,
+                errors=errors,
+                handoff_form_data=raw,
+            ),
+            status_code=422,
+        )
+
+
+@web_router.post("/contractors/{contractor_id}/opportunity-links")
+def contractor_link_opportunity_web(
+    request: Request,
+    contractor_id: str,
+    opportunity_id: str = Form(...),
+    actor: str = Form("operator"),
+    db: Session = Depends(get_db),
+) -> Response:
+    service = JanitorialOsService(db)
+    raw = {"opportunity_id": opportunity_id, "actor": actor}
+    try:
+        payload = ContractorOpportunityLinkCreate.model_validate(raw)
+        service.link_contractor_to_opportunity(contractor_id, payload)
+        return RedirectResponse(url=f"/contractors/{contractor_id}", status_code=303)
+    except (ValidationError, ValueError) as exc:
+        contractor = service.get_contractor(contractor_id)
+        if not contractor:
+            raise HTTPException(status_code=404, detail="Contractor not found") from exc
+        errors = _validation_errors(exc) if isinstance(exc, ValidationError) else [str(exc)]
+        return templates.TemplateResponse(
+            request=request,
+            name="contractor_detail.html",
+            context=_contractor_detail_context(
+                db,
+                service,
+                contractor,
+                errors=errors,
+                link_form_data=raw,
             ),
             status_code=422,
         )

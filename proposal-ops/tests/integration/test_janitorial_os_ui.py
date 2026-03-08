@@ -220,3 +220,105 @@ def test_contractor_prospecting_ui(client: TestClient) -> None:
     assert touchpoint.status_code == 200
     assert "Intro call completed with regional growth lead." in touchpoint.text
     assert "Last Touch" in touchpoint.text
+
+
+def test_contractor_handoff_ui(client: TestClient) -> None:
+    client.post("/api/dashboard/seed-demo")
+    today = date.today()
+
+    contractor = client.post(
+        "/api/contractors",
+        json={
+            "name": "UI Handoff Services",
+            "service_geographies": "NJ",
+            "headquarters_city": "Trenton",
+            "headquarters_state": "NJ",
+            "vertical_experience": "airport",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "non-union",
+            "diversity_certs": "WBE",
+            "airport_experience": True,
+            "healthcare_experience": False,
+            "education_experience": False,
+            "municipal_experience": False,
+            "scale_band": "REGIONAL",
+            "relationship_strength": 4,
+            "prospect_stage": "ENGAGED",
+            "next_follow_up_date": (today + timedelta(days=7)).isoformat(),
+            "relationship_notes": "Ready to move into active pursuit work.",
+            "strategic_fit_notes": "Strong airport positioning.",
+        },
+    ).json()
+    contract = client.get("/api/contracts").json()[0]
+
+    detail_path = f"/contractors/{contractor['id']}"
+    detail = client.get(detail_path)
+    assert detail.status_code == 200
+    assert "Create Pursuit Handoff" in detail.text
+    assert "Link To Existing Opportunity" in detail.text
+    assert "Linked Opportunities" in detail.text
+
+    handoff = client.post(
+        f"{detail_path}/pursuits",
+        data={
+            "contract_id": contract["id"],
+            "title": "UI Handoff Pursuit",
+            "primary_facility_id": contract["facility_ids"][0],
+            "pursuit_stage": "PRE_RFP_CAPTURE",
+            "confidence_level": "HIGH",
+            "expected_rfp_date": (today + timedelta(days=45)).isoformat(),
+            "provenance_summary": "Created from the contractor detail handoff form.",
+            "strategic_fit": "4",
+            "incumbent_vulnerability": "3",
+            "rebid_probability": "4",
+            "relationship_access": "4",
+            "contractor_fit": "5",
+            "operational_complexity": "3",
+            "margin_potential": "4",
+            "pre_rfp_influence": "4",
+            "timeline_urgency": "3",
+            "actor": "operator",
+        },
+        follow_redirects=False,
+    )
+    assert handoff.status_code == 303
+    assert "/capture-workbench" in handoff.headers["location"]
+
+    workbench = client.get(handoff.headers["location"])
+    assert workbench.status_code == 200
+    assert "UI Handoff Pursuit" in workbench.text
+
+    refreshed_detail = client.get(detail_path)
+    assert refreshed_detail.status_code == 200
+    assert "UI Handoff Pursuit" in refreshed_detail.text
+    assert "/capture-workbench" in refreshed_detail.text
+
+    existing = client.post(
+        f"/api/contracts/{contract['id']}/pursuits",
+        json={
+            "title": "Existing UI Linked Pursuit",
+            "primary_facility_id": contract["facility_ids"][0],
+            "pursuit_stage": "INTELLIGENCE",
+            "confidence_level": "MEDIUM",
+            "expected_rfp_date": (today + timedelta(days=60)).isoformat(),
+            "provenance_summary": "Created to test contractor linking.",
+            "strategic_fit": 3,
+            "incumbent_vulnerability": 3,
+            "rebid_probability": 3,
+            "relationship_access": 2,
+            "contractor_fit": 2,
+            "operational_complexity": 3,
+            "margin_potential": 3,
+            "pre_rfp_influence": 2,
+            "timeline_urgency": 2,
+            "actor": "operator",
+        },
+    ).json()
+
+    linked = client.post(
+        f"{detail_path}/opportunity-links",
+        data={"opportunity_id": existing["id"], "actor": "operator"},
+        follow_redirects=True,
+    )
+    assert linked.status_code == 200
+    assert "Existing UI Linked Pursuit" in linked.text

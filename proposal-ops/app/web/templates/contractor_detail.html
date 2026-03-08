@@ -17,6 +17,7 @@
   <p><strong>Relationship Strength:</strong> {{ contractor.relationship_strength }}/5</p>
   <p><strong>Vertical Experience:</strong> {{ contractor.vertical_experience or '-' }}</p>
   <p><strong>Diversity Certs:</strong> {{ contractor.diversity_certs or '-' }}</p>
+  <p><strong>Relationship Notes:</strong> {{ contractor.relationship_notes or '-' }}</p>
   <p><strong>Strategic Fit Notes:</strong> {{ contractor.strategic_fit_notes or '-' }}</p>
 
   <h3>Edit Contractor</h3>
@@ -73,6 +74,71 @@
     <label>Strategic Fit Notes <textarea name="strategic_fit_notes">{{ contractor.strategic_fit_notes or '' }}</textarea></label>
     <button type="submit">Save Contractor</button>
   </form>
+
+  <h3>Create Pursuit Handoff</h3>
+  <form method="post" action="/contractors/{{ contractor.id }}/pursuits">
+    <label>Contract
+      <select name="contract_id" required>
+        <option value="">Select Contract</option>
+        {% for item in contracts %}
+        <option value="{{ item.id }}" {% if handoff_form_data.contract_id == item.id %}selected{% endif %}>{{ item.title }} | {{ item.organization_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Pursuit Title <input name="title" value="{{ handoff_form_data.title or '' }}" /></label>
+    <label>Primary Facility
+      <select name="primary_facility_id">
+        <option value="">None</option>
+        {% for item in facilities %}
+        <option value="{{ item.id }}" {% if handoff_form_data.primary_facility_id == item.id %}selected{% endif %}>{{ item.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Pursuit Stage <input name="pursuit_stage" value="{{ handoff_form_data.pursuit_stage or 'INTELLIGENCE' }}" /></label>
+    <label>Confidence <input name="confidence_level" value="{{ handoff_form_data.confidence_level or 'MEDIUM' }}" /></label>
+    <label>Expected RFP Date <input type="date" name="expected_rfp_date" value="{{ handoff_form_data.expected_rfp_date or '' }}" /></label>
+    <label>Provenance Summary <textarea name="provenance_summary" required>{{ handoff_form_data.provenance_summary or ('Contractor handoff from ' ~ contractor.name ~ '.') }}</textarea></label>
+    <label>Strategic Fit <input name="strategic_fit" value="{{ handoff_form_data.strategic_fit or '3' }}" /></label>
+    <label>Incumbent Vulnerability <input name="incumbent_vulnerability" value="{{ handoff_form_data.incumbent_vulnerability or '3' }}" /></label>
+    <label>Rebid Probability <input name="rebid_probability" value="{{ handoff_form_data.rebid_probability or '3' }}" /></label>
+    <label>Relationship Access <input name="relationship_access" value="{{ handoff_form_data.relationship_access or contractor.relationship_strength }}" /></label>
+    <label>Contractor Fit <input name="contractor_fit" value="{{ handoff_form_data.contractor_fit or '4' }}" /></label>
+    <label>Operational Complexity <input name="operational_complexity" value="{{ handoff_form_data.operational_complexity or '3' }}" /></label>
+    <label>Margin Potential <input name="margin_potential" value="{{ handoff_form_data.margin_potential or '3' }}" /></label>
+    <label>Pre-RFP Influence <input name="pre_rfp_influence" value="{{ handoff_form_data.pre_rfp_influence or '3' }}" /></label>
+    <label>Timeline Urgency <input name="timeline_urgency" value="{{ handoff_form_data.timeline_urgency or '3' }}" /></label>
+    <label>Actor <input name="actor" value="{{ handoff_form_data.actor or 'operator' }}" /></label>
+    <button type="submit">Create Pursuit Handoff</button>
+  </form>
+
+  <h3>Link To Existing Opportunity</h3>
+  <form method="post" action="/contractors/{{ contractor.id }}/opportunity-links">
+    <label>Opportunity
+      <select name="opportunity_id" required>
+        <option value="">Select Opportunity</option>
+        {% for item in opportunities %}
+        <option value="{{ item.id }}" {% if link_form_data.opportunity_id == item.id %}selected{% endif %}>{{ item.name }} | {{ item.pursuit_stage }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Actor <input name="actor" value="{{ link_form_data.actor or 'operator' }}" /></label>
+    <button type="submit">Link Contractor To Opportunity</button>
+  </form>
+
+  <h3>Linked Opportunities</h3>
+  {% if linked_opportunities %}
+  <ul>
+    {% for item in linked_opportunities %}
+    <li>
+      <a href="/opportunities/{{ item.opportunity_id }}">{{ item.opportunity_name }}</a>
+      | {{ item.pursuit_stage }}
+      | <a href="/opportunities/{{ item.opportunity_id }}/capture-workbench">Capture Workbench</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No linked opportunities yet.</p>
+  {% endif %}
 
   <h3>Touchpoints</h3>
   <form method="post" action="/contractors/{{ contractor.id }}/touchpoints">

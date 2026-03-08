@@ -202,6 +202,132 @@ def test_contractor_prospect_pipeline_api(client: TestClient) -> None:
     assert any(item["contractor_id"] == overdue.json()["id"] for item in body["overdue_contractor_follow_ups"])
 
 
+def test_contractor_handoff_and_opportunity_link_api(client: TestClient) -> None:
+    client.post("/api/dashboard/seed-demo")
+    today = date.today()
+    contractor = client.post(
+        "/api/contractors",
+        json={
+            "name": "Handoff Ready Services",
+            "service_geographies": "NJ PA",
+            "headquarters_city": "Trenton",
+            "headquarters_state": "NJ",
+            "vertical_experience": "airport municipal",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "mixed",
+            "diversity_certs": "MWBE",
+            "airport_experience": True,
+            "healthcare_experience": False,
+            "education_experience": False,
+            "municipal_experience": True,
+            "scale_band": "REGIONAL",
+            "relationship_strength": 4,
+            "prospect_stage": "ENGAGED",
+            "next_follow_up_date": (today + timedelta(days=7)).isoformat(),
+            "relationship_notes": "Ready for active capture work.",
+            "strategic_fit_notes": "Strong transition operator.",
+        },
+    )
+    assert contractor.status_code == 200
+    contractor_id = contractor.json()["id"]
+
+    contract = client.get("/api/contracts").json()[0]
+    handoff = client.post(
+        f"/api/contractors/{contractor_id}/pursuits",
+        json={
+            "contract_id": contract["id"],
+            "title": "Contractor Handoff Pursuit",
+            "primary_facility_id": contract["facility_ids"][0],
+            "pursuit_stage": "PRE_RFP_CAPTURE",
+            "confidence_level": "HIGH",
+            "expected_rfp_date": (today + timedelta(days=45)).isoformat(),
+            "provenance_summary": "Created from contractor handoff workflow.",
+            "strategic_fit": 4,
+            "incumbent_vulnerability": 3,
+            "rebid_probability": 4,
+            "relationship_access": 4,
+            "contractor_fit": 5,
+            "operational_complexity": 3,
+            "margin_potential": 4,
+            "pre_rfp_influence": 4,
+            "timeline_urgency": 3,
+            "actor": "operator",
+        },
+    )
+    assert handoff.status_code == 200
+    opportunity_id = handoff.json()["id"]
+    assert handoff.json()["primary_contract_id"] == contract["id"]
+
+    seeded_commercial = client.get(f"/api/opportunities/{opportunity_id}/commercials")
+    assert seeded_commercial.status_code == 200
+    assert seeded_commercial.json()["contractor_id"] == contractor_id
+
+    existing = client.post(
+        f"/api/contracts/{contract['id']}/pursuits",
+        json={
+            "title": "Existing Linked Pursuit",
+            "primary_facility_id": contract["facility_ids"][0],
+            "pursuit_stage": "INTELLIGENCE",
+            "confidence_level": "MEDIUM",
+            "expected_rfp_date": (today + timedelta(days=60)).isoformat(),
+            "provenance_summary": "Created for contractor linking validation.",
+            "strategic_fit": 3,
+            "incumbent_vulnerability": 3,
+            "rebid_probability": 3,
+            "relationship_access": 2,
+            "contractor_fit": 2,
+            "operational_complexity": 3,
+            "margin_potential": 3,
+            "pre_rfp_influence": 2,
+            "timeline_urgency": 2,
+            "actor": "operator",
+        },
+    )
+    assert existing.status_code == 200
+    existing_opp_id = existing.json()["id"]
+
+    commercial = client.post(
+        f"/api/opportunities/{existing_opp_id}/commercials",
+        json={
+            "retainer_amount": 7500,
+            "success_fee_type": "FIXED",
+            "success_fee_value": 11000,
+            "projected_payout_date": (today + timedelta(days=120)).isoformat(),
+            "notes": "Existing commercial values should survive link.",
+        },
+    )
+    assert commercial.status_code == 200
+    commercial_id = commercial.json()["id"]
+
+    linked = client.post(
+        f"/api/contractors/{contractor_id}/opportunity-links",
+        json={"opportunity_id": existing_opp_id, "actor": "operator"},
+    )
+    assert linked.status_code == 200
+    assert linked.json()["opportunity_id"] == existing_opp_id
+    assert linked.json()["commercial_id"] == commercial_id
+
+    linked_again = client.post(
+        f"/api/contractors/{contractor_id}/opportunity-links",
+        json={"opportunity_id": existing_opp_id, "actor": "operator"},
+    )
+    assert linked_again.status_code == 200
+    assert linked_again.json()["commercial_id"] == commercial_id
+
+    preserved = client.get(f"/api/opportunities/{existing_opp_id}/commercials")
+    assert preserved.status_code == 200
+    assert preserved.json()["id"] == commercial_id
+    assert preserved.json()["contractor_id"] == contractor_id
+    assert preserved.json()["retainer_amount"] == 7500.0
+    assert preserved.json()["success_fee_value"] == 11000.0
+
+    links = client.get(f"/api/contractors/{contractor_id}/opportunity-links")
+    assert links.status_code == 200
+    linked_ids = {item["opportunity_id"] for item in links.json()}
+    assert opportunity_id in linked_ids
+    assert existing_opp_id in linked_ids
+
+
 def test_pursuit_creation_matching_capture_workbench_and_dashboard_api(client: TestClient) -> None:
     seed = client.post("/api/dashboard/seed-demo")
     assert seed.status_code == 200

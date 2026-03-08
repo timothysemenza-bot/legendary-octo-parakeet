@@ -364,6 +364,47 @@ class ContractorTouchpointResponse(BaseModel):
     created_at: datetime
 
 
+class ContractorPursuitHandoffCreate(BaseModel):
+    contract_id: str
+    title: str | None = Field(default=None, max_length=255)
+    primary_facility_id: str | None = None
+    pursuit_stage: PursuitStageOption = PursuitStageOption.INTELLIGENCE
+    confidence_level: ConfidenceLevel = ConfidenceLevel.MEDIUM
+    expected_rfp_date: date | None = None
+    provenance_summary: str = Field(min_length=5)
+    strategic_fit: int = Field(default=3, ge=1, le=5)
+    incumbent_vulnerability: int = Field(default=3, ge=1, le=5)
+    rebid_probability: int = Field(default=3, ge=1, le=5)
+    relationship_access: int = Field(default=3, ge=1, le=5)
+    contractor_fit: int = Field(default=3, ge=1, le=5)
+    operational_complexity: int = Field(default=3, ge=1, le=5)
+    margin_potential: int = Field(default=3, ge=1, le=5)
+    pre_rfp_influence: int = Field(default=3, ge=1, le=5)
+    timeline_urgency: int = Field(default=3, ge=1, le=5)
+    actor: str = Field(default="operator", min_length=2, max_length=100)
+
+
+class ContractorOpportunityLinkCreate(BaseModel):
+    opportunity_id: str
+    actor: str = Field(default="operator", min_length=2, max_length=100)
+
+
+class ContractorOpportunityLinkResponse(BaseModel):
+    commercial_id: str
+    opportunity_id: str
+    opportunity_name: str
+    organization_name: str | None
+    pursuit_stage: str
+    proposal_stage: str
+    confidence_level: str
+    expected_rfp_date: date | None
+    primary_contract_title: str | None
+    weighted_pipeline_value: float | None
+    weighted_expected_value: float | None
+    contractor_id: str
+    contractor_name: str
+
+
 class CreatePursuitFromContractRequest(BaseModel):
     title: str | None = Field(default=None, max_length=255)
     primary_facility_id: str | None = None
