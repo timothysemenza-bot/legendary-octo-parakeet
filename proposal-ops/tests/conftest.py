@@ -1,8 +1,15 @@
+import os
 import shutil
+import tempfile
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import text
+
+# Force tests onto isolated temp artifacts before importing app config/DB modules.
+TEST_ARTIFACTS_DIR = Path(tempfile.mkdtemp(prefix="bosskey-tests-"))
+os.environ["BOSSKEY_ARTIFACTS_DIR"] = TEST_ARTIFACTS_DIR.as_posix()
 
 from app.core.config import DB_PATH, RFP_SOURCE_STORAGE_DIR, SECRET_STORE_PATH
 from app.core.db import Base, engine
@@ -16,6 +23,12 @@ from app.modules.proposal_outline import models as proposal_outline_models  # no
 from app.modules.rfp_parser import models as rfp_models  # noqa: F401
 from app.modules.review_manager import models as review_models  # noqa: F401
 from app.modules.submission_checklist import models as submission_models  # noqa: F401
+
+
+@pytest.fixture(scope="session", autouse=True)
+def cleanup_test_artifacts() -> None:
+    yield
+    shutil.rmtree(TEST_ARTIFACTS_DIR, ignore_errors=True)
 
 
 @pytest.fixture(autouse=True)

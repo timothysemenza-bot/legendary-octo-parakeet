@@ -5,16 +5,29 @@ import json
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 APP_DIR = BASE_DIR / "app"
-DB_DIR = BASE_DIR / ".artifacts"
-DB_DIR.mkdir(exist_ok=True)
-RFP_SOURCE_STORAGE_DIR = DB_DIR / "rfp_source_documents"
-RFP_SOURCE_STORAGE_DIR.mkdir(exist_ok=True)
-DB_PATH = DB_DIR / "bosskey_pursuit_os.sqlite3"
+
+
+def _path_from_env(env_var: str, default: Path) -> Path:
+    raw = os.getenv(env_var, "").strip()
+    if not raw:
+        return default
+    candidate = Path(raw).expanduser()
+    if candidate.is_absolute():
+        return candidate
+    return BASE_DIR / candidate
+
+
+ARTIFACTS_DIR = _path_from_env("BOSSKEY_ARTIFACTS_DIR", BASE_DIR / ".artifacts")
+DB_PATH = _path_from_env("BOSSKEY_DB_PATH", ARTIFACTS_DIR / "bosskey_pursuit_os.sqlite3")
+DB_DIR = DB_PATH.parent
+DB_DIR.mkdir(parents=True, exist_ok=True)
+RFP_SOURCE_STORAGE_DIR = _path_from_env("BOSSKEY_RFP_SOURCE_STORAGE_DIR", DB_DIR / "rfp_source_documents")
+RFP_SOURCE_STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 DATABASE_URL = f"sqlite:///{DB_PATH.as_posix()}"
 GATE_POLICY_PACK = os.getenv("BOSSKEY_GATE_POLICY_PACK", "default")
 APPROVAL_SIGNING_SECRET = os.getenv("BOSSKEY_APPROVAL_SIGNING_SECRET", "dev-signing-secret")
 SESSION_SECRET = os.getenv("BOSSKEY_SESSION_SECRET", "dev-session-secret")
-SECRET_STORE_PATH = DB_DIR / "secrets.json"
+SECRET_STORE_PATH = _path_from_env("BOSSKEY_SECRET_STORE_PATH", DB_DIR / "secrets.json")
 SECRET_STORE_KEY = os.getenv("BOSSKEY_SECRET_STORE_KEY", SESSION_SECRET)
 AUTH_AUTO_PROVISION = os.getenv("BOSSKEY_AUTH_AUTO_PROVISION", "true").lower() == "true"
 NOTIFICATION_CHANNELS = [c.strip().lower() for c in os.getenv("BOSSKEY_NOTIFICATION_CHANNELS", "console,email,webhook").split(",") if c.strip()]
