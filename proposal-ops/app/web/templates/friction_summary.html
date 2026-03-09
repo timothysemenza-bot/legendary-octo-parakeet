@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Operator Friction Summary</h2>
+  <p>
+    <strong>Lookback:</strong> {{ summary.lookback_days }} days |
+    <strong>Tracked Sessions:</strong> {{ summary.tracked_sessions }} |
+    <strong>Events:</strong> {{ summary.total_events }} |
+    <strong>Feedback Entries:</strong> {{ summary.total_feedback }}
+  </p>
+  <p>Recommendations are surfaced for approval only. This screen does not silently change workflows.</p>
+
+  <h3>Recommendations</h3>
+  {% if summary.recommendations %}
+  <ul>
+    {% for item in summary.recommendations %}
+    <li>
+      <strong>{{ item.title }}</strong> on {{ item.page_key }}
+      <br />
+      {{ item.rationale }}
+      <br />
+      <em>Proposed action:</em> {{ item.proposed_action }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No recommendations yet. Use the system and submit feedback to build a signal base.</p>
+  {% endif %}
+
+  <h3>Friction Findings</h3>
+  {% if summary.findings %}
+  <table>
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Page</th>
+        <th>Signal</th>
+        <th>Value</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.findings %}
+      <tr>
+        <td>{{ item.severity }}</td>
+        <td>{{ item.page_key }}</td>
+        <td>{{ item.metric_name }}</td>
+        <td>{{ item.metric_value }} / {{ item.threshold }}</td>
+        <td>{{ item.summary }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No friction rules have fired yet.</p>
+  {% endif %}
+
+  <h3>Top Pages</h3>
+  {% if summary.top_pages %}
+  <table>
+    <thead>
+      <tr>
+        <th>Page</th>
+        <th>Visits</th>
+        <th>Avg Time</th>
+        <th>Revisits</th>
+        <th>Loops</th>
+        <th>Validation</th>
+        <th>Abandons</th>
+        <th>Clicks</th>
+        <th>Churn</th>
+        <th>Manual</th>
+        <th>Feedback</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.top_pages %}
+      <tr>
+        <td>{{ item.page_key }}</td>
+        <td>{{ item.visits }}</td>
+        <td>{{ item.avg_time_on_page_ms or '-' }}</td>
+        <td>{{ item.revisit_count }}</td>
+        <td>{{ item.navigation_loop_count }}</td>
+        <td>{{ item.validation_failures }}</td>
+        <td>{{ item.abandoned_forms }}</td>
+        <td>{{ item.repeated_clicks }}</td>
+        <td>{{ item.high_churn_fields }}</td>
+        <td>{{ item.manual_overrides }}</td>
+        <td>{{ item.explicit_feedback_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <h3>Recent Explicit Feedback</h3>
+  {% if summary.recent_feedback %}
+  <ul>
+    {% for item in summary.recent_feedback %}
+    <li>
+      <strong>{{ item.feedback_type }}</strong> on {{ item.page_key }}
+      {% if item.form_name %}| {{ item.form_name }}{% endif %}
+      {% if item.note_text %}
+      <br />
+      {{ item.note_text }}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No explicit feedback has been submitted yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

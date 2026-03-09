@@ -136,6 +136,84 @@
   <p>No upcoming contractor follow-ups in the next 14 days.</p>
   {% endif %}
 
+  <h3>Live Pursuit Readiness</h3>
+  {% if summary.live_pursuit_readiness %}
+  <table>
+    <thead>
+      <tr>
+        <th>Pursuit</th>
+        <th>Organization</th>
+        <th>Stage</th>
+        <th>Readiness</th>
+        <th>Advised Contractor</th>
+        <th>Coverage</th>
+        <th>Missing</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.live_pursuit_readiness %}
+      <tr>
+        <td><a href="/opportunities/{{ item.opportunity_id }}/capture-workbench">{{ item.opportunity_name }}</a></td>
+        <td>{{ item.organization_name or "-" }}</td>
+        <td>{{ item.pursuit_stage }}</td>
+        <td>{% if item.pilot_ready %}Ready{% else %}Needs Work{% endif %} ({{ item.readiness_score }}/{{ item.readiness_total }})</td>
+        <td>{{ item.advised_contractor_name or "-" }}</td>
+        <td>
+          Buyers {{ item.buyer_contacts_count }},
+          Contractors {{ item.contractor_contacts_count }},
+          Direct {{ item.direct_conversation_contacts_count }},
+          Notes {{ item.intelligence_notes_count }},
+          Evidence {{ item.evidence_records_count }},
+          Actions {{ item.open_capture_actions_count }}
+        </td>
+        <td>{{ ", ".join(item.missing_items) if item.missing_items else "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No active pursuits ready for pilot review yet.</p>
+  {% endif %}
+
+  <h3>Operator Friction Summary</h3>
+  <p><a href="/ux/friction">Open detailed friction view</a></p>
+  <p>
+    <strong>Tracked Sessions:</strong> {{ summary.friction_summary.tracked_sessions }} |
+    <strong>Events:</strong> {{ summary.friction_summary.total_events }} |
+    <strong>Feedback:</strong> {{ summary.friction_summary.total_feedback }}
+  </p>
+  {% if summary.friction_summary.recommendations %}
+  <ul>
+    {% for item in summary.friction_summary.recommendations[:3] %}
+    <li><strong>{{ item.title }}</strong> on {{ item.page_key }}: {{ item.proposed_action }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No friction recommendations yet.</p>
+  {% endif %}
+  {% if summary.friction_summary.findings %}
+  <table>
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Page</th>
+        <th>Signal</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.friction_summary.findings[:5] %}
+      <tr>
+        <td>{{ item.severity }}</td>
+        <td>{{ item.page_key }}</td>
+        <td>{{ item.metric_name }}</td>
+        <td>{{ item.metric_value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
   <h3>Active Pursuit Counts</h3>
   <ul>
     {% for stage, count in summary.active_pursuit_counts.items() %}

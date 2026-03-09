@@ -181,6 +181,42 @@ class ContractorTouchpoint(Base):
     contractor: Mapped[Contractor] = relationship(back_populates="touchpoints")
 
 
+class UxEvent(Base):
+    __tablename__ = "ux_events"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    session_id: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    actor: Mapped[str | None] = mapped_column(String(120), nullable=True, index=True)
+    page_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    path: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    referrer_path: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    event_type: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    form_name: Mapped[str | None] = mapped_column(String(160), nullable=True, index=True)
+    target_key: Mapped[str | None] = mapped_column(String(160), nullable=True)
+    field_name: Mapped[str | None] = mapped_column(String(160), nullable=True, index=True)
+    duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    count_value: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    metadata_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False, index=True)
+
+
+class UxFeedback(Base):
+    __tablename__ = "ux_feedback"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    session_id: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    actor: Mapped[str | None] = mapped_column(String(120), nullable=True, index=True)
+    page_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    path: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    form_name: Mapped[str | None] = mapped_column(String(160), nullable=True, index=True)
+    feedback_type: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    note_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    context_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    voice_note_status: Mapped[str] = mapped_column(String(40), nullable=False, default="NOT_PROVIDED")
+    voice_note_asset_ref: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False, index=True)
+
+
 class OpportunityMatch(Base):
     __tablename__ = "opportunity_matches"
     __table_args__ = (UniqueConstraint("opportunity_id", "contractor_id", name="uq_opportunity_match_pair"),)

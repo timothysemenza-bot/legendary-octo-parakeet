@@ -38,8 +38,94 @@
   <p>No advised contractor linked yet.</p>
   {% endif %}
 
+  <h3>Workbench Filters</h3>
+  <form method="get" action="/opportunities/{{ detail.id }}/capture-workbench" data-ux-form="capture_workbench_filters">
+    <label>Contact Side
+      <select name="contact_side">
+        <option value="">All</option>
+        {% for option in form_options.contact_sides %}
+        <option value="{{ option.value }}" {% if filters.contact_side == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Contact Source
+      <select name="contact_source_type">
+        <option value="">All</option>
+        {% for option in form_options.contact_source_types %}
+        <option value="{{ option.value }}" {% if filters.contact_source_type == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Contact Confidence
+      <select name="contact_confidence_level">
+        <option value="">All</option>
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if filters.contact_confidence_level == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Note Type
+      <select name="note_type">
+        <option value="">All</option>
+        {% for option in form_options.intelligence_note_types %}
+        <option value="{{ option.value }}" {% if filters.note_type == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Note Source
+      <select name="note_source_class">
+        <option value="">All</option>
+        {% for option in form_options.source_classes %}
+        <option value="{{ option.value }}" {% if filters.note_source_class == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Note Confidence
+      <select name="note_confidence_level">
+        <option value="">All</option>
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if filters.note_confidence_level == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Evidence Source
+      <select name="evidence_source_class">
+        <option value="">All</option>
+        {% for option in form_options.source_classes %}
+        <option value="{{ option.value }}" {% if filters.evidence_source_class == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Evidence Confidence
+      <select name="evidence_confidence_level">
+        <option value="">All</option>
+        {% for option in form_options.confidence_levels %}
+        <option value="{{ option.value }}" {% if filters.evidence_confidence_level == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Action Type
+      <select name="action_type">
+        <option value="">All</option>
+        {% for option in form_options.capture_action_types %}
+        <option value="{{ option.value }}" {% if filters.action_type == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Action Status
+      <select name="action_status">
+        <option value="">All</option>
+        {% for option in form_options.capture_action_statuses %}
+        <option value="{{ option.value }}" {% if filters.action_status == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Apply Filters</button>
+    <a href="/opportunities/{{ detail.id }}/capture-workbench">Clear Filters</a>
+  </form>
+
   <h3>Contractor Matching</h3>
-  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/matches">
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/matches" data-ux-form="capture_workbench_refresh_matches">
     <button type="submit">Refresh Matches</button>
   </form>
   {% if matches %}
@@ -60,7 +146,7 @@
   {% endif %}
 
   <h3>Contacts</h3>
-  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/contacts">
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/contacts" data-ux-form="capture_workbench_contact_create">
     <label>Organization ID <input name="organization_id" value="{{ detail.buying_organization_id or '' }}" /></label>
     <label>Contractor
       <select name="contractor_id">
@@ -81,7 +167,13 @@
         {% endfor %}
       </select>
     </label>
-    <label>Source Type <input name="source_type" value="PUBLIC" /></label>
+    <label>Source Type
+      <select name="source_type">
+        {% for option in form_options.contact_source_types %}
+        <option value="{{ option.value }}" {% if option.value == 'PUBLIC' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Confidence
       <select name="confidence_level">
         {% for option in form_options.confidence_levels %}
@@ -95,16 +187,22 @@
   {% if contacts %}
   <ul>
     {% for item in contacts %}
-    <li>{{ item.full_name }} | {{ item.role_title or '-' }} | {{ item.contact_side }} | {{ item.confidence_level }}</li>
+    <li>{{ item.full_name }} | {{ item.role_title or '-' }} | {{ item.contact_side }} | {{ item.source_type }} | {{ item.confidence_level }}</li>
     {% endfor %}
   </ul>
   {% endif %}
 
   <h3>Intelligence Notes</h3>
   <p>{{ notes[0].ethics_guidance_text if notes else "Use only lawful and ethical intelligence sources." }}</p>
-  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/intelligence">
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/intelligence" data-ux-form="capture_workbench_intelligence_create">
     <label>Title <input name="title" required /></label>
-    <label>Type <input name="note_type" value="INTELLIGENCE" /></label>
+    <label>Type
+      <select name="note_type">
+        {% for option in form_options.intelligence_note_types %}
+        <option value="{{ option.value }}" {% if option.value == 'INTELLIGENCE' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Source Class
       <select name="source_class">
         {% for option in form_options.source_classes %}
@@ -126,13 +224,13 @@
   {% if notes %}
   <ul>
     {% for item in notes %}
-    <li>{{ item.title }} | {{ item.source_class }} | {{ item.confidence_level }} | {{ item.note_text }}</li>
+    <li>{{ item.title }} | {{ item.note_type }} | {{ item.source_class }} | {{ item.confidence_level }} | {{ item.note_text }}</li>
     {% endfor %}
   </ul>
   {% endif %}
 
   <h3>Evidence</h3>
-  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/evidence">
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/evidence" data-ux-form="capture_workbench_evidence_create">
     <label>Intelligence Note ID <input name="intelligence_note_id" /></label>
     <label>Contract ID <input name="contract_id" value="{{ detail.primary_contract_id or '' }}" /></label>
     <label>Source Class
@@ -163,10 +261,22 @@
   {% endif %}
 
   <h3>Capture Actions</h3>
-  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/actions">
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/actions" data-ux-form="capture_workbench_action_create">
     <label>Title <input name="title" required /></label>
-    <label>Type <input name="action_type" value="RESEARCH" /></label>
-    <label>Status <input name="status" value="OPEN" /></label>
+    <label>Type
+      <select name="action_type">
+        {% for option in form_options.capture_action_types %}
+        <option value="{{ option.value }}" {% if option.value == 'RESEARCH' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Status
+      <select name="status">
+        {% for option in form_options.capture_action_statuses %}
+        <option value="{{ option.value }}" {% if option.value == 'OPEN' %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Owner <input name="owner" value="operator" /></label>
     <label>Due Date <input type="date" name="due_date" /></label>
     <label>Notes <textarea name="notes"></textarea></label>
@@ -175,13 +285,13 @@
   {% if actions %}
   <ul>
     {% for item in actions %}
-    <li>{{ item.title }} | {{ item.status }} | {{ item.owner }} | {{ item.due_date or '-' }}</li>
+    <li>{{ item.title }} | {{ item.action_type }} | {{ item.status }} | {{ item.owner }} | {{ item.due_date or '-' }}</li>
     {% endfor %}
   </ul>
   {% endif %}
 
   <h3>Commercials</h3>
-  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/commercials">
+  <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/commercials" data-ux-form="capture_workbench_commercials">
     <label>Advised Contractor
       <select name="contractor_id">
         <option value="">None</option>
@@ -190,7 +300,7 @@
         {% endfor %}
       </select>
     </label>
-    <label>Retainer Amount <input name="retainer_amount" value="{{ commercial.retainer_amount if commercial else '' }}" /></label>
+    <label>Retainer Amount <input name="retainer_amount" value="{{ commercial.retainer_amount if commercial and commercial.retainer_amount is not none else '' }}" /></label>
     <label>Success Fee Type
       <select name="success_fee_type">
         <option value="">None</option>
@@ -199,11 +309,11 @@
         {% endfor %}
       </select>
     </label>
-    <label>Success Fee Value <input name="success_fee_value" value="{{ commercial.success_fee_value if commercial else '' }}" /></label>
-    <label>Projected Payout Date <input type="date" name="projected_payout_date" value="{{ commercial.projected_payout_date if commercial else '' }}" /></label>
-    <label>Projected Payout Amount <input name="projected_payout_amount" value="{{ commercial.projected_payout_amount if commercial else '' }}" /></label>
-    <label>Realized Revenue <input name="realized_revenue" value="{{ commercial.realized_revenue if commercial else '' }}" /></label>
-    <label>Notes <textarea name="notes">{{ commercial.notes if commercial else '' }}</textarea></label>
+    <label>Success Fee Value <input name="success_fee_value" value="{{ commercial.success_fee_value if commercial and commercial.success_fee_value is not none else '' }}" /></label>
+    <label>Projected Payout Date <input type="date" name="projected_payout_date" value="{{ commercial.projected_payout_date if commercial and commercial.projected_payout_date else '' }}" /></label>
+    <label>Projected Payout Amount <input name="projected_payout_amount" value="{{ commercial.projected_payout_amount if commercial and commercial.projected_payout_amount is not none else '' }}" /></label>
+    <label>Realized Revenue <input name="realized_revenue" value="{{ commercial.realized_revenue if commercial and commercial.realized_revenue is not none else '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ commercial.notes if commercial and commercial.notes else '' }}</textarea></label>
     <button type="submit">Save Commercials</button>
   </form>
   {% if commercial %}

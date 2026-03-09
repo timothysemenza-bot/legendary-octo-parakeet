@@ -131,11 +131,37 @@ Recommended operator sequence:
 
 The workbench now uses controlled choice lists for the repetitive operator fields that were generating most validation noise:
 - contact side
+- contact source type
 - confidence level
+- intelligence note type
 - evidence/intelligence source class
+- capture action type
+- capture action status
 - commercial success fee type
 
 The contractor handoff form on `/contractors/{id}` uses the same controlled pursuit-stage, confidence, and 1-5 score selections as the contract-detail bootstrap.
+
+Standardized janitorial workbench vocabularies are now:
+- contact side: `BUYER`, `CONTRACTOR`
+- contact source type: `PUBLIC`, `DIRECT_CONVERSATION`, `REFERRAL`, `INFERRED`
+- intelligence note type: `INTELLIGENCE`, `POSITIONING`, `COMPETITOR`, `STAKEHOLDER`, `RISK`, `PRICING`, `TRANSITION`
+- capture action type: `RESEARCH`, `OUTREACH`, `MEETING`, `FOLLOW_UP`, `REVIEW`, `DELIVERABLE`
+- capture action status: `OPEN`, `IN_PROGRESS`, `BLOCKED`, `COMPLETE`
+- commercial success fee type: `FIXED`, `PERCENT_ANNUAL`, `PERCENT_TOTAL`
+
+Loose operator input is normalized into those canonical values before persistence so reporting and filtering stay consistent.
+
+The capture workbench also supports additive GET filters for faster operator review:
+- contacts: `contact_side`, `contact_source_type`, `contact_confidence_level`
+- intelligence: `note_type`, `note_source_class`, `note_confidence_level`
+- evidence: `evidence_source_class`, `evidence_confidence_level`
+- capture actions: `action_type`, `action_status`
+
+The corresponding API list routes expose the same filter dimensions on:
+- `GET /api/opportunities/{id}/contacts`
+- `GET /api/opportunities/{id}/intelligence`
+- `GET /api/opportunities/{id}/evidence`
+- `GET /api/opportunities/{id}/capture-actions`
 
 ## Pursuit stages
 
@@ -188,11 +214,56 @@ Track:
 - Hottest pursuits
 - Top contractor matches
 - Overdue and upcoming contractor follow-ups
+- Live pursuit readiness by active opportunity
+- Operator friction signals and recommendations
 - Active proposal workload
 - Weighted pipeline value
 - Expected consulting revenue
 
 Use it as the weekly operating review page.
+
+Treat the live-pursuit readiness panel as the go/no-go screen before running this on a real engagement. A pursuit is considered ready when it has:
+- at least one buyer contact
+- at least one contractor contact
+- at least one intelligence note
+- at least one evidence record
+- at least one non-complete capture action
+- an advised contractor linked through commercials
+
+If the panel still shows missing items, resolve those gaps in the capture workbench before treating the pursuit as pilot-ready.
+
+## Privacy-safe workflow feedback
+
+Boss Key now includes a privacy-safe adaptive feedback layer intended to help improve the operator workflow without turning the app into surveillance software.
+
+Tracked structured signals include:
+- page visits
+- time on page
+- repeated clicks
+- repeated validation failures
+- abandoned forms
+- field edit churn counts
+- repeated revisits
+- navigation loops
+- explicit manual-workaround feedback
+
+Guardrails:
+- no raw keystroke logging
+- no passive microphone capture
+- no replay-style session surveillance
+- no proposal text is stored unless you deliberately type it into the feedback note
+
+Use the shared `Share workflow friction` panel when:
+- a step is confusing
+- a step took too long
+- you had to do part of the work manually outside the intended flow
+
+Use `/ux/friction` or the dashboard friction panel to review:
+- which pages are generating the most friction
+- which deterministic rules have fired
+- which recommendations are being proposed for approval
+
+Recommendations are advisory only. They should be reviewed before changing the core workflow.
 
 ## Verification
 

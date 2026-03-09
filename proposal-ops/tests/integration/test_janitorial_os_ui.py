@@ -9,6 +9,7 @@ def test_dashboard_and_seed_demo_ui(client: TestClient) -> None:
     page = client.get("/dashboard")
     assert page.status_code == 200
     assert "Janitorial Capture Dashboard" in page.text
+    assert "Live Pursuit Readiness" in page.text
 
     seeded = client.post("/dashboard/seed-demo", follow_redirects=True)
     assert seeded.status_code == 200
@@ -16,6 +17,7 @@ def test_dashboard_and_seed_demo_ui(client: TestClient) -> None:
     assert "South Jersey Regional Airport" in seeded.text
     assert "Upcoming Contractor Follow-Ups" in seeded.text
     assert "Garden State Facility Services" in seeded.text
+    assert "Live Pursuit Readiness" in seeded.text
 
     overdue = client.post(
         "/api/contractors",
@@ -100,6 +102,8 @@ def test_contract_radar_ui_and_create_pursuit_from_contract_flow(client: TestCli
 def test_capture_workbench_ui_forms(client: TestClient) -> None:
     client.post("/api/dashboard/seed-demo")
     contract = client.get("/api/contracts").json()[0]
+    contractors = client.get("/api/contractors").json()
+    advised_contractor_id = contractors[0]["id"]
     pursuit = client.post(
         f"/api/contracts/{contract['id']}/pursuits",
         json={
@@ -127,13 +131,52 @@ def test_capture_workbench_ui_forms(client: TestClient) -> None:
     assert workbench.status_code == 200
     assert "Capture Workbench" in workbench.text
     assert "Use only lawful and ethical intelligence sources." in workbench.text
+    assert '<select name="contact_source_type">' in workbench.text
     assert '<select name="contact_side">' in workbench.text
+    assert '<select name="source_type">' in workbench.text
+    assert '<select name="note_type">' in workbench.text
     assert '<select name="source_class">' in workbench.text
+    assert '<select name="action_type">' in workbench.text
+    assert '<select name="status">' in workbench.text
     assert '<select name="success_fee_type">' in workbench.text
 
     refresh = client.post(f"{workbench_path}/matches", follow_redirects=True)
     assert refresh.status_code == 200
     assert "Contractor Matching" in refresh.text
+
+    add_contact = client.post(
+        f"{workbench_path}/contacts",
+        data={
+            "organization_id": pursuit["buying_organization_id"],
+            "contractor_id": advised_contractor_id,
+            "full_name": "Riley Partner",
+            "role_title": "Regional Growth Lead",
+            "contact_side": "CONTRACTOR",
+            "source_type": "DIRECT_CONVERSATION",
+            "confidence_level": "HIGH",
+            "notes": "Advised contractor aligned on the pursuit.",
+        },
+        follow_redirects=True,
+    )
+    assert add_contact.status_code == 200
+    assert "Riley Partner" in add_contact.text
+    assert "DIRECT_CONVERSATION" in add_contact.text
+
+    add_buyer_contact = client.post(
+        f"{workbench_path}/contacts",
+        data={
+            "organization_id": pursuit["buying_organization_id"],
+            "full_name": "Dana Procurement",
+            "role_title": "Procurement Director",
+            "contact_side": "BUYER",
+            "source_type": "PUBLIC",
+            "confidence_level": "MEDIUM",
+            "notes": "Active buying contact for the pursuit.",
+        },
+        follow_redirects=True,
+    )
+    assert add_buyer_contact.status_code == 200
+    assert "Dana Procurement" in add_buyer_contact.text
 
     add_note = client.post(
         f"{workbench_path}/intelligence",
@@ -150,11 +193,94 @@ def test_capture_workbench_ui_forms(client: TestClient) -> None:
     assert add_note.status_code == 200
     assert "Evaluator hypothesis" in add_note.text
 
+    add_evidence = client.post(
+        f"{workbench_path}/evidence",
+        data={
+            "contract_id": contract["id"],
+            "source_class": "PUBLIC",
+            "confidence_level": "HIGH",
+            "source_url": "https://example.org/board-packet",
+            "provenance": "Public board packet and contract record review.",
+            "summary": "Board packet reinforces transition-speed concerns.",
+        },
+        follow_redirects=True,
+    )
+    assert add_evidence.status_code == 200
+    assert "Board packet reinforces transition-speed concerns." in add_evidence.text
+
+    add_action = client.post(
+        f"{workbench_path}/actions",
+        data={
+            "title": "Follow up with advised contractor",
+            "action_type": "FOLLOW_UP",
+            "status": "IN_PROGRESS",
+            "owner": "operator",
+            "notes": "Lock the next capture meeting.",
+        },
+        follow_redirects=True,
+    )
+    assert add_action.status_code == 200
+    assert "Follow up with advised contractor" in add_action.text
+    assert "FOLLOW_UP" in add_action.text
+    assert "IN_PROGRESS" in add_action.text
+
+    client.post(
+        f"/api/opportunities/{pursuit['id']}/contacts",
+        json={
+            "organization_id": pursuit["buying_organization_id"],
+            "full_name": "Dana Procurement",
+            "role_title": "Procurement Director",
+            "contact_side": "BUYER",
+            "source_type": "PUBLIC",
+            "confidence_level": "LOW",
+        },
+    )
+    client.post(
+        f"/api/opportunities/{pursuit['id']}/intelligence",
+        json={
+            "title": "Transition risk note",
+            "note_type": "RISK",
+            "note_text": "Compressed transition could create staffing strain.",
+            "source_class": "PUBLIC",
+            "provenance": "Public contract dates.",
+            "confidence_level": "LOW",
+        },
+    )
+    client.post(
+        f"/api/opportunities/{pursuit['id']}/capture-actions",
+        json={
+            "title": "Open research task",
+            "action_type": "RESEARCH",
+            "status": "OPEN",
+            "owner": "operator",
+        },
+    )
+
+    filtered = client.get(
+        workbench_path,
+        params={
+            "contact_side": "CONTRACTOR",
+            "contact_source_type": "DIRECT_CONVERSATION",
+            "contact_confidence_level": "",
+            "note_type": "POSITIONING",
+            "note_source_class": "",
+            "action_status": "IN_PROGRESS",
+        },
+    )
+    assert filtered.status_code == 200
+    assert "Riley Partner" in filtered.text
+    assert "Dana Procurement" not in filtered.text
+    assert "Evaluator hypothesis" in filtered.text
+    assert "Transition risk note" not in filtered.text
+    assert "Follow up with advised contractor" in filtered.text
+    assert "Open research task" not in filtered.text
+
     add_commercial = client.post(
         f"{workbench_path}/commercials",
         data={
+            "contractor_id": advised_contractor_id,
             "retainer_amount": "6000",
-            "success_fee_type": "FIXED",
+            "success_fee_type": "fixed",
             "success_fee_value": "12000",
             "notes": "Managed pursuit model",
         },
@@ -162,6 +288,13 @@ def test_capture_workbench_ui_forms(client: TestClient) -> None:
     )
     assert add_commercial.status_code == 200
     assert "Weighted Expected Value" in add_commercial.text
+    assert "FIXED" in add_commercial.text
+
+    dashboard = client.get("/dashboard")
+    assert dashboard.status_code == 200
+    assert "Live Pursuit Readiness" in dashboard.text
+    assert "Workbench Pursuit" in dashboard.text
+    assert "Ready (6/6)" in dashboard.text
 
 
 def test_contractor_prospecting_ui(client: TestClient) -> None:
@@ -199,7 +332,7 @@ def test_contractor_prospecting_ui(client: TestClient) -> None:
     assert "Prospect Building Services" in created.text
     assert "OUTREACH" in created.text
 
-    filtered = client.get("/contractors", params={"prospect_stage": "OUTREACH"})
+    filtered = client.get("/contractors", params={"prospect_stage": "OUTREACH", "follow_up_before": ""})
     assert filtered.status_code == 200
     assert "Prospect Building Services" in filtered.text
 
@@ -315,6 +448,21 @@ def test_contractor_handoff_ui(client: TestClient) -> None:
     assert "Reviewed capture posture and transition expectations." in workbench.text
     assert f"/contractors/{contractor['id']}" in workbench.text
 
+    seeded_commercial_update = client.post(
+        f"{handoff.headers['location']}/commercials",
+        data={
+            "contractor_id": contractor["id"],
+            "retainer_amount": "5000",
+            "success_fee_type": "FIXED",
+            "success_fee_value": "10000",
+            "notes": "Seeded handoff commercial updated through the workbench.",
+        },
+        follow_redirects=True,
+    )
+    assert seeded_commercial_update.status_code == 200
+    assert "Weighted Expected Value" in seeded_commercial_update.text
+    assert "FIXED" in seeded_commercial_update.text
+
     refreshed_detail = client.get(detail_path)
     assert refreshed_detail.status_code == 200
     assert "UI Handoff Pursuit" in refreshed_detail.text
@@ -350,3 +498,61 @@ def test_contractor_handoff_ui(client: TestClient) -> None:
     )
     assert linked.status_code == 200
     assert "Existing UI Linked Pursuit" in linked.text
+
+
+def test_ux_friction_panel_and_feedback_ui(client: TestClient) -> None:
+    dashboard = client.get("/dashboard")
+    assert dashboard.status_code == 200
+    assert "Operator Friction Summary" in dashboard.text
+    assert "Share workflow friction" in dashboard.text
+    assert "This was confusing" in dashboard.text
+    assert "No passive audio is captured." in dashboard.text
+
+    session_id = "ui-friction-session-001"
+    client.post(
+        "/api/ux/events",
+        json={
+            "session_id": session_id,
+            "event_type": "PAGE_VIEW",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "metadata_json": {"page_title": "Contractors"},
+        },
+    )
+    client.post(
+        "/api/ux/events",
+        json={
+            "session_id": session_id,
+            "event_type": "VALIDATION_FAILURE",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "count_value": 3,
+            "metadata_json": {"field_names": ["name"]},
+        },
+    )
+    client.post(
+        "/api/ux/feedback",
+        json={
+            "session_id": session_id,
+            "feedback_type": "TOOK_TOO_LONG",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "note_text": "This screen takes too long to complete when starting from scratch.",
+            "context_json": {"source": "ui-test"},
+            "voice_note_status": "NOT_PROVIDED",
+        },
+    )
+
+    friction = client.get("/ux/friction")
+    assert friction.status_code == 200
+    assert "Operator Friction Summary" in friction.text
+    assert "Recommendations are surfaced for approval only." in friction.text
+    assert "Reduce time-to-complete" in friction.text
+    assert "This screen takes too long to complete when starting from scratch." in friction.text
+
+    refreshed_dashboard = client.get("/dashboard")
+    assert refreshed_dashboard.status_code == 200
+    assert "Reduce time-to-complete" in refreshed_dashboard.text
+    assert "Open detailed friction view" in refreshed_dashboard.text

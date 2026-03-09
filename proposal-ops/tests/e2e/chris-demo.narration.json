@@ -1,0 +1,49 @@
+{
+  "demo": "bosskey-overview",
+  "title": "Boss Key Overview",
+  "output_basename": "01-bosskey-overview",
+  "tts": {
+    "provider": "auto",
+    "openai": {
+      "model": "gpt-4o-mini-tts",
+      "voice": "sage",
+      "response_format": "wav"
+    },
+    "windows": {
+      "voice_name": "Microsoft Zira Desktop",
+      "voice_rate": 0
+    }
+  },
+  "steps": {
+    "dashboard_start": {
+      "title": "Dashboard opening",
+      "hold_ms": 4200,
+      "text": "Boss Key opens on one operating view for active pursuits. Rebid pressure, contractor follow-ups, and live-pursuit readiness all surface immediately instead of being buried across separate trackers."
+    },
+    "contractor_detail": {
+      "title": "Contractor relationship view",
+      "hold_ms": 4400,
+      "text": "From there, the workflow moves into the contractor relationship record. Touchpoints, fit, and next follow-up stay tied to the actual pursuit story, so relationship management does not drift away from proposal operations."
+    },
+    "pursuit_handoff": {
+      "title": "Pursuit handoff",
+      "hold_ms": 4400,
+      "text": "This is the handoff point. Boss Key creates the opportunity from the contractor record and carries the advised contractor forward into the workbench without duplicate setup."
+    },
+    "capture_context": {
+      "title": "Workbench context",
+      "hold_ms": 4200,
+      "text": "The capture workbench opens with contractor context already attached. Relationship history and live pursuit execution stay connected inside the same operating file."
+    },
+    "capture_completion": {
+      "title": "Workbench completion",
+      "hold_ms": 4400,
+      "text": "Once the workbench is active, contacts and commercials can be filled in directly on the pursuit. The operator sees the pursuit kit and the consulting economics in one place."
+    },
+    "dashboard_ready": {
+      "title": "Readiness return",
+      "hold_ms": 4300,
+      "text": "Back on the dashboard, readiness confirms whether the pursuit is actually operational. That is the point of Boss Key: visible movement from relationship to execution to pilot-ready work."
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import csv
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from typing import Any
@@ -27,11 +27,18 @@ from app.modules.janitorial_os.models import (
     ProposalWorkflowSummary,
     ScoringCriterion,
     ScoringProfile,
+    UxEvent,
+    UxFeedback,
 )
 from app.modules.janitorial_os.schemas import (
     CaptureActionCreate,
+    CaptureActionStatus,
+    CaptureActionType,
     CommercialCreate,
+    ConfidenceLevel,
     ContactCreate,
+    ContactSide,
+    ContactSourceType,
     ContractImportResult,
     ContractRecordCreate,
     ContractRecordResponse,
@@ -46,12 +53,25 @@ from app.modules.janitorial_os.schemas import (
     CreatePursuitFromContractRequest,
     DashboardContractSummary,
     DashboardContractorFollowUpSummary,
+    DashboardSummaryResponse,
     DashboardMatchSummary,
     DashboardOpportunitySummary,
-    DashboardSummaryResponse,
+    DashboardPursuitReadinessSummary,
     EvidenceRecordCreate,
+    IntelligenceNoteType,
     ProfileType,
     ScoringProfileUpdateRequest,
+    SourceClass,
+    UxEventCreate,
+    UxEventResponse,
+    UxEventType,
+    UxFeedbackCreate,
+    UxFeedbackResponse,
+    UxFeedbackType,
+    UxFrictionFinding,
+    UxFrictionSummaryResponse,
+    UxPageFrictionSummary,
+    UxRecommendation,
 )
 from app.modules.opportunity_intake.models import CapturePlan, Opportunity
 from app.modules.opportunity_intake.scoring import classify_recommendation, classify_tier
@@ -66,6 +86,80 @@ ETHICS_GUIDANCE = (
 
 def _utcnow() -> datetime:
     return datetime.now(UTC).replace(tzinfo=None)
+
+
+def _sanitize_ux_value(value: Any, *, depth: int = 0) -> Any:
+    if depth > 2:
+        return None
+    if value is None or isinstance(value, (bool, int, float)):
+        return value
+    if isinstance(value, str):
+        cleaned = value.strip()
+        return cleaned[:160]
+    if isinstance(value, list):
+        sanitized = [_sanitize_ux_value(item, depth=depth + 1) for item in value[:12]]
+        return [item for item in sanitized if item is not None]
+    if isinstance(value, dict):
+        result: dict[str, Any] = {}
+        for key, item in list(value.items())[:20]:
+            sanitized = _sanitize_ux_value(item, depth=depth + 1)
+            if sanitized is not None:
+                result[str(key)[:80]] = sanitized
+        return result
+    return str(value)[:160]
+
+
+def _dump_ux_json(payload: dict[str, Any] | None) -> str:
+    sanitized = _sanitize_ux_value(payload or {}, depth=0)
+    if not isinstance(sanitized, dict):
+        sanitized = {}
+    return json.dumps(sanitized, sort_keys=True)
+
+
+def _load_ux_json(raw: str | None) -> dict[str, Any]:
+    if not raw:
+        return {}
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError:
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _ux_event_response(row: UxEvent) -> UxEventResponse:
+    return UxEventResponse(
+        id=row.id,
+        session_id=row.session_id,
+        actor=row.actor,
+        event_type=row.event_type,
+        page_key=row.page_key,
+        path=row.path,
+        referrer_path=row.referrer_path,
+        form_name=row.form_name,
+        target_key=row.target_key,
+        field_name=row.field_name,
+        duration_ms=row.duration_ms,
+        count_value=row.count_value,
+        metadata_json=_load_ux_json(row.metadata_json),
+        created_at=row.created_at,
+    )
+
+
+def _ux_feedback_response(row: UxFeedback) -> UxFeedbackResponse:
+    return UxFeedbackResponse(
+        id=row.id,
+        session_id=row.session_id,
+        actor=row.actor,
+        feedback_type=row.feedback_type,
+        page_key=row.page_key,
+        path=row.path,
+        form_name=row.form_name,
+        note_text=row.note_text,
+        context_json=_load_ux_json(row.context_json),
+        voice_note_status=row.voice_note_status,
+        voice_note_asset_ref=row.voice_note_asset_ref,
+        created_at=row.created_at,
+    )
 
 DEFAULT_SCORING_PROFILES: dict[str, list[tuple[str, str, int]]] = {
     ProfileType.OPPORTUNITY.value: [
@@ -667,6 +761,432 @@ class JanitorialOsService:
         self.db.refresh(commercial)
         return commercial
 
+    def log_ux_event(self, payload: UxEventCreate, *, actor: str | None = None) -> UxEventResponse:
+        row = UxEvent(
+            session_id=payload.session_id,
+            actor=actor,
+            page_key=payload.page_key,
+            path=payload.path,
+            referrer_path=payload.referrer_path,
+            event_type=payload.event_type.value,
+            form_name=payload.form_name,
+            target_key=payload.target_key,
+            field_name=payload.field_name,
+            duration_ms=payload.duration_ms,
+            count_value=payload.count_value,
+            metadata_json=_dump_ux_json(payload.metadata_json),
+        )
+        self.db.add(row)
+        self.db.commit()
+        self.db.refresh(row)
+        return _ux_event_response(row)
+
+    def submit_ux_feedback(self, payload: UxFeedbackCreate, *, actor: str | None = None) -> UxFeedbackResponse:
+        row = UxFeedback(
+            session_id=payload.session_id,
+            actor=actor,
+            page_key=payload.page_key,
+            path=payload.path,
+            form_name=payload.form_name,
+            feedback_type=payload.feedback_type.value,
+            note_text=payload.note_text,
+            context_json=_dump_ux_json(payload.context_json),
+            voice_note_status=payload.voice_note_status.value,
+            voice_note_asset_ref=payload.voice_note_asset_ref,
+        )
+        self.db.add(row)
+        self.db.flush()
+        event_type = (
+            UxEventType.MANUAL_OVERRIDE.value
+            if payload.feedback_type == UxFeedbackType.MANUAL_WORKAROUND
+            else UxEventType.FEEDBACK_SUBMITTED.value
+        )
+        self.db.add(
+            UxEvent(
+                session_id=payload.session_id,
+                actor=actor,
+                page_key=payload.page_key,
+                path=payload.path,
+                referrer_path=None,
+                event_type=event_type,
+                form_name=payload.form_name,
+                target_key=None,
+                field_name=None,
+                duration_ms=None,
+                count_value=1,
+                metadata_json=_dump_ux_json({"feedback_type": payload.feedback_type.value, **payload.context_json}),
+            )
+        )
+        self.db.commit()
+        self.db.refresh(row)
+        return _ux_feedback_response(row)
+
+    def summarize_ux_friction(self, *, lookback_days: int = 14) -> UxFrictionSummaryResponse:
+        lookback_days = min(max(lookback_days, 1), 90)
+        since = _utcnow() - timedelta(days=lookback_days)
+        events = list(
+            self.db.scalars(
+                select(UxEvent).where(UxEvent.created_at >= since).order_by(UxEvent.created_at.asc())
+            )
+        )
+        feedback = list(
+            self.db.scalars(
+                select(UxFeedback).where(UxFeedback.created_at >= since).order_by(UxFeedback.created_at.desc())
+            )
+        )
+
+        page_stats: dict[str, dict[str, Any]] = defaultdict(
+            lambda: {
+                "page_key": "",
+                "path": "",
+                "visits": 0,
+                "duration_total": 0,
+                "duration_samples": 0,
+                "revisit_count": 0,
+                "navigation_loop_count": 0,
+                "validation_failures": 0,
+                "abandoned_forms": 0,
+                "repeated_clicks": 0,
+                "high_churn_fields": 0,
+                "manual_overrides": 0,
+                "explicit_feedback_count": 0,
+                "max_field_churn": 0,
+                "feedback_types": Counter(),
+                "validation_forms": Counter(),
+            }
+        )
+        page_views_by_session: dict[str, list[UxEvent]] = defaultdict(list)
+        page_visit_counts: dict[tuple[str, str], int] = defaultdict(int)
+        tracked_sessions = {
+            row.session_id for row in events if row.session_id
+        } | {row.session_id for row in feedback if row.session_id}
+
+        for row in events:
+            stats = page_stats[row.page_key]
+            stats["page_key"] = row.page_key
+            stats["path"] = row.path
+            event_count = row.count_value or 1
+            if row.event_type == UxEventType.PAGE_VIEW.value:
+                stats["visits"] += 1
+                page_views_by_session[row.session_id].append(row)
+                page_visit_counts[(row.session_id, row.page_key)] += 1
+            elif row.event_type == UxEventType.PAGE_EXIT.value and row.duration_ms is not None:
+                stats["duration_total"] += row.duration_ms
+                stats["duration_samples"] += 1
+            elif row.event_type == UxEventType.VALIDATION_FAILURE.value:
+                stats["validation_failures"] += event_count
+                if row.form_name:
+                    stats["validation_forms"][row.form_name] += event_count
+            elif row.event_type == UxEventType.FORM_ABANDON.value:
+                stats["abandoned_forms"] += event_count
+            elif row.event_type == UxEventType.REPEATED_CLICK.value:
+                stats["repeated_clicks"] += event_count
+            elif row.event_type == UxEventType.FIELD_CHURN.value:
+                stats["high_churn_fields"] += 1
+                stats["max_field_churn"] = max(stats["max_field_churn"], event_count)
+            elif row.event_type == UxEventType.MANUAL_OVERRIDE.value:
+                stats["manual_overrides"] += event_count
+
+        for (session_id, page_key), visits in page_visit_counts.items():
+            if visits > 1:
+                page_stats[page_key]["revisit_count"] += visits - 1
+
+        for session_events in page_views_by_session.values():
+            keys = [row.page_key for row in session_events]
+            for index in range(2, len(keys)):
+                if keys[index] == keys[index - 2] and keys[index] != keys[index - 1]:
+                    page_stats[keys[index]]["navigation_loop_count"] += 1
+
+        for row in feedback:
+            stats = page_stats[row.page_key]
+            stats["page_key"] = row.page_key
+            stats["path"] = row.path
+            stats["explicit_feedback_count"] += 1
+            stats["feedback_types"][row.feedback_type] += 1
+            if row.feedback_type == UxFeedbackType.MANUAL_WORKAROUND.value:
+                stats["manual_overrides"] += 1
+
+        top_pages: list[UxPageFrictionSummary] = []
+        findings: list[UxFrictionFinding] = []
+        recommendations: list[UxRecommendation] = []
+        recommendation_keys: set[tuple[str, str]] = set()
+
+        def add_recommendation(
+            *,
+            code: str,
+            page_key: str,
+            path: str,
+            title: str,
+            rationale: str,
+            proposed_action: str,
+        ) -> None:
+            dedupe_key = (code, page_key)
+            if dedupe_key in recommendation_keys:
+                return
+            recommendation_keys.add(dedupe_key)
+            recommendations.append(
+                UxRecommendation(
+                    code=code,
+                    page_key=page_key,
+                    path=path,
+                    title=title,
+                    rationale=rationale,
+                    proposed_action=proposed_action,
+                )
+            )
+
+        for stats in page_stats.values():
+            avg_time = None
+            if stats["duration_samples"]:
+                avg_time = round(stats["duration_total"] / stats["duration_samples"])
+            top_pages.append(
+                UxPageFrictionSummary(
+                    page_key=stats["page_key"],
+                    path=stats["path"],
+                    visits=stats["visits"],
+                    avg_time_on_page_ms=avg_time,
+                    revisit_count=stats["revisit_count"],
+                    navigation_loop_count=stats["navigation_loop_count"],
+                    validation_failures=stats["validation_failures"],
+                    abandoned_forms=stats["abandoned_forms"],
+                    repeated_clicks=stats["repeated_clicks"],
+                    high_churn_fields=stats["high_churn_fields"],
+                    manual_overrides=stats["manual_overrides"],
+                    explicit_feedback_count=stats["explicit_feedback_count"],
+                )
+            )
+            page_key = stats["page_key"]
+            path = stats["path"]
+
+            if stats["validation_failures"] >= 3:
+                findings.append(
+                    UxFrictionFinding(
+                        code="repeated_validation_failures",
+                        severity="HIGH",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="validation_failures",
+                        metric_value=stats["validation_failures"],
+                        threshold=3,
+                        summary=f"{page_key} generated repeated validation failures across the same workflow window.",
+                    )
+                )
+                top_form = stats["validation_forms"].most_common(1)[0][0] if stats["validation_forms"] else "this form"
+                add_recommendation(
+                    code="improve_form_guidance",
+                    page_key=page_key,
+                    path=path,
+                    title="Tighten form guidance and defaults",
+                    rationale=f"{stats['validation_failures']} validation failures were recorded on {top_form}.",
+                    proposed_action="Add inline examples, clearer required-field hints, or safer default values before changing workflow logic.",
+                )
+
+            if stats["abandoned_forms"] >= 2:
+                findings.append(
+                    UxFrictionFinding(
+                        code="abandoned_form_flow",
+                        severity="MEDIUM",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="abandoned_forms",
+                        metric_value=stats["abandoned_forms"],
+                        threshold=2,
+                        summary=f"{page_key} shows repeated form abandonment after operators started editing.",
+                    )
+                )
+                add_recommendation(
+                    code="simplify_form_flow",
+                    page_key=page_key,
+                    path=path,
+                    title="Simplify or stage the form flow",
+                    rationale=f"{stats['abandoned_forms']} abandoned forms suggest the page is asking for too much before commitment.",
+                    proposed_action="Break the form into smaller steps or reduce non-essential fields on the first pass.",
+                )
+
+            if stats["max_field_churn"] >= 5:
+                findings.append(
+                    UxFrictionFinding(
+                        code="field_edit_churn",
+                        severity="MEDIUM",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="max_field_churn",
+                        metric_value=stats["max_field_churn"],
+                        threshold=5,
+                        summary=f"{page_key} includes a field that operators repeatedly revise before leaving the page.",
+                    )
+                )
+                add_recommendation(
+                    code="normalize_high_churn_fields",
+                    page_key=page_key,
+                    path=path,
+                    title="Standardize the highest-churn fields",
+                    rationale=f"The highest observed edit churn reached {stats['max_field_churn']} edits on one field.",
+                    proposed_action="Convert ambiguous free-text inputs to controlled options or add helper copy before collecting the value.",
+                )
+
+            if stats["repeated_clicks"] >= 3:
+                findings.append(
+                    UxFrictionFinding(
+                        code="repeated_click_clusters",
+                        severity="MEDIUM",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="repeated_clicks",
+                        metric_value=stats["repeated_clicks"],
+                        threshold=3,
+                        summary=f"{page_key} triggered repeated clicks, which usually means the operator is unsure whether the UI responded.",
+                    )
+                )
+                add_recommendation(
+                    code="clarify_interaction_feedback",
+                    page_key=page_key,
+                    path=path,
+                    title="Clarify interaction feedback",
+                    rationale=f"{stats['repeated_clicks']} repeated click signals suggest the UI is not confirming state changes clearly.",
+                    proposed_action="Add a more explicit success/loading state or make the primary action outcome more visible.",
+                )
+
+            if stats["navigation_loop_count"] >= 2 or stats["revisit_count"] >= 4:
+                metric_name = "navigation_loop_count" if stats["navigation_loop_count"] >= 2 else "revisit_count"
+                metric_value = stats["navigation_loop_count"] if stats["navigation_loop_count"] >= 2 else stats["revisit_count"]
+                threshold = 2 if stats["navigation_loop_count"] >= 2 else 4
+                findings.append(
+                    UxFrictionFinding(
+                        code="navigation_revisit_pattern",
+                        severity="MEDIUM",
+                        page_key=page_key,
+                        path=path,
+                        metric_name=metric_name,
+                        metric_value=metric_value,
+                        threshold=threshold,
+                        summary=f"{page_key} is being revisited in a loop-like pattern, which suggests missing shortcuts or context.",
+                    )
+                )
+                add_recommendation(
+                    code="add_cross_links_or_summary",
+                    page_key=page_key,
+                    path=path,
+                    title="Reduce navigation loops",
+                    rationale=f"Operators revisited this page {stats['revisit_count']} times and hit {stats['navigation_loop_count']} loop patterns.",
+                    proposed_action="Add direct links, inline summaries, or cross-screen context so operators do not have to bounce between pages.",
+                )
+
+            if avg_time and avg_time >= 180_000 and stats["visits"] >= 3:
+                findings.append(
+                    UxFrictionFinding(
+                        code="long_dwell_time",
+                        severity="LOW",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="avg_time_on_page_ms",
+                        metric_value=avg_time,
+                        threshold=180_000,
+                        summary=f"{page_key} has a long average dwell time, which may indicate heavy cognitive load or reference use.",
+                    )
+                )
+                add_recommendation(
+                    code="add_decision_support",
+                    page_key=page_key,
+                    path=path,
+                    title="Add decision support on this page",
+                    rationale=f"The average time on page is {round(avg_time / 1000)} seconds across multiple visits.",
+                    proposed_action="Add concise helper text, defaults, or summaries so operators can finish the task without pausing to reconstruct context.",
+                )
+
+            if stats["feedback_types"][UxFeedbackType.CONFUSING.value] >= 1:
+                findings.append(
+                    UxFrictionFinding(
+                        code="explicit_confusing_feedback",
+                        severity="HIGH",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="confusing_feedback",
+                        metric_value=stats["feedback_types"][UxFeedbackType.CONFUSING.value],
+                        threshold=1,
+                        summary=f"Operators explicitly marked {page_key} as confusing.",
+                    )
+                )
+                add_recommendation(
+                    code="clarify_confusing_workflow",
+                    page_key=page_key,
+                    path=path,
+                    title="Clarify this workflow before expanding it",
+                    rationale="At least one operator explicitly marked this step as confusing.",
+                    proposed_action="Review labels, sequence, and help text with the operator before adding more adjacent features.",
+                )
+
+            if stats["feedback_types"][UxFeedbackType.TOOK_TOO_LONG.value] >= 1:
+                findings.append(
+                    UxFrictionFinding(
+                        code="explicit_time_feedback",
+                        severity="MEDIUM",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="too_long_feedback",
+                        metric_value=stats["feedback_types"][UxFeedbackType.TOOK_TOO_LONG.value],
+                        threshold=1,
+                        summary=f"Operators explicitly said {page_key} took too long.",
+                    )
+                )
+                add_recommendation(
+                    code="reduce_time_to_complete",
+                    page_key=page_key,
+                    path=path,
+                    title="Reduce time-to-complete",
+                    rationale="An operator explicitly reported that this workflow took too long.",
+                    proposed_action="Trim non-essential inputs or prefill known context before asking the operator to finish the step.",
+                )
+
+            if stats["feedback_types"][UxFeedbackType.MANUAL_WORKAROUND.value] >= 1 or stats["manual_overrides"] >= 1:
+                findings.append(
+                    UxFrictionFinding(
+                        code="manual_workaround_detected",
+                        severity="HIGH",
+                        page_key=page_key,
+                        path=path,
+                        metric_name="manual_overrides",
+                        metric_value=stats["manual_overrides"],
+                        threshold=1,
+                        summary=f"Operators reported doing part of {page_key} manually outside the intended workflow.",
+                    )
+                )
+                add_recommendation(
+                    code="formalize_manual_workaround",
+                    page_key=page_key,
+                    path=path,
+                    title="Decide whether to formalize the manual workaround",
+                    rationale="Manual-workaround feedback is the strongest signal that the workflow is missing a necessary path.",
+                    proposed_action="Review the exact manual step with approval before adding it to the productized workflow.",
+                )
+
+        top_pages.sort(
+            key=lambda item: (
+                item.validation_failures
+                + item.abandoned_forms
+                + item.manual_overrides
+                + item.explicit_feedback_count
+                + item.navigation_loop_count,
+                item.visits,
+            ),
+            reverse=True,
+        )
+        severity_rank = {"HIGH": 3, "MEDIUM": 2, "LOW": 1}
+        findings.sort(key=lambda item: (severity_rank.get(item.severity, 0), item.metric_value), reverse=True)
+        recent_feedback = [_ux_feedback_response(row) for row in feedback[:8]]
+
+        return UxFrictionSummaryResponse(
+            generated_at=_utcnow(),
+            lookback_days=lookback_days,
+            total_events=len(events),
+            total_feedback=len(feedback),
+            tracked_sessions=len(tracked_sessions),
+            top_pages=top_pages[:8],
+            findings=findings[:12],
+            recommendations=recommendations[:12],
+            recent_feedback=recent_feedback,
+        )
+
     def _dashboard_follow_up_summary(self, contractor: Contractor) -> DashboardContractorFollowUpSummary:
         latest_touchpoint = self.db.scalars(
             select(ContractorTouchpoint)
@@ -932,8 +1452,22 @@ class JanitorialOsService:
         )
         return list(self.db.scalars(stmt))
 
-    def list_contacts(self, opportunity_id: str) -> list[Contact]:
-        stmt = select(Contact).where(Contact.opportunity_id == opportunity_id).order_by(Contact.created_at.desc())
+    def list_contacts(
+        self,
+        opportunity_id: str,
+        *,
+        contact_side: ContactSide | None = None,
+        source_type: ContactSourceType | None = None,
+        confidence_level: ConfidenceLevel | None = None,
+    ) -> list[Contact]:
+        stmt = select(Contact).where(Contact.opportunity_id == opportunity_id)
+        if contact_side:
+            stmt = stmt.where(Contact.contact_side == contact_side.value)
+        if source_type:
+            stmt = stmt.where(Contact.source_type == source_type.value)
+        if confidence_level:
+            stmt = stmt.where(Contact.confidence_level == confidence_level.value)
+        stmt = stmt.order_by(Contact.created_at.desc())
         return list(self.db.scalars(stmt))
 
     def add_contact(self, opportunity_id: str, payload: ContactCreate) -> Contact:
@@ -945,10 +1479,22 @@ class JanitorialOsService:
         self.db.refresh(contact)
         return contact
 
-    def list_intelligence_notes(self, opportunity_id: str) -> list[IntelligenceNote]:
-        stmt = select(IntelligenceNote).where(IntelligenceNote.opportunity_id == opportunity_id).order_by(
-            IntelligenceNote.recorded_at.desc()
-        )
+    def list_intelligence_notes(
+        self,
+        opportunity_id: str,
+        *,
+        note_type: IntelligenceNoteType | None = None,
+        source_class: SourceClass | None = None,
+        confidence_level: ConfidenceLevel | None = None,
+    ) -> list[IntelligenceNote]:
+        stmt = select(IntelligenceNote).where(IntelligenceNote.opportunity_id == opportunity_id)
+        if note_type:
+            stmt = stmt.where(IntelligenceNote.note_type == note_type.value)
+        if source_class:
+            stmt = stmt.where(IntelligenceNote.source_class == source_class.value)
+        if confidence_level:
+            stmt = stmt.where(IntelligenceNote.confidence_level == confidence_level.value)
+        stmt = stmt.order_by(IntelligenceNote.recorded_at.desc())
         return list(self.db.scalars(stmt))
 
     def add_intelligence_note(self, opportunity_id: str, payload: Any) -> IntelligenceNote:
@@ -967,10 +1513,19 @@ class JanitorialOsService:
         self.db.refresh(note)
         return note
 
-    def list_evidence(self, opportunity_id: str) -> list[EvidenceRecord]:
-        stmt = select(EvidenceRecord).where(EvidenceRecord.opportunity_id == opportunity_id).order_by(
-            EvidenceRecord.captured_at.desc()
-        )
+    def list_evidence(
+        self,
+        opportunity_id: str,
+        *,
+        source_class: SourceClass | None = None,
+        confidence_level: ConfidenceLevel | None = None,
+    ) -> list[EvidenceRecord]:
+        stmt = select(EvidenceRecord).where(EvidenceRecord.opportunity_id == opportunity_id)
+        if source_class:
+            stmt = stmt.where(EvidenceRecord.source_class == source_class.value)
+        if confidence_level:
+            stmt = stmt.where(EvidenceRecord.confidence_level == confidence_level.value)
+        stmt = stmt.order_by(EvidenceRecord.captured_at.desc())
         return list(self.db.scalars(stmt))
 
     def add_evidence(self, opportunity_id: str, payload: EvidenceRecordCreate) -> EvidenceRecord:
@@ -990,10 +1545,19 @@ class JanitorialOsService:
         self.db.refresh(evidence)
         return evidence
 
-    def list_capture_actions(self, opportunity_id: str) -> list[CaptureAction]:
-        stmt = select(CaptureAction).where(CaptureAction.opportunity_id == opportunity_id).order_by(
-            CaptureAction.due_date.asc().nulls_last(), CaptureAction.created_at.desc()
-        )
+    def list_capture_actions(
+        self,
+        opportunity_id: str,
+        *,
+        action_type: CaptureActionType | None = None,
+        status: CaptureActionStatus | None = None,
+    ) -> list[CaptureAction]:
+        stmt = select(CaptureAction).where(CaptureAction.opportunity_id == opportunity_id)
+        if action_type:
+            stmt = stmt.where(CaptureAction.action_type == action_type.value)
+        if status:
+            stmt = stmt.where(CaptureAction.status == status.value)
+        stmt = stmt.order_by(CaptureAction.due_date.asc().nulls_last(), CaptureAction.created_at.desc())
         return list(self.db.scalars(stmt))
 
     def add_capture_action(self, opportunity_id: str, payload: CaptureActionCreate) -> CaptureAction:
@@ -1033,6 +1597,7 @@ class JanitorialOsService:
     def dashboard_summary(self) -> DashboardSummaryResponse:
         today = date.today()
         upcoming_cutoff = today + timedelta(days=14)
+        friction_summary = self.summarize_ux_friction()
         upcoming_contracts = self.list_contracts(rebid_within_days=180)[:8]
         opportunities = list(self.db.scalars(select(Opportunity).order_by(Opportunity.qualification_score.desc())))
         matches = list(
@@ -1120,6 +1685,7 @@ class JanitorialOsService:
             for contractor in contractors_with_follow_up
             if contractor.next_follow_up_date and today <= contractor.next_follow_up_date <= upcoming_cutoff
         ][:8]
+        active_pursuit_readiness = self._dashboard_pursuit_readiness(opportunities)
 
         return DashboardSummaryResponse(
             generated_at=_utcnow(),
@@ -1133,11 +1699,113 @@ class JanitorialOsService:
             top_matches=top_matches,
             overdue_contractor_follow_ups=overdue_follow_ups,
             upcoming_contractor_follow_ups=upcoming_follow_ups,
+            live_pursuit_readiness=active_pursuit_readiness,
             active_pursuit_counts=dict(active_counts),
             total_weighted_pipeline_value=total_pipeline,
             expected_consulting_revenue=expected_revenue,
             stage_conversion_metrics=dict(stage_metrics),
+            friction_summary=friction_summary,
         )
+
+    def _dashboard_pursuit_readiness(
+        self,
+        opportunities: list[Opportunity],
+    ) -> list[DashboardPursuitReadinessSummary]:
+        active_opportunities = [
+            opportunity
+            for opportunity in opportunities
+            if opportunity.pursuit_stage not in {"AWARD", "LOST", "DORMANT"}
+        ][:8]
+        if not active_opportunities:
+            return []
+
+        active_ids = [opportunity.id for opportunity in active_opportunities]
+        contacts_by_opportunity: dict[str, list[Contact]] = defaultdict(list)
+        notes_by_opportunity: Counter[str] = Counter()
+        evidence_by_opportunity: Counter[str] = Counter()
+        actions_by_opportunity: dict[str, list[CaptureAction]] = defaultdict(list)
+        commercials_by_opportunity = {
+            item.opportunity_id: item
+            for item in self.db.scalars(
+                select(CommercialEngagement).where(CommercialEngagement.opportunity_id.in_(active_ids))
+            )
+        }
+        organizations = {
+            item.id: item
+            for item in self.db.scalars(
+                select(Organization).where(
+                    Organization.id.in_([opportunity.buying_organization_id for opportunity in active_opportunities if opportunity.buying_organization_id])
+                )
+            )
+        }
+        contractors = {
+            item.id: item
+            for item in self.db.scalars(select(Contractor).where(Contractor.id.in_([commercial.contractor_id for commercial in commercials_by_opportunity.values() if commercial.contractor_id])))
+        }
+
+        for contact in self.db.scalars(select(Contact).where(Contact.opportunity_id.in_(active_ids))):
+            contacts_by_opportunity[contact.opportunity_id].append(contact)
+        for note in self.db.scalars(select(IntelligenceNote).where(IntelligenceNote.opportunity_id.in_(active_ids))):
+            notes_by_opportunity[note.opportunity_id] += 1
+        for evidence in self.db.scalars(select(EvidenceRecord).where(EvidenceRecord.opportunity_id.in_(active_ids))):
+            evidence_by_opportunity[evidence.opportunity_id] += 1
+        for action in self.db.scalars(select(CaptureAction).where(CaptureAction.opportunity_id.in_(active_ids))):
+            actions_by_opportunity[action.opportunity_id].append(action)
+
+        summaries: list[DashboardPursuitReadinessSummary] = []
+        readiness_total = 6
+        for opportunity in active_opportunities:
+            contacts = contacts_by_opportunity[opportunity.id]
+            buyer_contacts_count = sum(1 for item in contacts if item.contact_side == "BUYER")
+            contractor_contacts_count = sum(1 for item in contacts if item.contact_side == "CONTRACTOR")
+            direct_conversation_contacts_count = sum(
+                1 for item in contacts if item.source_type == "DIRECT_CONVERSATION"
+            )
+            intelligence_notes_count = notes_by_opportunity[opportunity.id]
+            evidence_records_count = evidence_by_opportunity[opportunity.id]
+            open_capture_actions_count = sum(
+                1 for item in actions_by_opportunity[opportunity.id] if item.status != "COMPLETE"
+            )
+            commercial = commercials_by_opportunity.get(opportunity.id)
+            contractor = contractors.get(commercial.contractor_id) if commercial and commercial.contractor_id else None
+            advised_contractor_name = contractor.name if contractor else None
+
+            missing_items: list[str] = []
+            if buyer_contacts_count == 0:
+                missing_items.append("Buyer contact")
+            if contractor_contacts_count == 0:
+                missing_items.append("Contractor contact")
+            if intelligence_notes_count == 0:
+                missing_items.append("Intelligence note")
+            if evidence_records_count == 0:
+                missing_items.append("Evidence")
+            if open_capture_actions_count == 0:
+                missing_items.append("Next action")
+            if not advised_contractor_name:
+                missing_items.append("Advised contractor")
+
+            summaries.append(
+                DashboardPursuitReadinessSummary(
+                    opportunity_id=opportunity.id,
+                    opportunity_name=opportunity.name,
+                    organization_name=organizations.get(opportunity.buying_organization_id).name
+                    if opportunity.buying_organization_id and opportunity.buying_organization_id in organizations
+                    else opportunity.client,
+                    pursuit_stage=opportunity.pursuit_stage,
+                    advised_contractor_name=advised_contractor_name,
+                    buyer_contacts_count=buyer_contacts_count,
+                    contractor_contacts_count=contractor_contacts_count,
+                    direct_conversation_contacts_count=direct_conversation_contacts_count,
+                    intelligence_notes_count=intelligence_notes_count,
+                    evidence_records_count=evidence_records_count,
+                    open_capture_actions_count=open_capture_actions_count,
+                    pilot_ready=not missing_items,
+                    readiness_score=readiness_total - len(missing_items),
+                    readiness_total=readiness_total,
+                    missing_items=missing_items,
+                )
+            )
+        return summaries
 
     def seed_demo_data(self) -> None:
         if self.db.scalar(select(func.count()).select_from(Organization)):

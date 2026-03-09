@@ -45,7 +45,7 @@ def reset_db() -> None:
     with engine.begin() as conn:
         conn.execute(text("CREATE TABLE IF NOT EXISTS alembic_version (version_num VARCHAR(32) NOT NULL)"))
         conn.execute(text("DELETE FROM alembic_version"))
-        conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('0026_contractor_prospect_pipeline')"))
+        conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('0027_ux_friction_feedback')"))
     yield
 
 

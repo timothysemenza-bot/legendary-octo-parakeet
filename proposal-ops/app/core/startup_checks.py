@@ -35,6 +35,8 @@ REQUIRED_TABLES = {
     "scoring_criteria",
     "contractors",
     "contractor_touchpoints",
+    "ux_events",
+    "ux_feedback",
     "opportunity_matches",
     "contacts",
     "intelligence_notes",

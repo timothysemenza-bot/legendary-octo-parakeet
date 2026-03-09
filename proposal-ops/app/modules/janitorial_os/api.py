@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from enum import StrEnum
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
@@ -19,11 +20,16 @@ from app.modules.janitorial_os.models import (
 )
 from app.modules.janitorial_os.schemas import (
     CaptureActionCreate,
+    CaptureActionStatus,
+    CaptureActionType,
     CaptureActionResponse,
     CommercialCreate,
+    CommercialSuccessFeeType,
     CommercialResponse,
     ConfidenceLevel,
     ContactCreate,
+    ContactSide,
+    ContactSourceType,
     ContactResponse,
     ContractSourceType,
     ContractRecordCreate,
@@ -49,6 +55,7 @@ from app.modules.janitorial_os.schemas import (
     FacilityCreate,
     FacilityResponse,
     FacilityUpdate,
+    IntelligenceNoteType,
     IntelligenceNoteCreate,
     IntelligenceNoteResponse,
     MatchFactorResponse,
@@ -61,6 +68,11 @@ from app.modules.janitorial_os.schemas import (
     ScoringProfileResponse,
     ScoringProfileUpdateRequest,
     SourceClass,
+    UxEventCreate,
+    UxEventResponse,
+    UxFeedbackCreate,
+    UxFeedbackResponse,
+    UxFrictionSummaryResponse,
 )
 from app.modules.janitorial_os.service import JanitorialOsService
 from app.modules.opportunity_intake.schemas import OpportunityDetailResponse
@@ -76,8 +88,33 @@ def _choice_label(value: str) -> str:
     return value if any(char.islower() for char in value) else value.replace("_", " ").title()
 
 
+def _choice_token(value: str) -> str:
+    return str(value).strip().upper().replace("-", "_").replace("/", "_").replace(" ", "_")
+
+
 def _enum_options(enum_cls: type) -> list[dict[str, str]]:
     return [{"value": item.value, "label": _choice_label(item.value)} for item in enum_cls]
+
+
+def _parse_optional_date_query(value: str | None) -> date | None:
+    text = (value or "").strip()
+    if not text:
+        return None
+    try:
+        return date.fromisoformat(text)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=f"Invalid date value: {text}") from exc
+
+
+def _parse_optional_enum_query(enum_cls: type[StrEnum], value: str | None) -> StrEnum | None:
+    text = (value or "").strip()
+    if not text:
+        return None
+    token = _choice_token(text)
+    for item in enum_cls:
+        if token in {_choice_token(item.name), _choice_token(item.value)}:
+            return item
+    raise HTTPException(status_code=422, detail=f"Invalid choice for {enum_cls.__name__}: {text}")
 
 
 CONTRACTOR_FORM_OPTIONS = {
@@ -88,17 +125,14 @@ CONTRACTOR_FORM_OPTIONS = {
     "touchpoint_types": _enum_options(ContractorTouchpointType),
     "contract_source_types": _enum_options(ContractSourceType),
     "confidence_levels": _enum_options(ConfidenceLevel),
+    "contact_sides": _enum_options(ContactSide),
+    "contact_source_types": _enum_options(ContactSourceType),
     "source_classes": _enum_options(SourceClass),
+    "intelligence_note_types": _enum_options(IntelligenceNoteType),
     "pursuit_stages": _enum_options(PursuitStageOption),
-    "contact_sides": [
-        {"value": "BUYER", "label": "Buyer"},
-        {"value": "CONTRACTOR", "label": "Contractor"},
-    ],
-    "success_fee_types": [
-        {"value": "FIXED", "label": "Fixed"},
-        {"value": "PERCENT_ANNUAL", "label": "Percent Annual"},
-        {"value": "PERCENT_TOTAL", "label": "Percent Total"},
-    ],
+    "capture_action_types": _enum_options(CaptureActionType),
+    "capture_action_statuses": _enum_options(CaptureActionStatus),
+    "success_fee_types": _enum_options(CommercialSuccessFeeType),
     "score_choices": [{"value": str(value), "label": str(value)} for value in range(1, 6)],
 }
 
@@ -253,6 +287,29 @@ def _parse_contract_form(
 
 def _validation_errors(exc: ValidationError) -> list[str]:
     return [f"{str(issue['loc'][-1]).replace('_', ' ').title()}: {issue['msg']}" for issue in exc.errors()]
+
+
+def _validation_field_names(exc: ValidationError) -> list[str]:
+    return sorted({str(issue["loc"][-1]) for issue in exc.errors() if issue.get("loc")})
+
+
+def _ux_validation_context(
+    *,
+    page_key: str,
+    form_name: str,
+    errors: list[str],
+    field_names: list[str] | None = None,
+) -> dict[str, object]:
+    return {
+        "page_key": page_key,
+        "form_name": form_name,
+        "error_count": len(errors),
+        "field_names": field_names or [],
+    }
+
+
+def _request_actor(request: Request) -> str | None:
+    return request.session.get("user_id") or request.session.get("display_name")
 
 
 @api_router.get("/api/organizations", response_model=list[OrganizationResponse])
@@ -553,9 +610,23 @@ def refresh_matches(opportunity_id: str, db: Session = Depends(get_db)) -> list[
 
 
 @api_router.get("/api/opportunities/{opportunity_id}/contacts", response_model=list[ContactResponse])
-def list_contacts(opportunity_id: str, db: Session = Depends(get_db)) -> list[ContactResponse]:
+def list_contacts(
+    opportunity_id: str,
+    contact_side: ContactSide | None = Query(None),
+    source_type: ContactSourceType | None = Query(None),
+    confidence_level: ConfidenceLevel | None = Query(None),
+    db: Session = Depends(get_db),
+) -> list[ContactResponse]:
     service = JanitorialOsService(db)
-    return [_contact_response(row) for row in service.list_contacts(opportunity_id)]
+    return [
+        _contact_response(row)
+        for row in service.list_contacts(
+            opportunity_id,
+            contact_side=contact_side,
+            source_type=source_type,
+            confidence_level=confidence_level,
+        )
+    ]
 
 
 @api_router.post("/api/opportunities/{opportunity_id}/contacts", response_model=ContactResponse)
@@ -565,9 +636,23 @@ def create_contact(opportunity_id: str, payload: ContactCreate, db: Session = De
 
 
 @api_router.get("/api/opportunities/{opportunity_id}/intelligence", response_model=list[IntelligenceNoteResponse])
-def list_intelligence(opportunity_id: str, db: Session = Depends(get_db)) -> list[IntelligenceNoteResponse]:
+def list_intelligence(
+    opportunity_id: str,
+    note_type: IntelligenceNoteType | None = Query(None),
+    source_class: SourceClass | None = Query(None),
+    confidence_level: ConfidenceLevel | None = Query(None),
+    db: Session = Depends(get_db),
+) -> list[IntelligenceNoteResponse]:
     service = JanitorialOsService(db)
-    return [_note_response(row) for row in service.list_intelligence_notes(opportunity_id)]
+    return [
+        _note_response(row)
+        for row in service.list_intelligence_notes(
+            opportunity_id,
+            note_type=note_type,
+            source_class=source_class,
+            confidence_level=confidence_level,
+        )
+    ]
 
 
 @api_router.post("/api/opportunities/{opportunity_id}/intelligence", response_model=IntelligenceNoteResponse)
@@ -579,9 +664,21 @@ def create_intelligence(
 
 
 @api_router.get("/api/opportunities/{opportunity_id}/evidence", response_model=list[EvidenceRecordResponse])
-def list_evidence(opportunity_id: str, db: Session = Depends(get_db)) -> list[EvidenceRecordResponse]:
+def list_evidence(
+    opportunity_id: str,
+    source_class: SourceClass | None = Query(None),
+    confidence_level: ConfidenceLevel | None = Query(None),
+    db: Session = Depends(get_db),
+) -> list[EvidenceRecordResponse]:
     service = JanitorialOsService(db)
-    return [_evidence_response(row) for row in service.list_evidence(opportunity_id)]
+    return [
+        _evidence_response(row)
+        for row in service.list_evidence(
+            opportunity_id,
+            source_class=source_class,
+            confidence_level=confidence_level,
+        )
+    ]
 
 
 @api_router.post("/api/opportunities/{opportunity_id}/evidence", response_model=EvidenceRecordResponse)
@@ -593,9 +690,21 @@ def create_evidence(
 
 
 @api_router.get("/api/opportunities/{opportunity_id}/capture-actions", response_model=list[CaptureActionResponse])
-def list_capture_actions(opportunity_id: str, db: Session = Depends(get_db)) -> list[CaptureActionResponse]:
+def list_capture_actions(
+    opportunity_id: str,
+    action_type: CaptureActionType | None = Query(None),
+    status: CaptureActionStatus | None = Query(None),
+    db: Session = Depends(get_db),
+) -> list[CaptureActionResponse]:
     service = JanitorialOsService(db)
-    return [_action_response(row) for row in service.list_capture_actions(opportunity_id)]
+    return [
+        _action_response(row)
+        for row in service.list_capture_actions(
+            opportunity_id,
+            action_type=action_type,
+            status=status,
+        )
+    ]
 
 
 @api_router.post("/api/opportunities/{opportunity_id}/capture-actions", response_model=CaptureActionResponse)
@@ -631,6 +740,35 @@ def dashboard_summary(db: Session = Depends(get_db)) -> DashboardSummaryResponse
     return service.dashboard_summary()
 
 
+@api_router.post("/api/ux/events", response_model=UxEventResponse)
+def create_ux_event(
+    payload: UxEventCreate,
+    request: Request,
+    db: Session = Depends(get_db),
+) -> UxEventResponse:
+    service = JanitorialOsService(db)
+    return service.log_ux_event(payload, actor=_request_actor(request))
+
+
+@api_router.post("/api/ux/feedback", response_model=UxFeedbackResponse)
+def create_ux_feedback(
+    payload: UxFeedbackCreate,
+    request: Request,
+    db: Session = Depends(get_db),
+) -> UxFeedbackResponse:
+    service = JanitorialOsService(db)
+    return service.submit_ux_feedback(payload, actor=_request_actor(request))
+
+
+@api_router.get("/api/ux/friction-summary", response_model=UxFrictionSummaryResponse)
+def ux_friction_summary(
+    lookback_days: int = Query(14, ge=1, le=90),
+    db: Session = Depends(get_db),
+) -> UxFrictionSummaryResponse:
+    service = JanitorialOsService(db)
+    return service.summarize_ux_friction(lookback_days=lookback_days)
+
+
 @api_router.post("/api/dashboard/seed-demo")
 def seed_demo(db: Session = Depends(get_db)) -> dict:
     service = JanitorialOsService(db)
@@ -655,6 +793,20 @@ def seed_demo_web(db: Session = Depends(get_db)) -> RedirectResponse:
     service = JanitorialOsService(db)
     service.seed_demo_data()
     return RedirectResponse(url="/dashboard", status_code=303)
+
+
+@web_router.get("/ux/friction", response_class=HTMLResponse)
+def ux_friction_view(
+    request: Request,
+    lookback_days: int = Query(14, ge=1, le=90),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    service = JanitorialOsService(db)
+    return templates.TemplateResponse(
+        request=request,
+        name="friction_summary.html",
+        context={"summary": service.summarize_ux_friction(lookback_days=lookback_days)},
+    )
 
 
 @web_router.get("/organizations", response_class=HTMLResponse)
@@ -1080,10 +1232,11 @@ def create_pursuit_from_contract_web(
 def contractors_view(
     request: Request,
     prospect_stage: str | None = Query(None),
-    follow_up_before: date | None = Query(None),
+    follow_up_before: str | None = Query(None),
     db: Session = Depends(get_db),
 ) -> HTMLResponse:
     service = JanitorialOsService(db)
+    normalized_follow_up_before = _parse_optional_date_query(follow_up_before)
     return templates.TemplateResponse(
         request=request,
         name="contractors.html",
@@ -1091,13 +1244,13 @@ def contractors_view(
             {
                 "contractors": service.list_contractors(
                     prospect_stage=prospect_stage or None,
-                    follow_up_before=follow_up_before,
+                    follow_up_before=normalized_follow_up_before,
                 ),
                 "errors": [],
                 "form_data": {},
                 "filters": {
                     "prospect_stage": prospect_stage or "",
-                    "follow_up_before": follow_up_before.isoformat() if follow_up_before else "",
+                    "follow_up_before": normalized_follow_up_before.isoformat() if normalized_follow_up_before else "",
                 },
             }
         ),
@@ -1163,6 +1316,12 @@ def contractors_create_web(
                     "errors": errors,
                     "form_data": raw,
                     "filters": {"prospect_stage": "", "follow_up_before": ""},
+                    "ux_validation_context": _ux_validation_context(
+                        page_key="/contractors",
+                        form_name="contractor_create",
+                        errors=errors,
+                        field_names=_validation_field_names(exc) if isinstance(exc, ValidationError) else [],
+                    ),
                 }
             ),
             status_code=422,
@@ -1239,7 +1398,15 @@ def contractor_update_web(
         return templates.TemplateResponse(
             request=request,
             name="contractor_detail.html",
-            context=_contractor_detail_context(db, service, contractor, errors=errors),
+            context={
+                **_contractor_detail_context(db, service, contractor, errors=errors),
+                "ux_validation_context": _ux_validation_context(
+                    page_key="/contractors/:id",
+                    form_name="contractor_update",
+                    errors=errors,
+                    field_names=_validation_field_names(exc),
+                ),
+            },
             status_code=422,
         )
     except ValueError as exc:
@@ -1280,7 +1447,15 @@ def contractor_touchpoint_create_web(
         return templates.TemplateResponse(
             request=request,
             name="contractor_detail.html",
-            context=_contractor_detail_context(db, service, contractor, errors=errors),
+            context={
+                **_contractor_detail_context(db, service, contractor, errors=errors),
+                "ux_validation_context": _ux_validation_context(
+                    page_key="/contractors/:id",
+                    form_name="contractor_touchpoint_create",
+                    errors=errors,
+                    field_names=_validation_field_names(exc) if isinstance(exc, ValidationError) else [],
+                ),
+            },
             status_code=422,
         )
 
@@ -1346,7 +1521,15 @@ def contractor_create_pursuit_handoff_web(
                 contractor,
                 errors=errors,
                 handoff_form_data=raw,
-            ),
+            )
+            | {
+                "ux_validation_context": _ux_validation_context(
+                    page_key="/contractors/:id",
+                    form_name="contractor_pursuit_handoff",
+                    errors=errors,
+                    field_names=_validation_field_names(exc) if isinstance(exc, ValidationError) else [],
+                )
+            },
             status_code=422,
         )
 
@@ -1379,7 +1562,15 @@ def contractor_link_opportunity_web(
                 contractor,
                 errors=errors,
                 link_form_data=raw,
-            ),
+            )
+            | {
+                "ux_validation_context": _ux_validation_context(
+                    page_key="/contractors/:id",
+                    form_name="contractor_link_opportunity",
+                    errors=errors,
+                    field_names=_validation_field_names(exc) if isinstance(exc, ValidationError) else [],
+                )
+            },
             status_code=422,
         )
 
@@ -1416,16 +1607,58 @@ async def scoring_settings_update_web(
 
 
 @web_router.get("/opportunities/{opportunity_id}/capture-workbench", response_class=HTMLResponse)
-def capture_workbench_view(request: Request, opportunity_id: str, db: Session = Depends(get_db)) -> HTMLResponse:
+def capture_workbench_view(
+    request: Request,
+    opportunity_id: str,
+    contact_side: str | None = Query(None),
+    contact_source_type: str | None = Query(None),
+    contact_confidence_level: str | None = Query(None),
+    note_type: str | None = Query(None),
+    note_source_class: str | None = Query(None),
+    note_confidence_level: str | None = Query(None),
+    evidence_source_class: str | None = Query(None),
+    evidence_confidence_level: str | None = Query(None),
+    action_type: str | None = Query(None),
+    action_status: str | None = Query(None),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
     service = JanitorialOsService(db)
     detail = OpportunityIntakeService(db).get_detail(opportunity_id)
     if not detail:
         raise HTTPException(status_code=404, detail="Opportunity not found")
+    normalized_contact_side = _parse_optional_enum_query(ContactSide, contact_side)
+    normalized_contact_source_type = _parse_optional_enum_query(ContactSourceType, contact_source_type)
+    normalized_contact_confidence_level = _parse_optional_enum_query(ConfidenceLevel, contact_confidence_level)
+    normalized_note_type = _parse_optional_enum_query(IntelligenceNoteType, note_type)
+    normalized_note_source_class = _parse_optional_enum_query(SourceClass, note_source_class)
+    normalized_note_confidence_level = _parse_optional_enum_query(ConfidenceLevel, note_confidence_level)
+    normalized_evidence_source_class = _parse_optional_enum_query(SourceClass, evidence_source_class)
+    normalized_evidence_confidence_level = _parse_optional_enum_query(ConfidenceLevel, evidence_confidence_level)
+    normalized_action_type = _parse_optional_enum_query(CaptureActionType, action_type)
+    normalized_action_status = _parse_optional_enum_query(CaptureActionStatus, action_status)
     matches = service.list_matches(opportunity_id)
-    contacts = service.list_contacts(opportunity_id)
-    notes = service.list_intelligence_notes(opportunity_id)
-    evidence = service.list_evidence(opportunity_id)
-    actions = service.list_capture_actions(opportunity_id)
+    contacts = service.list_contacts(
+        opportunity_id,
+        contact_side=normalized_contact_side,
+        source_type=normalized_contact_source_type,
+        confidence_level=normalized_contact_confidence_level,
+    )
+    notes = service.list_intelligence_notes(
+        opportunity_id,
+        note_type=normalized_note_type,
+        source_class=normalized_note_source_class,
+        confidence_level=normalized_note_confidence_level,
+    )
+    evidence = service.list_evidence(
+        opportunity_id,
+        source_class=normalized_evidence_source_class,
+        confidence_level=normalized_evidence_confidence_level,
+    )
+    actions = service.list_capture_actions(
+        opportunity_id,
+        action_type=normalized_action_type,
+        status=normalized_action_status,
+    )
     commercial = service.get_commercial(opportunity_id)
     contractor_context = service.get_capture_workbench_contractor_context(opportunity_id)
     return templates.TemplateResponse(
@@ -1443,6 +1676,18 @@ def capture_workbench_view(request: Request, opportunity_id: str, db: Session = 
                 "contractors": service.list_contractors(),
                 "contractor_context": contractor_context,
                 "advised_contractor_id": contractor_context.contractor.id if contractor_context else None,
+                "filters": {
+                    "contact_side": normalized_contact_side.value if normalized_contact_side else "",
+                    "contact_source_type": normalized_contact_source_type.value if normalized_contact_source_type else "",
+                    "contact_confidence_level": normalized_contact_confidence_level.value if normalized_contact_confidence_level else "",
+                    "note_type": normalized_note_type.value if normalized_note_type else "",
+                    "note_source_class": normalized_note_source_class.value if normalized_note_source_class else "",
+                    "note_confidence_level": normalized_note_confidence_level.value if normalized_note_confidence_level else "",
+                    "evidence_source_class": normalized_evidence_source_class.value if normalized_evidence_source_class else "",
+                    "evidence_confidence_level": normalized_evidence_confidence_level.value if normalized_evidence_confidence_level else "",
+                    "action_type": normalized_action_type.value if normalized_action_type else "",
+                    "action_status": normalized_action_status.value if normalized_action_status else "",
+                },
             }
         ),
     )

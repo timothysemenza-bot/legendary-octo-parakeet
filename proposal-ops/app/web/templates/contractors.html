@@ -11,7 +11,7 @@
   {% endif %}
 
   <h3>Filters</h3>
-  <form method="get" action="/contractors">
+  <form method="get" action="/contractors" data-ux-form="contractor_filters">
     <label>Prospect Stage
       <select name="prospect_stage">
         <option value="">Any</option>
@@ -25,7 +25,7 @@
   </form>
 
   <h3>Create Contractor Prospect</h3>
-  <form method="post" action="/contractors">
+  <form method="post" action="/contractors" data-ux-form="contractor_create">
     <label>Name <input name="name" value="{{ form_data.name or '' }}" required /></label>
     <label>Service Geographies <input name="service_geographies" value="{{ form_data.service_geographies or '' }}" /></label>
     <label>HQ City <input name="headquarters_city" value="{{ form_data.headquarters_city or '' }}" /></label>

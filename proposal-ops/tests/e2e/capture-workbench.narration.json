@@ -1,0 +1,49 @@
+{
+  "demo": "bosskey-capture-workbench",
+  "title": "Boss Key Capture Workbench",
+  "output_basename": "03-bosskey-capture-workbench",
+  "tts": {
+    "provider": "auto",
+    "openai": {
+      "model": "gpt-4o-mini-tts",
+      "voice": "sage",
+      "response_format": "wav"
+    },
+    "windows": {
+      "voice_name": "Microsoft Zira Desktop",
+      "voice_rate": 0
+    }
+  },
+  "steps": {
+    "workbench_arrival": {
+      "title": "Workbench arrival",
+      "hold_ms": 4400,
+      "text": "The capture workbench is the live operating file for one pursuit. The header keeps stage, organization, contract, confidence, and provenance visible so the operator does not lose context while working the record."
+    },
+    "contractor_context": {
+      "title": "Advised contractor context",
+      "hold_ms": 4400,
+      "text": "When a contractor is linked through commercials, the workbench shows relationship context directly in the operating screen. Recent touchpoints and contractor notes stay visible without duplicating relationship data into the pursuit."
+    },
+    "contacts": {
+      "title": "Contact coverage",
+      "hold_ms": 4500,
+      "text": "Buyer-side and contractor-side contacts live in the same workbench so the operator can manage access on both sides of the pursuit. That matters because live pursuits usually break when one side of the relationship is underdeveloped."
+    },
+    "intelligence_evidence": {
+      "title": "Intelligence and evidence",
+      "hold_ms": 4700,
+      "text": "Boss Key keeps intelligence notes and evidence separate on purpose. Operators can capture an insight, preserve the provenance behind it, and maintain a cleaner record of what is observed versus what is inferred."
+    },
+    "actions_and_commercials": {
+      "title": "Actions and commercials",
+      "hold_ms": 4700,
+      "text": "The lower part of the workbench ties execution and economics together. Open actions show what the team is doing next, while commercials translate that pursuit effort into weighted expected consulting value."
+    },
+    "filters": {
+      "title": "Workbench filters",
+      "hold_ms": 4300,
+      "text": "The filter bar turns the workbench into a review tool as well as a data-entry screen. Operators can isolate buyer contacts, positioning notes, public evidence, or open actions without leaving the pursuit."
+    }
+  }
+}

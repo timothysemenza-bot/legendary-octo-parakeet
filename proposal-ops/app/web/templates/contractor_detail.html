@@ -21,7 +21,7 @@
   <p><strong>Strategic Fit Notes:</strong> {{ contractor.strategic_fit_notes or '-' }}</p>
 
   <h3>Edit Contractor</h3>
-  <form method="post" action="/contractors/{{ contractor.id }}">
+  <form method="post" action="/contractors/{{ contractor.id }}" data-ux-form="contractor_update">
     <label>Name <input name="name" value="{{ contractor.name }}" required /></label>
     <label>Service Geographies <input name="service_geographies" value="{{ contractor.service_geographies or '' }}" /></label>
     <label>HQ City <input name="headquarters_city" value="{{ contractor.headquarters_city or '' }}" /></label>
@@ -77,7 +77,7 @@
 
   <h3>Create Pursuit Handoff</h3>
   {% set relationship_access_value = handoff_form_data.relationship_access or (contractor.relationship_strength ~ '') %}
-  <form method="post" action="/contractors/{{ contractor.id }}/pursuits">
+  <form method="post" action="/contractors/{{ contractor.id }}/pursuits" data-ux-form="contractor_pursuit_handoff">
     <label>Contract
       <select name="contract_id" required>
         <option value="">Select Contract</option>
@@ -179,7 +179,7 @@
   </form>
 
   <h3>Link To Existing Opportunity</h3>
-  <form method="post" action="/contractors/{{ contractor.id }}/opportunity-links">
+  <form method="post" action="/contractors/{{ contractor.id }}/opportunity-links" data-ux-form="contractor_link_opportunity">
     <label>Opportunity
       <select name="opportunity_id" required>
         <option value="">Select Opportunity</option>
@@ -212,7 +212,7 @@
   {% endif %}
 
   <h3>Touchpoints</h3>
-  <form method="post" action="/contractors/{{ contractor.id }}/touchpoints">
+  <form method="post" action="/contractors/{{ contractor.id }}/touchpoints" data-ux-form="contractor_touchpoint_create">
     <label>Contact Name <input name="contact_name" /></label>
     <label>Type
       <select name="touchpoint_type">

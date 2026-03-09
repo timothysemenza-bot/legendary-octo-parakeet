@@ -1,0 +1,44 @@
+{
+  "demo": "bosskey-contractor-workflow",
+  "title": "Boss Key Contractor Workflow",
+  "output_basename": "02-bosskey-contractor-workflow",
+  "tts": {
+    "provider": "auto",
+    "openai": {
+      "model": "gpt-4o-mini-tts",
+      "voice": "sage",
+      "response_format": "wav"
+    },
+    "windows": {
+      "voice_name": "Microsoft Zira Desktop",
+      "voice_rate": 0
+    }
+  },
+  "steps": {
+    "dashboard_followups": {
+      "title": "Dashboard follow-up queue",
+      "hold_ms": 4200,
+      "text": "This video starts on the dashboard because contractor follow-up discipline should surface in the weekly operating rhythm. Boss Key separates overdue relationships from the next two weeks of planned follow-up so nothing disappears into a flat contact list."
+    },
+    "contractor_list": {
+      "title": "Contractor list management",
+      "hold_ms": 4300,
+      "text": "From the contractor list, operators can filter by prospect stage and quickly see last touch, next follow-up, and relationship strength. This turns the list into a live pipeline rather than a static directory."
+    },
+    "touchpoint_logging": {
+      "title": "Touchpoint logging",
+      "hold_ms": 4600,
+      "text": "Inside the contractor record, each touchpoint captures what happened, what comes next, and when the next follow-up is due. The contractor record becomes the single source of truth for relationship momentum."
+    },
+    "pursuit_handoff": {
+      "title": "Contractor handoff",
+      "hold_ms": 4700,
+      "text": "When a contractor is ready to move into active capture, the handoff happens here. Boss Key creates the pursuit from the contractor record and carries the advised contractor into the workbench without duplicate entry."
+    },
+    "linked_opportunities": {
+      "title": "Linked opportunities",
+      "hold_ms": 4300,
+      "text": "After handoff, the contractor record shows linked opportunities and direct capture-workbench links. That means the operator can move from relationship management into execution and back again without searching."
+    }
+  }
+}

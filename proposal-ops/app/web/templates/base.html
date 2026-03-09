@@ -6,11 +6,12 @@
     <title>Boss Key Pursuit OS</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
-  <body>
+  <body data-page-key="{{ page_key or request.url.path }}">
     <header>
       <h1>Boss Key Pursuit OS</h1>
       <nav>
         <a href="/dashboard">Dashboard</a>
+        <a href="/ux/friction">Friction</a>
         <a href="/">Opportunities</a>
         <a href="/organizations">Organizations</a>
         <a href="/facilities">Facilities</a>
@@ -37,5 +38,362 @@
     <main>
       {% block content %}{% endblock %}
     </main>
+    <aside id="ux-feedback-panel">
+      <details>
+        <summary>Share workflow friction</summary>
+        <p>Stores only page and form metadata unless you deliberately type a note.</p>
+        <form id="ux-feedback-form" data-ux-skip="true">
+          <label>What happened?
+            <select name="feedback_type">
+              <option value="CONFUSING">This was confusing</option>
+              <option value="TOOK_TOO_LONG">This took too long</option>
+              <option value="MANUAL_WORKAROUND">I did this manually</option>
+              <option value="OTHER">Other friction</option>
+            </select>
+          </label>
+          <label>Related form
+            <input name="form_name" placeholder="Optional form name" />
+          </label>
+          <label>Optional note
+            <textarea
+              name="note_text"
+              rows="4"
+              placeholder="Optional. Only include proposal-specific details if you want them stored."
+            ></textarea>
+          </label>
+          <p>Voice-note support is reserved for a future release. No passive audio is captured.</p>
+          <button type="submit">Send Feedback</button>
+          <p id="ux-feedback-status" role="status"></p>
+        </form>
+      </details>
+    </aside>
+    <script>
+      (() => {
+        const body = document.body;
+        if (!body) {
+          return;
+        }
+
+        const eventEndpoint = "/api/ux/events";
+        const feedbackEndpoint = "/api/ux/feedback";
+        const pageStart = Date.now();
+        const sessionKey = "bosskey-ux-session-id";
+        const historyKey = "bosskey-ux-page-history";
+        const pageKey = normalizePath(body.dataset.pageKey || window.location.pathname);
+        const path = truncate(`${window.location.pathname}${window.location.search}`, 255);
+        const sessionId = ensureSessionId();
+        const clickState = new Map();
+        const formState = new Map();
+        const serverValidationContext = {{ ux_validation_context|default(None)|tojson }};
+
+        function truncate(value, length) {
+          return String(value || "").slice(0, length);
+        }
+
+        function normalizePath(value) {
+          return truncate(
+            String(value || "")
+              .replace(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g, ":id")
+              .replace(/\/\d+(?=\/|$)/g, "/:id"),
+            160
+          );
+        }
+
+        function ensureSessionId() {
+          const existing = sessionStorage.getItem(sessionKey);
+          if (existing) {
+            return existing;
+          }
+          const created =
+            window.crypto && window.crypto.randomUUID
+              ? window.crypto.randomUUID()
+              : `ux-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+          sessionStorage.setItem(sessionKey, created);
+          return created;
+        }
+
+        function readHistory() {
+          try {
+            return JSON.parse(sessionStorage.getItem(historyKey) || "[]");
+          } catch {
+            return [];
+          }
+        }
+
+        function writeHistory(entries) {
+          sessionStorage.setItem(historyKey, JSON.stringify(entries.slice(-10)));
+        }
+
+        function sameOriginPath(rawUrl) {
+          if (!rawUrl) {
+            return null;
+          }
+          try {
+            const url = new URL(rawUrl, window.location.origin);
+            if (url.origin !== window.location.origin) {
+              return null;
+            }
+            return truncate(`${url.pathname}${url.search}`, 255);
+          } catch {
+            return null;
+          }
+        }
+
+        function emit(url, payload, preferBeacon = false) {
+          const body = JSON.stringify(payload);
+          if (preferBeacon && navigator.sendBeacon) {
+            const blob = new Blob([body], { type: "application/json" });
+            navigator.sendBeacon(url, blob);
+            return;
+          }
+          fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            keepalive: true,
+            body,
+          }).catch(() => {});
+        }
+
+        function emitEvent(eventType, extra = {}, preferBeacon = false) {
+          emit(
+            eventEndpoint,
+            {
+              session_id: sessionId,
+              event_type: eventType,
+              page_key: pageKey,
+              path,
+              referrer_path: extra.referrer_path ?? null,
+              form_name: extra.form_name ?? null,
+              target_key: extra.target_key ?? null,
+              field_name: extra.field_name ?? null,
+              duration_ms: extra.duration_ms ?? null,
+              count_value: extra.count_value ?? null,
+              metadata_json: extra.metadata_json ?? {},
+            },
+            preferBeacon
+          );
+        }
+
+        function feedbackPayload(formData) {
+          return {
+            session_id: sessionId,
+            feedback_type: formData.get("feedback_type"),
+            page_key: pageKey,
+            path,
+            form_name: truncate(formData.get("form_name") || "", 160) || null,
+            note_text: truncate(formData.get("note_text") || "", 2000) || null,
+            context_json: {
+              page_title: truncate(document.title, 120),
+            },
+            voice_note_status: "NOT_PROVIDED",
+            voice_note_asset_ref: null,
+          };
+        }
+
+        function formName(form) {
+          return (
+            truncate(form.getAttribute("data-ux-form") || form.getAttribute("name") || "", 160) ||
+            normalizePath(sameOriginPath(form.action) || path)
+          );
+        }
+
+        function targetKey(element) {
+          if (!element) {
+            return null;
+          }
+          const href = element.tagName === "A" ? sameOriginPath(element.href) : null;
+          const base =
+            element.getAttribute("data-ux-target") ||
+            element.getAttribute("name") ||
+            element.getAttribute("id") ||
+            href ||
+            (element.form ? sameOriginPath(element.form.action) : null) ||
+            element.textContent ||
+            element.tagName;
+          return truncate(normalizePath(base), 160);
+        }
+
+        const history = readHistory();
+        const previous = history.length ? history[history.length - 1] : null;
+        emitEvent("PAGE_VIEW", {
+          referrer_path: previous ? previous.path : sameOriginPath(document.referrer),
+          count_value: 1,
+          metadata_json: {
+            revisit_count: history.filter((entry) => entry.page_key === pageKey).length,
+            page_title: truncate(document.title, 120),
+          },
+        });
+        writeHistory([...history, { page_key: pageKey, path }]);
+
+        if (serverValidationContext) {
+          emitEvent("VALIDATION_FAILURE", {
+            form_name: serverValidationContext.form_name || null,
+            count_value: serverValidationContext.error_count || 1,
+            metadata_json: {
+              field_names: serverValidationContext.field_names || [],
+            },
+          });
+        }
+
+        document.addEventListener(
+          "click",
+          (event) => {
+            const clickable = event.target.closest("button, a, input[type='submit'], input[type='button']");
+            if (!clickable || clickable.closest("[data-ux-skip='true']")) {
+              return;
+            }
+            const key = targetKey(clickable);
+            if (!key) {
+              return;
+            }
+            const now = Date.now();
+            const state = clickState.get(key) || { count: 0, firstAt: now, lastReportedAt: 0 };
+            if (now - state.firstAt > 4000) {
+              state.count = 0;
+              state.firstAt = now;
+            }
+            state.count += 1;
+            if (state.count >= 3 && now - state.lastReportedAt > 4000) {
+              emitEvent("REPEATED_CLICK", {
+                target_key: key,
+                count_value: state.count,
+                metadata_json: { tag_name: clickable.tagName },
+              });
+              state.lastReportedAt = now;
+            }
+            clickState.set(key, state);
+          },
+          true
+        );
+
+        document.querySelectorAll("form").forEach((form) => {
+          if (form.getAttribute("data-ux-skip") === "true") {
+            return;
+          }
+          const state = {
+            touched: false,
+            submitted: false,
+            fields: new Map(),
+          };
+          formState.set(form, state);
+
+          form.addEventListener(
+            "change",
+            (event) => {
+              const field = event.target;
+              if (!field || !field.name) {
+                return;
+              }
+              state.touched = true;
+              state.fields.set(field.name, (state.fields.get(field.name) || 0) + 1);
+            },
+            true
+          );
+
+          form.addEventListener(
+            "submit",
+            () => {
+              state.submitted = true;
+              const currentFormName = formName(form);
+              state.fields.forEach((count, fieldName) => {
+                if (count >= 3) {
+                  emitEvent(
+                    "FIELD_CHURN",
+                    {
+                      form_name: currentFormName,
+                      field_name: truncate(fieldName, 160),
+                      count_value: count,
+                    },
+                    true
+                  );
+                }
+              });
+              emitEvent(
+                "FORM_SUBMIT",
+                {
+                  form_name: currentFormName,
+                  count_value: state.fields.size,
+                  metadata_json: { changed_fields: state.fields.size },
+                },
+                true
+              );
+            },
+            true
+          );
+        });
+
+        window.addEventListener(
+          "pagehide",
+          () => {
+            emitEvent(
+              "PAGE_EXIT",
+              {
+                duration_ms: Math.max(0, Date.now() - pageStart),
+              },
+              true
+            );
+
+            formState.forEach((state, form) => {
+              if (!state.touched || state.submitted) {
+                return;
+              }
+              const currentFormName = formName(form);
+              state.fields.forEach((count, fieldName) => {
+                if (count >= 3) {
+                  emitEvent(
+                    "FIELD_CHURN",
+                    {
+                      form_name: currentFormName,
+                      field_name: truncate(fieldName, 160),
+                      count_value: count,
+                    },
+                    true
+                  );
+                }
+              });
+              emitEvent(
+                "FORM_ABANDON",
+                {
+                  form_name: currentFormName,
+                  count_value: state.fields.size,
+                  metadata_json: {
+                    changed_fields: state.fields.size,
+                    field_names: Array.from(state.fields.keys()).slice(0, 12).map((item) => truncate(item, 80)),
+                  },
+                },
+                true
+              );
+            });
+          },
+          true
+        );
+
+        const feedbackForm = document.getElementById("ux-feedback-form");
+        const feedbackStatus = document.getElementById("ux-feedback-status");
+        if (feedbackForm) {
+          feedbackForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const formData = new FormData(feedbackForm);
+            feedbackStatus.textContent = "Sending feedback...";
+            try {
+              const response = await fetch(feedbackEndpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify(feedbackPayload(formData)),
+              });
+              if (!response.ok) {
+                throw new Error("Feedback request failed");
+              }
+              feedbackForm.reset();
+              feedbackStatus.textContent = "Feedback captured.";
+            } catch {
+              feedbackStatus.textContent = "Feedback could not be saved from this browser session.";
+            }
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

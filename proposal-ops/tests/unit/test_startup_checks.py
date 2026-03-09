@@ -29,7 +29,7 @@ def test_validate_schema_state_passes_with_alembic_stamp(tmp_path: Path) -> None
     conn = sqlite3.connect(db_file.as_posix())
     _create_required_tables(conn)
     conn.execute("CREATE TABLE alembic_version (version_num VARCHAR(32) NOT NULL)")
-    conn.execute("INSERT INTO alembic_version (version_num) VALUES ('0026_contractor_prospect_pipeline')")
+    conn.execute("INSERT INTO alembic_version (version_num) VALUES ('0027_ux_friction_feedback')")
     conn.commit()
     conn.close()
 

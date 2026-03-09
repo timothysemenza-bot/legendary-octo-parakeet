@@ -43,6 +43,10 @@ jwblng-mvp/playwright/.profile/
 jwblng-mvp/playwright/artifacts/
 jwblng-mvp/playwright/playwright-report/
 jwblng-mvp/playwright/test-results/
+proposal-ops/.artifacts/playwright-demo/
+proposal-ops/demo-artifacts/
+proposal-ops/playwright-report/
+proposal-ops/test-results/
 
 # Apple receipts automation outputs
 output/

@@ -375,53 +375,117 @@ def test_pursuit_creation_matching_capture_workbench_and_dashboard_api(client: T
             "organization_id": pursuit.json()["buying_organization_id"],
             "full_name": "Dana Procurement",
             "role_title": "Procurement Director",
-            "contact_side": "BUYER",
-            "source_type": "PUBLIC",
-            "confidence_level": "HIGH",
+            "contact_side": "client",
+            "source_type": "public",
+            "confidence_level": "high",
             "notes": "Named in public board packet.",
         },
     )
     assert contact.status_code == 200
+    assert contact.json()["contact_side"] == "BUYER"
+    assert contact.json()["source_type"] == "PUBLIC"
+    assert contact.json()["confidence_level"] == "HIGH"
+
+    contractor_contact = client.post(
+        f"/api/opportunities/{opportunity_id}/contacts",
+        json={
+            "contractor_id": client.get("/api/contractors").json()[0]["id"],
+            "full_name": "Riley Partner",
+            "role_title": "Regional Growth Lead",
+            "contact_side": "contractor",
+            "source_type": "direct conversation",
+            "confidence_level": "medium",
+            "notes": "Confirmed interest in the pursuit.",
+        },
+    )
+    assert contractor_contact.status_code == 200
+    assert contractor_contact.json()["contact_side"] == "CONTRACTOR"
+    assert contractor_contact.json()["source_type"] == "DIRECT_CONVERSATION"
 
     note = client.post(
         f"/api/opportunities/{opportunity_id}/intelligence",
         json={
             "title": "Likely transition concern",
-            "note_type": "POSITIONING",
+            "note_type": "positioning",
             "note_text": "Airport operator appears focused on daytime terminal presentation and fast mobilization.",
-            "source_class": "INFERRED",
+            "source_class": "inferred",
             "provenance": "Inferred from public board discussion and current incumbent service complaints.",
-            "confidence_level": "MEDIUM",
+            "confidence_level": "medium",
         },
     )
     assert note.status_code == 200
+    assert note.json()["note_type"] == "POSITIONING"
+    assert note.json()["source_class"] == "INFERRED"
+    assert note.json()["confidence_level"] == "MEDIUM"
+
+    risk_note = client.post(
+        f"/api/opportunities/{opportunity_id}/intelligence",
+        json={
+            "title": "Transition labor risk",
+            "note_type": "RISK",
+            "note_text": "Compressed mobilization window may require early supervisor hiring.",
+            "source_class": "PUBLIC",
+            "provenance": "Public contract timeline and transition requirements.",
+            "confidence_level": "HIGH",
+        },
+    )
+    assert risk_note.status_code == 200
 
     evidence = client.post(
         f"/api/opportunities/{opportunity_id}/evidence",
         json={
             "intelligence_note_id": note.json()["id"],
             "contract_id": contract["id"],
-            "source_class": "PUBLIC",
+            "source_class": "public",
             "provenance": "Public airport board agenda packet dated 2026-02-15.",
             "source_url": "https://example.org/board-packet",
             "summary": "Board packet references cleanliness complaints and contract timing.",
-            "confidence_level": "HIGH",
+            "confidence_level": "high",
         },
     )
     assert evidence.status_code == 200
+    assert evidence.json()["source_class"] == "PUBLIC"
+    assert evidence.json()["confidence_level"] == "HIGH"
+
+    inferred_evidence = client.post(
+        f"/api/opportunities/{opportunity_id}/evidence",
+        json={
+            "intelligence_note_id": risk_note.json()["id"],
+            "contract_id": contract["id"],
+            "source_class": "INFERRED",
+            "provenance": "Reasoned from the transition dates already published.",
+            "summary": "Likely overlap staffing issue if award timing slips.",
+            "confidence_level": "LOW",
+        },
+    )
+    assert inferred_evidence.status_code == 200
 
     action = client.post(
         f"/api/opportunities/{opportunity_id}/capture-actions",
         json={
             "title": "Review board packet history",
-            "action_type": "RESEARCH",
-            "status": "OPEN",
+            "action_type": "follow up",
+            "status": "done",
             "owner": "operator",
             "due_date": "2026-04-01",
             "notes": "Trace incumbent vulnerabilities and likely evaluation themes.",
         },
     )
     assert action.status_code == 200
+    assert action.json()["action_type"] == "FOLLOW_UP"
+    assert action.json()["status"] == "COMPLETE"
+
+    open_action = client.post(
+        f"/api/opportunities/{opportunity_id}/capture-actions",
+        json={
+            "title": "Schedule contractor planning call",
+            "action_type": "OUTREACH",
+            "status": "OPEN",
+            "owner": "operator",
+            "notes": "Coordinate next-step call with advised contractor.",
+        },
+    )
+    assert open_action.status_code == 200
 
     contractors = client.get("/api/contractors").json()
     commercial = client.post(
@@ -429,14 +493,43 @@ def test_pursuit_creation_matching_capture_workbench_and_dashboard_api(client: T
         json={
             "contractor_id": contractors[0]["id"],
             "retainer_amount": 6000,
-            "success_fee_type": "FIXED",
+            "success_fee_type": "fixed",
             "success_fee_value": 12000,
             "projected_payout_date": "2026-12-31",
             "notes": "Internal managed-retainer model.",
         },
     )
     assert commercial.status_code == 200
+    assert commercial.json()["success_fee_type"] == "FIXED"
     assert commercial.json()["weighted_expected_value"] >= 6000
+
+    filtered_contacts = client.get(
+        f"/api/opportunities/{opportunity_id}/contacts",
+        params={"contact_side": "CONTRACTOR", "source_type": "DIRECT_CONVERSATION"},
+    )
+    assert filtered_contacts.status_code == 200
+    assert [item["full_name"] for item in filtered_contacts.json()] == ["Riley Partner"]
+
+    filtered_notes = client.get(
+        f"/api/opportunities/{opportunity_id}/intelligence",
+        params={"note_type": "POSITIONING", "source_class": "INFERRED"},
+    )
+    assert filtered_notes.status_code == 200
+    assert [item["title"] for item in filtered_notes.json()] == ["Likely transition concern"]
+
+    filtered_evidence = client.get(
+        f"/api/opportunities/{opportunity_id}/evidence",
+        params={"source_class": "INFERRED", "confidence_level": "LOW"},
+    )
+    assert filtered_evidence.status_code == 200
+    assert [item["summary"] for item in filtered_evidence.json()] == ["Likely overlap staffing issue if award timing slips."]
+
+    filtered_actions = client.get(
+        f"/api/opportunities/{opportunity_id}/capture-actions",
+        params={"action_type": "FOLLOW_UP", "status": "COMPLETE"},
+    )
+    assert filtered_actions.status_code == 200
+    assert [item["title"] for item in filtered_actions.json()] == ["Review board packet history"]
 
     dashboard = client.get("/api/dashboard/summary")
     assert dashboard.status_code == 200
@@ -447,6 +540,170 @@ def test_pursuit_creation_matching_capture_workbench_and_dashboard_api(client: T
     assert len(body["top_matches"]) >= 1
     assert "overdue_contractor_follow_ups" in body
     assert "upcoming_contractor_follow_ups" in body
+    assert "live_pursuit_readiness" in body
+    readiness = next(item for item in body["live_pursuit_readiness"] if item["opportunity_id"] == opportunity_id)
+    assert readiness["pilot_ready"] is True
+    assert readiness["advised_contractor_name"] == contractors[0]["name"]
+    assert readiness["buyer_contacts_count"] >= 1
+    assert readiness["contractor_contacts_count"] >= 1
+    assert readiness["intelligence_notes_count"] >= 1
+    assert readiness["evidence_records_count"] >= 1
+    assert readiness["open_capture_actions_count"] >= 1
+    assert readiness["missing_items"] == []
+
+
+def test_ux_friction_summary_api(client: TestClient) -> None:
+    contractor_session = "session-contractors-001"
+    dashboard_session = "session-dashboard-002"
+
+    for page_key in [
+        "/dashboard",
+        "/contractors",
+        "/dashboard",
+        "/contractors",
+        "/dashboard",
+        "/contractors",
+    ]:
+        response = client.post(
+            "/api/ux/events",
+            json={
+                "session_id": dashboard_session,
+                "event_type": "PAGE_VIEW",
+                "page_key": page_key,
+                "path": page_key,
+                "metadata_json": {"page_title": page_key},
+            },
+        )
+        assert response.status_code == 200
+
+    for payload in [
+        {
+            "session_id": contractor_session,
+            "event_type": "PAGE_VIEW",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "metadata_json": {"page_title": "Contractors"},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "PAGE_EXIT",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "duration_ms": 240000,
+            "metadata_json": {},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "REPEATED_CLICK",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "target_key": "contractor_create",
+            "count_value": 4,
+            "metadata_json": {"tag_name": "BUTTON"},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "FORM_ABANDON",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "count_value": 3,
+            "metadata_json": {"field_names": ["name", "service_geographies"]},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "FORM_ABANDON",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "count_value": 2,
+            "metadata_json": {"field_names": ["name"]},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "FIELD_CHURN",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "field_name": "relationship_notes",
+            "count_value": 5,
+            "metadata_json": {},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "VALIDATION_FAILURE",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "count_value": 2,
+            "metadata_json": {"field_names": ["name", "next_follow_up_date"]},
+        },
+        {
+            "session_id": contractor_session,
+            "event_type": "VALIDATION_FAILURE",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "count_value": 2,
+            "metadata_json": {"field_names": ["name"]},
+        },
+    ]:
+        response = client.post("/api/ux/events", json=payload)
+        assert response.status_code == 200
+
+    confusing = client.post(
+        "/api/ux/feedback",
+        json={
+            "session_id": contractor_session,
+            "feedback_type": "CONFUSING",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "note_text": "The prospect form feels unclear on first pass.",
+            "context_json": {"source": "operator"},
+            "voice_note_status": "NOT_PROVIDED",
+        },
+    )
+    assert confusing.status_code == 200
+
+    manual = client.post(
+        "/api/ux/feedback",
+        json={
+            "session_id": contractor_session,
+            "feedback_type": "MANUAL_WORKAROUND",
+            "page_key": "/contractors",
+            "path": "/contractors",
+            "form_name": "contractor_create",
+            "note_text": "I drafted follow-up notes outside the app first.",
+            "context_json": {"source": "operator"},
+            "voice_note_status": "REQUESTED",
+        },
+    )
+    assert manual.status_code == 200
+
+    summary = client.get("/api/ux/friction-summary", params={"lookback_days": 30})
+    assert summary.status_code == 200
+    body = summary.json()
+    assert body["total_events"] >= 10
+    assert body["total_feedback"] == 2
+    assert any(item["page_key"] == "/contractors" for item in body["top_pages"])
+    contractors_page = next(item for item in body["top_pages"] if item["page_key"] == "/contractors")
+    assert contractors_page["validation_failures"] >= 4
+    assert contractors_page["abandoned_forms"] >= 2
+    assert contractors_page["manual_overrides"] >= 1
+    assert contractors_page["navigation_loop_count"] >= 2
+    finding_codes = {item["code"] for item in body["findings"]}
+    assert "repeated_validation_failures" in finding_codes
+    assert "manual_workaround_detected" in finding_codes
+    recommendation_codes = {item["code"] for item in body["recommendations"]}
+    assert "improve_form_guidance" in recommendation_codes
+    assert "formalize_manual_workaround" in recommendation_codes
+    assert any(item["note_text"] == "The prospect form feels unclear on first pass." for item in body["recent_feedback"])
+
+    dashboard = client.get("/api/dashboard/summary")
+    assert dashboard.status_code == 200
+    dashboard_body = dashboard.json()
+    assert dashboard_body["friction_summary"]["total_feedback"] == 2
 
 
 def test_scoring_profile_update_api(client: TestClient) -> None:

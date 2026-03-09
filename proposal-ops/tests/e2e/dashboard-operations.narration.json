@@ -1,0 +1,44 @@
+{
+  "demo": "bosskey-dashboard-operations",
+  "title": "Boss Key Dashboard Operations",
+  "output_basename": "04-bosskey-dashboard-operations",
+  "tts": {
+    "provider": "auto",
+    "openai": {
+      "model": "gpt-4o-mini-tts",
+      "voice": "sage",
+      "response_format": "wav"
+    },
+    "windows": {
+      "voice_name": "Microsoft Zira Desktop",
+      "voice_rate": 0
+    }
+  },
+  "steps": {
+    "portfolio_overview": {
+      "title": "Portfolio overview",
+      "hold_ms": 4300,
+      "text": "The dashboard is the operating page for the week. It brings contracts, pursuits, weighted value, and recent radar activity into one screen so the operator can decide where attention goes first."
+    },
+    "followup_triage": {
+      "title": "Follow-up triage",
+      "hold_ms": 4500,
+      "text": "The follow-up panels make contractor relationship management visible at the portfolio level. Overdue items are the recovery queue, and upcoming items become the planned relationship workload for the next two weeks."
+    },
+    "readiness_triage": {
+      "title": "Readiness triage",
+      "hold_ms": 4800,
+      "text": "Live pursuit readiness is the decision table for pilot work. Boss Key shows which pursuits are operational, which ones still need contacts or evidence, and whether an advised contractor is already attached."
+    },
+    "gap_drilldown": {
+      "title": "Gap drilldown",
+      "hold_ms": 4500,
+      "text": "When a pursuit is not ready, the dashboard should send the operator directly into the workbench to close the missing items. This keeps the weekly review connected to the actual execution screen."
+    },
+    "operating_rhythm": {
+      "title": "Operating rhythm",
+      "hold_ms": 4200,
+      "text": "Used this way, the dashboard is not a vanity report. It is the top of the operating rhythm for deciding which relationships need attention, which pursuits are truly live, and what the team should work next."
+    }
+  }
+}

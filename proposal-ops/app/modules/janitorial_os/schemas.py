@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from enum import StrEnum
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -93,21 +94,121 @@ class ContractorUnionProfile(StrEnum):
     UNKNOWN = "Unknown"
 
 
+class ContactSide(StrEnum):
+    BUYER = "BUYER"
+    CONTRACTOR = "CONTRACTOR"
+
+
+class ContactSourceType(StrEnum):
+    PUBLIC = "PUBLIC"
+    DIRECT_CONVERSATION = "DIRECT_CONVERSATION"
+    REFERRAL = "REFERRAL"
+    INFERRED = "INFERRED"
+
+
+class IntelligenceNoteType(StrEnum):
+    INTELLIGENCE = "INTELLIGENCE"
+    POSITIONING = "POSITIONING"
+    COMPETITOR = "COMPETITOR"
+    STAKEHOLDER = "STAKEHOLDER"
+    RISK = "RISK"
+    PRICING = "PRICING"
+    TRANSITION = "TRANSITION"
+
+
+class CaptureActionType(StrEnum):
+    RESEARCH = "RESEARCH"
+    OUTREACH = "OUTREACH"
+    MEETING = "MEETING"
+    FOLLOW_UP = "FOLLOW_UP"
+    REVIEW = "REVIEW"
+    DELIVERABLE = "DELIVERABLE"
+
+
+class CaptureActionStatus(StrEnum):
+    OPEN = "OPEN"
+    IN_PROGRESS = "IN_PROGRESS"
+    BLOCKED = "BLOCKED"
+    COMPLETE = "COMPLETE"
+
+
+class CommercialSuccessFeeType(StrEnum):
+    FIXED = "FIXED"
+    PERCENT_ANNUAL = "PERCENT_ANNUAL"
+    PERCENT_TOTAL = "PERCENT_TOTAL"
+
+
+class UxEventType(StrEnum):
+    PAGE_VIEW = "PAGE_VIEW"
+    PAGE_EXIT = "PAGE_EXIT"
+    FORM_SUBMIT = "FORM_SUBMIT"
+    FORM_ABANDON = "FORM_ABANDON"
+    FIELD_CHURN = "FIELD_CHURN"
+    REPEATED_CLICK = "REPEATED_CLICK"
+    VALIDATION_FAILURE = "VALIDATION_FAILURE"
+    MANUAL_OVERRIDE = "MANUAL_OVERRIDE"
+    FEEDBACK_SUBMITTED = "FEEDBACK_SUBMITTED"
+
+
+class UxFeedbackType(StrEnum):
+    CONFUSING = "CONFUSING"
+    TOOK_TOO_LONG = "TOOK_TOO_LONG"
+    MANUAL_WORKAROUND = "MANUAL_WORKAROUND"
+    OTHER = "OTHER"
+
+
+class VoiceNoteStatus(StrEnum):
+    NOT_PROVIDED = "NOT_PROVIDED"
+    REQUESTED = "REQUESTED"
+    LINKED = "LINKED"
+
+
 def _choice_token(value: str) -> str:
     return str(value).strip().upper().replace("-", "_").replace("/", "_").replace(" ", "_")
 
 
-def _coerce_enum_value(value: object, enum_cls: type[StrEnum]) -> object:
+def _coerce_enum_value(
+    value: object,
+    enum_cls: type[StrEnum],
+    *,
+    aliases: dict[str, str] | None = None,
+) -> object:
     if value is None or isinstance(value, enum_cls):
         return value
     text = str(value).strip()
     if not text:
         return value
     token = _choice_token(text)
+    if aliases and token in aliases:
+        token = _choice_token(aliases[token])
     for member in enum_cls:
         if token in {_choice_token(member.name), _choice_token(member.value)}:
             return member.value
     return value
+
+
+CONTACT_SIDE_ALIASES = {
+    "CLIENT": ContactSide.BUYER.value,
+    "BUY_SIDE": ContactSide.BUYER.value,
+    "SELL_SIDE": ContactSide.CONTRACTOR.value,
+}
+
+CONTACT_SOURCE_TYPE_ALIASES = {
+    "DIRECT": ContactSourceType.DIRECT_CONVERSATION.value,
+    "CONVERSATION": ContactSourceType.DIRECT_CONVERSATION.value,
+    "DIRECT_CONVO": ContactSourceType.DIRECT_CONVERSATION.value,
+}
+
+INTELLIGENCE_NOTE_TYPE_ALIASES = {
+    "COMPETITION": IntelligenceNoteType.COMPETITOR.value,
+    "STAKEHOLDERS": IntelligenceNoteType.STAKEHOLDER.value,
+}
+
+CAPTURE_ACTION_STATUS_ALIASES = {
+    "DONE": CaptureActionStatus.COMPLETE.value,
+    "COMPLETED": CaptureActionStatus.COMPLETE.value,
+    "CLOSED": CaptureActionStatus.COMPLETE.value,
+}
 
 
 class OrganizationBase(BaseModel):
@@ -411,6 +512,112 @@ class ContractorWorkbenchContextResponse(BaseModel):
     linked_opportunities: list[ContractorOpportunityLinkResponse]
 
 
+class UxEventCreate(BaseModel):
+    session_id: str = Field(min_length=8, max_length=120)
+    event_type: UxEventType
+    page_key: str = Field(min_length=1, max_length=160)
+    path: str = Field(min_length=1, max_length=255)
+    referrer_path: str | None = Field(default=None, max_length=255)
+    form_name: str | None = Field(default=None, max_length=160)
+    target_key: str | None = Field(default=None, max_length=160)
+    field_name: str | None = Field(default=None, max_length=160)
+    duration_ms: int | None = Field(default=None, ge=0, le=86_400_000)
+    count_value: int | None = Field(default=None, ge=0, le=10_000)
+    metadata_json: dict[str, Any] = Field(default_factory=dict)
+
+
+class UxEventResponse(BaseModel):
+    id: str
+    session_id: str
+    actor: str | None
+    event_type: str
+    page_key: str
+    path: str
+    referrer_path: str | None
+    form_name: str | None
+    target_key: str | None
+    field_name: str | None
+    duration_ms: int | None
+    count_value: int | None
+    metadata_json: dict[str, Any]
+    created_at: datetime
+
+
+class UxFeedbackCreate(BaseModel):
+    session_id: str = Field(min_length=8, max_length=120)
+    feedback_type: UxFeedbackType
+    page_key: str = Field(min_length=1, max_length=160)
+    path: str = Field(min_length=1, max_length=255)
+    form_name: str | None = Field(default=None, max_length=160)
+    note_text: str | None = Field(default=None, max_length=2000)
+    context_json: dict[str, Any] = Field(default_factory=dict)
+    voice_note_status: VoiceNoteStatus = VoiceNoteStatus.NOT_PROVIDED
+    voice_note_asset_ref: str | None = Field(default=None, max_length=255)
+
+
+class UxFeedbackResponse(BaseModel):
+    id: str
+    session_id: str
+    actor: str | None
+    feedback_type: str
+    page_key: str
+    path: str
+    form_name: str | None
+    note_text: str | None
+    context_json: dict[str, Any]
+    voice_note_status: str
+    voice_note_asset_ref: str | None
+    created_at: datetime
+
+
+class UxPageFrictionSummary(BaseModel):
+    page_key: str
+    path: str
+    visits: int
+    avg_time_on_page_ms: int | None
+    revisit_count: int
+    navigation_loop_count: int
+    validation_failures: int
+    abandoned_forms: int
+    repeated_clicks: int
+    high_churn_fields: int
+    manual_overrides: int
+    explicit_feedback_count: int
+
+
+class UxFrictionFinding(BaseModel):
+    code: str
+    severity: str
+    page_key: str
+    path: str
+    metric_name: str
+    metric_value: int
+    threshold: int
+    summary: str
+
+
+class UxRecommendation(BaseModel):
+    code: str
+    page_key: str
+    path: str
+    title: str
+    rationale: str
+    proposed_action: str
+    requires_approval: bool = True
+
+
+class UxFrictionSummaryResponse(BaseModel):
+    generated_at: datetime
+    lookback_days: int
+    total_events: int
+    total_feedback: int
+    tracked_sessions: int
+    top_pages: list[UxPageFrictionSummary]
+    findings: list[UxFrictionFinding]
+    recommendations: list[UxRecommendation]
+    recent_feedback: list[UxFeedbackResponse]
+
+
 class CreatePursuitFromContractRequest(BaseModel):
     title: str | None = Field(default=None, max_length=255)
     primary_facility_id: str | None = None
@@ -456,6 +663,21 @@ class ContactBase(BaseModel):
     confidence_level: ConfidenceLevel = ConfidenceLevel.MEDIUM
     notes: str | None = None
 
+    @field_validator("contact_side", mode="before")
+    @classmethod
+    def _normalize_contact_side(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContactSide, aliases=CONTACT_SIDE_ALIASES)
+
+    @field_validator("source_type", mode="before")
+    @classmethod
+    def _normalize_source_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, ContactSourceType, aliases=CONTACT_SOURCE_TYPE_ALIASES)
+
+    @field_validator("confidence_level", mode="before")
+    @classmethod
+    def _normalize_confidence_level(cls, value: object) -> object:
+        return _coerce_enum_value(value, ConfidenceLevel)
+
 
 class ContactCreate(ContactBase):
     pass
@@ -478,6 +700,21 @@ class IntelligenceNoteCreate(BaseModel):
     provenance: str = Field(min_length=5)
     confidence_level: ConfidenceLevel = ConfidenceLevel.MEDIUM
 
+    @field_validator("note_type", mode="before")
+    @classmethod
+    def _normalize_note_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, IntelligenceNoteType, aliases=INTELLIGENCE_NOTE_TYPE_ALIASES)
+
+    @field_validator("source_class", mode="before")
+    @classmethod
+    def _normalize_source_class(cls, value: object) -> object:
+        return _coerce_enum_value(value, SourceClass)
+
+    @field_validator("confidence_level", mode="before")
+    @classmethod
+    def _normalize_confidence_level(cls, value: object) -> object:
+        return _coerce_enum_value(value, ConfidenceLevel)
+
 
 class IntelligenceNoteResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -494,6 +731,11 @@ class IntelligenceNoteResponse(BaseModel):
     recorded_at: datetime
     created_at: datetime
 
+    @field_validator("note_type", mode="before")
+    @classmethod
+    def _normalize_note_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, IntelligenceNoteType, aliases=INTELLIGENCE_NOTE_TYPE_ALIASES)
+
 
 class EvidenceRecordCreate(BaseModel):
     intelligence_note_id: str | None = None
@@ -503,6 +745,16 @@ class EvidenceRecordCreate(BaseModel):
     source_url: str | None = Field(default=None, max_length=255)
     summary: str = Field(min_length=5)
     confidence_level: ConfidenceLevel = ConfidenceLevel.MEDIUM
+
+    @field_validator("source_class", mode="before")
+    @classmethod
+    def _normalize_source_class(cls, value: object) -> object:
+        return _coerce_enum_value(value, SourceClass)
+
+    @field_validator("confidence_level", mode="before")
+    @classmethod
+    def _normalize_confidence_level(cls, value: object) -> object:
+        return _coerce_enum_value(value, ConfidenceLevel)
 
 
 class EvidenceRecordResponse(BaseModel):
@@ -530,6 +782,16 @@ class CaptureActionCreate(BaseModel):
     due_date: date | None = None
     notes: str | None = None
 
+    @field_validator("action_type", mode="before")
+    @classmethod
+    def _normalize_action_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, CaptureActionType)
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def _normalize_status(cls, value: object) -> object:
+        return _coerce_enum_value(value, CaptureActionStatus, aliases=CAPTURE_ACTION_STATUS_ALIASES)
+
 
 class CaptureActionResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -545,6 +807,16 @@ class CaptureActionResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    @field_validator("action_type", mode="before")
+    @classmethod
+    def _normalize_action_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, CaptureActionType)
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def _normalize_status(cls, value: object) -> object:
+        return _coerce_enum_value(value, CaptureActionStatus, aliases=CAPTURE_ACTION_STATUS_ALIASES)
+
 
 class CommercialCreate(BaseModel):
     contractor_id: str | None = None
@@ -555,6 +827,11 @@ class CommercialCreate(BaseModel):
     projected_payout_amount: float | None = Field(default=None, ge=0)
     realized_revenue: float | None = Field(default=None, ge=0)
     notes: str | None = None
+
+    @field_validator("success_fee_type", mode="before")
+    @classmethod
+    def _normalize_success_fee_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, CommercialSuccessFeeType)
 
 
 class CommercialResponse(BaseModel):
@@ -574,6 +851,11 @@ class CommercialResponse(BaseModel):
     notes: str | None
     created_at: datetime
     updated_at: datetime
+
+    @field_validator("success_fee_type", mode="before")
+    @classmethod
+    def _normalize_success_fee_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, CommercialSuccessFeeType)
 
 
 class DashboardContractSummary(BaseModel):
@@ -613,6 +895,24 @@ class DashboardContractorFollowUpSummary(BaseModel):
     next_step: str | None
 
 
+class DashboardPursuitReadinessSummary(BaseModel):
+    opportunity_id: str
+    opportunity_name: str
+    organization_name: str | None
+    pursuit_stage: str
+    advised_contractor_name: str | None
+    buyer_contacts_count: int
+    contractor_contacts_count: int
+    direct_conversation_contacts_count: int
+    intelligence_notes_count: int
+    evidence_records_count: int
+    open_capture_actions_count: int
+    pilot_ready: bool
+    readiness_score: int
+    readiness_total: int
+    missing_items: list[str]
+
+
 class DashboardSummaryResponse(BaseModel):
     generated_at: datetime
     organizations_total: int
@@ -625,7 +925,9 @@ class DashboardSummaryResponse(BaseModel):
     top_matches: list[DashboardMatchSummary]
     overdue_contractor_follow_ups: list[DashboardContractorFollowUpSummary]
     upcoming_contractor_follow_ups: list[DashboardContractorFollowUpSummary]
+    live_pursuit_readiness: list[DashboardPursuitReadinessSummary]
     active_pursuit_counts: dict[str, int]
     total_weighted_pipeline_value: float
     expected_consulting_revenue: float
     stage_conversion_metrics: dict[str, int]
+    friction_summary: UxFrictionSummaryResponse

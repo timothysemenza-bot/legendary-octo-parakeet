@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SBM Pursuit Surge Support | Discussion Draft</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <style>
+    :root {
+      --sbm-navy: #333a4c;
+      --sbm-navy-deep: #232a39;
+      --sbm-cyan: #2eb8f2;
+      --sbm-cyan-soft: #dff4fd;
+      --sbm-orange: #f76120;
+      --sbm-orange-soft: #ffe3d7;
+      --sbm-paper: #f9f9f9;
+      --sbm-ink: #2b2f32;
+      --sbm-muted: #6d7683;
+      --sbm-line: #d6dbe3;
+      --max: 1120px;
+      --radius: 16px;
+      --shadow: 0 18px 42px rgba(19, 30, 53, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(46, 184, 242, 0.18) 0%, rgba(46, 184, 242, 0) 26%),
+        linear-gradient(180deg, #eef3f8 0%, #f9f9f9 48%, #f2f4f7 100%);
+      color: var(--sbm-ink);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    .wrap {
+      width: min(var(--max), 94vw);
+      margin: 0 auto;
+      padding: 22px 0 38px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid rgba(51, 58, 76, 0.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      padding: 22px 22px 24px;
+      color: #ffffff;
+      background:
+        linear-gradient(115deg, rgba(46, 184, 242, 0.14) 0%, rgba(46, 184, 242, 0) 28%),
+        linear-gradient(160deg, #3b4558 0%, #2f3747 54%, #232a39 100%);
+      border-bottom: 6px solid var(--sbm-orange);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -8% -110px auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(46, 184, 242, 0.18) 0%, rgba(46, 184, 242, 0) 70%);
+      pointer-events: none;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.77rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .brand img {
+      display: block;
+      height: 28px;
+      width: auto;
+    }
+
+    .brand span {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      line-height: 1.15;
+    }
+
+    h1 {
+      max-width: 820px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.9rem, 3.8vw, 2.9rem);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      color: var(--sbm-navy);
+      font-size: 1.08rem;
+      letter-spacing: 0.02em;
+    }
+
+    h3 {
+      color: var(--sbm-navy);
+      font-size: 0.98rem;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 840px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.02rem;
+    }
+
+    .meta {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.84rem;
+    }
+
+    .section {
+      padding: 18px 22px;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--sbm-line);
+    }
+
+    .muted {
+      color: var(--sbm-muted);
+    }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .panel {
+      border: 1px solid var(--sbm-line);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+    }
+
+    .panel.cyan {
+      border-color: #bfe9fb;
+      background: linear-gradient(180deg, #f6fcff 0%, #eef9fe 100%);
+    }
+
+    .panel.orange {
+      border-color: #ffd3c2;
+      background: linear-gradient(180deg, #fff8f4 0%, #fff1ea 100%);
+    }
+
+    .kpi {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--sbm-cyan) 0%, var(--sbm-orange) 100%);
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .band {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .cta {
+      border: 1px solid #ffd2be;
+      border-radius: 14px;
+      padding: 16px;
+      background:
+        linear-gradient(150deg, rgba(247, 97, 32, 0.08) 0%, rgba(247, 97, 32, 0.02) 100%),
+        #fff8f4;
+    }
+
+    .cta strong {
+      color: var(--sbm-navy);
+    }
+
+    .foot {
+      margin-top: 12px;
+      color: var(--sbm-muted);
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .band {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 18px;
+      }
+
+      .section {
+        padding: 16px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <article class="card">
+      <header class="hero">
+        <div class="top">
+          <span class="chip">Private Discussion Draft</span>
+          <span class="brand">
+            <img src="../assets/logos/client/sbmwhitebig.png" alt="SBM logo">
+            <span>Prepared by Boss Key LLC</span>
+          </span>
+        </div>
+        <h1>SBM Pursuit Surge Support</h1>
+        <p>On-demand proposal and pursuit support for quick-turn, high-priority growth work when the internal team is already carrying too many active priorities.</p>
+        <div class="meta">
+          <span>Prepared for: Melissa Hampton / SBM internal discussion</span>
+          <span>Date: March 9, 2026</span>
+          <span>Use case: Overflow, quick-turn, and backfill support</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <div class="band">
+          <div>
+            <h2>Business Need</h2>
+            <p class="muted">From the call, the gap is clear: SBM is managing a high volume of active pursuits while also protecting internal focus on the highest-priority growth RFPs and deals. When a large proposal turns quickly, the team can run out of clean bandwidth even when the internal structure is sound.</p>
+          </div>
+          <div class="panel orange">
+            <h3>What This Is</h3>
+            <ul>
+              <li>External surge capacity for proposal and pursuit execution.</li>
+              <li>A way to protect internal focus during compressed timelines.</li>
+              <li>Support that plugs into the existing sales, pricing, and operations structure.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Where This Fits</h2>
+        <div class="grid-2">
+          <div class="panel cyan">
+            <h3>Best-Fit Scenarios</h3>
+            <ul>
+              <li>Large proposals with a 4-day or similarly compressed turnaround.</li>
+              <li>Simultaneous live pursuits that overload the internal team.</li>
+              <li>High-priority growth work that should not be delayed by lower-value noise.</li>
+              <li>Temporary bandwidth gaps or backfill situations.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>What Stays Internal</h3>
+            <ul>
+              <li>Final pricing ownership and pricing-team decisions.</li>
+              <li>Client relationship ownership and executive approvals.</li>
+              <li>Final go/no-go and leadership sign-off.</li>
+              <li>Any confidential materials not cleared for external handling.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Support Model</h2>
+        <div class="grid-3">
+          <div class="panel kpi">
+            <h3>Rapid Response</h3>
+            <ul>
+              <li>Jump in fast when a pursuit compresses unexpectedly.</li>
+              <li>Stabilize scope, timeline, and document flow.</li>
+            </ul>
+          </div>
+          <div class="panel kpi">
+            <h3>Overflow Delivery</h3>
+            <ul>
+              <li>Own specific proposal workstreams under internal direction.</li>
+              <li>Reduce load on the core team during peak volume.</li>
+            </ul>
+          </div>
+          <div class="panel kpi">
+            <h3>Strategic Backfill</h3>
+            <ul>
+              <li>Cover temporary gaps while the team scales or rebalances.</li>
+              <li>Support continuity without changing internal ownership lines.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>What Boss Key Would Handle</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <ul>
+              <li>Proposal management and submission-path coordination.</li>
+              <li>Draft development, structure, and response shaping.</li>
+              <li>Compliance and content assembly support.</li>
+              <li>Executive summary and storyline refinement.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <ul>
+              <li>Cross-functional coordination with sales, pricing, and operations inputs.</li>
+              <li>Fast-turn document cleanup and response acceleration.</li>
+              <li>Additional perspective on gaps, risks, and missing proof points.</li>
+              <li>Flexible support aligned to the way SBM already runs deals.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Why This Helps SBM</h2>
+        <div class="grid-3">
+          <div class="panel cyan">
+            <h3>Protects Core Team Focus</h3>
+            <p class="muted">Keeps the team centered on the most important growth work instead of spreading thin across every urgent request.</p>
+          </div>
+          <div class="panel orange">
+            <h3>Absorbs Peak Load</h3>
+            <p class="muted">Creates a cleaner way to handle overflow when proposal volume spikes or timelines collapse.</p>
+          </div>
+          <div class="panel">
+            <h3>Maintains Existing Structure</h3>
+            <p class="muted">Supports the current decision model rather than forcing a new process or a new layer of ownership.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Initial Next Step</h2>
+        <div class="cta">
+          <p><strong>Recommended next move:</strong> circulate this concept to Sean, Nicole, and Nick to validate whether an overflow-support model is worth structuring for SBM’s quick-turn growth pursuits.</p>
+          <p><strong>If aligned:</strong> hold a short follow-up conversation to define trigger conditions, confidentiality boundaries, and what work can be safely handled externally.</p>
+        </div>
+        <p class="foot">This is a private working draft prepared by Boss Key LLC for discussion purposes. It uses SBM-inspired branding for internal fit but does not represent an official SBM document.</p>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

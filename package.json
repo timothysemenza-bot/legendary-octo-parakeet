@@ -24,7 +24,11 @@
     "pw:jwblng:sliceverify": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-slice.spec.js",
     "pw:jwblng:eventqa": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/verify-event-pages-spec.spec.js",
     "pw:jwblng:event": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/create-event-template.spec.js",
-    "pw:jwblng:approve": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/approve-contact.spec.js"
+    "pw:jwblng:approve": "playwright test -c jwblng-mvp/playwright/playwright.config.js jwblng-mvp/playwright/tests/approve-contact.spec.js",
+    "pw:bosskey:demo": "playwright test -c proposal-ops/playwright.config.js proposal-ops/tests/e2e/chris-demo.spec.js",
+    "pw:bosskey:demo:narrated": "npm run pw:bosskey:demo && powershell -NoProfile -ExecutionPolicy Bypass -File .\\proposal-ops\\tools\\render-demo-narration.ps1",
+    "pw:bosskey:kb": "playwright test -c proposal-ops/playwright.config.js proposal-ops/tests/e2e/chris-demo.spec.js proposal-ops/tests/e2e/contractor-workflow.spec.js proposal-ops/tests/e2e/capture-workbench.spec.js proposal-ops/tests/e2e/dashboard-operations.spec.js",
+    "pw:bosskey:kb:narrated": "npm run pw:bosskey:kb && powershell -NoProfile -ExecutionPolicy Bypass -File .\\proposal-ops\\tools\\render-demo-library.ps1"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
