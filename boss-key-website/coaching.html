@@ -3,121 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Coaching | Confidential Advisor for Founders and Operators | Boss Key LLC</title>
-  <meta name="description" content="Executive coaching for founders and operators who need a confidential thought partner for leadership decisions, stakeholder friction, and consistent follow-through.">
+  <title>Procurement Intelligence | Policy Signals and Opportunity Forecasting | Boss Key LLC</title>
+  <meta name="description" content="Boss Key monitors budgets, agendas, legislation, program shifts, and procurement-adjacent signals to forecast likely state and local buying events.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    :root{--ink:#f3f5f8;--paper:#0a0a0b;--line:#2d2f35;--soft:#c3c8d3;--max:1080px}
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;color:var(--ink);background:radial-gradient(circle at 14% 8%,#23252b 0%,var(--paper) 42%),linear-gradient(145deg,#121316 0%,#09090a 100%);font-family:"Manrope","Segoe UI",sans-serif;line-height:1.58}
-    a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),92vw);margin:0 auto}
-    header{padding:16px 0;border-bottom:1px solid #1f2127;position:sticky;top:0;background:rgba(10,10,11,.82);backdrop-filter:blur(8px)}
-    .nav{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}.brand{display:inline-flex;align-items:center;gap:9px;font-weight:700}.brand img{width:31px;height:31px}
-    .links{display:flex;flex-wrap:wrap;gap:8px}.links a{border:1px solid #343740;border-radius:999px;padding:6px 11px;background:#1b1d22;color:var(--soft);font-size:.86rem;font-weight:700}
-    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid transparent;padding:11px 14px;font-weight:700;line-height:1.1}.btn-primary{background:linear-gradient(145deg,#c5162e,#a70f24);color:#fff}.btn-secondary{background:#181c24;color:#dbe8ff;border-color:#3b4350}
-    main{padding:24px 0 40px}section{margin:14px 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(165deg,#181a20 0%,#111318 100%);padding:22px}
-    h1,h2{font-family:"Fraunces",Georgia,serif;margin:0 0 10px;line-height:1.15}h1{font-size:clamp(2rem,4vw,3rem)}h2{font-size:clamp(1.36rem,2.5vw,1.9rem)}h3{margin:0 0 8px;font-size:1.06rem}
-    p{margin:0 0 10px;color:var(--soft)}ul{margin:0;padding-left:18px;color:#d9dee8}li{margin:7px 0}
+    :root{--ink:#f4f2ed;--paper:#081018;--line:#243245;--soft:#b7c2cf;--accent:#d4a35f;--accent-2:#f0ddba;--max:1080px}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;color:var(--ink);background:radial-gradient(circle at 18% 0%,#1d2835 0%,#0b1219 44%),linear-gradient(155deg,#111a24 0%,#071018 100%);font-family:"Manrope","Segoe UI",sans-serif;line-height:1.6}
+    a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),92vw);margin:0 auto}header{padding:16px 0;border-bottom:1px solid #1a2532;position:sticky;top:0;background:rgba(8,16,24,.84);backdrop-filter:blur(10px)}
+    .nav{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}.brand{display:inline-flex;align-items:center;gap:10px;font-weight:700}.brand img{width:32px;height:32px}.links{display:flex;flex-wrap:wrap;gap:8px}.links a{border:1px solid #314050;border-radius:999px;padding:6px 11px;background:#121c27;color:var(--soft);font-size:.86rem;font-weight:700}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid transparent;padding:11px 15px;font-weight:700;line-height:1.1}.btn-primary{background:linear-gradient(145deg,#e0b06e,#bc8440);color:#10161e}.btn-secondary{background:#121c27;color:#e7edf5;border-color:#314050}
+    main{padding:26px 0 42px}section{margin:16px 0;border:1px solid var(--line);border-radius:18px;background:linear-gradient(165deg,#121b26 0%,#0b1219 100%);padding:24px}
+    h1,h2{font-family:"Fraunces",Georgia,serif;margin:0 0 12px;line-height:1.1}h1{font-size:clamp(2.2rem,4.5vw,3.6rem)}h2{font-size:clamp(1.4rem,2.6vw,2rem)}h3{margin:0 0 8px;font-size:1.05rem}
+    p{margin:0 0 12px;color:var(--soft)}ul{margin:0;padding-left:18px;color:#d7dde6}li{margin:8px 0}.eyebrow{display:inline-block;margin-bottom:10px;border:1px solid rgba(212,163,95,.38);border-radius:999px;padding:6px 10px;background:rgba(212,163,95,.1);color:var(--accent-2);font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
     .grid-2,.grid-3{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .panel{border:1px solid #343844;border-radius:12px;background:#14171f;padding:14px}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
-    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;align-items:stretch}
-    .founder-card{display:flex;flex-direction:column;justify-content:space-between;min-height:100%}
-    .founder-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-    .founder-head img{width:72px;height:72px;border-radius:10px;object-fit:cover;flex:0 0 auto}
-    .founder-meta strong{display:block;line-height:1.2}
-    .founder-meta span{color:var(--soft);font-size:.92rem}
-    .founder-card p{margin:0 0 8px}
-    .notice{border:1px solid rgba(197,22,46,.35);background:rgba(197,22,46,.08)}
-    footer{border-top:1px solid var(--line);color:#afb6c3;font-size:.88rem;padding:16px 0 26px}
-    @media (max-width:860px){.hero,.grid-2,.grid-3{grid-template-columns:1fr}.buttons .btn{width:100%}}
+    .panel{border:1px solid #2a3949;border-radius:14px;background:#101924;padding:16px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    footer{border-top:1px solid var(--line);color:#9eabb9;font-size:.88rem;padding:16px 0 28px}
+    @media (max-width:980px){.grid-2,.grid-3{grid-template-columns:1fr}.buttons .btn{width:100%}}
   </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a><nav class="links" aria-label="Main navigation"><a href="./about.html">About</a><a href="./engagements.html">Proposal Support</a><a href="./coaching.html">Coaching</a><a href="./proof.html">Proof</a><a href="./faq.html">FAQ</a><a href="./contact.html">Contact</a></nav><a class="btn btn-primary schedule-cta" href="#">Book coaching intro</a></div></header>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="./about.html">About</a>
+      <a href="./services.html">Services</a>
+      <a href="./coaching.html">Intelligence</a>
+      <a href="./engagements.html">Capture + Proposal</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book briefing</a>
+  </div>
+</header>
 <main class="wrap">
-  <section class="notice">
-    <h2>Executive coaching is one of two Boss Key offerings.</h2>
-    <p>If your real need is support across active pursuits, proposal cadence, and leadership visibility inside the pipeline, go to <a href="./engagements.html">Proposal Support</a>. This page is for the separate coaching practice.</p>
-  </section>
-
-  <section class="hero">
-    <article>
-      <h1>Executive coaching for leaders who carry complex decisions.</h1>
-      <p>This is founder coaching and executive coaching built for real operating pressure. Sessions are confidential, direct, and anchored in leadership decision-making rather than generic motivation.</p>
-      <ul>
-        <li>Clarify what is strategic noise versus the real decision.</li>
-        <li>Pressure-test choices before they become organizational commitments.</li>
-        <li>Turn insight into actions you can communicate and sustain.</li>
-      </ul>
-      <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book coaching intro</a><a class="btn btn-secondary" href="./contact.html?offering=executive-coaching">Request coaching intro</a></div>
-    </article>
-    <aside class="panel founder-card">
-      <div>
-        <div class="founder-head">
-          <img src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza headshot">
-          <div class="founder-meta">
-            <strong>Timmy Semenza</strong>
-            <span>Founder, Boss Key LLC</span>
-          </div>
-        </div>
-        <p>I work as a confidential advisor for founder-led and operator-led leaders carrying real decision load.</p>
-      </div>
-      <p>My edge is pattern recognition: surfacing contradictions, incentives, and blind spots that affect judgment and follow-through.</p>
-    </aside>
+  <section>
+    <span class="eyebrow">Procurement Intelligence</span>
+    <h1>Translate public-sector signals into earlier opportunity visibility.</h1>
+    <p>Boss Key’s intelligence work helps clients understand what agencies are likely to buy, why, and when, before the formal procurement is released. This is the upstream practice line that feeds the rest of the capture lifecycle.</p>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=procurement-intelligence-retainer">Request intelligence scope</a>
+    </div>
   </section>
 
   <section>
-    <h2>What executive coaching is here</h2>
+    <h2>What Boss Key monitors</h2>
+    <div class="grid-3">
+      <article class="panel"><h3>Funding and budget signals</h3><p>Proposed and adopted budgets, capital plans, appropriations, bond programs, hearings, and pass-through funding movement.</p></article>
+      <article class="panel"><h3>Legislative and regulatory signals</h3><p>Bills, committee activity, rulemaking, executive action, licensing changes, and program-specific policy movement.</p></article>
+      <article class="panel"><h3>Procurement-adjacent signals</h3><p>Contract expirations, rebid windows, amendments, board approvals, vendor outreach, and procurement forecasts.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>What the client gets</h2>
     <div class="grid-2">
-      <article class="panel"><h3>Private thinking partnership</h3><p>A confidential advisor space where you can think rigorously without posturing for stakeholders.</p></article>
-      <article class="panel"><h3>Decision calibration under uncertainty</h3><p>We test assumptions, sequence choices, and identify second-order consequences.</p></article>
+      <article class="panel">
+        <h3>Opportunity Foresight Sprint</h3>
+        <ul>
+          <li>Target-market signal scan</li>
+          <li>Likely opportunity forecast</li>
+          <li>Top-priority pursuit shortlist</li>
+          <li>Capture brief for the strongest targets</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h3>Procurement Intelligence Retainer</h3>
+        <ul>
+          <li>Recurring signal digest</li>
+          <li>90-180 day opportunity watchlist</li>
+          <li>Agency and account priority summaries</li>
+          <li>Confidence framing and recommended next actions</li>
+        </ul>
+      </article>
     </div>
   </section>
 
   <section>
-    <h2>How coaching engagements work</h2>
-    <div class="grid-3">
-      <article class="panel"><h3>Weekly or biweekly coaching</h3><p>For leaders under sustained pressure who need a regular thought partner and accountability rhythm.</p></article>
-      <article class="panel"><h3>Advisory sprint</h3><p>For one critical decision cycle that needs concentrated support over 2-4 weeks.</p></article>
-      <article class="panel"><h3>Light advisory retainer</h3><p>For continuing coverage when you want periodic support without a high meeting load.</p></article>
+    <h2>What this is not</h2>
+    <div class="grid-2">
+      <article class="panel">
+        <h3>Not lobbying</h3>
+        <p>Boss Key does not provide lobbying services. The work is based on public information, ethical analysis, and structured capture planning.</p>
+      </article>
+      <article class="panel">
+        <h3>Not passive monitoring</h3>
+        <p>The goal is not to send a stream of alerts. The goal is to translate signals into opportunity hypotheses and concrete pre-RFP actions.</p>
+      </article>
     </div>
   </section>
 
   <section>
-    <h2>How it feels after</h2>
-    <div class="grid-3">
-      <article class="panel"><h3>Less internal noise</h3><p>You can separate facts from emotional signal faster.</p></article>
-      <article class="panel"><h3>Better leadership decisions</h3><p>Your choices are more deliberate and easier to defend.</p></article>
-      <article class="panel"><h3>More consistency</h3><p>Your team sees fewer abrupt pivots and clearer intent.</p></article>
-    </div>
-  </section>
-
-  <section>
-    <h2>Who this is not for</h2>
+    <h2>Best fit</h2>
     <ul>
-      <li>Leaders unwilling to examine their own assumptions.</li>
-      <li>People who want generic leadership content instead of personalized challenge.</li>
-      <li>Buyers seeking proposal operations or internal pipeline support rather than leadership coaching.</li>
+      <li>Organizations with public-sector growth goals but weak pre-RFP visibility</li>
+      <li>Mid-size contractors and service providers expanding in state and local markets</li>
+      <li>Nonprofits and public-sector entrants that need help connecting policy and funding movement to actual opportunity timing</li>
     </ul>
   </section>
-
-  <section>
-    <h2>Boundary statement: not therapy</h2>
-    <p>This engagement is executive coaching and executive advisory in a business context. It is not psychotherapy, mental health treatment, or clinical diagnosis.</p>
-  </section>
-
-  <section>
-    <h2>Next step</h2>
-    <p>If what you need is a confidential thought partner rather than proposal support, start with a private coaching intro.</p>
-    <div class="buttons"><a class="btn btn-primary schedule-cta" href="#">Book coaching intro</a><a class="btn btn-secondary" href="./contact.html?offering=executive-coaching">Request private callback</a></div>
-  </section>
 </main>
-<footer><div class="wrap">Boss Key LLC | Executive coaching | Confidential advisor | Leadership decision-making</div></footer>
+<footer><div class="wrap">Boss Key LLC | Procurement intelligence | Opportunity forecasting | State and local market signals</div></footer>
 <script>
-(function(){const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;document.querySelectorAll('.schedule-cta').forEach(function(l){l.href=calendarScheduleUrl;l.target='_blank';l.rel='noopener noreferrer';});})();
+(function(){
+  const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';
+  const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;
+  document.querySelectorAll('.schedule-cta').forEach(function(l){l.href=calendarScheduleUrl;l.target='_blank';l.rel='noopener noreferrer';});
+})();
 </script>
 </body>
 </html>

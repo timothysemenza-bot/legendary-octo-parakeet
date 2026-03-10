@@ -3,97 +3,112 @@
 ## 1) Hero
 
 ### Headline
-Operational clarity that protects margin and gets your team out of reactive mode.
+See public-sector opportunities before the bid is posted.
 
 ### Subhead
-Boss Key LLC helps owner-led service businesses fix execution breakdowns, tighten handoffs, and install operating systems that hold up under real pressure.
+Boss Key is a government opportunity intelligence and capture advisory firm. We combine policy analysis, procurement forecasting, capture strategy, and proposal execution support so clients can position months earlier, not just react when the RFP appears.
 
 ### 3 bullets
-- Stop losing profit to preventable process breakdowns.
-- Reduce leadership drag caused by unclear ownership and handoffs.
-- Create a practical operating cadence your team can actually maintain.
+- Interpret policy, budget, and agency signals before formal procurements are released.
+- Build a sharper opportunity forecast across the Mid-Atlantic public-sector market.
+- Turn early signals into practical capture strategy and proposal readiness.
 
 ### Primary CTA
-Book a diagnostic
+Book an opportunity briefing
 
-## 2) If you’re dealing with...
-- Jobs are getting done, but margins keep leaking.
-- Too much tribal knowledge sits with one or two people.
-- Work is constantly urgent because upstream decisions are unclear.
-- Sales commitments and delivery reality are not aligned.
-- You are hiring around process problems instead of fixing them.
-- Reporting exists, but it does not drive decisions.
-- Your team is working hard, but execution still feels inconsistent.
+## 2) If you are dealing with...
+- Your team sees posted RFPs, but lacks reliable visibility before release.
+- Agency priorities shift and you hear about them too late to shape positioning.
+- Rebid opportunities feel obvious in hindsight, but not early enough to act on.
+- Public-sector growth depends too heavily on reactive bid/no-bid decisions.
+- Policy, funding, and procurement signals exist, but no one is translating them into a pursuit plan.
+- Business development, capture, and proposal execution are disconnected.
+- You want earlier positioning without building a full internal intelligence function.
 
-## 3) What changes after 30-60 days
-- Leadership has a clear operating rhythm and escalation path.
-- The highest-friction handoffs are documented and stabilized.
-- Team roles and decision rights are clearer in day-to-day work.
-- Priority workflows are easier to execute without constant intervention.
-- You can see where margin and execution risk are concentrated.
+## 3) What changes after 60-90 days
+- Leadership has a cleaner view of likely opportunities 3-6 months ahead.
+- Priority agencies, accounts, and programs are mapped to specific service lines.
+- Signals are translated into concrete capture actions instead of passive monitoring.
+- Fewer opportunities arrive as surprises at the posted-RFP stage.
+- Proposal effort is focused on better-positioned, better-understood targets.
 
-## 4) How it works (3 steps)
-1. Diagnostic: We map the operational bottlenecks driving missed execution and margin leakage.
-2. Operating Sprint: We implement focused workflow fixes and management routines in the highest-impact areas.
-3. Stabilization: We lock in ownership, cadence, and accountability so improvements stick.
+## 4) How it works
+1. Policy Intelligence: We monitor budgets, agendas, legislation, program shifts, and procurement-adjacent signals.
+2. Opportunity Forecasting: We convert those signals into likely buying events, target accounts, and timing hypotheses.
+3. Capture Strategy: We define stakeholder maps, positioning themes, and pre-RFP action plans.
+4. Proposal Execution: When the solicitation lands, we support architecture, compliance, pricing coordination, and proposal operations.
 
-## 5) What I deliver (outcome-framed)
-- A prioritized operating-risk map showing where execution is breaking down.
-- A 30-60 day action plan tied to business outcomes, not tool checklists.
-- Updated workflow and handoff structure for selected high-friction processes.
-- Leadership cadence artifacts (review rhythm, decision logs, escalation rules).
-- Optional automation recommendations where they reduce recurring friction.
+## 5) Core services
+### Procurement Intelligence Retainer
+Recurring monitoring and interpretation of public-sector signals tied to your target markets, agencies, and service lines.
 
-## 6) Credibility / Proof
-### Experience line
-Led proposal and pursuit execution for 10+ years across complex service environments, then built Boss Key to help operators run cleaner, faster, and with less avoidable waste.
+### Capture Strategy Engagement
+Opportunity-specific pursuit support once a likely procurement or funding path is identified.
 
-### Testimonials (placeholders)
-- "[Placeholder testimonial]" - Name, Title, Company
-- "[Placeholder testimonial]" - Name, Title, Company
-- "[Placeholder testimonial]" - Name, Title, Company
+### Proposal Execution Support
+Proposal management, structure, pricing support, and AI-assisted proposal operations once the formal bid is live.
 
-### Who I’ve supported (placeholder list)
-- [Company or portfolio placeholder]
-- [Company or portfolio placeholder]
-- [Company or portfolio placeholder]
-- [Company or portfolio placeholder]
+### Immediate entry offer
+`Opportunity Foresight Sprint`
+- 3-4 week paid engagement
+- signal scan for a defined market and service line
+- forecasted opportunity map
+- top-priority pursuit shortlist
+- capture brief for the most actionable targets
 
-### Case cards (placeholders)
-- Case Placeholder 01: Problem, intervention approach, observed shift (no fabricated metrics).
-- Case Placeholder 02: Problem, intervention approach, observed shift (no fabricated metrics).
+## 6) Who we work with
+- Facilities and municipal service contractors
+- Healthcare and human-service providers
+- Education vendors and program operators
+- Nonprofits pursuing public funding
+- Technology vendors entering state and local markets
 
-## 7) FAQ (6-8)
-1. Who do you work with?
-- Owner-led and growth-stage service businesses that need stronger operating discipline.
+### Best-fit client profile
+- Growth-minded organization with public-sector revenue goals
+- Weak or fragmented pre-RFP visibility
+- No internal policy-intelligence function
+- No mature capture discipline across the full lifecycle
+- Willing to act before formal solicitations exist
 
-2. What does a diagnostic include?
-- A focused review of how work is sold, handed off, executed, and managed.
+## 7) Why Boss Key
+Boss Key is built around two complementary principals:
 
-3. Do you replace my operations leader?
-- No. I strengthen the operating system and leadership cadence your team runs on.
+- Partner 1: proposal and capture strategy, proposal architecture, pricing strategy, AI-assisted proposal operations, APMP-informed methodology
+- Partner 2: policy research, legislative and regulatory analysis, program interpretation, stakeholder and agency mapping
 
-4. Do you build AI tools?
-- I can recommend or implement selective automation when it supports outcomes. The engagement is led by operating priorities, not tools.
+This is the differentiator: policy intelligence and capture strategy in one advisory practice.
 
-5. How quickly will we see change?
-- Most clients see practical changes in visibility and execution behavior within the first 30-60 days.
+## 8) FAQ
+1. What is Boss Key?
+- A government opportunity intelligence and capture advisory firm focused on helping clients act earlier in the public-sector buying cycle.
 
-6. How do you price engagements?
-- Pricing is scoped to decision complexity, execution load, and speed requirements. We align structure to outcomes instead of selling a generic package.
+2. Are you a lobbying firm?
+- No. Boss Key does not provide lobbying services. We interpret public information, policy signals, funding movements, and procurement patterns to support lawful capture planning.
 
-7. What is not included?
-- Full-scale system replatforming, staff augmentation, and long-term embedded delivery without explicit scope.
+3. Who is your best first-market fit?
+- Mid-size contractors, service providers, and nonprofits pursuing state and local opportunities in the Mid-Atlantic, especially facilities and public-service contexts.
 
-8. What happens after I reach out?
-- We schedule a conversation, run a diagnostic, then decide together whether a focused engagement is the right fit.
+4. What happens before the RFP exists?
+- We monitor signals, develop opportunity hypotheses, identify likely buyers and timing, and recommend pre-RFP positioning actions.
 
-## 8) Final CTA
+5. Do you still support proposals?
+- Yes. Proposal execution remains part of the model, but it is the downstream expansion service, not the lead identity.
+
+6. What is the easiest way to start?
+- Start with the Opportunity Foresight Sprint. It is the fastest way to test fit and build a live opportunity map without a large commitment.
+
+7. How do you price engagements?
+- Boss Key is designed around recurring retainers plus fixed-fee strategy and proposal projects. Select success-linked structures can be used in narrow cases, but they are not the default.
+
+8. What is not included?
+- Lobbying, procurement influence outside ethical advisory work, indefinite channel commissions, or software-led product engagements masquerading as consulting.
+
+## 9) Final CTA
 ### Headline
-If operations feel heavier than they should, start with a diagnostic.
+If your public-sector pipeline still starts too late, start earlier.
 
 ### Framing
-First conversation -> diagnostic -> clear engagement decision.
+Briefing -> paid foresight sprint -> retainer or capture scope.
 
 ### CTA
-Book a diagnostic
+Book an opportunity briefing

@@ -1,29 +1,55 @@
 # Boss Key Pursuit OS - Development Roadmap
 
-## Phase A (Weeks 1-2) - Foundation + Intake
-- FastAPI app skeleton
-- SQLite persistence with Alembic migration
-- Opportunity Intake Engine API + UI
-- Deterministic scoring and audit trail
-- Unit + integration tests
+## Phase 0 - Operating Model Alignment
+- Reframe the repo around the Boss Key lifecycle:
+  - policy intelligence
+  - opportunity forecasting
+  - capture strategy
+  - proposal execution
+- Codify janitorial / facilities as the first vertical wedge rather than the entire product identity
+- Align public positioning, internal docs, and operator guidance
 
-## Phase B (Weeks 3-4) - RFP Parser + Compliance Matrix
-- PDF/DOCX ingestion pipeline
-- requirement and deadline extraction
-- structured solicitation data model
-- compliance matrix generation and owner assignment UI
+## Phase 1 - Vertical Wedge Foundation
+- Janitorial market radar
+- organizations, facilities, contracts, and imports
+- pursuit scoring and contract-to-pursuit creation
+- contractor prospecting, touchpoints, and handoff
+- capture workbench, intelligence, evidence, capture actions, commercials
+- dashboard readiness and operator friction visibility
 
-## Phase C (Weeks 5-6) - Capture + Outline
-- capture plan enrichment workflows
-- proposal outline generation from compliance matrix
-- section ownership and sequencing
+Status: implemented
 
-## Phase D (Weeks 7-8) - Review + Submission Readiness
-- Pink/Red/Gold review cycle manager
-- comment and resolution tracking
-- submission checklist and package validation
+## Phase 2 - Procurement Intelligence Foundation
+- source registry for budgets, agendas, legislation, and procurement feeds
+- agency and account watchlists
+- structured signal events with provenance
+- opportunity-hypothesis records that link signals to likely buying events
+- operator workflows for confidence framing and next-action recommendation
 
-## Phase E (Weeks 9-10) - Agent Workflow Hooks
-- local task queue abstraction
-- module-level agent execution contracts
-- retry behavior and confidence flags
+Status: next major build lane
+
+## Phase 3 - Forecasting Generalization and Sector Packs
+- generalize from janitorial / facilities into adjacent service categories
+- package healthcare, education, municipal services, nonprofit, and public-sector technology variants
+- reusable deliverable templates per sector
+- configurable watchlists and scoring patterns by vertical
+
+## Phase 4 - Proposal Execution Hardening
+- expand formal solicitation intake
+- deepen compliance-matrix workflows
+- structured outline and review flows
+- stronger handoff from forecast/capture context into active proposal execution
+
+## Phase 5 - Client Artifact Packaging
+- signal brief exports
+- opportunity forecast memos
+- capture brief packaging
+- stakeholder maps
+- pursuit recommendation outputs
+- reusable deliverables that can be handed to clients cleanly
+
+## Phase 6 - Research Augmentation and Automation Hooks
+- AI-assisted research support with human approval
+- confidence flags and provenance preservation
+- automation around source collection without black-box opportunity decisions
+- deeper reporting and retrospective analysis

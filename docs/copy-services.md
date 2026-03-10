@@ -5,71 +5,100 @@ Services | Boss Key LLC
 
 ## Hero
 ### Headline
-Three ways to work together, all anchored to operating outcomes.
+Three ways to work together across the government opportunity lifecycle.
 ### Subhead
-Choose the engagement level that matches your urgency, team bandwidth, and decision complexity.
+Boss Key helps clients move from public-sector signal monitoring to forecasted opportunities, capture strategy, and proposal execution support.
 ### Primary CTA
-Book a diagnostic
+Book an opportunity briefing
+
+## Service 0
+### Name
+Opportunity Foresight Sprint
+### Best for
+Leaders who need a fast, paid entry point before committing to a longer advisory relationship.
+### Outcome
+Create an actionable opportunity map and define the highest-priority pre-RFP moves.
+### Includes
+- target geography and agency signal scan
+- service-line-specific opportunity hypotheses
+- top-priority pursuit shortlist
+- one capture brief for each highest-priority target
+- partner recommendation call
+### Typical length
+3-4 weeks
+### Typical investment
+$7,500-$15,000
 
 ## Service 1
 ### Name
-Diagnostic + Operating Sprint (30-60 days)
+Procurement Intelligence Retainer
 ### Best for
-Leaders who need rapid clarity and focused execution changes.
+Organizations that need recurring visibility into public-sector opportunities before procurements are formally released.
 ### Outcome
-Identify the highest-impact breakdowns and stabilize critical workflows quickly.
+Maintain a forward-looking opportunity watchlist tied to budgets, policy, agency priorities, and procurement timing.
 ### Includes
-- Current-state operating diagnostic
-- Prioritized risk and leakage map
-- Focused workflow and handoff redesign
-- Leadership cadence setup
-### Excludes
-- Large system migrations
-- Full org redesign
+- monthly or biweekly signal monitoring
+- 90-180 day opportunity watchlist
+- agency and account priority summaries
+- signal confidence / risk framing
+- recommended next actions
+### Typical investment
+$3,000-$10,000+ per month depending on market scope
 
 ## Service 2
 ### Name
-Operating System Install (60-90 days)
+Capture Strategy Engagement
 ### Best for
-Teams needing broader cross-functional operating alignment.
+Teams that know a likely opportunity is forming and need structured pre-RFP positioning support.
 ### Outcome
-Install consistent execution standards across key functions.
+Turn a likely procurement into a real pursuit plan with stakeholder clarity, positioning themes, and named next actions.
 ### Includes
-- Multi-workstream operating model design
-- Decision-rights and escalation structure
-- KPI and review-cadence architecture
-- Change adoption support with team leads
-### Excludes
-- Long-term embedded management unless scoped
+- opportunity brief
+- stakeholder and agency map
+- incumbent / competitor assessment
+- win-theme and positioning memo
+- pursuit decision and action calendar
+### Typical investment
+$8,000-$20,000 for opportunity-specific work
 
 ## Service 3
 ### Name
-Ongoing Advisory Retainer
+Proposal Execution Support
 ### Best for
-Teams that want sustained operating discipline with external judgment.
+Clients that want the same advisory team to continue once the solicitation is released.
 ### Outcome
-Maintain momentum, pressure-test decisions, and prevent drift.
+Enter proposal production with stronger positioning, cleaner architecture, and better execution discipline.
 ### Includes
-- Monthly operating reviews
-- Prioritization and decision support
-- Execution risk checks and course-correction guidance
-### Excludes
-- Daily task execution as a substitute for internal ownership
+- proposal architecture and compliance framing
+- content planning and review support
+- pricing coordination support
+- AI-assisted proposal operations
+- proposal management and delivery support
+### Typical investment
+$10,000-$75,000+ depending on proposal complexity
 
-## How engagements start
-1. Intro conversation
-2. Diagnostic
-3. Scope decision and start plan
+## How engagements progress
+1. Opportunity briefing
+2. Opportunity Foresight Sprint or direct retainer start
+3. Capture strategy scope on priority opportunities
+4. Proposal execution support when formal procurement begins
 
 ## Fit guidance
 ### Strong fit
-- You want direct feedback and faster decisions.
-- You can assign a single internal owner.
-- You are ready to implement operational changes.
+- You want earlier visibility into state and local opportunities.
+- You are willing to act on public-sector signals before the bid is posted.
+- You want one advisory partner across intelligence, capture, and proposal execution.
+- You need stronger discipline without building a large internal team immediately.
 
 ### Not a fit
-- You are only looking for a one-off tool implementation.
-- You are not ready to change operating behaviors.
+- You only want a lobbyist or government affairs shop.
+- You only want generic bid writing after release with no strategic work upstream.
+- You want a software product instead of an advisory practice.
+
+## Why this structure works
+- Intelligence retainers create recurring visibility
+- Capture engagements turn signals into action
+- Proposal support monetizes downstream execution without making the firm reactive
 
 ## Final CTA
-Book a diagnostic
+Book an opportunity briefing

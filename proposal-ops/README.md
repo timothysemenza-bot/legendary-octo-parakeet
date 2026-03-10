@@ -1,15 +1,54 @@
 # ProposalOps Monorepo
 
-Artifact-first scaffold for a multi-tenant, human-gated proposal operations platform.
+Internal-first operating system for Boss Key's early-lifecycle government opportunity intelligence and capture advisory practice.
 
-## Quick Start
+## What This Repo Is
 
-```bash
-cd proposal-ops
-npm test
+Boss Key's firm model is:
+
+```text
+Policy Intelligence
+-> Opportunity Forecasting
+-> Capture Strategy
+-> Proposal Execution
 ```
 
-## Boss Key Pursuit OS (FastAPI v1)
+`proposal-ops` is where that model is codified operationally.
+
+Current truth:
+- The repo is **not** a SaaS product.
+- The repo is **not** a lobbying platform.
+- The repo is an internal consulting toolkit for running research, capture, proposal, and reusable client-deliverable workflows.
+- The first implementation wedge is **janitorial / facilities services** inside Mid-Atlantic state and local markets.
+
+## Lifecycle Mapping
+
+### 1. Policy / Procurement Intelligence
+- Monitor budgets, agendas, legislation, regulatory movement, rebid timing, and procurement-adjacent signals.
+- Current state: codified as the target operating model and documentation standard; still largely manual in the software layer.
+
+### 2. Opportunity Forecasting
+- Turn signals into likely buying events, target accounts, confidence framing, and timing hypotheses.
+- Current state: implemented in the Janitorial Contract Capture OS through organizations, facilities, contract radar, dashboard views, and forecast-oriented workflow support.
+
+### 3. Capture Strategy
+- Build stakeholder maps, contractor strategy, intelligence notes, capture actions, commercials, and pre-RFP pursuit discipline.
+- Current state: implemented in the janitorial operating wedge through contractor prospecting, touchpoints, capture workbench, opportunity handoff, and dashboard readiness views.
+
+### 4. Proposal Execution
+- Carry qualified pursuits into formal solicitation handling, compliance framing, content planning, review, and submission support.
+- Current state: partially implemented through opportunity intake, downstream proposal workflow scaffolding, compliance-matrix work, and proposal-oriented module plans.
+
+## Foundational Docs
+
+- [Early-Lifecycle Operating Model](./docs/early-lifecycle-operating-model.md)
+- [System Architecture](./docs/system-architecture.md)
+- [Development Roadmap](./docs/development-roadmap.md)
+- [Proposal Workflow](./docs/proposal-workflow.md)
+- [Janitorial Capture OS Operator Guide](./docs/runbooks/janitorial-capture-os-operator-guide.md)
+- [Execution Plan](./PLANS.md)
+
+## Quick Start
 
 ```bash
 cd proposal-ops
@@ -22,56 +61,19 @@ Open:
 - `http://127.0.0.1:8000/` for the web UI
 - `http://127.0.0.1:8000/docs` for API docs
 
-### Automated Chris Demo (Playwright)
+## Boss Key Pursuit OS (FastAPI v1)
 
-Run from the repo root:
+The current production-quality wedge inside this repo is the **Janitorial Contract Capture OS**.
 
-```bash
-npm run pw:bosskey:demo
-```
-
-Optional headed run for a visible browser:
-
-```bash
-npm run pw:bosskey:demo -- --headed
-```
-
-Create a narrated partner-facing MP4 from the same deterministic demo flow:
-
-```bash
-npm run pw:bosskey:demo:narrated
-```
-
-Generate the full narrated knowledge-base library:
-
-```bash
-npm run pw:bosskey:kb:narrated
-```
-
-What the harness does:
-- starts Boss Key on `http://127.0.0.1:8010`
-- resets a dedicated demo database under `proposal-ops/.artifacts/playwright-demo/`
-- seeds deterministic janitorial demo data
-- walks the overview film plus focused knowledge-base videos for contractor workflow, capture workbench, and dashboard operations
-- records Playwright artifacts including video, trace, and named screenshots
-- renders a scripted voiceover with OpenAI text-to-speech when `OPENAI_API_KEY` is available, or falls back to Windows speech synthesis
-- refuses to squeeze narration into scenes that are too short, so pacing errors surface as authoring errors instead of producing unintelligible audio
-
-Artifacts are written to:
-- `proposal-ops/test-results/`
-- `proposal-ops/playwright-report/`
-- `proposal-ops/demo-artifacts/01-bosskey-overview.mp4`
-- `proposal-ops/demo-artifacts/02-bosskey-contractor-workflow.mp4`
-- `proposal-ops/demo-artifacts/03-bosskey-capture-workbench.mp4`
-- `proposal-ops/demo-artifacts/04-bosskey-dashboard-operations.mp4`
-
-The demo harness does not use your live working SQLite file.
-The narration is scripted by walkthrough step and synchronized to the recorded Playwright video after the run; it is not live microphone capture.
-If you want the higher-quality external voice, set `OPENAI_API_KEY` in the environment or a local `.env` file at the repo root before running the narrated commands.
-
-## Janitorial Contract Capture OS v1
-
-`proposal-ops` now includes an internal-first Janitorial Contract Capture OS for pre-RFP market intelligence, pursuit scoring, contractor matching, capture workbench operations, and consulting economics tracking.
+It supports:
+- contract radar and rebid visibility
+- organizations and facilities
+- contractor prospecting and touchpoints
+- pursuit scoring and contract-to-pursuit handoff
+- capture workbench operations
+- commercials and advised contractor linkage
+- operator dashboard and readiness visibility
+- UX friction feedback capture
 
 Primary web routes:
 - `/dashboard`
@@ -81,6 +83,7 @@ Primary web routes:
 - `/contractors`
 - `/settings/scoring`
 - `/opportunities/{id}/capture-workbench`
+- `/ux/friction`
 
 Primary API routes:
 - `GET|POST /api/organizations`
@@ -89,7 +92,9 @@ Primary API routes:
 - `POST /api/contracts/import`
 - `POST /api/contracts/{id}/pursuits`
 - `GET|POST /api/contractors`
-- `POST /api/opportunities/{id}/matches`
+- `GET|POST /api/contractors/{contractor_id}/touchpoints`
+- `POST /api/contractors/{contractor_id}/pursuits`
+- `POST /api/contractors/{contractor_id}/opportunity-links`
 - `GET|POST /api/opportunities/{id}/contacts`
 - `GET|POST /api/opportunities/{id}/intelligence`
 - `GET|POST /api/opportunities/{id}/evidence`
@@ -97,8 +102,12 @@ Primary API routes:
 - `GET|PUT /api/opportunities/{id}/commercials`
 - `GET /api/dashboard/summary`
 - `POST /api/dashboard/seed-demo`
+- `POST /api/ux/events`
+- `POST /api/ux/feedback`
+- `GET /api/ux/friction-summary`
 
-MVP contract import CSV columns:
+### MVP contract import CSV columns
+
 - `organization_name`
 - `organization_type`
 - `facility_name`
@@ -117,41 +126,58 @@ MVP contract import CSV columns:
 - `source_type`
 - `source_notes`
 
-Operator guidance:
-- [Janitorial Capture OS Operator Guide](./docs/runbooks/janitorial-capture-os-operator-guide.md)
-- [Execution plan](./PLANS.md)
+## Automated Demo and Knowledge Base
 
-### Migration mismatch fix
+Run from the repo root:
+
+```bash
+npm run pw:bosskey:demo
+```
+
+Narrated partner demo:
+
+```bash
+npm run pw:bosskey:demo:narrated
+```
+
+Narrated knowledge-base library:
+
+```bash
+npm run pw:bosskey:kb:narrated
+```
+
+What the harness does:
+- starts Boss Key on `http://127.0.0.1:8010`
+- resets a dedicated demo database under `proposal-ops/.artifacts/playwright-demo/`
+- seeds deterministic janitorial demo data
+- records high-resolution walkthrough videos, traces, and screenshots
+- renders scripted narration with OpenAI text-to-speech when `OPENAI_API_KEY` is available, or falls back to Windows speech synthesis
+
+Artifacts are written to:
+- `proposal-ops/test-results/`
+- `proposal-ops/playwright-report/`
+- `proposal-ops/demo-artifacts/`
+
+## Migration mismatch fix
+
 If you see `table opportunities already exists`, your DB has tables but is not Alembic-stamped.
 
 Preserve data:
+
 ```bash
 python -m alembic stamp head
 ```
 
 Reset local DB:
+
 ```bash
 powershell -ExecutionPolicy Bypass -File .\tools\reset-local-db.ps1
 ```
 
-## Phase B Endpoints
-- `POST /api/opportunities/{id}/rfp/parse`
-- `GET /api/opportunities/{id}/compliance-matrix`
-- `PATCH /api/compliance-matrix/{row_id}`
+## Working Assumptions
 
-## Phase B Web Screens
-- `/opportunities/{id}/rfp-upload`
-- `/opportunities/{id}/compliance-matrix`
-
-## Current Scope
-
-- Product and architecture docs
-- Domain model and workflow definitions
-- Client config JSON schema
-- Demo tenant fixture config
-- Contract tests for gate transitions and tenant isolation
-- Opportunity Intake Engine (FastAPI + SQLite + UI + scoring + audit trail)
-- RFP Parser + Compliance Matrix (heuristic extraction, matrix generation, manual row updates)
-- Janitorial market radar: organizations, facilities, contracts, and CSV import
-- Pursuit scoring with configurable profiles and contract-to-pursuit creation
-- Contractor matching, capture workbench, ethical evidence tracking, dashboard reporting, and commercials
+- Internal-first, local-first, human-gated operation
+- Janitorial / facilities is the first vertical wedge, not the only end state
+- Structured signal interpretation is preferred over black-box automation
+- Client deliverables should remain exportable and editable
+- The internal repo remains the master system for reusable methodology and workflow

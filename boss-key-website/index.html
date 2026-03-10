@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proposal Management Support and Executive Coaching | Boss Key LLC</title>
-  <meta name="description" content="Boss Key LLC offers two clear service lines: proposal management support for active pursuits and executive coaching for founders and operators carrying complex decisions.">
+  <title>Government Opportunity Intelligence and Capture Advisory | Boss Key LLC</title>
+  <meta name="description" content="Boss Key helps contractors, service providers, and nonprofits see public-sector opportunities before the bid is posted through policy intelligence, opportunity forecasting, capture strategy, and proposal execution support.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,458 +12,403 @@
   <style>
     :root {
       --ink: #f3f5f8;
-      --paper: #0a0a0b;
-      --line: #2d2f35;
-      --soft: #c3c8d3;
-      --accent: #c5162e;
-      --accent-soft: #ffd7dd;
-      --proposal: #3d8bff;
-      --proposal-soft: #d6e6ff;
-      --max: 1120px;
+      --paper: #0a0c10;
+      --line: #2d3440;
+      --soft: #c3cad6;
+      --muted: #99a3b3;
+      --accent: #bf2034;
+      --accent-2: #2d6cdf;
+      --accent-soft: #ffd8de;
+      --accent-2-soft: #dce8ff;
+      --panel: #141922;
+      --panel-2: #0f131b;
+      --max: 1160px;
     }
-
     * { box-sizing: border-box; }
-
     html, body {
       margin: 0;
       padding: 0;
+      background:
+        radial-gradient(circle at 15% 10%, #243041 0%, rgba(36, 48, 65, 0.18) 28%, transparent 56%),
+        linear-gradient(145deg, #121721 0%, #090b10 100%);
       color: var(--ink);
-      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
       font-family: "Manrope", "Segoe UI", sans-serif;
       line-height: 1.58;
       scroll-behavior: smooth;
     }
-
     a { color: inherit; text-decoration: none; }
-
-    .wrap {
-      width: min(var(--max), 92vw);
-      margin: 0 auto;
-    }
-
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
     header {
       position: sticky;
       top: 0;
       z-index: 40;
-      backdrop-filter: blur(8px);
-      background: rgba(10, 10, 11, 0.82);
-      border-bottom: 1px solid #1f2127;
       padding: 16px 0;
+      backdrop-filter: blur(8px);
+      background: rgba(10, 12, 16, 0.84);
+      border-bottom: 1px solid #1e2430;
     }
-
     .nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
     }
-
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       font-weight: 700;
       letter-spacing: 0.02em;
     }
-
-    .brand img {
-      width: 31px;
-      height: 31px;
-      display: block;
-    }
-
+    .brand img { width: 32px; height: 32px; display: block; }
     .links {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
-
     .links a {
-      border: 1px solid #343740;
+      border: 1px solid #353f4c;
       border-radius: 999px;
       padding: 6px 11px;
-      background: #1b1d22;
+      background: #151a23;
       color: var(--soft);
       font-size: 0.86rem;
       font-weight: 700;
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: 12px;
       border: 1px solid transparent;
-      padding: 11px 14px;
+      padding: 11px 15px;
       font-weight: 700;
       line-height: 1.1;
-      cursor: pointer;
       white-space: nowrap;
     }
-
     .btn-primary {
-      background: linear-gradient(145deg, #c5162e, #a70f24);
+      background: linear-gradient(145deg, var(--accent), #981326);
       color: #fff;
-      box-shadow: 0 10px 22px rgba(197, 22, 46, 0.34);
+      box-shadow: 0 12px 28px rgba(191, 32, 52, 0.28);
     }
-
     .btn-secondary {
-      background: #181c24;
-      color: #dbe8ff;
-      border-color: #3b4350;
+      background: #181e28;
+      color: #e2ebfb;
+      border-color: #3a4554;
     }
-
-    .btn-proposal {
-      background: linear-gradient(145deg, #3d8bff, #2560ca);
-      color: #fff;
-      box-shadow: 0 10px 22px rgba(61, 139, 255, 0.28);
-    }
-
     main { padding: 24px 0 42px; }
-
     section {
       margin: 14px 0;
       border: 1px solid var(--line);
-      border-radius: 16px;
-      background: linear-gradient(165deg, #181a20 0%, #111318 100%);
-      padding: 22px;
+      border-radius: 18px;
+      background: linear-gradient(165deg, rgba(20, 25, 34, 0.98), rgba(12, 15, 22, 0.98));
+      padding: 24px;
     }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 18px;
-      align-items: start;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 10px;
-      border: 1px solid #5d2230;
-      border-radius: 999px;
-      color: #ffdce2;
-      background: #2a1318;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      padding: 5px 9px;
-    }
-
-    .eyebrow-proposal {
-      border-color: #244479;
-      color: var(--proposal-soft);
-      background: #101a2a;
-    }
-
     h1, h2 {
       font-family: "Fraunces", Georgia, serif;
       margin: 0 0 10px;
-      line-height: 1.15;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
     }
-
-    h1 { font-size: clamp(2.05rem, 4.2vw, 3.35rem); letter-spacing: -0.02em; }
-    h2 { font-size: clamp(1.42rem, 2.6vw, 2rem); }
-    h3 { margin: 0 0 8px; font-size: 1.06rem; }
-
+    h1 { font-size: clamp(2.2rem, 4.8vw, 4rem); }
+    h2 { font-size: clamp(1.4rem, 2.7vw, 2.2rem); }
+    h3 { margin: 0 0 8px; font-size: 1.04rem; }
     p { margin: 0 0 10px; color: var(--soft); }
-
-    ul {
-      margin: 0;
-      padding-left: 18px;
-      color: #d9dee8;
-    }
-
+    ul { margin: 0; padding-left: 18px; color: #d9dee8; }
     li { margin: 7px 0; }
-
-    .hero-side,
-    .panel,
-    .track-card {
-      border: 1px solid #343844;
-      border-radius: 12px;
-      background: #14171f;
-      padding: 14px;
-    }
-
-    .track-card {
-      padding: 18px;
-      background: linear-gradient(180deg, rgba(20, 23, 31, 0.96), rgba(15, 17, 24, 0.96));
-    }
-
-    .track-card-proposal {
-      border-color: rgba(61, 139, 255, 0.35);
-      box-shadow: inset 0 1px 0 rgba(61, 139, 255, 0.14);
-    }
-
-    .track-card-coaching {
-      border-color: rgba(197, 22, 46, 0.38);
-      box-shadow: inset 0 1px 0 rgba(197, 22, 46, 0.14);
-    }
-
-    .track-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .track-tag {
+    .eyebrow {
       display: inline-flex;
       align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(45, 108, 223, 0.32);
       border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 0.74rem;
+      padding: 6px 10px;
+      font-size: 0.76rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
+      color: var(--accent-2-soft);
+      background: rgba(45, 108, 223, 0.12);
     }
-
-    .track-tag-proposal {
-      background: rgba(61, 139, 255, 0.14);
-      color: var(--proposal-soft);
-      border: 1px solid rgba(61, 139, 255, 0.36);
-    }
-
-    .track-tag-coaching {
-      background: rgba(197, 22, 46, 0.14);
-      color: var(--accent-soft);
-      border: 1px solid rgba(197, 22, 46, 0.34);
-    }
-
-    .founder {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      margin-bottom: 10px;
-    }
-
-    .founder img {
-      width: 64px;
-      height: 64px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    .grid-2,
-    .grid-3 {
+    .hero {
       display: grid;
-      gap: 12px;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: stretch;
     }
-
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-    .buttons {
-      margin-top: 12px;
-      display: flex;
-      gap: 9px;
-      flex-wrap: wrap;
+    .panel, .card {
+      border: 1px solid #34404f;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(18, 23, 32, 0.96), rgba(13, 17, 24, 0.96));
+      padding: 16px;
     }
-
-    .comparison {
+    .hero-metrics {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .metric {
+      border: 1px solid #334052;
+      border-radius: 12px;
+      padding: 12px;
+      background: #111722;
+    }
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.15rem;
+      color: #fff;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .grid-2, .grid-3 {
+      display: grid;
       gap: 12px;
     }
-
-    .comparison .panel strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--ink);
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .timeline {
+      display: grid;
+      gap: 10px;
     }
-
+    .timeline-step {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #304257;
+      border-radius: 14px;
+      padding: 14px;
+      background: #111722;
+    }
+    .timeline-step strong:first-child,
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(145deg, var(--accent-2), #1f4c9f);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .tag-red {
+      background: rgba(191, 32, 52, 0.13);
+      border: 1px solid rgba(191, 32, 52, 0.3);
+      color: var(--accent-soft);
+    }
+    .tag-blue {
+      background: rgba(45, 108, 223, 0.12);
+      border: 1px solid rgba(45, 108, 223, 0.32);
+      color: var(--accent-2-soft);
+    }
+    .small { color: var(--muted); font-size: 0.9rem; }
     footer {
       border-top: 1px solid var(--line);
-      color: #afb6c3;
+      color: #aeb7c5;
       font-size: 0.88rem;
       padding: 16px 0 26px;
     }
-
-    @media (max-width: 940px) {
-      .hero,
-      .grid-3,
-      .comparison { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 760px) {
-      .grid-2,
-      .grid-3 { grid-template-columns: 1fr; }
+    @media (max-width: 920px) {
+      .hero, .grid-2, .grid-3, .hero-metrics { grid-template-columns: 1fr; }
       .buttons .btn { width: 100%; }
-      section { padding: 18px; }
-      .track-heading { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <a class="brand" href="./index.html" aria-label="Boss Key home">
-        <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
-        <span>Boss Key LLC</span>
-      </a>
-      <nav class="links" aria-label="Main navigation">
-        <a href="./about.html">About</a>
-        <a href="./engagements.html">Proposal Support</a>
-        <a href="./coaching.html">Coaching</a>
-        <a href="./proof.html">Proof</a>
-        <a href="./faq.html">FAQ</a>
-        <a href="./contact.html">Contact</a>
-      </nav>
-      <a class="btn btn-primary schedule-cta" href="#">Book intro</a>
-    </div>
-  </header>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="./services.html">Services</a>
+      <a href="./coaching.html">Policy Intelligence</a>
+      <a href="./engagements.html">Capture + Proposal</a>
+      <a href="./about.html">About</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
 
-  <main class="wrap">
-    <section class="hero" aria-labelledby="homeHeroTitle">
-      <div>
-        <span class="eyebrow">Two Distinct Offerings</span>
-        <h1 id="homeHeroTitle">Proposal management support for active pursuits. Executive coaching for leaders carrying the decisions.</h1>
-        <p>Boss Key now has two clear practice lines. One helps teams run cleaner qualification, proposal, and leadership review cadence. The other gives founders and operators a private thinking partnership for high-stakes leadership decisions.</p>
-        <ul>
-          <li>Proposal support for teams under live deadline pressure.</li>
-          <li>Executive coaching for leaders who need sharper judgment and steadier execution.</li>
-          <li>Choose the lane that matches the pressure you are under right now.</li>
-        </ul>
-        <div class="buttons">
-          <a class="btn btn-proposal" href="./engagements.html">Explore proposal support</a>
-          <a class="btn btn-secondary" href="./coaching.html">Explore executive coaching</a>
-        </div>
-      </div>
-      <aside class="hero-side">
-        <div class="founder">
-          <img src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza headshot">
-          <div>
-            <strong>Timmy Semenza</strong><br>
-            <span>Founder, Boss Key LLC</span>
-          </div>
-        </div>
-        <p>My background is 10+ years inside high-stakes proposal and business development environments where decision quality, handoffs, and leadership alignment directly affected outcomes.</p>
-        <p>That same pattern-recognition skill now supports two offers: hands-on proposal management support for live pursuits, and executive coaching for people carrying complex judgment load.</p>
-      </aside>
-    </section>
-
-    <section>
-      <h2>Choose your path</h2>
-      <div class="grid-2">
-        <article class="track-card track-card-proposal">
-          <div class="track-heading">
-            <h3>Proposal management support</h3>
-            <span class="track-tag track-tag-proposal">Pipeline-facing</span>
-          </div>
-          <p>For proposal teams, BD leaders, and operators who need better go/no-go decisions, cleaner proposal cadence, and stronger leadership visibility across active pursuits.</p>
-          <ul>
-            <li>Live pursuit diagnostic sprint to baseline current drag.</li>
-            <li>Weekly cadence support for qualification, milestone reviews, and decision tracking.</li>
-            <li>Managed or embedded support when pursuit volume or complexity is higher.</li>
-          </ul>
-          <div class="buttons">
-            <a class="btn btn-proposal" href="./engagements.html">View proposal packages</a>
-            <a class="btn btn-secondary" href="./contact.html?offering=proposal-support">Request proposal scope</a>
-          </div>
-        </article>
-        <article class="track-card track-card-coaching">
-          <div class="track-heading">
-            <h3>Executive coaching</h3>
-            <span class="track-tag track-tag-coaching">Leader-facing</span>
-          </div>
-          <p>For founders, presidents, GMs, and operators who need a confidential space to think clearly, pressure-test choices, and lead with more consistency.</p>
-          <ul>
-            <li>Weekly or biweekly coaching for leaders under sustained decision pressure.</li>
-            <li>Short advisory sprints for one critical decision cycle.</li>
-            <li>Ongoing advisory retainers for continuing confidential support.</li>
-          </ul>
-          <div class="buttons">
-            <a class="btn btn-primary" href="./coaching.html">View coaching model</a>
-            <a class="btn btn-secondary" href="./contact.html?offering=executive-coaching">Request coaching intro</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2>How the two offers differ</h2>
-      <div class="comparison">
-        <article class="panel">
-          <span class="eyebrow eyebrow-proposal">Proposal Support</span>
-          <strong>Use this when the pressure is inside the pipeline.</strong>
-          <p>You need faster qualification calls, clearer owners, stronger proposal checkpoints, and fewer late-cycle escalations. The work sits inside live pursuits and recurring team cadence.</p>
-        </article>
-        <article class="panel">
-          <span class="eyebrow">Executive Coaching</span>
-          <strong>Use this when the pressure is inside the leader.</strong>
-          <p>You need a confidential advisor to sort signal from noise, pressure-test decisions, and lead with less reactivity. The work sits inside your judgment, communication, and follow-through.</p>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2>What proposal support looks like in practice</h2>
-      <div class="grid-3">
-        <article class="panel">
-          <h3>Diagnostic sprint</h3>
-          <p>Baseline live pursuits, map decision bottlenecks, and show where cycle time and ownership are breaking down.</p>
-        </article>
-        <article class="panel">
-          <h3>Weekly pursuit cadence</h3>
-          <p>Run structured reviews, tighten go/no-go discipline, and keep milestones moving with named owners and dates.</p>
-        </article>
-        <article class="panel">
-          <h3>Leadership visibility</h3>
-          <p>Translate active pipeline risk into clear memos, escalations, and next decisions for leadership.</p>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2>What coaching looks like in practice</h2>
-      <div class="grid-3">
-        <article class="panel">
-          <h3>Private thinking partnership</h3>
-          <p>Work through the hard call without performing for stakeholders or defending half-formed ideas.</p>
-        </article>
-        <article class="panel">
-          <h3>Decision calibration</h3>
-          <p>Test assumptions, sequence choices, and surface incentive problems before they become expensive.</p>
-        </article>
-        <article class="panel">
-          <h3>Leadership follow-through</h3>
-          <p>Convert insight into clearer communication, steadier signals, and concrete next actions.</p>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2>Why these offerings live together</h2>
-      <p>Both practices come from the same operating edge: hearing contradictions early, spotting drag in how decisions get made, and helping people move from noise to action. The difference is where that work lands. One engagement supports the team’s pursuit cadence. The other supports the leader carrying the judgment load.</p>
-    </section>
-
-    <section>
-      <h2>Start with the right conversation</h2>
-      <p>If you are trying to stabilize active pursuits, start with proposal support. If you are carrying a leadership decision that needs a confidential thought partner, start with coaching. If both are true, we can scope them separately.</p>
+<main class="wrap">
+  <section class="hero">
+    <article>
+      <span class="eyebrow">Early-lifecycle government opportunity advisory</span>
+      <h1>See public-sector opportunities before the bid is posted.</h1>
+      <p>Boss Key helps contractors, service providers, and nonprofits act earlier in the government contracting lifecycle. We combine policy intelligence, opportunity forecasting, capture strategy, and proposal execution support so clients can position months before formal procurements are released.</p>
+      <ul>
+        <li>Track policy, budget, governance, and procurement-adjacent signals before the market reacts.</li>
+        <li>Turn early signals into a forecasted opportunity map and pre-RFP action plan.</li>
+        <li>Carry the same advisory work forward into capture strategy and proposal execution when the procurement goes live.</li>
+      </ul>
       <div class="buttons">
-        <a class="btn btn-proposal" href="./contact.html?offering=proposal-support">Proposal support inquiry</a>
-        <a class="btn btn-primary" href="./contact.html?offering=executive-coaching">Coaching inquiry</a>
+        <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+        <a class="btn btn-secondary" href="./services.html">View service architecture</a>
       </div>
-    </section>
-  </main>
+      <div class="hero-metrics">
+        <div class="metric"><strong>Earlier visibility</strong><span>Policy and funding signals interpreted before formal release.</span></div>
+        <div class="metric"><strong>Cleaner qualification</strong><span>Forecasted opportunities filtered before costly bid reaction begins.</span></div>
+        <div class="metric"><strong>Stronger capture timing</strong><span>Stakeholder maps and positioning themes built before the procurement opens.</span></div>
+        <div class="metric"><strong>Downstream execution continuity</strong><span>Proposal support remains available once the solicitation is live.</span></div>
+      </div>
+    </article>
+    <aside class="panel">
+      <span class="tag tag-blue">The Boss Key model</span>
+      <p><strong>Policy Intelligence -> Opportunity Forecasting -> Capture Strategy -> Proposal Execution</strong></p>
+      <p>Most proposal consultancies enter at the posted-RFP stage. Boss Key is designed to start earlier, when agency priorities, funding shifts, and market timing still create positioning advantage.</p>
+      <p class="small">Not a lobbying firm. Not a generic bid-writing vendor. A government opportunity intelligence and capture advisory practice.</p>
+    </aside>
+  </section>
 
-  <footer>
-    <div class="wrap">Boss Key LLC | Proposal management support | Executive coaching | <a href="./trust/">Trust Center</a></div>
-  </footer>
+  <section>
+    <h2>Why this exists</h2>
+    <div class="grid-3">
+      <article class="card">
+        <span class="tag tag-red">Reactive buyers lose time</span>
+        <p>Most contractors wait for a posted solicitation, which means positioning, teaming, and agency understanding all begin too late.</p>
+      </article>
+      <article class="card">
+        <span class="tag tag-blue">Signals exist earlier</span>
+        <p>Budgets, council agendas, appropriations, rebid windows, program changes, and public governance activity often point to buying events months ahead.</p>
+      </article>
+      <article class="card">
+        <span class="tag tag-red">Boss Key bridges the gap</span>
+        <p>Boss Key translates those signals into an opportunity forecast, then turns that forecast into practical capture and proposal support.</p>
+      </article>
+    </div>
+  </section>
 
-  <script>
-    (function () {
-      const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
-      const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  <section>
+    <h2>How Boss Key works</h2>
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Policy and procurement intelligence</h3>
+          <p>Monitor budgets, legislation, agency priorities, council and board agendas, program changes, contract expirations, rebid timing, and public operating signals.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Opportunity forecasting</h3>
+          <p>Translate those signals into likely buying events, timing hypotheses, target agencies, and a realistic opportunity watchlist.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Capture strategy</h3>
+          <p>Build stakeholder maps, positioning themes, pursuit decisions, and pre-RFP action plans before the procurement formally opens.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Proposal execution</h3>
+          <p>Support proposal architecture, compliance framing, pricing coordination, review strategy, and AI-assisted proposal operations once the RFP is live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      document.querySelectorAll(".schedule-cta").forEach(function (link) {
-        link.href = calendarScheduleUrl;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-      });
-    })();
-  </script>
+  <section>
+    <h2>The two-partner model</h2>
+    <div class="grid-2">
+      <article class="card">
+        <span class="tag tag-blue">Partner 1</span>
+        <h3>Capture and proposal strategy</h3>
+        <p>Proposal architecture, capture strategy, pricing support, proposal execution discipline, and AI-assisted proposal operations.</p>
+      </article>
+      <article class="card">
+        <span class="tag tag-red">Partner 2</span>
+        <h3>Policy and program intelligence</h3>
+        <p>Legislative and regulatory analysis, program interpretation, stakeholder mapping, agency-priority analysis, and upstream signal interpretation.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Who we help first</h2>
+    <div class="grid-3">
+      <article class="card"><h3>Facilities and municipal service contractors</h3><p>Janitorial, EVS, day porter, maintenance, staffing, and operational support providers working in state and local markets.</p></article>
+      <article class="card"><h3>Service providers and nonprofits</h3><p>Healthcare, workforce, education, human services, and mission-driven operators pursuing government-funded work.</p></article>
+      <article class="card"><h3>Public-sector market entrants</h3><p>Technology vendors and specialty providers that need earlier visibility and a sharper capture path.</p></article>
+    </div>
+    <p class="small">Initial geographic wedge: Mid-Atlantic regional public-sector markets.</p>
+  </section>
+
+  <section>
+    <h2>Start with the minimum viable engagement</h2>
+    <div class="grid-2">
+      <article class="card">
+        <span class="tag tag-blue">Entry offer</span>
+        <h3>Opportunity Foresight Sprint</h3>
+        <p>A 3-4 week paid sprint that produces a target-market signal scan, likely opportunity forecast, top-priority pursuit shortlist, and capture brief for the most actionable targets.</p>
+      </article>
+      <article class="card">
+        <span class="tag tag-red">Expansion path</span>
+        <h3>Retainer -> Capture -> Proposal</h3>
+        <p>The sprint is designed to convert into a recurring intelligence retainer, opportunity-specific capture strategy, and downstream proposal execution support when formal procurement begins.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>What we monitor</h2>
+    <div class="grid-3">
+      <article class="card"><h3>Funding signals</h3><p>Budgets, appropriations, capital plans, bond programs, and pass-through funding that indicate likely buying capacity.</p></article>
+      <article class="card"><h3>Governance signals</h3><p>Council agendas, board meetings, committee activity, public authority approvals, audits, and operating controversies.</p></article>
+      <article class="card"><h3>Procurement signals</h3><p>Contract expirations, rebid windows, amendments, pre-solicitation notices, forecast schedules, and vendor outreach activity.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Next step</h2>
+    <p>If your public-sector pipeline still starts at the posted-RFP stage, start earlier with an opportunity briefing.</p>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=opportunity-briefing">Request a briefing</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Boss Key LLC | Government opportunity intelligence | Capture advisory | Proposal execution support</div>
+</footer>
+
+<script>
+(function () {
+  const scheduleFallback = 'https://calendar.app.google/XXQaukj4evMTLq4E7';
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  document.querySelectorAll('.schedule-cta').forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+  });
+})();
+</script>
 </body>
 </html>

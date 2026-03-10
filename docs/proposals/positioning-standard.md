@@ -1,148 +1,143 @@
-# Boss Key Proposal Positioning Standard
+# Boss Key Positioning Standard
 
 ## Pre-Send Checklist
-- Lead sentence names the business problem and the business stakes, not a tool.
-- First page states `we do / you get / we measure` in plain language.
-- No banned language appears in headline, subhead, section titles, or pricing labels.
-- Offer is framed as operating support and accountability, not software access.
-- Pilot is framed as live pursuit diagnostic + applied execution with measurable deltas.
-- Vertical focus is narrowed to 1-2 relevant contexts for this buyer.
-- Pricing is tied to concrete operational deliverables and decision support.
-- At least 3 measurable targets are included with baseline and target placeholders.
+- Lead sentence explains the buyer’s market-timing problem, not a generic consulting capability.
+- First page makes the lifecycle explicit: `policy intelligence -> opportunity forecasting -> capture strategy -> proposal execution`.
+- Offer is framed as advisory work, not software access.
+- “Not a lobbying firm” boundary is clear where relevant.
+- Vertical context is specific.
+- At least one pre-RFP outcome is visible in the first screen or first page.
+- Pricing is tied to defined deliverables and working cadence.
+- If proposal support is included, it is positioned as downstream expansion work, not the lead identity.
 
 ## Positioning Thesis
-Boss Key is an operating partner for pursuit and proposal performance.
+Boss Key is a government opportunity intelligence and capture advisory firm.
 
-We run the working cadence that helps teams decide faster, qualify smarter, produce better proposals, and improve win outcomes.
+We help clients identify, interpret, and act on public-sector signals before formal procurements are released, then support capture strategy and proposal execution once the buying event becomes real.
 
-We do not sell software. We provide method, operating rhythm, and accountability tied to measurable pursuit performance.
+We do not sell software. We do not sell lobbying. We sell judgment, signal interpretation, capture discipline, and proposal execution support across the full opportunity lifecycle.
 
 ## What We Are / What We Do
 ### What we are
-- A hands-on pursuit operations partner.
-- A decision and execution layer across qualification, proposal production, and leadership visibility.
+- An early-lifecycle public-sector growth advisory firm
+- A bridge between policy and program signals on one side, and capture/proposal execution on the other
+- A two-partner model combining policy intelligence with proposal and capture strategy
 
 ### What we do
-- We structure weekly pursuit decisions so teams stop chasing low-probability work.
-- We improve proposal throughput and quality by tightening operating cadence.
-- We create leadership visibility into pipeline risk, resource load, and win-path choices.
+- Monitor public-sector signals that indicate likely buying events
+- Translate policy, funding, and agency movement into actionable opportunity forecasts
+- Build capture plans before the RFP is released
+- Support proposal execution once the formal solicitation exists
 
-## Language To Avoid (Banned)
-Do not lead with or emphasize:
-- `AI`
-- `ML`
-- `agent`
-- `automation`
-- `operating system`
-- `platform`
-- `workflow engine`
-- `tool`
-- `software`
-- `product`
-- `configuration`
-- `deployment`
-- `setup`
-- Productized labels like `Qualification Engine` or `Pre-Meeting Intelligence`
+## What We Are Not
+- A lobbying firm
+- A generic proposal writing vendor
+- A government affairs shop selling influence without delivery
+- A SaaS platform
+- A broad business consultancy without a public-sector growth specialty
+
+## Language To Avoid
+Do not lead with:
+- `lobbying`
+- `government relations`
+- `influence strategy`
+- `public affairs shop`
+- `generic bid writing`
+- `software platform`
+- `AI company`
+- `automation-first`
+- vague “growth consulting” language with no procurement or agency context
 
 ## Approved Language Patterns
 ### Headline patterns
-- `Fix pursuit drag and improve win quality in [VERTICAL/DEAL CONTEXT].`
-- `Improve qualification speed, proposal throughput, and executive decision clarity.`
-- `Turn pursuit chaos into a weekly operating rhythm that improves close outcomes.`
+- `See public-sector opportunities before the bid is posted.`
+- `Turn policy and budget signals into earlier capture advantage.`
+- `Get ahead of state and local procurements before the market reacts.`
 
 ### Subhead patterns
-- `We work inside your active pipeline to improve speed, focus, and proposal quality.`
-- `You get operating support, clear decision points, and measurable performance movement.`
-- `We run the cadence; your team gains consistency, visibility, and better win-path execution.`
+- `Boss Key combines policy intelligence, opportunity forecasting, capture strategy, and proposal support in one advisory model.`
+- `We help contractors, service providers, and nonprofits act earlier in the government buying cycle.`
+- `You get clearer opportunity timing, sharper positioning, and stronger proposal readiness.`
 
-### Body pattern (`we do / you get / we measure`)
-- `We do:` Run [WEEKLY_CADENCE], enforce [DECISION_GATES], and support [LIVE_PURSUITS].
-- `You get:` Faster qualification, cleaner resource allocation, and stronger proposal output.
-- `We measure:` Time-to-qualify, time-to-first-draft, screened-out pursuits, monthly throughput, decision latency.
+### Body pattern
+- `We do:` monitor signals, forecast likely opportunities, and define pre-RFP actions.
+- `You get:` earlier visibility, sharper qualification, and better-positioned pursuits.
+- `We support:` capture strategy upstream and proposal execution downstream when the opportunity matures.
+
+## Offer hierarchy
+### Entry offer
+`Opportunity Foresight Sprint`
+- Purpose: fastest paid entry point
+- Promise: turn scattered public-sector signals into a clear shortlist of likely opportunities and next actions
+
+### Core recurring offer
+`Procurement Intelligence Retainer`
+- Purpose: recurring visibility and advisory support
+- Promise: ongoing signal monitoring tied to priority agencies, accounts, and service lines
+
+### Strategy expansion
+`Capture Strategy Engagement`
+- Purpose: convert likely opportunities into real pre-RFP action plans
+- Promise: stakeholder mapping, positioning, and pursuit decisions
+
+### Downstream execution
+`Proposal Execution Support`
+- Purpose: support the client when formal procurement begins
+- Promise: proposal architecture, reviews, pricing coordination, and proposal ops
 
 ## Outcome Categories And Metrics Library
-### 1) Qualification Quality And Speed
-- Time from opportunity intake to go/no-go decision: `[X days] -> [Y days]`
-- Percent of pursuits screened out early: `[X%] -> [Y%]`
-- Decision rework rate after go/no-go: `[X%] -> [Y%]`
+### 1) Opportunity visibility
+- forecasted opportunities identified before public release: `[X] -> [Y]`
+- percent of target accounts with active signal coverage: `[X%] -> [Y%]`
+- average months of visibility before expected buying event: `[X] -> [Y]`
 
-### 2) Proposal Throughput And Delivery
-- Time to first compliant draft: `[X days] -> [Y days]`
-- Proposals delivered per month per team: `[X] -> [Y]`
-- On-time submission rate: `[X%] -> [Y%]`
+### 2) Capture readiness
+- opportunities with named stakeholder map before release: `[X%] -> [Y%]`
+- opportunities with documented win themes before release: `[X%] -> [Y%]`
+- time from signal detection to capture action plan: `[X days] -> [Y days]`
 
-### 3) Win Probability Inputs
-- % pursuits with explicit win themes before drafting: `[X%] -> [Y%]`
-- % opportunities with named competitive risks and mitigation plan: `[X%] -> [Y%]`
-- Bid/no-bid alignment score vs capacity: `[X/10] -> [Y/10]`
+### 3) Proposal readiness and execution
+- opportunities entering proposal stage with prior intelligence / capture brief: `[X%] -> [Y%]`
+- time to proposal architecture after release: `[X days] -> [Y days]`
+- percentage of proposals launched from pre-positioned opportunities: `[X%] -> [Y%]`
 
-### 4) Leadership Visibility And Control
-- Leadership decision latency on pursuit escalations: `[X days] -> [Y days]`
-- Forecast confidence band variance: `[X%] -> [Y%]`
-- Active pursuit status accuracy in reviews: `[X%] -> [Y%]`
+### 4) Leadership visibility
+- leadership review cadence adherence: `[X%] -> [Y%]`
+- time to go/no-go decision on forecasted opportunities: `[X days] -> [Y days]`
+- percent of low-fit opportunities screened out early: `[X%] -> [Y%]`
 
-## Pilot Structure Template (Diagnostic + Applied Execution)
-### Pilot name
-`Live Pursuit Diagnostic Sprint (30 Days)`
+## Standard proof structure
+When writing a one-pager or sales proposal, structure proof like this:
+1. What signal or market pattern was identified
+2. What buying event or opportunity it suggested
+3. What capture implication followed
+4. What client action was recommended
+5. What changed in timing, focus, or proposal readiness
 
-### Pilot purpose
-Validate and improve pursuit performance on live opportunities while creating a repeatable operating cadence.
+Do not fabricate award metrics or procurement outcomes.
 
-### Scope
-- 1-2 live pursuits in `[VERTICAL_CONTEXT]`
-- Baseline capture in week 1
-- Applied operating changes in weeks 2-4
-- Weekly decision checkpoints with leadership
+## Pilot / sprint structure
+### Preferred pilot name
+`Opportunity Foresight Sprint`
 
-### Deliverables
-- Baseline snapshot of current pursuit cycle performance
-- Weekly pursuit decision memo with recommended actions
-- Draft acceleration support on live submission work
-- End-of-pilot performance readout with deltas and next-phase recommendation
+### Purpose
+Validate Boss Key’s value by producing a real opportunity map and pre-RFP capture brief in a defined target market.
 
-### Measurable targets
-- Reduce time-to-qualify from `[X]` to `[Y]`
-- Reduce time-to-first-draft from `[X]` to `[Y]`
-- Increase screened-out low-fit pursuits from `[X%]` to `[Y%]`
-- Improve on-time proposal milestones from `[X%]` to `[Y%]`
+### Standard scope
+- one region
+- one or two service lines
+- three to five target agencies or accounts
+- one partner recommendation session
 
-### Exclusions language
-- `This sprint does not sell or install software.`
-- `This sprint focuses on operating decisions and applied execution within your live pipeline.`
+### Standard deliverables
+- signal scan
+- forecasted opportunity map
+- top-priority pursuit shortlist
+- capture brief for top targets
+- recommendation memo
 
-## Retainer Structure Templates (Operating Support)
-### Light: `Pursuit Cadence Support`
-- Best for: Teams needing decision discipline without daily embedded support.
-- We do: Weekly pursuit review, go/no-go support, milestone QA.
-- You get: Faster decisions, fewer low-value pursuits, cleaner handoffs.
-- We measure: Decision cycle time, screened-out rate, on-time milestones.
-- Typical rhythm: 1 weekly operating meeting + async decision support.
-
-### Standard: `Managed Pursuit Operations`
-- Best for: Teams running multiple active pursuits monthly.
-- We do: Weekly operating cadence, active proposal support, executive updates.
-- You get: Higher throughput, better quality control, improved leadership visibility.
-- We measure: Throughput per month, first-draft cycle time, leadership decision latency.
-- Typical rhythm: 2 weekly operating blocks + pursuit-specific checkpoints.
-
-### Embedded: `Embedded Capture Partner`
-- Best for: High-volume or high-stakes cycles requiring close day-to-day support.
-- We do: Embedded pursuit leadership, decision escalation management, QA gates, cross-functional coordination.
-- You get: Consistent execution under load, tighter close planning, reduced late-cycle churn.
-- We measure: Win-path adherence, cycle reliability, proposal quality and timing metrics.
-- Typical rhythm: Multi-touch weekly engagement + leadership escalation channel.
-
-## Engineering-Heavy Buyer Adaptation
-When buyer teams have strong internal engineering capability:
-- Position the offer as operating methodology + weekly execution cadence + accountability for deltas.
-- Avoid language that implies a tool they could recreate internally.
-- Emphasize that the value is decision quality under real pipeline pressure, not technical implementation.
-- Use proof structure: baseline, intervention, measured movement, leadership adoption.
-- Use this line when needed:
-  `Your team can build systems. We own pursuit operating discipline and measurable movement on live opportunities.`
-
-## Pricing Framing Rules
-- Price by operating scope and outcome accountability, not by access to assets.
-- Every price line must map to specific recurring actions and measurable outputs.
-- Do not pair premium pricing with document-only outputs.
-- Include a short `Why this is priced this way` line tied to operating load, stakeholder cadence, and measurable targets.
+## Pricing framing rules
+- Price by research scope, signal complexity, decision load, and advisory cadence
+- Map every price line to real deliverables and partner time
+- Keep retainers tied to specific monitoring and advisory rhythm
+- Keep proposal execution pricing separate from intelligence and capture pricing so the lifecycle remains clear
