@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
 {% block content %}
 <section>
   <h2>Capture Workbench: {{ detail.name }}</h2>
@@ -147,6 +148,7 @@
 
   <h3>Contacts</h3>
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/contacts" data-ux-form="capture_workbench_contact_create">
+    {{ example_controls("capture_workbench_contact_create", example_presets) }}
     <label>Organization ID <input name="organization_id" value="{{ detail.buying_organization_id or '' }}" /></label>
     <label>Contractor
       <select name="contractor_id">
@@ -195,6 +197,7 @@
   <h3>Intelligence Notes</h3>
   <p>{{ notes[0].ethics_guidance_text if notes else "Use only lawful and ethical intelligence sources." }}</p>
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/intelligence" data-ux-form="capture_workbench_intelligence_create">
+    {{ example_controls("capture_workbench_intelligence_create", example_presets) }}
     <label>Title <input name="title" required /></label>
     <label>Type
       <select name="note_type">
@@ -231,6 +234,7 @@
 
   <h3>Evidence</h3>
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/evidence" data-ux-form="capture_workbench_evidence_create">
+    {{ example_controls("capture_workbench_evidence_create", example_presets) }}
     <label>Intelligence Note ID <input name="intelligence_note_id" /></label>
     <label>Contract ID <input name="contract_id" value="{{ detail.primary_contract_id or '' }}" /></label>
     <label>Source Class
@@ -262,6 +266,7 @@
 
   <h3>Capture Actions</h3>
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/actions" data-ux-form="capture_workbench_action_create">
+    {{ example_controls("capture_workbench_action_create", example_presets) }}
     <label>Title <input name="title" required /></label>
     <label>Type
       <select name="action_type">
@@ -292,6 +297,7 @@
 
   <h3>Commercials</h3>
   <form method="post" action="/opportunities/{{ detail.id }}/capture-workbench/commercials" data-ux-form="capture_workbench_commercials">
+    {{ example_controls("capture_workbench_commercials", example_presets) }}
     <label>Advised Contractor
       <select name="contractor_id">
         <option value="">None</option>
@@ -317,7 +323,7 @@
     <button type="submit">Save Commercials</button>
   </form>
   {% if commercial %}
-  <p><strong>Weighted Expected Value:</strong> {{ commercial.weighted_expected_value }}</p>
+  <p><strong>Weighted Expected Value:</strong> {{ commercial.weighted_expected_value|currency }}</p>
   {% endif %}
 </section>
 {% endblock %}

@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timothy Semenza | Proposal Management Resume | Boss Key LLC</title>
+  <meta name="description" content="Two-page Boss Key branded resume for Timothy Semenza.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128' fill='none'%3E%3Crect x='10' y='10' width='108' height='108' rx='20' fill='%230B1222'/%3E%3Cpath d='M33 21H95L107 33V95L95 107H33L21 95V33L33 21Z' stroke='%23F5F7FB' stroke-width='7' stroke-linejoin='miter'/%3E%3Cpath d='M64 40L87 63L64 86L41 63L64 40Z' stroke='%23F5F7FB' stroke-width='7' stroke-linejoin='miter'/%3E%3Cpath d='M64 21V40' stroke='%23F5F7FB' stroke-width='7' stroke-linecap='square'/%3E%3Ccircle cx='80.5' cy='63' r='4' fill='%23C5162E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --soft: #c3cad6;
+      --muted: #99a3b3;
+      --line: #2d3440;
+      --panel: #141922;
+      --panel-2: #10151d;
+      --accent: #bf2034;
+      --accent-soft: #ffd8de;
+      --accent-2: #2d6cdf;
+      --accent-2-soft: #dce8ff;
+      --shadow: 0 20px 44px rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 15% 10%, #243041 0%, rgba(36, 48, 65, 0.18) 28%, transparent 56%),
+        linear-gradient(145deg, #121721 0%, #090b10 100%);
+      color: var(--ink);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.34;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .document {
+      padding: 18px 0 28px;
+    }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 18px;
+      padding: 0.34in 0.36in;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(45, 108, 223, 0.14) 0%, rgba(45, 108, 223, 0) 28%),
+        linear-gradient(160deg, rgba(20, 25, 34, 0.98), rgba(10, 13, 18, 0.98));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.12in;
+    }
+
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 0.12in;
+      border-bottom: 1px solid #1f2734;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.64rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .contact span,
+    .contact a {
+      border: 1px solid #353f4c;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #151a23;
+      color: var(--soft);
+      font-size: 0.67rem;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.08;
+    }
+
+    h1, h2 {
+      font-family: "Fraunces", Georgia, serif;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: 0.46in;
+      margin-bottom: 0.06in;
+    }
+
+    h2 {
+      font-size: 0.2in;
+      margin-bottom: 0.07in;
+    }
+
+    h3 {
+      font-size: 0.13in;
+      color: #fff;
+      margin-bottom: 0.04in;
+    }
+
+    p {
+      margin: 0;
+      color: var(--soft);
+      font-size: 0.12in;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 0.12in;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.07in;
+      border: 1px solid rgba(45, 108, 223, 0.32);
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 0.07in;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent-2-soft);
+      background: rgba(45, 108, 223, 0.12);
+    }
+
+    .subtitle {
+      color: #f8fbff;
+      font-size: 0.14in;
+      margin-bottom: 0.06in;
+      max-width: 5.2in;
+    }
+
+    .summary {
+      font-size: 0.115in;
+    }
+
+    .card {
+      border: 1px solid #34404f;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(18, 23, 32, 0.96), rgba(13, 17, 24, 0.96));
+      padding: 0.11in 0.13in;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.08in;
+    }
+
+    .metric strong {
+      display: block;
+      color: #fff;
+      font-size: 0.18in;
+      margin-bottom: 0.02in;
+    }
+
+    .metric p {
+      font-size: 0.105in;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 0.12in;
+    }
+
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.04in 0.12in;
+      margin-top: 0.04in;
+    }
+
+    .skills span {
+      color: #d9dee8;
+      font-size: 0.105in;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 0.05in;
+    }
+
+    .mini-list p,
+    .mini-list li {
+      font-size: 0.105in;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 0.04in;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 0.1in;
+    }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.09in;
+    }
+
+    .role-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 0.04in;
+    }
+
+    .role-title {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.125in;
+    }
+
+    .role-company {
+      color: var(--accent-2-soft);
+      font-size: 0.105in;
+      font-weight: 700;
+    }
+
+    .role-meta {
+      color: var(--muted);
+      font-size: 0.085in;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 0.18in;
+      color: #d9dee8;
+    }
+
+    li {
+      margin: 0.03in 0;
+      font-size: 0.102in;
+    }
+
+    .bottom-strip {
+      margin-top: auto;
+      padding-top: 0.08in;
+      border-top: 1px solid #1f2734;
+      color: var(--muted);
+      font-size: 0.082in;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    @media screen and (max-width: 920px) {
+      .document {
+        padding: 10px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+      }
+    }
+
+    @media print {
+      @page {
+        size: letter;
+        margin: 0;
+      }
+
+      body {
+        background: #090b10;
+      }
+
+      .document {
+        padding: 0;
+      }
+
+      .page {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="document">
+    <section class="page page-break">
+      <div class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+              <rect x="10" y="10" width="108" height="108" rx="20" fill="#0B1222"></rect>
+              <path d="M33 21H95L107 33V95L95 107H33L21 95V33L33 21Z" stroke="#F5F7FB" stroke-width="7" stroke-linejoin="miter"></path>
+              <path d="M64 40L87 63L64 86L41 63L64 40Z" stroke="#F5F7FB" stroke-width="7" stroke-linejoin="miter"></path>
+              <path d="M64 21V40" stroke="#F5F7FB" stroke-width="7" stroke-linecap="square"></path>
+              <circle cx="80.5" cy="63" r="4" fill="#C5162E"></circle>
+            </svg>
+          </span>
+          <div>
+            <small>Boss Key LLC</small>
+            <div>Timothy Semenza</div>
+          </div>
+        </div>
+        <div class="contact">
+          <span>Cinnaminson, NJ</span>
+          <a href="tel:2035210311">203-521-0311</a>
+          <a href="mailto:timothy.semenza@gmail.com">timothy.semenza@gmail.com</a>
+          <a href="https://www.linkedin.com/in/timothy-semenza-82b35656/">LinkedIn</a>
+          <a href="https://bosskeyops.com">bosskeyops.com</a>
+        </div>
+      </div>
+
+      <div class="hero">
+        <article class="card">
+          <span class="eyebrow">Proposal Management Consulting</span>
+          <h1>Timothy Semenza</h1>
+          <p class="subtitle">Proposal management consultant and writer with 12+ years of experience across healthcare, insurance, federal, commercial, and facilities services pursuits.</p>
+          <p class="summary">Founder of Boss Key LLC, providing proposal management consulting services spanning bid analysis, proposal planning, compliance discipline, cross-functional coordination, and proposal operations improvement. Career proof includes 200+ compliant proposals at SBM Management Services, healthcare proposal work at Aetna and Broadspire, 1,600+ proposal library entries at Broadspire, and enterprise operating model design at The Facilities Group.</p>
+        </article>
+
+        <aside class="card">
+          <div class="section-title">
+            <h2>Proof Points</h2>
+            <p>Selected quantified evidence</p>
+          </div>
+          <div class="metrics">
+            <div class="card metric">
+              <strong>12+ years</strong>
+              <p>Proposal writing, management, and content operations experience</p>
+            </div>
+            <div class="card metric">
+              <strong>200+</strong>
+              <p>Compliant proposals developed at SBM Management Services</p>
+            </div>
+            <div class="card metric">
+              <strong>1600+</strong>
+              <p>Proposal library entries built at Broadspire</p>
+            </div>
+            <div class="card metric">
+              <strong>$265M</strong>
+              <p>DHS BPA pursuit supported at Blackstone Federal</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="section-grid">
+        <section class="card">
+          <div class="section-title">
+            <h2>Core Capabilities</h2>
+            <p>ATS-aligned focus areas</p>
+          </div>
+          <div class="skills">
+            <span>Proposal management</span>
+            <span>Bid analysis</span>
+            <span>RFP, RFQ, and IFB responses</span>
+            <span>Proposal plans and schedules</span>
+            <span>Outlines and compliance matrices</span>
+            <span>Writing, editing, formatting</span>
+            <span>Cross-functional SME coordination</span>
+            <span>Process ownership and quality control</span>
+            <span>Tracking databases and content libraries</span>
+            <span>Post-submission clarifications support</span>
+            <span>Qvidian content management</span>
+            <span>Healthcare and regulated-services proposals</span>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-title">
+            <h2>Certifications and Education</h2>
+            <p>Professional foundation</p>
+          </div>
+          <div class="mini-list">
+            <p><strong>APMP Leadership Academy</strong></p>
+            <p><strong>APMP Micro-Certification:</strong> Executive Summaries</p>
+            <p><strong>ITIL Foundation</strong> in IT Service Management</p>
+            <p><strong>University of Connecticut</strong> | BA in English</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Recent Experience</h2>
+          <p>Current consulting platform and most recent enterprise roles</p>
+        </div>
+        <div class="roles-grid">
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Founder and Proposal Management Consultant</div>
+                <div class="role-company">Boss Key LLC</div>
+              </div>
+              <div class="role-meta">Feb 2026-Present<br>Riverton, NJ</div>
+            </div>
+            <ul>
+              <li>Provide proposal management consulting to service businesses that need stronger bid discipline, cleaner workflows, and more consistent proposal execution.</li>
+              <li>Support bid analysis, proposal planning, compliance review, schedules, outlines, and cross-functional coordination.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Senior Manager of Proposals</div>
+                <div class="role-company">The Facilities Group</div>
+              </div>
+              <div class="role-meta">Apr 2024-Feb 2026<br>Cinnaminson, NJ</div>
+            </div>
+            <ul>
+              <li>Designed and enforced enterprise proposal operating models across a multi-brand portfolio, reducing variance and compressing cycle time.</li>
+              <li>Strengthened proposal governance with leadership, sales, finance, and operations stakeholders.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Proposal Manager</div>
+                <div class="role-company">SBM Management Services, LP</div>
+              </div>
+              <div class="role-meta">Oct 2021-Apr 2024<br>Riverton, NJ</div>
+            </div>
+            <ul>
+              <li>Created 200+ compliant proposals across concurrent pursuits with sales, finance, and operations teams.</li>
+              <li>Implemented quality control that reduced clarifications post-submission and mentored new proposal staff.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Senior Proposal Coordinator</div>
+                <div class="role-company">Kellermeyer Bergensons Services, LLC</div>
+              </div>
+              <div class="role-meta">Oct 2020-Sep 2021<br>Pflugerville, TX</div>
+            </div>
+            <ul>
+              <li>Guided proposal development from kickoff through submission with sales, finance, and operations stakeholders.</li>
+              <li>Built a marketing content repository that improved bid consistency and content reuse.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <div class="bottom-strip">
+        <span>Page 1 of 2</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+              <rect x="10" y="10" width="108" height="108" rx="20" fill="#0B1222"></rect>
+              <path d="M33 21H95L107 33V95L95 107H33L21 95V33L33 21Z" stroke="#F5F7FB" stroke-width="7" stroke-linejoin="miter"></path>
+              <path d="M64 40L87 63L64 86L41 63L64 40Z" stroke="#F5F7FB" stroke-width="7" stroke-linejoin="miter"></path>
+              <path d="M64 21V40" stroke="#F5F7FB" stroke-width="7" stroke-linecap="square"></path>
+              <circle cx="80.5" cy="63" r="4" fill="#C5162E"></circle>
+            </svg>
+          </span>
+          <div>
+            <small>Boss Key LLC</small>
+            <div>Timothy Semenza</div>
+          </div>
+        </div>
+        <div class="contact">
+          <span>Proposal Management Resume</span>
+        </div>
+      </div>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Earlier Proposal Experience</h2>
+          <p>Healthcare, federal, and large-complexity pursuit depth</p>
+        </div>
+        <div class="roles-grid">
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">RFP Developer</div>
+                <div class="role-company">Broadspire</div>
+              </div>
+              <div class="role-meta">Apr 2019-Aug 2020<br>Alexandria, VA</div>
+            </div>
+            <ul>
+              <li>Managed healthcare-related RFP responses for third-party administrator services on opportunities over $1 million.</li>
+              <li>Developed proposal resources including a standard language library and branding guidelines in Qvidian.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Proposal Specialist</div>
+                <div class="role-company">Blackstone Federal</div>
+              </div>
+              <div class="role-meta">May 2018-Apr 2019<br>Arlington, VA</div>
+            </div>
+            <ul>
+              <li>Supported a Department of Homeland Security BPA pursuit valued up to $265 million.</li>
+              <li>Developed compliance matrices and annotated outlines to guide content development and submission readiness.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Proposal Writer</div>
+                <div class="role-company">Deloitte Consulting</div>
+              </div>
+              <div class="role-meta">Sep 2017-May 2018<br>Arlington, VA</div>
+            </div>
+            <ul>
+              <li>Led proposal development for private-sector opportunities valued at $25 million and above.</li>
+              <li>Drafted and edited proposal content and maintained Qvidian pursuit materials.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">RFP Developer</div>
+                <div class="role-company">Broadspire</div>
+              </div>
+              <div class="role-meta">Apr 2016-Sep 2017<br>Vernon Rockville, CT</div>
+            </div>
+            <ul>
+              <li>Helped launch a new disability insurance product category by drafting RFP responses with sales and operations teams.</li>
+              <li>Built a proposal content library with more than 1,600 entries, improving response efficiency and reuse.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="role-head">
+              <div>
+                <div class="role-title">Proposal Writer</div>
+                <div class="role-company">Aetna, a CVS Health Company</div>
+              </div>
+              <div class="role-meta">Sep 2014-Apr 2016<br>Hartford, CT</div>
+            </div>
+            <ul>
+              <li>Led proposal writing for life and disability insurance products, adding direct healthcare and regulated-services relevance.</li>
+              <li>Partnered with project managers and operations teams to align kickoff strategy and response tailoring.</li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <div class="bottom-strip">
+        <span>Page 2 of 2</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

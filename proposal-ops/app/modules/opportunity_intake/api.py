@@ -1,14 +1,17 @@
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
-from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.core.session_auth import get_session_user
 from app.core.workflow import active_gate_for_stage
+from app.web.example_presets import select_example_presets
+from app.web.templating import build_templates
 from app.modules.identity.service import IdentityService
+from app.modules.janitorial_os.service import JanitorialOsService
 from app.modules.opportunity_intake.schemas import (
+    ArchiveActionRequest,
     GateInboxItemResponse,
     GateDecisionRequest,
     GateDecisionResponse,
@@ -28,13 +31,14 @@ from app.modules.rfp_parser.document_reader import extract_text_from_upload_batc
 
 api_router = APIRouter(prefix="/api/opportunities", tags=["opportunity-intake"])
 web_router = APIRouter(tags=["web"])
-templates = Jinja2Templates(directory="app/web/templates")
+templates = build_templates()
 
 
 def _build_intake_payload(
     *,
     name: str,
     client: str,
+    buying_organization_id: str | None,
     estimated_contract_value: float,
     lead_time_days: int,
     incumbent_status: bool,
@@ -45,6 +49,7 @@ def _build_intake_payload(
     return OpportunityIntakeRequest(
         name=name,
         client=client,
+        buying_organization_id=buying_organization_id,
         estimated_contract_value=estimated_contract_value,
         lead_time_days=lead_time_days,
         incumbent_status=incumbent_status,
@@ -59,12 +64,18 @@ def _render_intake_form(
     *,
     errors: list[str],
     form_data: dict,
+    organizations: list[object],
     status_code: int = 200,
 ) -> HTMLResponse:
     return templates.TemplateResponse(
         request=request,
         name="opportunity_form.html",
-        context={"errors": errors, "form_data": form_data},
+        context={
+            "errors": errors,
+            "form_data": form_data,
+            "organizations": organizations,
+            "example_presets": select_example_presets("opportunity_manual_intake"),
+        },
         status_code=status_code,
     )
 
@@ -75,12 +86,13 @@ def _render_intake_draft_review(
     draft: OpportunityIntakeDraftResponse,
     errors: list[str],
     form_data: dict,
+    organizations: list[object],
     status_code: int = 200,
 ) -> HTMLResponse:
     return templates.TemplateResponse(
         request=request,
         name="opportunity_intake_draft.html",
-        context={"draft": draft, "errors": errors, "form_data": form_data},
+        context={"draft": draft, "errors": errors, "form_data": form_data, "organizations": organizations},
         status_code=status_code,
     )
 
@@ -101,10 +113,23 @@ def _validation_errors(exc: ValidationError) -> list[str]:
     return errors
 
 
+def _organization_options(db: Session) -> list[object]:
+    return JanitorialOsService(db).list_organizations()
+
+
+def _resolve_client_value(db: Session, client: str, buying_organization_id: str | None) -> str:
+    if buying_organization_id:
+        organization = JanitorialOsService(db).get_organization(buying_organization_id)
+        if organization:
+            return organization.name
+    return client
+
+
 def _build_draft_confirm_payload(
     *,
     name: str,
     client: str,
+    buying_organization_id: str | None,
     estimated_contract_value: str,
     lead_time_days: str,
     incumbent_status: str | None,
@@ -115,6 +140,7 @@ def _build_draft_confirm_payload(
     normalized = {
         "name": name,
         "client": client,
+        "buying_organization_id": buying_organization_id,
         "estimated_contract_value": estimated_contract_value,
         "lead_time_days": lead_time_days,
         "incumbent_status": False if incumbent_status is None else incumbent_status,
@@ -128,7 +154,10 @@ def _build_draft_confirm_payload(
 @api_router.post("/intake", response_model=OpportunityIntakeResult)
 def intake_opportunity(payload: OpportunityIntakeRequest, db: Session = Depends(get_db)) -> OpportunityIntakeResult:
     service = OpportunityIntakeService(db)
-    return service.intake(payload)
+    try:
+        return service.intake(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @api_router.post("/intake-rfp-drafts", response_model=OpportunityIntakeDraftResponse)
@@ -176,7 +205,8 @@ def confirm_intake_rfp_draft_api(
 @api_router.post("/intake-with-rfp", response_model=OpportunityIntakeWithRfpResult)
 async def intake_opportunity_with_rfp(
     name: str = Form(...),
-    client: str = Form(...),
+    client: str = Form(""),
+    buying_organization_id: str = Form(""),
     estimated_contract_value: float = Form(...),
     lead_time_days: int = Form(...),
     incumbent_status: bool = Form(False),
@@ -188,7 +218,8 @@ async def intake_opportunity_with_rfp(
 ) -> OpportunityIntakeWithRfpResult:
     payload = _build_intake_payload(
         name=name,
-        client=client,
+        client=_resolve_client_value(db, client, buying_organization_id or None),
+        buying_organization_id=buying_organization_id or None,
         estimated_contract_value=estimated_contract_value,
         lead_time_days=lead_time_days,
         incumbent_status=incumbent_status,
@@ -209,9 +240,12 @@ async def intake_opportunity_with_rfp(
 
 
 @api_router.get("", response_model=list[OpportunityDetailResponse])
-def list_opportunities(db: Session = Depends(get_db)) -> list[OpportunityDetailResponse]:
+def list_opportunities(
+    include_archived: bool = Query(False),
+    db: Session = Depends(get_db),
+) -> list[OpportunityDetailResponse]:
     service = OpportunityIntakeService(db)
-    opportunities = service.list_opportunities()
+    opportunities = service.list_opportunities(include_archived=include_archived)
     results: list[OpportunityDetailResponse] = []
     for item in opportunities:
         detail = service.get_detail(item.id)
@@ -232,6 +266,38 @@ def get_opportunity(opportunity_id: str, db: Session = Depends(get_db)) -> Oppor
     detail = service.get_detail(opportunity_id)
     if not detail:
         raise HTTPException(status_code=404, detail="Opportunity not found")
+    return detail
+
+
+@api_router.post("/{opportunity_id}/archive", response_model=OpportunityDetailResponse)
+def archive_opportunity(
+    opportunity_id: str,
+    payload: ArchiveActionRequest,
+    db: Session = Depends(get_db),
+) -> OpportunityDetailResponse:
+    service = OpportunityIntakeService(db)
+    try:
+        opportunity = service.archive_opportunity(opportunity_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    detail = service.get_detail(opportunity.id)
+    assert detail is not None
+    return detail
+
+
+@api_router.post("/{opportunity_id}/restore", response_model=OpportunityDetailResponse)
+def restore_opportunity(
+    opportunity_id: str,
+    payload: ArchiveActionRequest,
+    db: Session = Depends(get_db),
+) -> OpportunityDetailResponse:
+    service = OpportunityIntakeService(db)
+    try:
+        opportunity = service.restore_opportunity(opportunity_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    detail = service.get_detail(opportunity.id)
+    assert detail is not None
     return detail
 
 
@@ -308,9 +374,30 @@ def home() -> RedirectResponse:
     return RedirectResponse(url="/dashboard", status_code=303)
 
 
+@web_router.get("/opportunities", response_class=HTMLResponse)
+def opportunities_view(
+    request: Request,
+    include_archived: bool = Query(False),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    service = OpportunityIntakeService(db)
+    opportunities = service.list_opportunities(include_archived=include_archived)
+    details = [detail for item in opportunities if (detail := service.get_detail(item.id)) is not None]
+    return templates.TemplateResponse(
+        request=request,
+        name="opportunity_list.html",
+        context={"opportunities": details, "include_archived": include_archived},
+    )
+
+
 @web_router.get("/intake", response_class=HTMLResponse)
-def intake_form(request: Request) -> HTMLResponse:
-    return _render_intake_form(request, errors=[], form_data={"actor": "operator"})
+def intake_form(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
+    return _render_intake_form(
+        request,
+        errors=[],
+        form_data={"actor": "operator"},
+        organizations=_organization_options(db),
+    )
 
 
 @web_router.post("/intake/rfp-drafts")
@@ -332,7 +419,13 @@ async def intake_rfp_draft_submit(
         for warning in batch.warnings:
             if warning not in errors:
                 errors.append(warning)
-        return _render_intake_form(request, errors=errors, form_data={"actor": actor}, status_code=422)
+        return _render_intake_form(
+            request,
+            errors=errors,
+            form_data={"actor": actor},
+            organizations=_organization_options(db),
+            status_code=422,
+        )
     return RedirectResponse(url=f"/intake/rfp-drafts/{draft.draft_id}", status_code=303)
 
 
@@ -347,6 +440,7 @@ def intake_rfp_draft_review(request: Request, draft_id: str, db: Session = Depen
         draft=draft,
         errors=[],
         form_data=_draft_form_data(draft),
+        organizations=_organization_options(db),
     )
 
 
@@ -354,7 +448,8 @@ def intake_rfp_draft_review(request: Request, draft_id: str, db: Session = Depen
 def intake_submit(
     request: Request,
     name: str = Form(...),
-    client: str = Form(...),
+    client: str = Form(""),
+    buying_organization_id: str = Form(""),
     estimated_contract_value: float = Form(...),
     lead_time_days: int = Form(...),
     incumbent_status: bool = Form(False),
@@ -365,7 +460,8 @@ def intake_submit(
 ) -> HTMLResponse:
     payload = _build_intake_payload(
         name=name,
-        client=client,
+        client=_resolve_client_value(db, client, buying_organization_id or None),
+        buying_organization_id=buying_organization_id or None,
         estimated_contract_value=estimated_contract_value,
         lead_time_days=lead_time_days,
         incumbent_status=incumbent_status,
@@ -374,7 +470,16 @@ def intake_submit(
         actor=actor,
     )
     service = OpportunityIntakeService(db)
-    result = service.intake(payload)
+    try:
+        result = service.intake(payload)
+    except ValueError as exc:
+        return _render_intake_form(
+            request,
+            errors=[str(exc)],
+            form_data=payload.model_dump(),
+            organizations=_organization_options(db),
+            status_code=422,
+        )
     detail = service.get_detail(result.id)
     return templates.TemplateResponse(
         request=request,
@@ -389,6 +494,7 @@ def intake_rfp_draft_confirm(
     draft_id: str,
     name: str = Form(""),
     client: str = Form(""),
+    buying_organization_id: str = Form(""),
     estimated_contract_value: str = Form(""),
     lead_time_days: str = Form(""),
     incumbent_status: str | None = Form(None),
@@ -405,6 +511,7 @@ def intake_rfp_draft_confirm(
     raw_form_data = {
         "name": name,
         "client": client,
+        "buying_organization_id": buying_organization_id,
         "estimated_contract_value": estimated_contract_value,
         "lead_time_days": lead_time_days,
         "incumbent_status": incumbent_status is not None,
@@ -415,7 +522,8 @@ def intake_rfp_draft_confirm(
     try:
         payload = _build_draft_confirm_payload(
             name=name,
-            client=client,
+            client=_resolve_client_value(db, client, buying_organization_id or None),
+            buying_organization_id=buying_organization_id or None,
             estimated_contract_value=estimated_contract_value,
             lead_time_days=lead_time_days,
             incumbent_status=incumbent_status,
@@ -429,6 +537,7 @@ def intake_rfp_draft_confirm(
             draft=draft,
             errors=_validation_errors(exc),
             form_data=raw_form_data,
+            organizations=_organization_options(db),
             status_code=422,
         )
 
@@ -451,7 +560,8 @@ def intake_rfp_draft_confirm(
 async def intake_with_rfp_submit(
     request: Request,
     name: str = Form(...),
-    client: str = Form(...),
+    client: str = Form(""),
+    buying_organization_id: str = Form(""),
     estimated_contract_value: float = Form(...),
     lead_time_days: int = Form(...),
     incumbent_status: bool = Form(False),
@@ -463,7 +573,8 @@ async def intake_with_rfp_submit(
 ) -> HTMLResponse:
     payload = _build_intake_payload(
         name=name,
-        client=client,
+        client=_resolve_client_value(db, client, buying_organization_id or None),
+        buying_organization_id=buying_organization_id or None,
         estimated_contract_value=estimated_contract_value,
         lead_time_days=lead_time_days,
         incumbent_status=incumbent_status,
@@ -487,6 +598,7 @@ async def intake_with_rfp_submit(
             request,
             errors=errors,
             form_data=payload.model_dump(),
+            organizations=_organization_options(db),
             status_code=422,
         )
 
@@ -523,6 +635,41 @@ def opportunity_detail(request: Request, opportunity_id: str, db: Session = Depe
             "permission_reports": permission_reports,
         },
     )
+
+
+@web_router.post("/opportunities/{opportunity_id}/archive")
+def archive_opportunity_web(
+    opportunity_id: str,
+    actor: str = Form("operator"),
+    reason: str = Form(""),
+    return_to: str = Form(""),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    service = OpportunityIntakeService(db)
+    payload = ArchiveActionRequest(actor=actor, reason=reason or None)
+    try:
+        service.archive_opportunity(opportunity_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    destination = return_to or f"/opportunities/{opportunity_id}"
+    return RedirectResponse(url=destination, status_code=303)
+
+
+@web_router.post("/opportunities/{opportunity_id}/restore")
+def restore_opportunity_web(
+    opportunity_id: str,
+    actor: str = Form("operator"),
+    return_to: str = Form(""),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    service = OpportunityIntakeService(db)
+    payload = ArchiveActionRequest(actor=actor)
+    try:
+        service.restore_opportunity(opportunity_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    destination = return_to or f"/opportunities/{opportunity_id}"
+    return RedirectResponse(url=destination, status_code=303)
 
 
 @web_router.get("/opportunities/{opportunity_id}/timeline", response_class=HTMLResponse)

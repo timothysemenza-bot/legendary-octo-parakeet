@@ -1,7 +1,27 @@
 {% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
 {% block content %}
 <section>
   <h2>{{ contractor.name }}</h2>
+  <div class="section-actions">
+    {% if contractor.archived_at %}
+    <span class="status-chip archived">Archived</span>
+    <span class="muted">Archived by {{ contractor.archived_by or "-" }} on {{ contractor.archived_at }}</span>
+    <form method="post" action="/contractors/{{ contractor.id }}/restore" class="inline-form">
+      <input type="hidden" name="return_to" value="/contractors/{{ contractor.id }}" />
+      <label>Actor <input name="actor" value="operator" /></label>
+      <button type="submit">Restore Contractor</button>
+    </form>
+    {% else %}
+    <span class="status-chip">Active</span>
+    <form method="post" action="/contractors/{{ contractor.id }}/archive" class="inline-form">
+      <input type="hidden" name="return_to" value="/contractors/{{ contractor.id }}" />
+      <label>Actor <input name="actor" value="operator" /></label>
+      <label>Archive Reason <input name="reason" placeholder="Optional" /></label>
+      <button type="submit">Archive Contractor</button>
+    </form>
+    {% endif %}
+  </div>
   {% if errors %}
   <ul>
     {% for error in errors %}
@@ -19,6 +39,9 @@
   <p><strong>Diversity Certs:</strong> {{ contractor.diversity_certs or '-' }}</p>
   <p><strong>Relationship Notes:</strong> {{ contractor.relationship_notes or '-' }}</p>
   <p><strong>Strategic Fit Notes:</strong> {{ contractor.strategic_fit_notes or '-' }}</p>
+  {% if contractor.archive_reason %}
+  <p><strong>Archive Reason:</strong> {{ contractor.archive_reason }}</p>
+  {% endif %}
 
   <h3>Edit Contractor</h3>
   <form method="post" action="/contractors/{{ contractor.id }}" data-ux-form="contractor_update">
@@ -75,9 +98,11 @@
     <button type="submit">Save Contractor</button>
   </form>
 
+  {% if not contractor.archived_at %}
   <h3>Create Pursuit Handoff</h3>
   {% set relationship_access_value = handoff_form_data.relationship_access or (contractor.relationship_strength ~ '') %}
   <form method="post" action="/contractors/{{ contractor.id }}/pursuits" data-ux-form="contractor_pursuit_handoff">
+    {{ example_controls("contractor_pursuit_handoff", example_presets) }}
     <label>Contract
       <select name="contract_id" required>
         <option value="">Select Contract</option>
@@ -191,6 +216,9 @@
     <label>Actor <input name="actor" value="{{ link_form_data.actor or 'operator' }}" /></label>
     <button type="submit">Link Contractor To Opportunity</button>
   </form>
+  {% else %}
+  <p>This contractor is archived and excluded from new handoffs or opportunity links until restored.</p>
+  {% endif %}
 
   <h3>Linked Opportunities</h3>
   {% if linked_opportunities %}
@@ -201,8 +229,8 @@
       | {{ item.organization_name or '-' }}
       | {{ item.pursuit_stage }} / {{ item.proposal_stage }}
       | Confidence {{ item.confidence_level }}
-      | Weighted Pipeline {{ item.weighted_pipeline_value or '-' }}
-      | Weighted EV {{ item.weighted_expected_value or '-' }}
+      | Weighted Pipeline {{ item.weighted_pipeline_value|currency }}
+      | Weighted EV {{ item.weighted_expected_value|currency }}
       | <a href="/opportunities/{{ item.opportunity_id }}/capture-workbench">Capture Workbench</a>
     </li>
     {% endfor %}
@@ -213,6 +241,7 @@
 
   <h3>Touchpoints</h3>
   <form method="post" action="/contractors/{{ contractor.id }}/touchpoints" data-ux-form="contractor_touchpoint_create">
+    {{ example_controls("contractor_touchpoint_create", example_presets) }}
     <label>Contact Name <input name="contact_name" /></label>
     <label>Type
       <select name="touchpoint_type">

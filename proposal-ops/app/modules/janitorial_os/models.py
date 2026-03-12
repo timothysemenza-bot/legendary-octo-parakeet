@@ -153,6 +153,9 @@ class Contractor(Base):
     prospect_stage: Mapped[str] = mapped_column(String(30), nullable=False, default="TARGET", index=True)
     next_follow_up_date: Mapped[date | None] = mapped_column(Date, nullable=True, index=True)
     last_touch_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, index=True)
+    archived_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, index=True)
+    archived_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    archive_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
     relationship_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     strategic_fit_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
@@ -215,6 +218,30 @@ class UxFeedback(Base):
     voice_note_status: Mapped[str] = mapped_column(String(40), nullable=False, default="NOT_PROVIDED")
     voice_note_asset_ref: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False, index=True)
+
+
+class UxRecommendationCheckpoint(Base):
+    __tablename__ = "ux_recommendation_checkpoints"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    code: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    page_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    path: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    rationale: Mapped[str] = mapped_column(Text, nullable=False)
+    proposed_action: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[str] = mapped_column(String(40), nullable=False, default="APPROVED", index=True)
+    owner: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    approved_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=_utcnow,
+        onupdate=_utcnow,
+        nullable=False,
+    )
 
 
 class OpportunityMatch(Base):

@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
+{% block content %}
+<section>
+  <h2>Opportunity Intelligence</h2>
+  <p>Track upstream government signals before they become formal procurements.</p>
+  <p>
+    <strong>Signal Sources:</strong> {{ summary.signal_sources_total }} |
+    <strong>Signal Events:</strong> {{ summary.signal_events_total }} |
+    <strong>Open Hypotheses:</strong> {{ summary.open_hypotheses_total }}
+  </p>
+
+  {% if errors %}
+  <section>
+    <h3>Validation Issues</h3>
+    <ul>
+      {% for error in errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section>
+    <h3>Create Signal Source</h3>
+    <form method="post" action="/intelligence/sources" data-ux-form="signal_source_create">
+      {{ example_controls("signal_source_create", example_presets) }}
+      <label>Name
+        <input name="name" value="{{ source_form_data.get('name', '') }}" required />
+      </label>
+      <label>Source Type
+        <select name="source_type">
+          {% for option in form_options.source_types %}
+          <option value="{{ option.value }}" {% if source_form_data.get('source_type', 'OTHER') == option.value %}selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Region
+        <input name="region" value="{{ source_form_data.get('region', '') }}" />
+      </label>
+      <label>Owner Scope
+        <input name="owner_scope" value="{{ source_form_data.get('owner_scope', '') }}" />
+      </label>
+      <label>Source URL
+        <input name="source_url" value="{{ source_form_data.get('source_url', '') }}" />
+      </label>
+      <label>Notes
+        <textarea name="notes" rows="3">{{ source_form_data.get('notes', '') }}</textarea>
+      </label>
+      <button type="submit">Create Signal Source</button>
+    </form>
+  </section>
+
+  <section>
+    <h3>Log Signal Event</h3>
+    <form method="post" action="/intelligence/signals" data-ux-form="signal_event_create">
+      {{ example_controls("signal_event_create", example_presets) }}
+      <label>Source
+        <select name="source_id" required>
+          <option value="">Select source</option>
+          {% for source in sources %}
+          <option value="{{ source.id }}" {% if event_form_data.get('source_id', '') == source.id %}selected{% endif %}>{{ source.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Title
+        <input name="title" value="{{ event_form_data.get('title', '') }}" required />
+      </label>
+      <label>Signal Type
+        <select name="signal_type">
+          {% for option in form_options.signal_types %}
+          <option value="{{ option.value }}" {% if event_form_data.get('signal_type', 'OTHER') == option.value %}selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Signal Date
+        <input type="date" name="signal_date" value="{{ event_form_data.get('signal_date', '') }}" required />
+      </label>
+      <label>Jurisdiction
+        <input name="jurisdiction" value="{{ event_form_data.get('jurisdiction', '') }}" />
+      </label>
+      <label>Agency
+        <input name="agency_name" value="{{ event_form_data.get('agency_name', '') }}" />
+      </label>
+      <label>Program
+        <input name="program_name" value="{{ event_form_data.get('program_name', '') }}" />
+      </label>
+      <label>Confidence
+        <select name="confidence_level">
+          {% for option in form_options.confidence_levels %}
+          <option value="{{ option.value }}" {% if event_form_data.get('confidence_level', 'MEDIUM') == option.value %}selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Summary
+        <textarea name="summary" rows="4" required>{{ event_form_data.get('summary', '') }}</textarea>
+      </label>
+      <label>Recommended Action
+        <textarea name="recommended_action" rows="3">{{ event_form_data.get('recommended_action', '') }}</textarea>
+      </label>
+      <label>Source URL
+        <input name="source_url" value="{{ event_form_data.get('source_url', '') }}" />
+      </label>
+      <label>Source Reference
+        <input name="source_reference" value="{{ event_form_data.get('source_reference', '') }}" />
+      </label>
+      <button type="submit">Log Signal Event</button>
+    </form>
+  </section>
+
+  <section>
+    <h3>Create Opportunity Hypothesis</h3>
+    <form method="post" action="/intelligence/hypotheses" data-ux-form="opportunity_hypothesis_create">
+      {{ example_controls("opportunity_hypothesis_create", example_presets) }}
+      <label>Title
+        <input name="title" value="{{ hypothesis_form_data.get('title', '') }}" required />
+      </label>
+      <label>Sector
+        <input name="sector" value="{{ hypothesis_form_data.get('sector', '') }}" />
+      </label>
+      <label>Geography
+        <input name="geography" value="{{ hypothesis_form_data.get('geography', '') }}" />
+      </label>
+      <label>Buying Organization
+        <select name="buying_organization_id">
+          <option value="">Select organization if already tracked</option>
+          {% for item in organizations %}
+          <option value="{{ item.id }}" {% if hypothesis_form_data.get('buying_organization_id', '') == item.id %}selected{% endif %}>{{ item.name }}{% if item.organization_type %} | {{ item.organization_type }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Buying Organization Fallback
+        <input name="buying_organization" value="{{ hypothesis_form_data.get('buying_organization', '') }}" />
+      </label>
+      <label>Service Line
+        <input name="service_line" value="{{ hypothesis_form_data.get('service_line', '') }}" />
+      </label>
+      <label>Stage
+        <select name="stage">
+          {% for option in form_options.hypothesis_stages %}
+          <option value="{{ option.value }}" {% if hypothesis_form_data.get('stage', 'MONITORING') == option.value %}selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Confidence
+        <select name="confidence_level">
+          {% for option in form_options.confidence_levels %}
+          <option value="{{ option.value }}" {% if hypothesis_form_data.get('confidence_level', 'MEDIUM') == option.value %}selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Expected Release Start
+        <input type="date" name="expected_release_start" value="{{ hypothesis_form_data.get('expected_release_start', '') }}" />
+      </label>
+      <label>Expected Release End
+        <input type="date" name="expected_release_end" value="{{ hypothesis_form_data.get('expected_release_end', '') }}" />
+      </label>
+      <label>Primary Signal Event
+        <select name="primary_signal_event_id">
+          <option value="">None</option>
+          {% for event in signal_events %}
+          <option value="{{ event.id }}" {% if hypothesis_form_data.get('primary_signal_event_id', '') == event.id %}selected{% endif %}>{{ event.title }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Recommended Contractor
+        <select name="recommended_contractor_id">
+          <option value="">None yet</option>
+          {% for contractor in contractors %}
+          <option value="{{ contractor.id }}" {% if hypothesis_form_data.get('recommended_contractor_id', '') == contractor.id %}selected{% endif %}>{{ contractor.name }}{% if contractor.prospect_stage %} | {{ contractor.prospect_stage }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Summary
+        <textarea name="summary" rows="4" required>{{ hypothesis_form_data.get('summary', '') }}</textarea>
+      </label>
+      <label>Recommended Action
+        <textarea name="recommended_action" rows="3">{{ hypothesis_form_data.get('recommended_action', '') }}</textarea>
+      </label>
+      <button type="submit">Create Opportunity Hypothesis</button>
+    </form>
+  </section>
+
+  <section>
+    <h3>Recent Signal Events</h3>
+    {% if signal_events %}
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Title</th>
+          <th>Source</th>
+          <th>Type</th>
+          <th>Agency</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in signal_events %}
+        <tr>
+          <td>{{ event.signal_date }}</td>
+          <td>{{ event.title }}</td>
+          <td>{{ event.source_name or "-" }}</td>
+          <td>{{ event.signal_type }}</td>
+          <td>{{ event.agency_name or event.jurisdiction or "-" }}</td>
+          <td>{{ event.confidence_level }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No signal events logged yet.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h3>Opportunity Hypotheses</h3>
+    {% if hypotheses %}
+    <table>
+      <thead>
+        <tr>
+          <th>Hypothesis</th>
+          <th>Organization</th>
+          <th>Service Line</th>
+          <th>Stage</th>
+          <th>Release Window</th>
+          <th>Primary Signal</th>
+          <th>Recommended Contractor</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in hypotheses %}
+        {% set conversion = conversion_form_data.get(item.id, {}) %}
+        <tr>
+          <td>{{ item.title }}</td>
+          <td>{{ item.buying_organization_name or item.buying_organization or "-" }}</td>
+          <td>{{ item.service_line or "-" }}</td>
+          <td>{{ item.stage }}</td>
+          <td>{{ item.expected_release_start or "-" }} to {{ item.expected_release_end or "-" }}</td>
+          <td>{{ item.primary_signal_event_title or "-" }}</td>
+          <td>{{ item.recommended_contractor_name or "-" }}</td>
+          <td>
+            {% if item.converted_opportunity_id %}
+            <a href="/opportunities/{{ item.converted_opportunity_id }}">Converted: {{ item.converted_opportunity_name or "Open pursuit" }}</a>
+            {% else %}
+            <details>
+              <summary>Convert to Pursuit</summary>
+              <form method="post" action="/intelligence/hypotheses/{{ item.id }}/convert-to-pursuit" data-ux-form="hypothesis_convert_to_pursuit">
+                <label>Pursuit Name
+                  <input name="name" value="{{ conversion.get('name', item.title) }}" />
+                </label>
+                <label>Client / Buying Organization
+                  <input name="client_name" value="{{ conversion.get('client_name', item.buying_organization_name or item.buying_organization or '') }}" />
+                </label>
+                <label>Recommended Contractor
+                  <select name="contractor_id">
+                    <option value="">None yet</option>
+                    {% for contractor in contractors %}
+                    <option value="{{ contractor.id }}" {% if conversion.get('contractor_id', item.recommended_contractor_id or '') == contractor.id %}selected{% endif %}>{{ contractor.name }}{% if contractor.prospect_stage %} | {{ contractor.prospect_stage }}{% endif %}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <label>Estimated Contract Value
+                  <input type="number" step="0.01" min="1" name="estimated_contract_value" value="{{ conversion.get('estimated_contract_value', '') }}" required />
+                </label>
+                <label>Lead Time Days
+                  <input type="number" min="1" name="lead_time_days" value="{{ conversion.get('lead_time_days', '') }}" />
+                </label>
+                <label>Pursuit Stage
+                  <select name="pursuit_stage">
+                    {% for option in form_options.pursuit_stages %}
+                    <option value="{{ option.value }}" {% if conversion.get('pursuit_stage', 'EARLY_QUALIFICATION') == option.value %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <label>Strategic Alignment
+                  <input type="number" min="1" max="5" name="strategic_alignment" value="{{ conversion.get('strategic_alignment', '3') }}" />
+                </label>
+                <label>Estimated Probability Win
+                  <input type="number" min="0" max="100" name="estimated_probability_win" value="{{ conversion.get('estimated_probability_win', '') }}" />
+                </label>
+                <label>Expected RFP Date
+                  <input type="date" name="expected_rfp_date" value="{{ conversion.get('expected_rfp_date', item.expected_release_start or '') }}" />
+                </label>
+                <label>
+                  <input type="checkbox" name="incumbent_status" value="true" {% if conversion.get('incumbent_status') %}checked{% endif %} />
+                  Known incumbent present
+                </label>
+                <label>Actor
+                  <input name="actor" value="{{ conversion.get('actor', 'operator') }}" />
+                </label>
+                <p>If a contractor is selected here, the new pursuit will open in the capture workbench with advised-contractor context already attached.</p>
+                <button type="submit">Create Pursuit</button>
+              </form>
+            </details>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No opportunity hypotheses tracked yet.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

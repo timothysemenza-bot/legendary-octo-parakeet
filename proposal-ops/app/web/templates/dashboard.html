@@ -1,14 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
 <section>
-  <h2>Janitorial Capture Dashboard</h2>
+  <h2>Boss Key Opportunity Dashboard</h2>
+  <p>Early-lifecycle signal tracking, capture readiness, and pursuit execution in one operating view.</p>
   <p><strong>Generated:</strong> {{ summary.generated_at }}</p>
   <p><strong>Organizations:</strong> {{ summary.organizations_total }} | <strong>Facilities:</strong> {{ summary.facilities_total }} | <strong>Contracts:</strong> {{ summary.contracts_total }} | <strong>Contractors:</strong> {{ summary.contractors_total }} | <strong>Pursuits:</strong> {{ summary.pursuits_total }}</p>
-  <p><strong>Weighted Pipeline:</strong> {{ summary.total_weighted_pipeline_value }} | <strong>Expected Consulting Revenue:</strong> {{ summary.expected_consulting_revenue }}</p>
+  <p><strong>Weighted Pipeline:</strong> {{ summary.total_weighted_pipeline_value|currency }} | <strong>Expected Consulting Revenue:</strong> {{ summary.expected_consulting_revenue|currency }}</p>
   {% if summary.organizations_total == 0 %}
   <form method="post" action="/dashboard/seed-demo">
     <button type="submit">Load Demo Data</button>
   </form>
+  {% endif %}
+
+  <h3>Opportunity Intelligence Snapshot</h3>
+  <p><a href="/intelligence">Open opportunity intelligence workspace</a></p>
+  <p>
+    <strong>Sources:</strong> {{ summary.intelligence_summary.signal_sources_total }} |
+    <strong>Signals:</strong> {{ summary.intelligence_summary.signal_events_total }} |
+    <strong>Open Hypotheses:</strong> {{ summary.intelligence_summary.open_hypotheses_total }}
+  </p>
+  {% if summary.intelligence_summary.recent_signal_events %}
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Signal</th>
+        <th>Source</th>
+        <th>Agency</th>
+        <th>Confidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.intelligence_summary.recent_signal_events %}
+      <tr>
+        <td>{{ item.signal_date }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.source_name or "-" }}</td>
+        <td>{{ item.agency_name or item.jurisdiction or "-" }}</td>
+        <td>{{ item.confidence_level }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No signal events tracked yet.</p>
+  {% endif %}
+
+  <h4>Active Opportunity Hypotheses</h4>
+  {% if summary.intelligence_summary.active_hypotheses %}
+  <ul>
+    {% for item in summary.intelligence_summary.active_hypotheses %}
+    <li>{{ item.title }} | {{ item.stage }} | {{ item.buying_organization or item.geography or "-" }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No active opportunity hypotheses yet.</p>
   {% endif %}
 
   <h3>Upcoming Rebids</h3>
@@ -31,7 +77,7 @@
         <td>{{ item.organization_name }}</td>
         <td>{{ item.rebid_window_start or "-" }}</td>
         <td>{{ item.expiration_date or "-" }}</td>
-        <td>{{ item.estimated_annual_value or "-" }}</td>
+        <td>{{ item.estimated_annual_value|currency }}</td>
         <td>{{ item.state or "-" }}</td>
       </tr>
       {% endfor %}
@@ -60,7 +106,7 @@
         <td>{{ item.organization_name }}</td>
         <td>{{ item.pursuit_stage }}</td>
         <td>{{ item.qualification_score }}</td>
-        <td>{{ item.weighted_pipeline_value or "-" }}</td>
+        <td>{{ item.weighted_pipeline_value|currency }}</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -180,12 +226,52 @@
   <p>
     <strong>Tracked Sessions:</strong> {{ summary.friction_summary.tracked_sessions }} |
     <strong>Events:</strong> {{ summary.friction_summary.total_events }} |
-    <strong>Feedback:</strong> {{ summary.friction_summary.total_feedback }}
+    <strong>Feedback:</strong> {{ summary.friction_summary.total_feedback }} |
+    <strong>Open Checkpoints:</strong> {{ summary.friction_summary.open_checkpoints_total }}
   </p>
+  {% if summary.friction_summary.checkpoint_status_counts %}
+  <p>
+    {% for status, count in summary.friction_summary.checkpoint_status_counts.items() %}
+    <strong>{{ status }}:</strong> {{ count }}{% if not loop.last %} | {% endif %}
+    {% endfor %}
+  </p>
+  {% endif %}
+  {% if summary.friction_summary.checkpoints %}
+  <h4>Approved Actions Queue</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Recommendation</th>
+        <th>Owner</th>
+        <th>Due</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.friction_summary.checkpoints[:4] %}
+      <tr>
+        <td>{{ item.status }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.owner or "-" }}</td>
+        <td>{{ item.due_date or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
   {% if summary.friction_summary.recommendations %}
   <ul>
     {% for item in summary.friction_summary.recommendations[:3] %}
-    <li><strong>{{ item.title }}</strong> on {{ item.page_key }}: {{ item.proposed_action }}</li>
+    <li>
+      <strong>{{ item.title }}</strong> on {{ item.page_key }}: {{ item.proposed_action }}
+      {% if item.checkpoint_id %}
+      <br />
+      <span class="muted">Checkpoint: {{ item.checkpoint_status }}{% if item.checkpoint_owner %} | Owner {{ item.checkpoint_owner }}{% endif %}</span>
+      {% else %}
+      <br />
+      <span class="muted">No checkpoint approved yet.</span>
+      {% endif %}
+    </li>
     {% endfor %}
   </ul>
   {% else %}

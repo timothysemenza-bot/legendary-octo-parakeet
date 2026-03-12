@@ -2,15 +2,26 @@
 {% block content %}
 <section>
   <h2>Opportunities</h2>
+  <p>Active pursuits only by default. Use the archive toggle to review historical deals without mixing them into the live pipeline.</p>
+  <form method="get" action="/opportunities" class="section-actions" data-ux-form="opportunity_list_filters">
+    <label>
+      <input type="checkbox" name="include_archived" value="true" {% if include_archived %}checked{% endif %} />
+      Include archived opportunities
+    </label>
+    <button type="submit">Apply</button>
+  </form>
   {% if opportunities %}
   <table>
     <thead>
       <tr>
         <th>Name</th>
         <th>Client</th>
+        <th>Pursuit Stage</th>
+        <th>Workflow Stage</th>
         <th>Score</th>
         <th>Tier</th>
         <th>Recommendation</th>
+        <th>Status</th>
         <th>Created</th>
       </tr>
     </thead>
@@ -19,9 +30,18 @@
       <tr>
         <td><a href="/opportunities/{{ opp.id }}">{{ opp.name }}</a></td>
         <td>{{ opp.client }}</td>
+        <td>{{ opp.pursuit_stage }}</td>
+        <td>{{ opp.stage }}</td>
         <td>{{ "%.2f"|format(opp.qualification_score) }}</td>
         <td>{{ opp.tier }}</td>
         <td>{{ opp.pursuit_recommendation }}</td>
+        <td>
+          {% if opp.archived_at %}
+          <span class="status-chip archived">Archived</span>
+          {% else %}
+          <span class="status-chip">Active</span>
+          {% endif %}
+        </td>
         <td>{{ opp.created_at }}</td>
       </tr>
       {% endfor %}

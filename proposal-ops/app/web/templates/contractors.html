@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
 {% block content %}
 <section>
   <h2>Contractors</h2>
@@ -21,11 +22,16 @@
       </select>
     </label>
     <label>Follow Up Before <input type="date" name="follow_up_before" value="{{ filters.follow_up_before }}" /></label>
+    <label>
+      <input type="checkbox" name="include_archived" value="true" {% if filters.include_archived %}checked{% endif %} />
+      Include archived contractors
+    </label>
     <button type="submit">Apply Filters</button>
   </form>
 
   <h3>Create Contractor Prospect</h3>
   <form method="post" action="/contractors" data-ux-form="contractor_create">
+    {{ example_controls("contractor_create", example_presets) }}
     <label>Name <input name="name" value="{{ form_data.name or '' }}" required /></label>
     <label>Service Geographies <input name="service_geographies" value="{{ form_data.service_geographies or '' }}" /></label>
     <label>HQ City <input name="headquarters_city" value="{{ form_data.headquarters_city or '' }}" /></label>
@@ -90,6 +96,7 @@
         <th>Last Touch</th>
         <th>Scale</th>
         <th>Relationship</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -102,6 +109,13 @@
         <td>{{ item.last_touch_at or '-' }}</td>
         <td>{{ item.scale_band }}</td>
         <td>{{ item.relationship_strength }}/5</td>
+        <td>
+          {% if item.archived_at %}
+          <span class="status-chip archived">Archived</span>
+          {% else %}
+          <span class="status-chip">Active</span>
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

@@ -2,6 +2,25 @@
 {% block content %}
 <section>
   <h2>{{ detail.name }}</h2>
+  <div class="section-actions">
+    {% if detail.archived_at %}
+    <span class="status-chip archived">Archived</span>
+    <span class="muted">Archived by {{ detail.archived_by or "-" }} on {{ detail.archived_at }}</span>
+    <form method="post" action="/opportunities/{{ detail.id }}/restore" class="inline-form">
+      <input type="hidden" name="return_to" value="/opportunities/{{ detail.id }}" />
+      <label>Actor <input name="actor" value="operator" /></label>
+      <button type="submit">Restore Opportunity</button>
+    </form>
+    {% else %}
+    <span class="status-chip">Active</span>
+    <form method="post" action="/opportunities/{{ detail.id }}/archive" class="inline-form">
+      <input type="hidden" name="return_to" value="/opportunities/{{ detail.id }}" />
+      <label>Actor <input name="actor" value="operator" /></label>
+      <label>Archive Reason <input name="reason" placeholder="Optional" /></label>
+      <button type="submit">Archive Opportunity</button>
+    </form>
+    {% endif %}
+  </div>
   <p><strong>Client:</strong> {{ detail.client }}</p>
   <p><strong>Score:</strong> {{ detail.qualification_score }}</p>
   <p><strong>Tier:</strong> {{ detail.tier }}</p>
@@ -15,11 +34,15 @@
   <p><strong>Confidence:</strong> {{ detail.confidence_level }}</p>
   <p><strong>Expected RFP Date:</strong> {{ detail.expected_rfp_date or '-' }}</p>
   <p><strong>Provenance:</strong> {{ detail.provenance_summary or '-' }}</p>
-  <p><strong>Weighted Pipeline Value:</strong> {{ detail.weighted_pipeline_value or '-' }}</p>
+  <p><strong>Weighted Pipeline Value:</strong> {{ detail.weighted_pipeline_value|currency }}</p>
   <p><strong>Lead Time:</strong> {{ detail.lead_time_days }} days</p>
-  <p><strong>Estimated Contract Value:</strong> {{ detail.estimated_contract_value }}</p>
+  <p><strong>Estimated Contract Value:</strong> {{ detail.estimated_contract_value|currency }}</p>
+  {% if detail.archive_reason %}
+  <p><strong>Archive Reason:</strong> {{ detail.archive_reason }}</p>
+  {% endif %}
   <p><a href="/opportunities/{{ detail.id }}/capture-workbench">Capture Workbench</a> | <a href="/opportunities/{{ detail.id }}/capture-plan">Capture Plan</a> | <a href="/opportunities/{{ detail.id }}/proposal-outline">Proposal Outline</a> | <a href="/opportunities/{{ detail.id }}/rfp-upload">Parse RFP</a> | <a href="/opportunities/{{ detail.id }}/compliance-matrix">View Compliance Matrix</a> | <a href="/opportunities/{{ detail.id }}/reviews">Review Dashboard</a> | <a href="/opportunities/{{ detail.id }}/submission">Submission Readiness</a> | <a href="/opportunities/{{ detail.id }}/lessons">Lessons Learned</a> | <a href="/opportunities/{{ detail.id }}/timeline">Workflow Timeline</a></p>
 
+  {% if not detail.archived_at %}
   <h3>Record Gate Decision</h3>
   {% if session_user and not authorized_gates %}
   <p>You are signed in as {{ session_user.display_name }} but have no authorized gate actions for this opportunity.</p>
@@ -139,6 +162,9 @@
     <label>Reason <input name="reason" value="Manual stage transition" /></label>
     <button type="submit">Apply Stage Transition</button>
   </form>
+  {% else %}
+  <p>This opportunity is archived. Restore it before making new gate or stage updates.</p>
+  {% endif %}
 
   <h3>Gate Decisions</h3>
   {% if detail.gate_decisions %}

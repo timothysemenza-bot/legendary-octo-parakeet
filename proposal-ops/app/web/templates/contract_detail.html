@@ -4,8 +4,8 @@
   <h2>{{ contract.title }}</h2>
   <p><strong>Organization:</strong> {{ contract.organization_name }}</p>
   <p><strong>Incumbent:</strong> {{ contract.incumbent_vendor or '-' }}</p>
-  <p><strong>Annual Value:</strong> {{ contract.estimated_annual_value or '-' }}</p>
-  <p><strong>Total Value:</strong> {{ contract.estimated_total_value or '-' }}</p>
+  <p><strong>Annual Value:</strong> {{ contract.estimated_annual_value|currency }}</p>
+  <p><strong>Total Value:</strong> {{ contract.estimated_total_value|currency }}</p>
   <p><strong>Dates:</strong> {{ contract.start_date or '-' }} -> {{ contract.expiration_date or '-' }}</p>
   <p><strong>Rebid Window:</strong> {{ contract.rebid_window_start or '-' }} -> {{ contract.rebid_window_end or '-' }}</p>
   <p><strong>Source:</strong> {{ contract.source_type }} | {{ contract.procurement_source_url or '-' }}</p>

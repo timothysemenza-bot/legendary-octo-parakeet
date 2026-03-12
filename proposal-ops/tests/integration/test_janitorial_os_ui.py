@@ -8,8 +8,9 @@ def test_dashboard_and_seed_demo_ui(client: TestClient) -> None:
 
     page = client.get("/dashboard")
     assert page.status_code == 200
-    assert "Janitorial Capture Dashboard" in page.text
+    assert "Boss Key Opportunity Dashboard" in page.text
     assert "Live Pursuit Readiness" in page.text
+    assert "Opportunity Intelligence Snapshot" in page.text
 
     seeded = client.post("/dashboard/seed-demo", follow_redirects=True)
     assert seeded.status_code == 200
@@ -18,6 +19,8 @@ def test_dashboard_and_seed_demo_ui(client: TestClient) -> None:
     assert "Upcoming Contractor Follow-Ups" in seeded.text
     assert "Garden State Facility Services" in seeded.text
     assert "Live Pursuit Readiness" in seeded.text
+    assert "Weighted Pipeline:" in seeded.text
+    assert "$" in seeded.text
 
     overdue = client.post(
         "/api/contractors",
@@ -139,6 +142,8 @@ def test_capture_workbench_ui_forms(client: TestClient) -> None:
     assert '<select name="action_type">' in workbench.text
     assert '<select name="status">' in workbench.text
     assert '<select name="success_fee_type">' in workbench.text
+    assert "Load Example" in workbench.text
+    assert "Clear Example" in workbench.text
 
     refresh = client.post(f"{workbench_path}/matches", follow_redirects=True)
     assert refresh.status_code == 200
@@ -307,6 +312,8 @@ def test_contractor_prospecting_ui(client: TestClient) -> None:
     assert "Create Contractor Prospect" in contractors.text
     assert '<select name="scale_band">' in contractors.text
     assert '<select name="prospect_stage">' in contractors.text
+    assert "Load Example" in contractors.text
+    assert "Clear Example" in contractors.text
 
     created = client.post(
         "/contractors",
@@ -344,6 +351,7 @@ def test_contractor_prospecting_ui(client: TestClient) -> None:
     assert "Next Follow Up" in detail.text
     assert '<select name="labor_profile">' in detail.text
     assert '<select name="touchpoint_type">' in detail.text
+    assert "Load Example" in detail.text
 
     touchpoint = client.post(
         f"{detail_path}/touchpoints",
@@ -360,6 +368,71 @@ def test_contractor_prospecting_ui(client: TestClient) -> None:
     assert touchpoint.status_code == 200
     assert "Intro call completed with regional growth lead." in touchpoint.text
     assert "Last Touch" in touchpoint.text
+
+
+def test_contractor_archive_and_restore_ui(client: TestClient) -> None:
+    contractor = client.post(
+        "/api/contractors",
+        json={
+            "name": "Archived UI Contractor",
+            "service_geographies": "NJ",
+            "headquarters_city": "Trenton",
+            "headquarters_state": "NJ",
+            "vertical_experience": "municipal",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "mixed",
+            "scale_band": "LOCAL",
+            "relationship_strength": 3,
+            "prospect_stage": "TARGET",
+            "relationship_notes": "Archive UI test.",
+            "strategic_fit_notes": "Should disappear from active list.",
+        },
+    ).json()
+
+    detail_path = f"/contractors/{contractor['id']}"
+    detail = client.get(detail_path)
+    assert detail.status_code == 200
+    assert "Archive Contractor" in detail.text
+
+    archived = client.post(
+        f"{detail_path}/archive",
+        data={"actor": "operator", "reason": "Pilot archive test"},
+        follow_redirects=True,
+    )
+    assert archived.status_code == 200
+    assert "Archived" in archived.text
+    assert "Restore Contractor" in archived.text
+
+    listing = client.get("/contractors")
+    assert listing.status_code == 200
+    assert "Archived UI Contractor" not in listing.text
+
+    include_archived = client.get("/contractors", params={"include_archived": "true"})
+    assert include_archived.status_code == 200
+    assert "Archived UI Contractor" in include_archived.text
+
+    restored = client.post(
+        f"{detail_path}/restore",
+        data={"actor": "operator"},
+        follow_redirects=True,
+    )
+    assert restored.status_code == 200
+    assert "Archive Contractor" in restored.text
+
+
+def test_source_registry_forms_include_example_loaders(client: TestClient) -> None:
+    organizations = client.get("/organizations")
+    assert organizations.status_code == 200
+    assert "Load Example" in organizations.text
+    assert "Clear Example" in organizations.text
+
+    facilities = client.get("/facilities")
+    assert facilities.status_code == 200
+    assert "Load Example" in facilities.text
+
+    contracts = client.get("/contracts")
+    assert contracts.status_code == 200
+    assert "Load Example" in contracts.text
 
 
 def test_contractor_handoff_ui(client: TestClient) -> None:
@@ -551,8 +624,45 @@ def test_ux_friction_panel_and_feedback_ui(client: TestClient) -> None:
     assert "Recommendations are surfaced for approval only." in friction.text
     assert "Reduce time-to-complete" in friction.text
     assert "This screen takes too long to complete when starting from scratch." in friction.text
+    assert "Approve As Checkpoint" in friction.text
+
+    recommendation = next(
+        item
+        for item in client.get("/api/ux/friction-summary").json()["recommendations"]
+        if item["code"] == "reduce_time_to_complete"
+    )
+
+    approved = client.post(
+        "/ux/recommendation-checkpoints",
+        data={
+            "code": recommendation["code"],
+            "page_key": recommendation["page_key"],
+            "path": recommendation["path"],
+            "title": recommendation["title"],
+            "rationale": recommendation["rationale"],
+            "proposed_action": recommendation["proposed_action"],
+            "owner": "tim",
+            "approved_by": "tim",
+            "notes": "Pilot hardening checkpoint.",
+            "return_to": "/ux/friction",
+        },
+        follow_redirects=True,
+    )
+    assert approved.status_code == 200
+    assert "Recommendation Checkpoints" in approved.text
+    assert "APPROVED" in approved.text
+
+    checkpoint_id = client.get("/api/ux/recommendation-checkpoints").json()[0]["id"]
+    progressed = client.post(
+        f"/ux/recommendation-checkpoints/{checkpoint_id}/status",
+        data={"status": "IN_PROGRESS", "owner": "tim", "notes": "Working now.", "return_to": "/ux/friction"},
+        follow_redirects=True,
+    )
+    assert progressed.status_code == 200
+    assert "IN_PROGRESS" in progressed.text
 
     refreshed_dashboard = client.get("/dashboard")
     assert refreshed_dashboard.status_code == 200
     assert "Reduce time-to-complete" in refreshed_dashboard.text
     assert "Open detailed friction view" in refreshed_dashboard.text
+    assert "Open Checkpoints" in refreshed_dashboard.text

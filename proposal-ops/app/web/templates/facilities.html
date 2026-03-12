@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
 {% block content %}
 <section>
   <h2>Facilities</h2>
@@ -9,7 +10,8 @@
     {% endfor %}
   </ul>
   {% endif %}
-  <form method="post" action="/facilities">
+  <form method="post" action="/facilities" data-ux-form="facility_create">
+    {{ example_controls("facility_create", example_presets) }}
     <label>Organization
       <select name="organization_id" required>
         <option value="">Select</option>

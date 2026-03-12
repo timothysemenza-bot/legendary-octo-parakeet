@@ -2,6 +2,13 @@
 {% block content %}
 <section>
   <h2>{{ organization.name }}</h2>
+  {% if errors %}
+  <ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   <p><strong>Type:</strong> {{ organization.organization_type }}</p>
   <p><strong>Location:</strong> {{ organization.city or '' }} {{ organization.state or '' }}</p>
   <p><strong>Website:</strong> {{ organization.website_url or '-' }}</p>
@@ -9,14 +16,20 @@
   <p><strong>Notes:</strong> {{ organization.notes or '-' }}</p>
 
   <h3>Edit Organization</h3>
-  <form method="post" action="/organizations/{{ organization.id }}">
-    <label>Name <input name="name" value="{{ organization.name }}" required /></label>
-    <label>Type <input name="organization_type" value="{{ organization.organization_type }}" /></label>
-    <label>City <input name="city" value="{{ organization.city or '' }}" /></label>
-    <label>State <input name="state" value="{{ organization.state or '' }}" /></label>
-    <label>Website <input name="website_url" value="{{ organization.website_url or '' }}" /></label>
-    <label>Procurement URL <input name="procurement_url" value="{{ organization.procurement_url or '' }}" /></label>
-    <label>Notes <textarea name="notes">{{ organization.notes or '' }}</textarea></label>
+  <form method="post" action="/organizations/{{ organization.id }}" data-ux-form="organization_update">
+    <label>Name <input name="name" value="{{ form_data.name or organization.name }}" required /></label>
+    <label>Type
+      <select name="organization_type">
+        {% for option in form_options.organization_types %}
+        <option value="{{ option.value }}" {% if (form_data.organization_type or organization.organization_type) == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>City <input name="city" value="{{ form_data.city or organization.city or '' }}" /></label>
+    <label>State <input name="state" value="{{ form_data.state or organization.state or '' }}" /></label>
+    <label>Website <input name="website_url" value="{{ form_data.website_url or organization.website_url or '' }}" /></label>
+    <label>Procurement URL <input name="procurement_url" value="{{ form_data.procurement_url or organization.procurement_url or '' }}" /></label>
+    <label>Notes <textarea name="notes">{{ form_data.notes or organization.notes or '' }}</textarea></label>
     <button type="submit">Save Organization</button>
   </form>
 

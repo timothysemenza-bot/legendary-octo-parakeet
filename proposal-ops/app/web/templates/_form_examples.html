@@ -1,0 +1,18 @@
+{% macro controls(form_key, example_presets) -%}
+  {% set examples = example_presets.get(form_key, []) if example_presets else [] %}
+  {% if examples %}
+  <div class="form-example-controls">
+    <label>Example Data
+      <select data-example-select="{{ form_key }}">
+        <option value="">Choose example</option>
+        {% for example in examples %}
+        <option value="{{ example.key }}">{{ example.title }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="button" class="ghost-button" data-example-load="{{ form_key }}">Load Example</button>
+    <button type="button" class="ghost-button" data-example-clear="{{ form_key }}">Clear Example</button>
+    <p class="muted" data-example-description="{{ form_key }}">Load a full example into this form. Clear restores the fields to their prior values for this browser session.</p>
+  </div>
+  {% endif %}
+{%- endmacro %}

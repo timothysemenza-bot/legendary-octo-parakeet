@@ -29,6 +29,7 @@ from app.modules.janitorial_os.models import (
     ScoringProfile,
     UxEvent,
     UxFeedback,
+    UxRecommendationCheckpoint,
 )
 from app.modules.janitorial_os.schemas import (
     CaptureActionCreate,
@@ -72,7 +73,12 @@ from app.modules.janitorial_os.schemas import (
     UxFrictionSummaryResponse,
     UxPageFrictionSummary,
     UxRecommendation,
+    UxRecommendationCheckpointCreate,
+    UxRecommendationCheckpointResponse,
+    UxRecommendationCheckpointStatus,
+    UxRecommendationCheckpointStatusUpdate,
 )
+from app.modules.opportunity_intelligence.service import OpportunityIntelligenceService
 from app.modules.opportunity_intake.models import CapturePlan, Opportunity
 from app.modules.opportunity_intake.scoring import classify_recommendation, classify_tier
 from app.modules.opportunity_intake.service import sync_pursuit_fields, weighted_pipeline_value
@@ -160,6 +166,17 @@ def _ux_feedback_response(row: UxFeedback) -> UxFeedbackResponse:
         voice_note_asset_ref=row.voice_note_asset_ref,
         created_at=row.created_at,
     )
+
+
+def _ux_checkpoint_response(row: UxRecommendationCheckpoint) -> UxRecommendationCheckpointResponse:
+    return UxRecommendationCheckpointResponse.model_validate(row, from_attributes=True)
+
+
+def _is_open_checkpoint_status(status: str) -> bool:
+    return status not in {
+        UxRecommendationCheckpointStatus.IMPLEMENTED.value,
+        UxRecommendationCheckpointStatus.REJECTED.value,
+    }
 
 DEFAULT_SCORING_PROFILES: dict[str, list[tuple[str, str, int]]] = {
     ProfileType.OPPORTUNITY.value: [
@@ -555,8 +572,11 @@ class JanitorialOsService:
         *,
         prospect_stage: str | None = None,
         follow_up_before: date | None = None,
+        include_archived: bool = False,
     ) -> list[Contractor]:
         stmt = select(Contractor)
+        if not include_archived:
+            stmt = stmt.where(Contractor.archived_at.is_(None))
         if prospect_stage:
             stmt = stmt.where(Contractor.prospect_stage == prospect_stage)
         if follow_up_before:
@@ -573,7 +593,10 @@ class JanitorialOsService:
     def list_linkable_opportunities(self) -> list[Opportunity]:
         stmt = (
             select(Opportunity)
-            .where(Opportunity.pursuit_stage.not_in(["AWARD", "LOST", "DORMANT"]))
+            .where(
+                Opportunity.archived_at.is_(None),
+                Opportunity.pursuit_stage.not_in(["AWARD", "LOST", "DORMANT"]),
+            )
             .order_by(Opportunity.expected_rfp_date.asc().nulls_last(), Opportunity.updated_at.desc())
         )
         return list(self.db.scalars(stmt))
@@ -594,6 +617,28 @@ class JanitorialOsService:
             raise ValueError("Contractor not found.")
         for key, value in payload.model_dump().items():
             setattr(contractor, key, value)
+        self.db.commit()
+        self.db.refresh(contractor)
+        return contractor
+
+    def archive_contractor(self, contractor_id: str, *, actor: str, reason: str | None = None) -> Contractor:
+        contractor = self.db.get(Contractor, contractor_id)
+        if not contractor:
+            raise ValueError("Contractor not found.")
+        contractor.archived_at = _utcnow()
+        contractor.archived_by = actor
+        contractor.archive_reason = reason
+        self.db.commit()
+        self.db.refresh(contractor)
+        return contractor
+
+    def restore_contractor(self, contractor_id: str, *, actor: str) -> Contractor:
+        contractor = self.db.get(Contractor, contractor_id)
+        if not contractor:
+            raise ValueError("Contractor not found.")
+        contractor.archived_at = None
+        contractor.archived_by = None
+        contractor.archive_reason = None
         self.db.commit()
         self.db.refresh(contractor)
         return contractor
@@ -708,6 +753,8 @@ class JanitorialOsService:
         contractor = self.db.get(Contractor, contractor_id)
         if not contractor:
             raise ValueError("Contractor not found.")
+        if contractor.archived_at is not None:
+            raise ValueError("Archived contractors cannot be used for new pursuit handoffs.")
         opportunity = self.create_pursuit_from_contract(
             payload.contract_id,
             CreatePursuitFromContractRequest.model_validate(payload.model_dump(exclude={"contract_id"})),
@@ -738,9 +785,13 @@ class JanitorialOsService:
         contractor = self.db.get(Contractor, contractor_id)
         if not contractor:
             raise ValueError("Contractor not found.")
+        if contractor.archived_at is not None:
+            raise ValueError("Archived contractors cannot be linked to active opportunities.")
         opportunity = self.db.get(Opportunity, payload.opportunity_id)
         if not opportunity:
             raise ValueError("Opportunity not found.")
+        if opportunity.archived_at is not None:
+            raise ValueError("Archived opportunities cannot be updated.")
         commercial = self.upsert_commercial(
             payload.opportunity_id,
             CommercialCreate(contractor_id=contractor_id),
@@ -820,6 +871,77 @@ class JanitorialOsService:
         self.db.commit()
         self.db.refresh(row)
         return _ux_feedback_response(row)
+
+    def list_recommendation_checkpoints(self) -> list[UxRecommendationCheckpoint]:
+        stmt = select(UxRecommendationCheckpoint).order_by(
+            UxRecommendationCheckpoint.updated_at.desc(),
+            UxRecommendationCheckpoint.created_at.desc(),
+        )
+        return list(self.db.scalars(stmt))
+
+    def approve_recommendation_checkpoint(
+        self,
+        payload: UxRecommendationCheckpointCreate,
+    ) -> UxRecommendationCheckpointResponse:
+        stmt = (
+            select(UxRecommendationCheckpoint)
+            .where(
+                UxRecommendationCheckpoint.code == payload.code,
+                UxRecommendationCheckpoint.page_key == payload.page_key,
+                UxRecommendationCheckpoint.path == payload.path,
+            )
+            .order_by(UxRecommendationCheckpoint.updated_at.desc(), UxRecommendationCheckpoint.created_at.desc())
+        )
+        existing = next(
+            (row for row in self.db.scalars(stmt) if _is_open_checkpoint_status(row.status)),
+            None,
+        )
+        if existing:
+            if payload.owner:
+                existing.owner = payload.owner
+            if payload.notes:
+                existing.notes = payload.notes
+            if payload.due_date:
+                existing.due_date = payload.due_date
+            if payload.approved_by and not existing.approved_by:
+                existing.approved_by = payload.approved_by
+            self.db.commit()
+            self.db.refresh(existing)
+            return _ux_checkpoint_response(existing)
+
+        row = UxRecommendationCheckpoint(
+            code=payload.code,
+            page_key=payload.page_key,
+            path=payload.path,
+            title=payload.title,
+            rationale=payload.rationale,
+            proposed_action=payload.proposed_action,
+            status=UxRecommendationCheckpointStatus.APPROVED.value,
+            owner=payload.owner,
+            notes=payload.notes,
+            due_date=payload.due_date,
+            approved_by=payload.approved_by,
+        )
+        self.db.add(row)
+        self.db.commit()
+        self.db.refresh(row)
+        return _ux_checkpoint_response(row)
+
+    def update_recommendation_checkpoint(
+        self,
+        checkpoint_id: str,
+        payload: UxRecommendationCheckpointStatusUpdate,
+    ) -> UxRecommendationCheckpointResponse:
+        row = self.db.get(UxRecommendationCheckpoint, checkpoint_id)
+        if not row:
+            raise ValueError("Recommendation checkpoint not found.")
+        row.status = payload.status.value
+        row.owner = payload.owner
+        row.notes = payload.notes
+        row.due_date = payload.due_date
+        self.db.commit()
+        self.db.refresh(row)
+        return _ux_checkpoint_response(row)
 
     def summarize_ux_friction(self, *, lookback_days: int = 14) -> UxFrictionSummaryResponse:
         lookback_days = min(max(lookback_days, 1), 90)
@@ -906,10 +1028,21 @@ class JanitorialOsService:
             if row.feedback_type == UxFeedbackType.MANUAL_WORKAROUND.value:
                 stats["manual_overrides"] += 1
 
+        checkpoints = self.list_recommendation_checkpoints()
+        checkpoint_lookup: dict[tuple[str, str, str], UxRecommendationCheckpoint] = {}
+        checkpoint_status_counts = Counter(row.status for row in checkpoints)
+        for checkpoint in checkpoints:
+            key = (checkpoint.code, checkpoint.page_key, checkpoint.path)
+            current = checkpoint_lookup.get(key)
+            if current is None or (
+                _is_open_checkpoint_status(checkpoint.status) and not _is_open_checkpoint_status(current.status)
+            ):
+                checkpoint_lookup[key] = checkpoint
+
         top_pages: list[UxPageFrictionSummary] = []
         findings: list[UxFrictionFinding] = []
         recommendations: list[UxRecommendation] = []
-        recommendation_keys: set[tuple[str, str]] = set()
+        recommendation_keys: set[tuple[str, str, str]] = set()
 
         def add_recommendation(
             *,
@@ -920,10 +1053,11 @@ class JanitorialOsService:
             rationale: str,
             proposed_action: str,
         ) -> None:
-            dedupe_key = (code, page_key)
+            dedupe_key = (code, page_key, path)
             if dedupe_key in recommendation_keys:
                 return
             recommendation_keys.add(dedupe_key)
+            checkpoint = checkpoint_lookup.get(dedupe_key)
             recommendations.append(
                 UxRecommendation(
                     code=code,
@@ -932,6 +1066,10 @@ class JanitorialOsService:
                     title=title,
                     rationale=rationale,
                     proposed_action=proposed_action,
+                    checkpoint_id=checkpoint.id if checkpoint else None,
+                    checkpoint_status=checkpoint.status if checkpoint else None,
+                    checkpoint_owner=checkpoint.owner if checkpoint else None,
+                    checkpoint_due_date=checkpoint.due_date if checkpoint else None,
                 )
             )
 
@@ -1185,6 +1323,9 @@ class JanitorialOsService:
             findings=findings[:12],
             recommendations=recommendations[:12],
             recent_feedback=recent_feedback,
+            open_checkpoints_total=sum(1 for row in checkpoints if _is_open_checkpoint_status(row.status)),
+            checkpoint_status_counts=dict(checkpoint_status_counts),
+            checkpoints=[_ux_checkpoint_response(row) for row in checkpoints[:20]],
         )
 
     def _dashboard_follow_up_summary(self, contractor: Contractor) -> DashboardContractorFollowUpSummary:
@@ -1575,6 +1716,12 @@ class JanitorialOsService:
         opportunity = self.db.get(Opportunity, opportunity_id)
         if not opportunity:
             raise ValueError("Opportunity not found.")
+        if opportunity.archived_at is not None:
+            raise ValueError("Archived opportunities cannot be updated.")
+        if payload.contractor_id:
+            contractor = self.db.get(Contractor, payload.contractor_id)
+            if contractor and contractor.archived_at is not None:
+                raise ValueError("Archived contractors cannot be selected for new commercial engagements.")
         commercial = self.get_commercial(opportunity_id)
         if not commercial:
             commercial = CommercialEngagement(opportunity_id=opportunity_id)
@@ -1598,26 +1745,51 @@ class JanitorialOsService:
         today = date.today()
         upcoming_cutoff = today + timedelta(days=14)
         friction_summary = self.summarize_ux_friction()
+        intelligence_summary = OpportunityIntelligenceService(self.db).summary()
         upcoming_contracts = self.list_contracts(rebid_within_days=180)[:8]
-        opportunities = list(self.db.scalars(select(Opportunity).order_by(Opportunity.qualification_score.desc())))
+        opportunities = list(
+            self.db.scalars(
+                select(Opportunity)
+                .where(Opportunity.archived_at.is_(None))
+                .order_by(Opportunity.qualification_score.desc())
+            )
+        )
+        active_opportunity_ids = {opportunity.id for opportunity in opportunities}
         matches = list(
             self.db.scalars(
                 select(OpportunityMatch).order_by(OpportunityMatch.match_score.desc(), OpportunityMatch.updated_at.desc())
             )
         )
-        commercials = list(self.db.scalars(select(CommercialEngagement)))
+        commercials = list(
+            self.db.scalars(
+                select(CommercialEngagement).where(CommercialEngagement.opportunity_id.in_(active_opportunity_ids))
+            )
+        )
         contractors_with_follow_up = list(
             self.db.scalars(
                 select(Contractor)
-                .where(Contractor.next_follow_up_date.is_not(None))
+                .where(
+                    Contractor.archived_at.is_(None),
+                    Contractor.next_follow_up_date.is_not(None),
+                )
                 .order_by(Contractor.next_follow_up_date.asc(), Contractor.name.asc())
             )
         )
         organizations_total = self.db.scalar(select(func.count()).select_from(Organization)) or 0
         facilities_total = self.db.scalar(select(func.count()).select_from(Facility)) or 0
         contracts_total = self.db.scalar(select(func.count()).select_from(ContractRecord)) or 0
-        contractors_total = self.db.scalar(select(func.count()).select_from(Contractor)) or 0
-        pursuits_total = self.db.scalar(select(func.count()).select_from(Opportunity)) or 0
+        contractors_total = (
+            self.db.scalar(
+                select(func.count()).select_from(Contractor).where(Contractor.archived_at.is_(None))
+            )
+            or 0
+        )
+        pursuits_total = (
+            self.db.scalar(
+                select(func.count()).select_from(Opportunity).where(Opportunity.archived_at.is_(None))
+            )
+            or 0
+        )
         active_counts = Counter(opportunity.pursuit_stage for opportunity in opportunities)
         stage_metrics = Counter(opportunity.proposal_stage for opportunity in opportunities)
         total_pipeline = round(sum(opportunity.weighted_pipeline_value or 0.0 for opportunity in opportunities), 2)
@@ -1664,7 +1836,12 @@ class JanitorialOsService:
         for match in matches[:8]:
             opportunity = self.db.get(Opportunity, match.opportunity_id)
             contractor = self.db.get(Contractor, match.contractor_id)
-            if not opportunity or not contractor:
+            if (
+                not opportunity
+                or not contractor
+                or opportunity.archived_at is not None
+                or contractor.archived_at is not None
+            ):
                 continue
             top_matches.append(
                 DashboardMatchSummary(
@@ -1694,6 +1871,7 @@ class JanitorialOsService:
             contracts_total=contracts_total,
             contractors_total=contractors_total,
             pursuits_total=pursuits_total,
+            intelligence_summary=intelligence_summary,
             upcoming_rebids=upcoming_rebids,
             hottest_opportunities=hottest_opportunities,
             top_matches=top_matches,
@@ -1920,3 +2098,4 @@ class JanitorialOsService:
             ]
         )
         self.db.commit()
+        OpportunityIntelligenceService(self.db).seed_demo_data()

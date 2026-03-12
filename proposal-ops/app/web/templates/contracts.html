@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
 {% block content %}
 <section>
   <h2>Contract Radar</h2>
@@ -26,7 +27,8 @@
   </form>
 
   <h3>Create Contract</h3>
-  <form method="post" action="/contracts">
+  <form method="post" action="/contracts" data-ux-form="contract_create">
+    {{ example_controls("contract_create", example_presets) }}
     <label>Organization
       <select name="organization_id" required>
         <option value="">Select</option>
@@ -44,7 +46,13 @@
     <label>Rebid Window Start <input type="date" name="rebid_window_start" value="{{ form_data.rebid_window_start or '' }}" /></label>
     <label>Rebid Window End <input type="date" name="rebid_window_end" value="{{ form_data.rebid_window_end or '' }}" /></label>
     <label>Procurement Source URL <input name="procurement_source_url" value="{{ form_data.procurement_source_url or '' }}" /></label>
-    <label>Source Type <input name="source_type" value="{{ form_data.source_type or 'PUBLIC' }}" /></label>
+    <label>Source Type
+      <select name="source_type">
+        {% for option in form_options.contract_source_types %}
+        <option value="{{ option.value }}" {% if (form_data.source_type or 'PUBLIC') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Facilities
       <select name="facility_ids" multiple>
         {% for facility in facilities %}

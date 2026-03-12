@@ -25,7 +25,7 @@ Current truth:
 
 ### 1. Policy / Procurement Intelligence
 - Monitor budgets, agendas, legislation, regulatory movement, rebid timing, and procurement-adjacent signals.
-- Current state: codified as the target operating model and documentation standard; still largely manual in the software layer.
+- Current state: implemented as an additive opportunity-intelligence workspace for signal sources, signal events, and opportunity hypotheses.
 
 ### 2. Opportunity Forecasting
 - Turn signals into likely buying events, target accounts, confidence framing, and timing hypotheses.
@@ -66,17 +66,24 @@ Open:
 The current production-quality wedge inside this repo is the **Janitorial Contract Capture OS**.
 
 It supports:
+- upstream opportunity-intelligence tracking
+- organization-backed buying-organization normalization across intelligence and intake flows
+- hypothesis-to-pursuit conversion into the live opportunity workflow, with saved or override advised-contractor seeding
 - contract radar and rebid visibility
 - organizations and facilities
 - contractor prospecting and touchpoints
+- active/archive lifecycle for contractors and opportunities
 - pursuit scoring and contract-to-pursuit handoff
 - capture workbench operations
 - commercials and advised contractor linkage
 - operator dashboard and readiness visibility
 - UX friction feedback capture
+- approval-based friction recommendation checkpoints
 
 Primary web routes:
 - `/dashboard`
+- `/intelligence`
+- `/opportunities`
 - `/organizations`
 - `/facilities`
 - `/contracts`
@@ -86,15 +93,25 @@ Primary web routes:
 - `/ux/friction`
 
 Primary API routes:
+- `GET|POST /api/intelligence/sources`
+- `GET|POST /api/intelligence/signals`
+- `GET|POST /api/intelligence/hypotheses`
+- `POST /api/intelligence/hypotheses/{id}/convert-to-pursuit`
+- `GET /api/intelligence/summary`
 - `GET|POST /api/organizations`
 - `GET|POST /api/facilities`
 - `GET|POST /api/contracts`
 - `POST /api/contracts/import`
 - `POST /api/contracts/{id}/pursuits`
 - `GET|POST /api/contractors`
+- `POST /api/contractors/{contractor_id}/archive`
+- `POST /api/contractors/{contractor_id}/restore`
 - `GET|POST /api/contractors/{contractor_id}/touchpoints`
 - `POST /api/contractors/{contractor_id}/pursuits`
 - `POST /api/contractors/{contractor_id}/opportunity-links`
+- `GET /api/opportunities`
+- `POST /api/opportunities/{id}/archive`
+- `POST /api/opportunities/{id}/restore`
 - `GET|POST /api/opportunities/{id}/contacts`
 - `GET|POST /api/opportunities/{id}/intelligence`
 - `GET|POST /api/opportunities/{id}/evidence`
@@ -105,6 +122,8 @@ Primary API routes:
 - `POST /api/ux/events`
 - `POST /api/ux/feedback`
 - `GET /api/ux/friction-summary`
+- `GET|POST /api/ux/recommendation-checkpoints`
+- `POST /api/ux/recommendation-checkpoints/{id}/status`
 
 ### MVP contract import CSV columns
 
@@ -181,3 +200,11 @@ powershell -ExecutionPolicy Bypass -File .\tools\reset-local-db.ps1
 - Structured signal interpretation is preferred over black-box automation
 - Client deliverables should remain exportable and editable
 - The internal repo remains the master system for reusable methodology and workflow
+
+## Locked Follow-On
+
+The next data-model expansion after this pilot-hardening release is intentionally deferred:
+- manual logo upload for organizations and contractors through a reusable `brand_assets` pattern
+- structured contractor service areas, state/territory coverage, and normalized vertical taxonomy
+- contractor office records for headquarters and regional offices
+- lightweight map views driven by stored office/service-area data rather than live scraping or geocoding

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summer Camp Comparison Tool</title>
+    <meta
+      name="description"
+      content="Interactive summer camp comparison tool built from the March 11, 2026 camp research report for families near Cinnaminson, NJ."
+    />
+    <link rel="stylesheet" href="assets/summer-camp-comparison.css" />
+    <script src="assets/summer-camp-comparison.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Interactive decision tool</p>
+          <h1>Summer camp shortlist builder</h1>
+          <p class="lede">
+            Compare the camps from <strong>Summer camp research.pdf</strong> and rank them for your family.
+            This version starts with the report's original use case: children ages 3 and 5 near Cinnaminson,
+            New Jersey.
+          </p>
+          <div class="hero-actions">
+            <button id="copySummaryButton" type="button" class="button primary">Copy shortlist summary</button>
+            <a class="button ghost" href="file:///C:/Users/timot/Downloads/Summer%20camp%20research.pdf">Open source report</a>
+          </div>
+        </div>
+        <div class="hero-note">
+          <h2>What this tool optimizes</h2>
+          <p>
+            Age fit carries the most weight. Then you can tilt the ranking toward budget, longer coverage,
+            pricing transparency, or program flavor.
+          </p>
+          <p class="micro-note">
+            Report snapshot date: <strong>March 11, 2026</strong>. Camps that do not publish tuition or full
+            schedules are marked so you know where a phone call is still required.
+          </p>
+        </div>
+      </header>
+
+      <section class="summary-grid" id="summaryGrid">
+        <article class="panel stat-card">
+          <span class="stat-label">In play</span>
+          <strong class="stat-value" id="statVisible">0</strong>
+          <p class="stat-note">Camp options matching your hard filters.</p>
+        </article>
+        <article class="panel stat-card">
+          <span class="stat-label">Fits every child</span>
+          <strong class="stat-value" id="statAllKids">0</strong>
+          <p class="stat-note">Options that work for all ages you entered.</p>
+        </article>
+        <article class="panel stat-card">
+          <span class="stat-label">Published pricing</span>
+          <strong class="stat-value" id="statPricing">0</strong>
+          <p class="stat-note">Current or estimated public tuition data.</p>
+        </article>
+        <article class="panel stat-card">
+          <span class="stat-label">Late pickup</span>
+          <strong class="stat-value" id="statLatePickup">0</strong>
+          <p class="stat-note">Options ending at 5:30 PM or later.</p>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <form id="decisionForm" class="panel controls" autocomplete="off">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Family inputs</p>
+              <h2>Set your must-haves</h2>
+            </div>
+            <button id="resetButton" type="button" class="button ghost compact">Reset</button>
+          </div>
+
+          <div class="field-grid two-up">
+            <label class="field">
+              <span class="label">Child 1 age</span>
+              <select id="childAgeOne" name="childAgeOne">
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">Child 2 age</span>
+              <select id="childAgeTwo" name="childAgeTwo">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" selected>5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-grid two-up">
+            <label class="field">
+              <span class="label">Max drive</span>
+              <select id="maxDrive" name="maxDrive">
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="20" selected>20 minutes</option>
+                <option value="25">25 minutes</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">Weekly budget target</span>
+              <select id="weeklyBudget" name="weeklyBudget">
+                <option value="ignore" selected>Ignore budget for now</option>
+                <option value="250">$250 / child</option>
+                <option value="350">$350 / child</option>
+                <option value="500">$500 / child</option>
+                <option value="650">$650 / child</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="toggle-grid">
+            <label class="toggle">
+              <input id="requireAllKids" name="requireAllKids" type="checkbox" checked />
+              <span>One camp must work for every child</span>
+            </label>
+            <label class="toggle">
+              <input id="needExtendedCare" name="needExtendedCare" type="checkbox" />
+              <span>I need long hours or extended care</span>
+            </label>
+            <label class="toggle">
+              <input id="needPublicPricing" name="needPublicPricing" type="checkbox" />
+              <span>Only show camps with public tuition data</span>
+            </label>
+          </div>
+
+          <div class="field">
+            <span class="label">Priority preset</span>
+            <div class="segmented" id="priorityPreset" role="group" aria-label="Priority preset">
+              <button type="button" class="segment is-active" data-priority="balanced">Balanced</button>
+              <button type="button" class="segment" data-priority="budget">Budget</button>
+              <button type="button" class="segment" data-priority="coverage">Long hours</button>
+              <button type="button" class="segment" data-priority="transparency">Clear pricing</button>
+              <button type="button" class="segment" data-priority="enrichment">Program fit</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">Camp style preference</span>
+            <div class="segmented" id="focusPreset" role="group" aria-label="Camp style preference">
+              <button type="button" class="segment is-active" data-focus="any">Any</button>
+              <button type="button" class="segment" data-focus="general">General</button>
+              <button type="button" class="segment" data-focus="arts">Arts</button>
+              <button type="button" class="segment" data-focus="academics">Academic</button>
+              <button type="button" class="segment" data-focus="sports">Sports / swim</button>
+              <button type="button" class="segment" data-focus="stem">STEM / nature</button>
+            </div>
+          </div>
+        </form>
+
+        <aside class="panel explainer">
+          <p class="eyebrow">How to read the output</p>
+          <h2>Fit score is a decision aid, not a guarantee</h2>
+          <ul class="micro-list">
+            <li>Direct age matches score higher than camps where fit is inferred from broad preschool wording.</li>
+            <li>Published tuition beats "contact us" because it makes tradeoffs easier to compare.</li>
+            <li>When you enable long hours, camps ending at 5:30 PM or later move up quickly.</li>
+            <li>Use compare mode for a side-by-side table of schedule, costs, and tradeoffs.</li>
+          </ul>
+          <p class="micro-note">
+            If you change the ages beyond the report's original 3-and-5 scope, rankings still use published age
+            windows where available, but some early-childhood centers remain best-effort approximations.
+          </p>
+        </aside>
+      </section>
+
+      <section class="insight-grid" id="insightGrid"></section>
+
+      <section id="comparisonPanel" class="panel comparison-panel is-hidden" aria-live="polite"></section>
+
+      <section class="results-head">
+        <div>
+          <p class="eyebrow">Ranked list</p>
+          <h2>Camp options</h2>
+          <p class="micro-note" id="resultsSummary"></p>
+        </div>
+        <label class="field sort-field">
+          <span class="label">Sort by</span>
+          <select id="sortMode" name="sortMode">
+            <option value="fit" selected>Best fit</option>
+            <option value="cost">Lowest published cost</option>
+            <option value="distance">Shortest drive</option>
+            <option value="coverage">Longest day</option>
+            <option value="pricing">Best pricing transparency</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="results" class="results-grid" aria-live="polite"></section>
+
+      <footer class="panel footer-note">
+        <p>
+          Built from the report at <strong>c:\Users\timot\Downloads\Summer camp research.pdf</strong>. Verify
+          current openings, 2026 tuition, and sibling policies directly with each camp before enrolling.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

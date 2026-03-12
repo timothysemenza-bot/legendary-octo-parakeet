@@ -39,8 +39,11 @@ class OpportunityRepository:
         self.db.flush()
         return draft
 
-    def list_opportunities(self) -> list[Opportunity]:
-        stmt = select(Opportunity).order_by(Opportunity.created_at.desc())
+    def list_opportunities(self, *, include_archived: bool = False) -> list[Opportunity]:
+        stmt = select(Opportunity)
+        if not include_archived:
+            stmt = stmt.where(Opportunity.archived_at.is_(None))
+        stmt = stmt.order_by(Opportunity.created_at.desc())
         return list(self.db.scalars(stmt))
 
     def get_opportunity(self, opportunity_id: str) -> Opportunity | None:

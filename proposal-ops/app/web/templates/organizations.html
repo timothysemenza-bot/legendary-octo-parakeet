@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_form_examples.html" import controls as example_controls %}
 {% block content %}
 <section>
   <h2>Organizations</h2>
@@ -9,9 +10,16 @@
     {% endfor %}
   </ul>
   {% endif %}
-  <form method="post" action="/organizations">
+  <form method="post" action="/organizations" data-ux-form="organization_create">
+    {{ example_controls("organization_create", example_presets) }}
     <label>Name <input name="name" value="{{ form_data.name or '' }}" required /></label>
-    <label>Type <input name="organization_type" value="{{ form_data.organization_type or 'OTHER' }}" /></label>
+    <label>Type
+      <select name="organization_type">
+        {% for option in form_options.organization_types %}
+        <option value="{{ option.value }}" {% if (form_data.organization_type or 'OTHER') == option.value %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>City <input name="city" value="{{ form_data.city or '' }}" /></label>
     <label>State <input name="state" value="{{ form_data.state or '' }}" /></label>
     <label>Website <input name="website_url" value="{{ form_data.website_url or '' }}" /></label>
@@ -27,6 +35,7 @@
         <th>Name</th>
         <th>Type</th>
         <th>Location</th>
+        <th>Procurement</th>
       </tr>
     </thead>
     <tbody>
@@ -35,6 +44,7 @@
         <td><a href="/organizations/{{ item.id }}">{{ item.name }}</a></td>
         <td>{{ item.organization_type }}</td>
         <td>{{ item.city or '' }} {{ item.state or '' }}</td>
+        <td>{% if item.procurement_url %}<a href="{{ item.procurement_url }}">Source</a>{% else %}-{% endif %}</td>
       </tr>
       {% endfor %}
     </tbody>

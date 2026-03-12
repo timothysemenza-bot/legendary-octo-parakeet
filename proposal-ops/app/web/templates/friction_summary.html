@@ -6,9 +6,46 @@
     <strong>Lookback:</strong> {{ summary.lookback_days }} days |
     <strong>Tracked Sessions:</strong> {{ summary.tracked_sessions }} |
     <strong>Events:</strong> {{ summary.total_events }} |
-    <strong>Feedback Entries:</strong> {{ summary.total_feedback }}
+    <strong>Feedback Entries:</strong> {{ summary.total_feedback }} |
+    <strong>Open Checkpoints:</strong> {{ summary.open_checkpoints_total }}
   </p>
+  {% if summary.checkpoint_status_counts %}
+  <p>
+    {% for status, count in summary.checkpoint_status_counts.items() %}
+    <strong>{{ status }}:</strong> {{ count }}{% if not loop.last %} | {% endif %}
+    {% endfor %}
+  </p>
+  {% endif %}
   <p>Recommendations are surfaced for approval only. This screen does not silently change workflows.</p>
+
+  <h3>Approved Actions Queue</h3>
+  <p class="muted">Recommendation Checkpoints are shown here as the current implementation queue.</p>
+  {% if summary.checkpoints %}
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Recommendation</th>
+        <th>Owner</th>
+        <th>Due</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary.checkpoints %}
+      <tr>
+        <td>{{ item.status }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.owner or "-" }}</td>
+        <td>{{ item.due_date or "-" }}</td>
+        <td>{{ item.notes or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No approved actions yet.</p>
+  {% endif %}
 
   <h3>Recommendations</h3>
   {% if summary.recommendations %}
@@ -20,11 +57,78 @@
       {{ item.rationale }}
       <br />
       <em>Proposed action:</em> {{ item.proposed_action }}
+      {% if item.checkpoint_id %}
+      <br />
+      <span class="status-chip">{{ item.checkpoint_status }}</span>
+      {% if item.checkpoint_owner %}
+      <span class="muted">Owner: {{ item.checkpoint_owner }}</span>
+      {% endif %}
+      {% if item.checkpoint_due_date %}
+      <span class="muted">Due: {{ item.checkpoint_due_date }}</span>
+      {% endif %}
+      {% else %}
+      <form method="post" action="/ux/recommendation-checkpoints" class="stack">
+        <input type="hidden" name="code" value="{{ item.code }}" />
+        <input type="hidden" name="page_key" value="{{ item.page_key }}" />
+        <input type="hidden" name="path" value="{{ item.path }}" />
+        <input type="hidden" name="title" value="{{ item.title }}" />
+        <input type="hidden" name="rationale" value="{{ item.rationale }}" />
+        <input type="hidden" name="proposed_action" value="{{ item.proposed_action }}" />
+        <input type="hidden" name="return_to" value="/ux/friction" />
+        <div class="compact-grid">
+          <label>Owner <input name="owner" placeholder="Optional owner" /></label>
+          <label>Due Date <input type="date" name="due_date" /></label>
+          <label>Approved By <input name="approved_by" value="operator" /></label>
+        </div>
+        <label>Implementation Notes
+          <textarea name="notes" rows="2" placeholder="Optional delivery notes"></textarea>
+        </label>
+        <button type="submit">Approve As Checkpoint</button>
+      </form>
+      {% endif %}
     </li>
     {% endfor %}
   </ul>
   {% else %}
   <p>No recommendations yet. Use the system and submit feedback to build a signal base.</p>
+  {% endif %}
+
+  <h3>Checkpoint Detail</h3>
+  {% if summary.checkpoints %}
+  <ul>
+    {% for item in summary.checkpoints %}
+    <li>
+      <strong>{{ item.title }}</strong> on {{ item.page_key }}
+      <br />
+      <span class="status-chip">{{ item.status }}</span>
+      {% if item.owner %}<span class="muted">Owner: {{ item.owner }}</span>{% endif %}
+      {% if item.due_date %}<span class="muted">Due: {{ item.due_date }}</span>{% endif %}
+      <br />
+      {{ item.proposed_action }}
+      <form method="post" action="/ux/recommendation-checkpoints/{{ item.id }}/status" class="stack">
+        <input type="hidden" name="return_to" value="/ux/friction" />
+        <div class="compact-grid">
+          <label>Status
+            <select name="status">
+              <option value="APPROVED" {% if item.status == 'APPROVED' %}selected{% endif %}>Approved</option>
+              <option value="IN_PROGRESS" {% if item.status == 'IN_PROGRESS' %}selected{% endif %}>In Progress</option>
+              <option value="IMPLEMENTED" {% if item.status == 'IMPLEMENTED' %}selected{% endif %}>Implemented</option>
+              <option value="REJECTED" {% if item.status == 'REJECTED' %}selected{% endif %}>Rejected</option>
+            </select>
+          </label>
+          <label>Owner <input name="owner" value="{{ item.owner or '' }}" /></label>
+          <label>Due Date <input type="date" name="due_date" value="{{ item.due_date or '' }}" /></label>
+        </div>
+        <label>Notes
+          <textarea name="notes" rows="2">{{ item.notes or '' }}</textarea>
+        </label>
+        <button type="submit">Update Checkpoint</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No implementation checkpoints yet.</p>
   {% endif %}
 
   <h3>Friction Findings</h3>

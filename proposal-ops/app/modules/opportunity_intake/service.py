@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -33,6 +33,7 @@ from app.modules.review_manager.service import ReviewManagerService
 from app.modules.submission_checklist.service import SubmissionChecklistService
 from app.modules.knowledge.service import KnowledgeService
 from app.modules.opportunity_intake.schemas import (
+    ArchiveActionRequest,
     GateDecisionRequest,
     OpportunityDetailResponse,
     OpportunityIntakeDraftConfirmRequest,
@@ -239,6 +240,20 @@ class OpportunityIntakeService:
         self.db = db
         self.repo = OpportunityRepository(db)
 
+    def _organization_name(self, organization_id: str | None) -> str | None:
+        if not organization_id:
+            return None
+        from app.modules.janitorial_os.models import Organization
+
+        organization = self.db.get(Organization, organization_id)
+        return organization.name if organization else None
+
+    def _resolve_client_name(self, client: str, buying_organization_id: str | None) -> str:
+        organization_name = self._organization_name(buying_organization_id)
+        if buying_organization_id and not organization_name:
+            raise ValueError("buying_organization_id is not valid.")
+        return organization_name or client
+
     def _create_intake_records(
         self,
         payload: OpportunityIntakeRequest,
@@ -257,7 +272,7 @@ class OpportunityIntakeService:
 
         opportunity = Opportunity(
             name=payload.name,
-            client=payload.client,
+            client=self._resolve_client_name(payload.client, payload.buying_organization_id),
             estimated_contract_value=payload.estimated_contract_value,
             lead_time_days=payload.lead_time_days,
             incumbent_status=payload.incumbent_status,
@@ -271,6 +286,7 @@ class OpportunityIntakeService:
             provenance_summary="Manual intake created without linked contract radar record.",
             score_breakdown_json=json.dumps(breakdown),
             weighted_pipeline_value=weighted_pipeline_value(payload.estimated_contract_value, score),
+            buying_organization_id=payload.buying_organization_id,
         )
         sync_pursuit_fields(opportunity, explicit_pursuit_stage)
         self.repo.add_opportunity(opportunity)
@@ -316,6 +332,39 @@ class OpportunityIntakeService:
         _opportunity, _capture_plan, result = self._create_intake_records(payload)
         self.db.commit()
         return result
+
+    def create_bootstrapped_pursuit(
+        self,
+        payload: OpportunityIntakeRequest,
+        *,
+        explicit_pursuit_stage: str,
+        buying_organization_id: str | None = None,
+        primary_contract_id: str | None = None,
+        primary_facility_id: str | None = None,
+        confidence_level: str = "MEDIUM",
+        expected_rfp_date: date | None = None,
+        provenance_summary: str | None = None,
+        provenance_last_verified_at: datetime | None = None,
+        commit: bool = True,
+    ) -> Opportunity:
+        opportunity, _capture_plan, _result = self._create_intake_records(
+            payload,
+            explicit_pursuit_stage=explicit_pursuit_stage,
+        )
+        if buying_organization_id:
+            opportunity.buying_organization_id = buying_organization_id
+            opportunity.client = self._resolve_client_name(opportunity.client, buying_organization_id)
+        opportunity.primary_contract_id = primary_contract_id
+        opportunity.primary_facility_id = primary_facility_id
+        opportunity.confidence_level = confidence_level
+        opportunity.expected_rfp_date = expected_rfp_date
+        opportunity.provenance_summary = provenance_summary
+        opportunity.provenance_last_verified_at = provenance_last_verified_at
+        self.db.flush()
+        if commit:
+            self.db.commit()
+            self.db.refresh(opportunity)
+        return opportunity
 
     def _build_rfp_intake_result(
         self,
@@ -496,6 +545,7 @@ class OpportunityIntakeService:
         effective_payload = OpportunityIntakeRequest(
             name=payload.name,
             client=payload.client,
+            buying_organization_id=payload.buying_organization_id,
             estimated_contract_value=payload.estimated_contract_value,
             lead_time_days=payload.lead_time_days,
             incumbent_status=payload.incumbent_status,
@@ -528,8 +578,8 @@ class OpportunityIntakeService:
             self.db.rollback()
             raise
 
-    def list_opportunities(self) -> list[Opportunity]:
-        return self.repo.list_opportunities()
+    def list_opportunities(self, *, include_archived: bool = False) -> list[Opportunity]:
+        return self.repo.list_opportunities(include_archived=include_archived)
 
     def workflow_timeline(
         self, opportunity_id: str, *, category: str = "ALL", limit: int = 200
@@ -553,14 +603,6 @@ class OpportunityIntakeService:
                 }
             )
         return rows
-
-    def _organization_name(self, organization_id: str | None) -> str | None:
-        if not organization_id:
-            return None
-        from app.modules.janitorial_os.models import Organization
-
-        organization = self.db.get(Organization, organization_id)
-        return organization.name if organization else None
 
     def _contract_title(self, contract_id: str | None) -> str | None:
         if not contract_id:
@@ -614,12 +656,37 @@ class OpportunityIntakeService:
             score_breakdown_json=opportunity.score_breakdown_json,
             bidder_fit_score=opportunity.bidder_fit_score,
             weighted_pipeline_value=opportunity.weighted_pipeline_value,
+            archived_at=opportunity.archived_at,
+            archived_by=opportunity.archived_by,
+            archive_reason=opportunity.archive_reason,
             created_at=opportunity.created_at,
             updated_at=opportunity.updated_at,
             capture_plan=capture_plan,
             gate_decisions=gate_decisions,
             audit_events=audit_events,
         )
+
+    def archive_opportunity(self, opportunity_id: str, payload: ArchiveActionRequest) -> Opportunity:
+        opportunity = self.repo.get_opportunity(opportunity_id)
+        if not opportunity:
+            raise ValueError("Opportunity not found.")
+        opportunity.archived_at = datetime.now(UTC).replace(tzinfo=None)
+        opportunity.archived_by = payload.actor
+        opportunity.archive_reason = payload.reason
+        self.db.commit()
+        self.db.refresh(opportunity)
+        return opportunity
+
+    def restore_opportunity(self, opportunity_id: str, payload: ArchiveActionRequest) -> Opportunity:
+        opportunity = self.repo.get_opportunity(opportunity_id)
+        if not opportunity:
+            raise ValueError("Opportunity not found.")
+        opportunity.archived_at = None
+        opportunity.archived_by = None
+        opportunity.archive_reason = None
+        self.db.commit()
+        self.db.refresh(opportunity)
+        return opportunity
 
     def add_gate_decision(self, opportunity_id: str, payload: GateDecisionRequest) -> GateDecisionRecord | None:
         opportunity = self.repo.get_opportunity(opportunity_id)

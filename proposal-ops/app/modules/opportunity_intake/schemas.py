@@ -43,6 +43,7 @@ class IntakeRfpFieldStatus(StrEnum):
 class OpportunityIntakeRequest(BaseModel):
     name: str = Field(min_length=3, max_length=255)
     client: str = Field(min_length=2, max_length=255)
+    buying_organization_id: str | None = None
     estimated_contract_value: float = Field(gt=0)
     lead_time_days: int = Field(ge=1, le=3650)
     incumbent_status: bool
@@ -115,12 +116,18 @@ class OpportunityIntakeDraftResponse(BaseModel):
 class OpportunityIntakeDraftConfirmRequest(BaseModel):
     name: str = Field(min_length=3, max_length=255)
     client: str = Field(min_length=2, max_length=255)
+    buying_organization_id: str | None = None
     estimated_contract_value: float = Field(gt=0)
     lead_time_days: int = Field(ge=1, le=3650)
     incumbent_status: bool
     strategic_alignment: int = Field(ge=1, le=5)
     estimated_probability_win: int = Field(ge=0, le=100)
     actor: str | None = Field(default=None)
+
+
+class ArchiveActionRequest(BaseModel):
+    actor: str = Field(default="operator", min_length=2, max_length=120)
+    reason: str | None = Field(default=None, max_length=2000)
 
 
 class GateDecisionRequest(BaseModel):
@@ -251,6 +258,9 @@ class OpportunityDetailResponse(BaseModel):
     score_breakdown_json: str | None
     bidder_fit_score: float | None
     weighted_pipeline_value: float | None
+    archived_at: datetime | None
+    archived_by: str | None
+    archive_reason: str | None
     created_at: datetime
     updated_at: datetime
     capture_plan: CapturePlanTemplate | None

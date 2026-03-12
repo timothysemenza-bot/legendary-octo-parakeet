@@ -4,6 +4,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.modules.opportunity_intelligence.schemas import OpportunityIntelligenceSummaryResponse
+
 
 class OrganizationType(StrEnum):
     AIRPORT = "AIRPORT"
@@ -163,6 +165,13 @@ class VoiceNoteStatus(StrEnum):
     LINKED = "LINKED"
 
 
+class UxRecommendationCheckpointStatus(StrEnum):
+    APPROVED = "APPROVED"
+    IN_PROGRESS = "IN_PROGRESS"
+    IMPLEMENTED = "IMPLEMENTED"
+    REJECTED = "REJECTED"
+
+
 def _choice_token(value: str) -> str:
     return str(value).strip().upper().replace("-", "_").replace("/", "_").replace(" ", "_")
 
@@ -219,6 +228,11 @@ class OrganizationBase(BaseModel):
     website_url: str | None = Field(default=None, max_length=255)
     procurement_url: str | None = Field(default=None, max_length=255)
     notes: str | None = None
+
+    @field_validator("organization_type", mode="before")
+    @classmethod
+    def _normalize_organization_type(cls, value: object) -> object:
+        return _coerce_enum_value(value, OrganizationType)
 
 
 class OrganizationCreate(OrganizationBase):
@@ -433,6 +447,9 @@ class ContractorResponse(ContractorBase):
     scale_band: str
     prospect_stage: str
     last_touch_at: datetime | None = None
+    archived_at: datetime | None = None
+    archived_by: str | None = None
+    archive_reason: str | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -604,6 +621,54 @@ class UxRecommendation(BaseModel):
     rationale: str
     proposed_action: str
     requires_approval: bool = True
+    checkpoint_id: str | None = None
+    checkpoint_status: str | None = None
+    checkpoint_owner: str | None = None
+    checkpoint_due_date: date | None = None
+
+
+class UxRecommendationCheckpointCreate(BaseModel):
+    code: str = Field(min_length=2, max_length=120)
+    page_key: str = Field(min_length=1, max_length=160)
+    path: str = Field(min_length=1, max_length=255)
+    title: str = Field(min_length=3, max_length=255)
+    rationale: str = Field(min_length=5)
+    proposed_action: str = Field(min_length=5)
+    owner: str | None = Field(default=None, max_length=120)
+    notes: str | None = None
+    due_date: date | None = None
+    approved_by: str | None = Field(default=None, max_length=120)
+
+
+class UxRecommendationCheckpointStatusUpdate(BaseModel):
+    status: UxRecommendationCheckpointStatus
+    owner: str | None = Field(default=None, max_length=120)
+    notes: str | None = None
+    due_date: date | None = None
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def _normalize_status(cls, value: object) -> object:
+        return _coerce_enum_value(value, UxRecommendationCheckpointStatus)
+
+
+class UxRecommendationCheckpointResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    code: str
+    page_key: str
+    path: str
+    title: str
+    rationale: str
+    proposed_action: str
+    status: str
+    owner: str | None = None
+    notes: str | None = None
+    due_date: date | None = None
+    approved_by: str | None = None
+    created_at: datetime
+    updated_at: datetime
 
 
 class UxFrictionSummaryResponse(BaseModel):
@@ -616,6 +681,9 @@ class UxFrictionSummaryResponse(BaseModel):
     findings: list[UxFrictionFinding]
     recommendations: list[UxRecommendation]
     recent_feedback: list[UxFeedbackResponse]
+    open_checkpoints_total: int
+    checkpoint_status_counts: dict[str, int]
+    checkpoints: list[UxRecommendationCheckpointResponse]
 
 
 class CreatePursuitFromContractRequest(BaseModel):
@@ -920,6 +988,7 @@ class DashboardSummaryResponse(BaseModel):
     contracts_total: int
     contractors_total: int
     pursuits_total: int
+    intelligence_summary: OpportunityIntelligenceSummaryResponse
     upcoming_rebids: list[DashboardContractSummary]
     hottest_opportunities: list[DashboardOpportunitySummary]
     top_matches: list[DashboardMatchSummary]

@@ -8,6 +8,60 @@ def test_intake_form_renders(client: TestClient) -> None:
     assert "Start From RFP Files" in response.text
     assert "Manual Intake Backup" in response.text
     assert "Build Intake Draft From RFP Files" in response.text
+    assert '<select name="buying_organization_id">' in response.text
+    assert "Load Example" in response.text
+    assert "Clear Example" in response.text
+
+
+def test_dashboard_and_opportunities_render_distinct_views_with_lifecycle_nav(client: TestClient) -> None:
+    dashboard = client.get("/dashboard")
+    assert dashboard.status_code == 200
+    assert "Boss Key Opportunity Dashboard" in dashboard.text
+    assert "Overview" in dashboard.text
+    assert "Source" in dashboard.text
+    assert "Pursue" in dashboard.text
+    assert "Operate" in dashboard.text
+    assert 'href="/opportunities"' in dashboard.text
+
+    opportunities = client.get("/opportunities")
+    assert opportunities.status_code == 200
+    assert "Opportunities" in opportunities.text
+    assert "Active pursuits only by default." in opportunities.text
+    assert "Boss Key Opportunity Dashboard" not in opportunities.text
+
+
+def test_web_submission_uses_selected_buying_organization(client: TestClient) -> None:
+    organization = client.post(
+        "/api/organizations",
+        json={
+            "name": "City of Springfield",
+            "organization_type": "MUNICIPALITY",
+            "city": "Springfield",
+            "state": "PA",
+        },
+    )
+    assert organization.status_code == 200
+    organization_id = organization.json()["id"]
+
+    response = client.post(
+        "/intake",
+        data={
+            "name": "Operations Pursuit",
+            "client": "",
+            "buying_organization_id": organization_id,
+            "estimated_contract_value": "900000",
+            "lead_time_days": "35",
+            "strategic_alignment": "4",
+            "estimated_probability_win": "70",
+            "actor": "operator",
+        },
+    )
+    assert response.status_code == 200
+    assert "City of Springfield" in response.text
+
+    detail = client.get("/api/opportunities").json()[0]
+    assert detail["client"] == "City of Springfield"
+    assert detail["buying_organization_id"] == organization_id
 
 
 def test_successful_web_submission_shows_score(client: TestClient) -> None:
@@ -250,6 +304,52 @@ def test_detail_page_shows_gate_decision_history(client: TestClient) -> None:
     assert detail.status_code == 200
     assert "Gate Decisions" in detail.text
     assert "REWORK_REQUIRED" in detail.text
+    assert "$400,000" in detail.text
+
+
+def test_opportunity_archive_and_restore_ui(client: TestClient) -> None:
+    intake = client.post(
+        "/api/opportunities/intake",
+        json={
+            "name": "Archive Candidate Pursuit",
+            "client": "Metro Transit",
+            "estimated_contract_value": 400000,
+            "lead_time_days": 25,
+            "incumbent_status": True,
+            "strategic_alignment": 3,
+            "estimated_probability_win": 55,
+            "actor": "operator",
+        },
+    ).json()
+
+    detail = client.get(f"/opportunities/{intake['id']}")
+    assert detail.status_code == 200
+    assert "Archive Opportunity" in detail.text
+
+    archived = client.post(
+        f"/opportunities/{intake['id']}/archive",
+        data={"actor": "operator", "reason": "Closed for pilot hardening review"},
+        follow_redirects=True,
+    )
+    assert archived.status_code == 200
+    assert "Archived" in archived.text
+    assert "Restore Opportunity" in archived.text
+
+    listing = client.get("/opportunities")
+    assert listing.status_code == 200
+    assert "Archive Candidate Pursuit" not in listing.text
+
+    include_archived = client.get("/opportunities", params={"include_archived": "true"})
+    assert include_archived.status_code == 200
+    assert "Archive Candidate Pursuit" in include_archived.text
+
+    restored = client.post(
+        f"/opportunities/{intake['id']}/restore",
+        data={"actor": "operator"},
+        follow_redirects=True,
+    )
+    assert restored.status_code == 200
+    assert "Archive Opportunity" in restored.text
 
 
 def test_gate_inbox_page_renders_and_accepts_decision(client: TestClient) -> None:

@@ -202,6 +202,55 @@ def test_contractor_prospect_pipeline_api(client: TestClient) -> None:
     assert any(item["contractor_id"] == overdue.json()["id"] for item in body["overdue_contractor_follow_ups"])
 
 
+def test_contractor_archive_and_restore_api(client: TestClient) -> None:
+    contractor = client.post(
+        "/api/contractors",
+        json={
+            "name": "Archive Candidate Contractor",
+            "service_geographies": "NJ",
+            "headquarters_city": "Trenton",
+            "headquarters_state": "NJ",
+            "vertical_experience": "municipal",
+            "labor_profile": "W2 self-perform",
+            "union_profile": "mixed",
+            "scale_band": "LOCAL",
+            "relationship_strength": 3,
+            "prospect_stage": "TARGET",
+            "relationship_notes": "Used to validate archive flow.",
+            "strategic_fit_notes": "Do not include in active selectors after archive.",
+        },
+    )
+    assert contractor.status_code == 200
+    contractor_id = contractor.json()["id"]
+
+    archived = client.post(
+        f"/api/contractors/{contractor_id}/archive",
+        json={"actor": "operator", "reason": "Pilot archive test"},
+    )
+    assert archived.status_code == 200
+    assert archived.json()["archived_by"] == "operator"
+
+    active_listing = client.get("/api/contractors")
+    assert active_listing.status_code == 200
+    assert active_listing.json() == []
+
+    archived_listing = client.get("/api/contractors", params={"include_archived": "true"})
+    assert archived_listing.status_code == 200
+    assert archived_listing.json()[0]["id"] == contractor_id
+
+    dashboard = client.get("/api/dashboard/summary")
+    assert dashboard.status_code == 200
+    assert dashboard.json()["contractors_total"] == 0
+
+    restored = client.post(f"/api/contractors/{contractor_id}/restore", json={"actor": "operator"})
+    assert restored.status_code == 200
+    assert restored.json()["archived_at"] is None
+
+    restored_listing = client.get("/api/contractors")
+    assert restored_listing.status_code == 200
+    assert restored_listing.json()[0]["id"] == contractor_id
+
+
 def test_contractor_handoff_and_opportunity_link_api(client: TestClient) -> None:
     client.post("/api/dashboard/seed-demo")
     today = date.today()
@@ -700,10 +749,65 @@ def test_ux_friction_summary_api(client: TestClient) -> None:
     assert "formalize_manual_workaround" in recommendation_codes
     assert any(item["note_text"] == "The prospect form feels unclear on first pass." for item in body["recent_feedback"])
 
+    recommendation = next(item for item in body["recommendations"] if item["code"] == "improve_form_guidance")
+    checkpoint = client.post(
+        "/api/ux/recommendation-checkpoints",
+        json={
+            "code": recommendation["code"],
+            "page_key": recommendation["page_key"],
+            "path": recommendation["path"],
+            "title": recommendation["title"],
+            "rationale": recommendation["rationale"],
+            "proposed_action": recommendation["proposed_action"],
+            "owner": "tim",
+            "notes": "Pilot hardening checkpoint.",
+            "approved_by": "tim",
+        },
+    )
+    assert checkpoint.status_code == 200
+    checkpoint_id = checkpoint.json()["id"]
+    assert checkpoint.json()["status"] == "APPROVED"
+
+    duplicate = client.post(
+        "/api/ux/recommendation-checkpoints",
+        json={
+            "code": recommendation["code"],
+            "page_key": recommendation["page_key"],
+            "path": recommendation["path"],
+            "title": recommendation["title"],
+            "rationale": recommendation["rationale"],
+            "proposed_action": recommendation["proposed_action"],
+            "owner": "tim",
+            "notes": "Do not duplicate open checkpoint.",
+            "approved_by": "tim",
+        },
+    )
+    assert duplicate.status_code == 200
+    assert duplicate.json()["id"] == checkpoint_id
+
+    updated = client.post(
+        f"/api/ux/recommendation-checkpoints/{checkpoint_id}/status",
+        json={"status": "IN_PROGRESS", "owner": "tim", "notes": "Implementing now."},
+    )
+    assert updated.status_code == 200
+    assert updated.json()["status"] == "IN_PROGRESS"
+
+    refreshed = client.get("/api/ux/friction-summary", params={"lookback_days": 30})
+    assert refreshed.status_code == 200
+    refreshed_body = refreshed.json()
+    refreshed_recommendation = next(
+        item for item in refreshed_body["recommendations"] if item["code"] == "improve_form_guidance"
+    )
+    assert refreshed_recommendation["checkpoint_id"] == checkpoint_id
+    assert refreshed_recommendation["checkpoint_status"] == "IN_PROGRESS"
+    assert refreshed_body["open_checkpoints_total"] == 1
+    assert refreshed_body["checkpoint_status_counts"]["IN_PROGRESS"] == 1
+
     dashboard = client.get("/api/dashboard/summary")
     assert dashboard.status_code == 200
     dashboard_body = dashboard.json()
     assert dashboard_body["friction_summary"]["total_feedback"] == 2
+    assert dashboard_body["friction_summary"]["open_checkpoints_total"] == 1
 
 
 def test_scoring_profile_update_api(client: TestClient) -> None:

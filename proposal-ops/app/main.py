@@ -24,6 +24,8 @@ from app.modules.notifications.api import api_router as notifications_api_router
 from app.modules.notifications.api import web_router as notifications_web_router
 from app.modules.ops_reporting.api import api_router as ops_api_router
 from app.modules.ops_reporting.api import web_router as ops_web_router
+from app.modules.opportunity_intelligence.api import api_router as intelligence_api_router
+from app.modules.opportunity_intelligence.api import web_router as intelligence_web_router
 from app.modules.opportunity_intake.api import api_router, web_router
 from app.modules.proposal_outline.api import api_router as outline_api_router
 from app.modules.proposal_outline.api import web_router as outline_web_router
@@ -64,6 +66,8 @@ app.include_router(notifications_api_router)
 app.include_router(notifications_web_router)
 app.include_router(ops_api_router)
 app.include_router(ops_web_router)
+app.include_router(intelligence_api_router)
+app.include_router(intelligence_web_router)
 app.include_router(outline_api_router)
 app.include_router(outline_web_router)
 app.include_router(review_api_router)

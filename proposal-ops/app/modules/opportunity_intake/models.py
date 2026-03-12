@@ -39,6 +39,9 @@ class Opportunity(Base):
     score_breakdown_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     bidder_fit_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     weighted_pipeline_value: Mapped[float | None] = mapped_column(Float, nullable=True)
+    archived_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, index=True)
+    archived_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    archive_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False

@@ -315,6 +315,59 @@ def test_list_and_detail_consistency(client: TestClient) -> None:
     assert second["id"] in ids
 
 
+def test_intake_accepts_buying_organization_id_and_archive_filters(client: TestClient) -> None:
+    organization = client.post(
+        "/api/organizations",
+        json={
+            "name": "City of Springfield",
+            "organization_type": "MUNICIPALITY",
+            "city": "Springfield",
+            "state": "PA",
+        },
+    )
+    assert organization.status_code == 200
+    organization_id = organization.json()["id"]
+
+    created = client.post(
+        "/api/opportunities/intake",
+        json=_payload() | {"client": "City of Springfield", "buying_organization_id": organization_id},
+    )
+    assert created.status_code == 200
+    opportunity_id = created.json()["id"]
+
+    detail = client.get(f"/api/opportunities/{opportunity_id}")
+    assert detail.status_code == 200
+    assert detail.json()["buying_organization_id"] == organization_id
+    assert detail.json()["buying_organization_name"] == "City of Springfield"
+
+    archived = client.post(
+        f"/api/opportunities/{opportunity_id}/archive",
+        json={"actor": "operator", "reason": "Pilot archive test"},
+    )
+    assert archived.status_code == 200
+    assert archived.json()["archived_by"] == "operator"
+
+    active_listing = client.get("/api/opportunities")
+    assert active_listing.status_code == 200
+    assert active_listing.json() == []
+
+    archived_listing = client.get("/api/opportunities", params={"include_archived": "true"})
+    assert archived_listing.status_code == 200
+    assert archived_listing.json()[0]["id"] == opportunity_id
+
+    dashboard = client.get("/api/dashboard/summary")
+    assert dashboard.status_code == 200
+    assert dashboard.json()["pursuits_total"] == 0
+
+    restored = client.post(f"/api/opportunities/{opportunity_id}/restore", json={"actor": "operator"})
+    assert restored.status_code == 200
+    assert restored.json()["archived_at"] is None
+
+    restored_listing = client.get("/api/opportunities")
+    assert restored_listing.status_code == 200
+    assert restored_listing.json()[0]["id"] == opportunity_id
+
+
 def test_stage_transition_blocks_drafting_before_gate_c_approval(client: TestClient) -> None:
     intake = client.post("/api/opportunities/intake", json=_payload()).json()
     response = client.post(

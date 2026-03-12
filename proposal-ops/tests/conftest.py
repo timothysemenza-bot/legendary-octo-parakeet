@@ -16,6 +16,7 @@ from app.core.db import Base, engine
 from app.main import app
 from app.modules.identity import models as identity_models  # noqa: F401
 from app.modules.janitorial_os import models as janitorial_models  # noqa: F401
+from app.modules.opportunity_intelligence import models as intelligence_models  # noqa: F401
 from app.modules.opportunity_intake import models  # noqa: F401
 from app.modules.knowledge import models as knowledge_models  # noqa: F401
 from app.modules.notifications import models as notification_models  # noqa: F401
@@ -45,7 +46,7 @@ def reset_db() -> None:
     with engine.begin() as conn:
         conn.execute(text("CREATE TABLE IF NOT EXISTS alembic_version (version_num VARCHAR(32) NOT NULL)"))
         conn.execute(text("DELETE FROM alembic_version"))
-        conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('0027_ux_friction_feedback')"))
+        conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('0031_pilot_hardening_release')"))
     yield
 
 
