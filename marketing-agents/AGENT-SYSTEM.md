@@ -74,6 +74,11 @@ Do not position Boss Key LLC as a generic AI consultancy.
 - Output: ranked pre-RFP government target list, seeded opportunity rows, and seeded pipeline rows for proactive outreach.
 - Rule: prioritize near-term recompetes and named office contacts.
 
+15. `Agent 15: Boss Key Content Operator`
+- Input: rough notes, voice-note transcripts, video transcripts, or meeting transcripts.
+- Output: one LinkedIn post, one short video caption, one document/carousel outline, three comment replies, two DM follow-ups, and operator notes.
+- Rule: never publish or send directly; produce a packet for owner approval first.
+
 ## Standard Workflow
 
 1. Fill one row in `marketing-agents/data/prospect_pipeline.csv`.
@@ -93,6 +98,7 @@ Do not position Boss Key LLC as a generic AI consultancy.
 15. Use Agent 13 to send approved outreach emails from Outlook and auto-log outcomes.
 16. Use Agent 14 to run a weekly Burlington public digital recompete scan and refresh pre-RFP capture priorities.
 17. Generate GO/NO-GO memos for `pursue_now` accounts before outreach using `marketing-agents/scripts/generate-public-go-no-go-memos.ps1`.
+18. Use Agent 15 to turn raw transcript material into a Boss Key content packet before posting or sending.
 
 ## Quality Bar
 

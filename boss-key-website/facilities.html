@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facilities Contractors | Early Rebid Visibility and Pursuit Discipline | Boss Key LLC</title>
+  <meta name="description" content="Boss Key helps janitorial, EVS, day porter, and maintenance contractors get in front of rebids earlier, tighten qualification discipline, and clean up the handoff from capture to proposal.">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f4f3ef;
+      --paper: #081017;
+      --line: #27404a;
+      --soft: #c0ccd1;
+      --muted: #90a3aa;
+      --signal: #3fb89d;
+      --signal-soft: #d8fff3;
+      --metal: #8ab1bd;
+      --copper: #cb8f4f;
+      --panel: #101a22;
+      --panel-2: #0d141b;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(63, 184, 157, 0.18) 0%, rgba(63, 184, 157, 0) 30%),
+        radial-gradient(circle at 88% 8%, rgba(138, 177, 189, 0.18) 0%, rgba(138, 177, 189, 0) 22%),
+        linear-gradient(145deg, #101922 0%, #071016 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 16px 0;
+      border-bottom: 1px solid #1c2d35;
+      background: rgba(8, 16, 23, 0.84);
+      backdrop-filter: blur(10px);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .brand img { width: 32px; height: 32px; display: block; }
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      padding: 6px 11px;
+      border: 1px solid #32505a;
+      border-radius: 999px;
+      background: #12202a;
+      color: var(--soft);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    .links a.current {
+      border-color: rgba(63, 184, 157, 0.46);
+      background: rgba(63, 184, 157, 0.14);
+      color: var(--signal-soft);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 15px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--signal), #24866f);
+      color: #071512;
+      box-shadow: 0 14px 30px rgba(63, 184, 157, 0.26);
+    }
+    .btn-secondary {
+      background: #14222c;
+      color: #e2eef1;
+      border-color: #32505a;
+    }
+    .btn-tertiary {
+      background: rgba(203, 143, 79, 0.12);
+      color: #ffd9b4;
+      border-color: rgba(203, 143, 79, 0.3);
+    }
+    main { padding: 24px 0 42px; }
+    section {
+      margin: 14px 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(165deg, rgba(16, 26, 34, 0.98), rgba(10, 16, 23, 0.98));
+    }
+    h1, h2 {
+      margin: 0 0 12px;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.3rem, 5vw, 4.1rem); }
+    h2 { font-size: clamp(1.45rem, 2.8vw, 2.25rem); }
+    h3 { margin: 0 0 8px; font-size: 1.03rem; }
+    p { margin: 0 0 10px; color: var(--soft); }
+    ul { margin: 0; padding-left: 18px; color: #dce6e8; }
+    li { margin: 7px 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(63, 184, 157, 0.34);
+      background: rgba(63, 184, 157, 0.1);
+      color: var(--signal-soft);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      margin-top: -50px;
+      margin-left: calc(100% - 260px);
+      background: radial-gradient(circle, rgba(63, 184, 157, 0.16) 0%, rgba(63, 184, 157, 0) 72%);
+      pointer-events: none;
+    }
+    .hero-copy { position: relative; z-index: 1; }
+    .panel, .card {
+      border: 1px solid #31505a;
+      border-radius: 16px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(19, 32, 41, 0.98), rgba(12, 19, 26, 0.98));
+    }
+    .stack { display: grid; gap: 12px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .metric {
+      border: 1px solid #304d56;
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(10, 16, 22, 0.66);
+    }
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #ffffff;
+      font-size: 1.04rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: 12px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .label {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(138, 177, 189, 0.1);
+      border: 1px solid rgba(138, 177, 189, 0.28);
+      color: #dcedf1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .label.copper {
+      background: rgba(203, 143, 79, 0.12);
+      border-color: rgba(203, 143, 79, 0.26);
+      color: #ffd9b4;
+    }
+    .flow {
+      display: grid;
+      gap: 12px;
+    }
+    .flow-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #31505a;
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(11, 18, 25, 0.76);
+    }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(145deg, var(--signal), #24866f);
+      color: #071512;
+      font-weight: 800;
+    }
+    .small { color: var(--muted); font-size: 0.9rem; }
+    .bullet-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .bullet {
+      border-left: 3px solid var(--signal);
+      padding-left: 12px;
+      color: #dbe9eb;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #98aab1;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 940px) {
+      .hero, .grid-2, .grid-3, .grid-4, .hero-grid { grid-template-columns: 1fr; }
+      .buttons .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="./about.html">About</a>
+      <a href="./services.html">Services</a>
+      <a class="current" href="./facilities.html">Facilities</a>
+      <a href="./coaching.html">Intelligence</a>
+      <a href="./engagements.html">Capture + Proposal</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book a facilities opportunity briefing</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <article class="hero-copy">
+      <span class="eyebrow">Facilities Revenue Lane</span>
+      <h1>Get in front of the next facilities rebid before it turns into a scramble.</h1>
+      <p>Boss Key helps janitorial, EVS, day porter, and maintenance contractors move earlier. The goal is straightforward: clearer rebid visibility, better qualification discipline, and a cleaner handoff from capture logic into proposal execution.</p>
+      <ul>
+        <li>Spot timing signals before the formal notice does all the work for your competitors.</li>
+        <li>Pressure-test whether a pursuit is worth leadership attention before the field team is dragged into a fire drill.</li>
+        <li>Keep pricing, staffing, compliance, and narrative from breaking apart at the last minute.</li>
+      </ul>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book a facilities opportunity briefing</a>
+        <a class="btn btn-secondary" href="./facilities-diagnostic.html">Request the Facilities Pursuit Diagnostic</a>
+      </div>
+      <div class="hero-grid">
+        <div class="metric"><strong>Earlier rebid visibility</strong><span>Track contract anniversaries, board calendars, budget movement, and operating pressure before the bid posts.</span></div>
+        <div class="metric"><strong>Cleaner go or no-go choices</strong><span>Separate real targets from low-fit noise before internal time gets burned up.</span></div>
+        <div class="metric"><strong>Stronger handoffs</strong><span>Bring sales, ops, staffing, pricing, and compliance into one pursuit rhythm.</span></div>
+        <div class="metric"><strong>Proposal continuity</strong><span>Carry the same judgment forward when the opportunity becomes formal.</span></div>
+      </div>
+    </article>
+    <aside class="stack">
+      <article class="panel">
+        <span class="label">Best Fit</span>
+        <p><strong>Regional contractors with real delivery capability and weak pre-RFP visibility.</strong></p>
+        <p>Especially relevant for owner-led or lean commercial teams pursuing schools, municipalities, healthcare facilities, transit-adjacent work, or other compliance-heavy environments.</p>
+      </article>
+      <article class="panel">
+        <span class="label copper">What To Do First</span>
+        <p>Do not start with a broad transformation pitch. Start with a facilities-specific diagnostic, a briefing, and one defined route:</p>
+        <div class="bullet-list">
+          <div class="bullet"><strong>Briefing</strong>: if the problem still needs definition.</div>
+          <div class="bullet"><strong>Foresight sprint</strong>: if one likely rebid or target market needs definition fast.</div>
+          <div class="bullet"><strong>Intelligence retainer</strong>: if several named accounts need recurring watchlist coverage.</div>
+          <div class="bullet"><strong>Live support</strong>: if the procurement is already moving.</div>
+        </div>
+      </article>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Where facilities teams usually lose position</h2>
+    <div class="grid-4">
+      <article class="card">
+        <span class="label">Timing gap</span>
+        <h3>The rebid is visible, but nobody is acting early enough.</h3>
+        <p>Contract anniversaries, board approvals, budget cycles, and operating pressure often show up months before the formal solicitation. Many teams still wait for the posting.</p>
+      </article>
+      <article class="card">
+        <span class="label copper">Decision gap</span>
+        <h3>Leadership is still qualifying opportunities by instinct.</h3>
+        <p>Without a real bid or no-bid rhythm, owner attention gets spread across low-fit work and late-stage opportunities all look equally urgent.</p>
+      </article>
+      <article class="card">
+        <span class="label">Handoff gap</span>
+        <h3>Ops, pricing, and staffing inputs arrive too late.</h3>
+        <p>The pursuit is technically active, but the real operating picture is still in someone's head, not inside a structure the proposal can use.</p>
+      </article>
+      <article class="card">
+        <span class="label copper">Execution gap</span>
+        <h3>Compliance and review discipline appear only when the clock is already red.</h3>
+        <p>That is how good service operators end up looking chaotic on paper even when they can absolutely perform the work.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>The facilities conversion path</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Facilities Pursuit Diagnostic</h3>
+          <p>Score six pursuit-control areas and identify whether the next move is briefing, sprint, retainer, or live support.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Facilities opportunity briefing</h3>
+          <p>Use a short call to confirm buyer situation, region, service mix, and whether the first move should be narrow or recurring.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Foresight sprint or intelligence retainer</h3>
+          <p>Build either one focused opportunity map or a broader Mid-Atlantic watchlist tied to likely buying events.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Capture and proposal continuity</h3>
+          <p>When the opportunity is real, carry the same operating logic into stakeholder prep, proposal structure, and review discipline.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Use the diagnostic in two formats</h2>
+    <div class="grid-2">
+      <article class="panel">
+        <span class="label">Web Version</span>
+        <h3>Interactive Facilities Pursuit Diagnostic</h3>
+        <p>Use the short web-native questionnaire when you want a fast route recommendation and a clean email summary for follow-up.</p>
+        <ul>
+          <li>Rebid visibility</li>
+          <li>Incumbent and buyer knowledge</li>
+          <li>Bid or no-bid discipline</li>
+          <li>Pricing and staffing handoff</li>
+          <li>Compliance ownership</li>
+          <li>Review cadence</li>
+        </ul>
+        <div class="buttons">
+          <a class="btn btn-secondary" href="./facilities-diagnostic.html">Open the diagnostic</a>
+          <a class="btn btn-tertiary" href="./assets/downloads/facilities-pursuit-diagnostic-scorecard.pdf">Download the scorecard PDF</a>
+        </div>
+      </article>
+      <article class="panel">
+        <span class="label copper">Referral Version</span>
+        <h3>One-page scorecard for email and LinkedIn follow-up</h3>
+        <p>Use the printable scorecard when a referral needs something concrete to forward before a call is booked.</p>
+        <ul>
+          <li>Fits on one page</li>
+          <li>Uses the same route logic as the web version</li>
+          <li>Easy to save as PDF and attach to outreach</li>
+        </ul>
+        <div class="buttons">
+          <a class="btn btn-tertiary" href="./facilities-pursuit-diagnostic-scorecard.html">Open the scorecard</a>
+          <a class="btn btn-secondary" href="./assets/downloads/facilities-pursuit-diagnostic-scorecard.pdf">Download the scorecard PDF</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Proof for facilities buyers</h2>
+    <div class="grid-3">
+      <article class="card">
+        <span class="label">SBM Management Services</span>
+        <h3>High-volume facilities proposal discipline</h3>
+        <p>More than 200 compliant proposals built inside a facilities-services environment where repeatability, structure, and review control mattered.</p>
+      </article>
+      <article class="card">
+        <span class="label copper">The Facilities Group</span>
+        <h3>Operating-model work inside a multi-brand facilities business</h3>
+        <p>Proposal process ownership, clarified decision points, and tighter handoffs across a broader facilities-services portfolio.</p>
+      </article>
+      <article class="card">
+        <span class="label">Adjacent regulated bids</span>
+        <h3>Compliance-first habits from healthcare and regulated work</h3>
+        <p>Documentation, review control, and disciplined coordination built in environments where process sloppiness had real consequences.</p>
+      </article>
+    </div>
+    <div class="buttons">
+      <a class="btn btn-secondary" href="./proof.html">See the site proof view</a>
+      <a class="btn btn-tertiary" href="./facilities-proof-pack.html">Open the printable proof pack</a>
+      <a class="btn btn-secondary" href="./assets/downloads/facilities-proof-pack.pdf">Download the proof pack PDF</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Mid-Atlantic Facilities Rebid Radar</h2>
+    <p>The radar is the monthly authority piece for this lane. It is built to give facilities contractors a concrete reason to reopen the conversation, not just another generic article to ignore.</p>
+    <div class="grid-3">
+      <article class="card">
+        <span class="label">Signal 01</span>
+        <h3>Spring budget hardening</h3>
+        <p>Operating-line assumptions for custodial, EVS, and maintenance scopes become easier to read before formal bid calendars are published.</p>
+      </article>
+      <article class="card">
+        <span class="label copper">Signal 02</span>
+        <h3>Summer reset planning</h3>
+        <p>School, campus, and public-building environments often reveal scope change before the procurement office issues a notice.</p>
+      </article>
+      <article class="card">
+        <span class="label">Signal 03</span>
+        <h3>Contract anniversary windows</h3>
+        <p>Board cycles, amendments, and service pressure create visible watchlist moments for regional operators willing to look early.</p>
+      </article>
+    </div>
+    <div class="buttons">
+      <a class="btn btn-secondary" href="./insights/mid-atlantic-facilities-rebid-radar-2026-03.html">Read the March 2026 issue</a>
+      <a class="btn btn-tertiary" href="./assets/downloads/mid-atlantic-facilities-rebid-radar-2026-03.pdf">Download the radar PDF</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to do next</h2>
+    <p>If you already know the facilities market matters to your growth plan, do not wait for a perfect website journey. Run the diagnostic, book the briefing, and use one concrete opportunity or one defined geography to test the model quickly.</p>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book a facilities opportunity briefing</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=facilities-pursuit-diagnostic">Send a private facilities inquiry</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Boss Key LLC | Facilities rebid visibility | Pursuit discipline | Capture and proposal continuity</div>
+</footer>
+
+<script>
+(function () {
+  const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  document.querySelectorAll(".schedule-cta").forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+})();
+</script>
+</body>
+</html>

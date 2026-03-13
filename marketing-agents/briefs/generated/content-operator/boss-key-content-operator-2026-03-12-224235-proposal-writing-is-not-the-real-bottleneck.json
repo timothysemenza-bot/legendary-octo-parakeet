@@ -1,0 +1,76 @@
+{
+  "id": "resp_0ba18e799550566b0069b3799b7d9481949079e8476e1e839b",
+  "object": "response",
+  "created_at": 1773369755,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1773369767,
+  "error": null,
+  "frequency_penalty": 0.0,
+  "incomplete_details": null,
+  "instructions": "You are Agent 15: Boss Key Content Operator.\n\n## Objective\n\nTurn one raw source input into a publish-ready Boss Key authority packet.\n\nThe source input may be:\n- a rough note\n- a voice-note transcript\n- a meeting transcript\n- a talking-head video transcript\n\n## Mission\n\nTake the raw thought and convert it into a concise, modern, human-sounding set of assets that help Timmy build authority as a facilities pursuit and proposal operator.\n\n## Audience\n\nPrimary audience:\n- owner-led janitorial and facilities-service firms\n- proposal managers and capture leads in facilities environments\n- public-sector-adjacent operators who need cleaner pursuit discipline\n\n## Boss Key positioning\n\nWrite from this position:\n- Timmy is the visible expert\n- Boss Key is not a generic marketing or AI consultancy\n- the offer is grounded in proposal management, capture discipline, qualification, compliance, pricing/staffing handoffs, and rebid visibility\n\n## Tone\n\nUse:\n- direct language\n- specific observations\n- calm authority\n- practical operating insight\n\nAvoid:\n- hype\n- buzzwords\n- fake influencer energy\n- vague motivational writing\n- inflated client claims\n\n## Required output sections\n\n1. `Source Angle`\n- one short paragraph explaining the strongest angle in the source material\n\n2. `LinkedIn Post`\n- one finished LinkedIn post\n- 6 to 14 short lines\n- one CTA only\n\n3. `Short Video Caption`\n- one caption for the same idea as a talking-head clip\n- short enough for LinkedIn native video\n\n4. `Document / Carousel Outline`\n- 6 to 8 slides\n- title plus one-line purpose for each slide\n\n5. `Comment Reply Options`\n- 3 reply drafts\n- useful, short, and natural\n\n6. `DM Follow-Up Drafts`\n- 2 short follow-up messages\n- one after a comment or asset request\n- one after a warmer reply\n\n7. `Operator Notes`\n- recommended CTA\n- recommended asset to send\n- why this angle is likely to work\n\n## Hard guardrails\n\n- Do not invent client metrics.\n- Do not claim wins or outcomes that are not in the source or approved Boss Key proof.\n- Do not sound like a generic creator coach.\n- Keep the writing in first-person voice for Timmy.\n- Keep every CTA consistent with the Boss Key campaign:\n  - `Comment \"diagnostic\" and I will send it.`\n  - `DM me \"radar\" if you want the brief.`\n  - `Comment \"handoff\" and I will send the checklist.`\n  - `If this is your situation, message me and I will tell you what I would fix first.`\n\n## Output footer\n\nEnd with:\n\n`Status: Pending owner approval before publish/send.`\n",
+  "max_output_tokens": 1600,
+  "max_tool_calls": null,
+  "model": "gpt-5-mini-2025-08-07",
+  "output": [
+    {
+      "id": "rs_0ba18e799550566b0069b3799bddd48194b5c20238ac6256e2",
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "id": "msg_0ba18e799550566b0069b3799e5ed88194993397d6c3a0e432",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "Source Angle\nMost firms ask for proposal help, but the real failure point is earlier: owner-led pursuits, late engagement, and misaligned pricing/staffing. Show that fixing capture discipline and the handoff beats rewriting the proposal.\n\nLinkedIn Post\nMost contractors think \u201cbad proposals\u201d are the problem. I disagree.  \nThe real bottleneck usually starts weeks before the RFP drops.  \nOwner is running the chase. Pricing and staffing aren\u2019t aligned to the story.  \nTeams only get serious when the RFP is posted \u2014 too late.  \nThat\u2019s why your proposal looks rushed and off-message.  \nYou don\u2019t need prettier writing; you need cleaner pursuit discipline.  \nFix the capture, fix the handoff, and the proposal writes itself.  \nComment \"diagnostic\" and I will send it.\n\nShort Video Caption\nProposal writing isn\u2019t usually the problem \u2014 owner-led pursuit and late staffing are. Comment \"diagnostic\" and I\u2019ll send the checklist.\n\nDocument / Carousel Outline\nSlide 1 \u2014 Title: Why Proposal Writing Isn\u2019t Your First Bottleneck\nPurpose: Set the argument and what readers will learn.\nSlide 2 \u2014 Problem: Owner-Run Pursuits\nPurpose: Show how owner dependency destroys coordination and bandwidth.\nSlide 3 \u2014 Problem: Pricing vs. Narrative Misalignment\nPurpose: Explain how disconnected pricing breaks compliance and scoring.\nSlide 4 \u2014 Problem: Late Team Engagement\nPurpose: Describe consequences of starting capture at RFP release.\nSlide 5 \u2014 The Handoff Gap\nPurpose: Show specific failures in capture-to-proposal transitions.\nSlide 6 \u2014 Quick Fixes Before Writing\nPurpose: Actionable steps to realign pricing, staffing, and roles early.\nSlide 7 \u2014 Minimum Capture Checklist\nPurpose: A compact set of items to require before proposal mode begins.\nSlide 8 \u2014 Next Step\nPurpose: Offer the Facilities Pursuit Diagnostic and call to action.\n\nComment Reply Options\n1) Exactly \u2014 comment \"diagnostic\" and I\u2019ll send the checklist.  \n2) If you want, I can walk through one recent pursuit and point out the first fix. Comment \"diagnostic\".  \n3) Agreed. Most fixes are capture-level. Comment \"diagnostic\" and I\u2019ll send the short checklist.\n\nDM Follow-Up Drafts\nAfter a comment/asset request:\nThanks \u2014 I\u2019ll send the Facilities Pursuit Diagnostic. What\u2019s one pursuit you want me to consider when I follow up?  \nAfter a warmer reply:\nGood \u2014 I can review one pursuit with you. Which upcoming RFP should I look at first?\n\nOperator Notes\nRecommended CTA: Comment \"diagnostic\" and I will send it.  \nRecommended asset to send: Facilities Pursuit Diagnostic (compact checklist of capture prerequisites and handoff items).  \nWhy this angle works: Owners recognize the workload and timing problem; showing a clear, operational fix (capture discipline + handoff checklist) feels practical and immediately usable, not fluff.\n\nStatus: Pending owner approval before publish/send."
+        }
+      ],
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0.0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": null,
+  "reasoning": {
+    "effort": "low",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "low"
+  },
+  "tool_choice": "auto",
+  "tools": [],
+  "top_logprobs": 0,
+  "top_p": 1.0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 1060,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 784,
+    "output_tokens_details": {
+      "reasoning_tokens": 128
+    },
+    "total_tokens": 1844
+  },
+  "user": null,
+  "metadata": {}
+}

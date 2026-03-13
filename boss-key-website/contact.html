@@ -31,6 +31,7 @@
     <nav class="links" aria-label="Main navigation">
       <a href="./about.html">About</a>
       <a href="./services.html">Services</a>
+      <a href="./facilities.html">Facilities</a>
       <a href="./coaching.html">Intelligence</a>
       <a href="./engagements.html">Capture + Proposal</a>
       <a href="./proof.html">Proof</a>
@@ -43,10 +44,10 @@
 <main class="wrap">
   <section>
     <h1>Start with an opportunity briefing.</h1>
-    <p>The intake below helps route the conversation into the right part of the lifecycle: early opportunity visibility, recurring intelligence, capture strategy, or proposal execution.</p>
+    <p>The intake below helps route the conversation into the right part of the lifecycle: early opportunity visibility, recurring intelligence, capture strategy, proposal execution, or the facilities-specific diagnostic path.</p>
     <div class="buttons">
       <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
-      <a class="btn btn-secondary" href="./services.html">Review services first</a>
+      <a class="btn btn-secondary" href="./facilities-diagnostic.html">Request the Facilities Pursuit Diagnostic</a>
     </div>
   </section>
 
@@ -70,6 +71,7 @@
         <select id="offering" name="offering" required>
           <option value="">Select one</option>
           <option value="opportunity-briefing">Opportunity briefing</option>
+          <option value="facilities-pursuit-diagnostic">Facilities Pursuit Diagnostic</option>
           <option value="opportunity-foresight-sprint">Opportunity Foresight Sprint</option>
           <option value="procurement-intelligence-retainer">Procurement intelligence retainer</option>
           <option value="capture-strategy-engagement">Capture strategy engagement</option>
@@ -103,6 +105,7 @@
       const offering=d.get('offering')||'general-inquiry';
       const subjectMap={
         'opportunity-briefing':'[Boss Key] Opportunity Briefing Request',
+        'facilities-pursuit-diagnostic':'[Boss Key] Facilities Pursuit Diagnostic Request',
         'opportunity-foresight-sprint':'[Boss Key] Opportunity Foresight Sprint Inquiry',
         'procurement-intelligence-retainer':'[Boss Key] Procurement Intelligence Retainer Inquiry',
         'capture-strategy-engagement':'[Boss Key] Capture Strategy Inquiry',
@@ -111,6 +114,7 @@
       };
       const labelMap={
         'opportunity-briefing':'Opportunity briefing',
+        'facilities-pursuit-diagnostic':'Facilities Pursuit Diagnostic',
         'opportunity-foresight-sprint':'Opportunity Foresight Sprint',
         'procurement-intelligence-retainer':'Procurement intelligence retainer',
         'capture-strategy-engagement':'Capture strategy engagement',

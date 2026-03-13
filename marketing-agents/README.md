@@ -46,3 +46,35 @@ Outputs:
 
 Optional manual APMP contacts can be added to:
 - `marketing-agents/data/apmp_member_prospects.csv`
+
+## Boss Key Authority Stack
+
+LinkedIn-first Boss Key campaign assets live here:
+- strategy: `marketing-agents/campaigns/boss-key-modern-authority-campaign-2026-03-13.md`
+- calendar: `marketing-agents/campaigns/boss-key-30-day-linkedin-authority-calendar-2026-03-13.md`
+- launch posts and video scripts: `marketing-agents/campaigns/boss-key-launch-content-pack-2026-03-13.md`
+- profile rewrite: `marketing-agents/templates/boss-key-linkedin-profile-rebuild.md`
+- comment and DM workflow: `marketing-agents/templates/boss-key-comment-dm-funnel.md`
+- video production workflow: `marketing-agents/templates/boss-key-video-recording-runbook.md`
+- handoff asset: `marketing-agents/templates/facilities-capture-to-proposal-handoff-checklist.md`
+- scheduled post queue: `marketing-agents/data/boss_key_linkedin_post_queue_2026-03-13.csv`
+- performance tracker: `marketing-agents/data/boss_key_creator_scoreboard.csv`
+- content source template: `marketing-agents/templates/boss-key-content-source-template.md`
+- content operator prompt: `marketing-agents/prompts/15_boss_key_content_operator.md`
+- content operator runner: `marketing-agents/scripts/run-boss-key-content-operator.ps1`
+
+### Boss Key Content Operator
+
+Turn one rough note, transcript, or recording into a Boss Key content packet:
+
+`pwsh -File .\marketing-agents\scripts\run-boss-key-content-operator.ps1 -InputFile .\marketing-agents\templates\boss-key-content-source-template.md -PromptOnly`
+
+Or from an open PowerShell 7 session:
+
+`& .\marketing-agents\scripts\run-boss-key-content-operator.ps1 -InputFile .\marketing-agents\templates\boss-key-content-source-template.md -PromptOnly`
+
+If `OPENAI_API_KEY` is set in `.env` or `.env.local`, the same script will call the OpenAI Responses API and generate a finished packet automatically.
+
+Audio/video inputs are supported when local transcription is installed:
+
+`pwsh -File .\marketing-agents\scripts\run-boss-key-content-operator.ps1 -InputFile .\path\to\clip.mp4`

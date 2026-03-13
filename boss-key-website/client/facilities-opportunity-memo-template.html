@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Client Name] Facilities Opportunity Memo | Discussion Draft</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <style>
+    :root {
+      --ink: #1d2731;
+      --soft: #5a6b78;
+      --line: #d5dde2;
+      --paper: #f8f9f8;
+      --navy: #273445;
+      --signal: #2d907c;
+      --signal-soft: #e6f8f3;
+      --accent: #c17d46;
+      --accent-soft: #faecdf;
+      --max: 1120px;
+      --radius: 18px;
+      --shadow: 0 18px 34px rgba(22, 34, 45, 0.1);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(45, 144, 124, 0.14) 0%, rgba(45, 144, 124, 0) 28%),
+        linear-gradient(180deg, #edf1f4 0%, #f8f9f8 100%);
+      color: var(--ink);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.5;
+    }
+    .wrap {
+      width: min(var(--max), 95vw);
+      margin: 0 auto;
+      padding: 24px 0 38px;
+    }
+    .card {
+      background: rgba(248, 249, 248, 0.98);
+      border: 1px solid rgba(29, 39, 49, 0.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 22px 24px 24px;
+      color: #ffffff;
+      background:
+        linear-gradient(140deg, rgba(45, 144, 124, 0.12) 0%, rgba(45, 144, 124, 0) 34%),
+        linear-gradient(155deg, #304052 0%, #202a36 100%);
+      border-bottom: 5px solid var(--accent);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .brand img { height: 28px; width: auto; display: block; }
+    .brand span {
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      line-height: 1.12;
+    }
+    h1 {
+      max-width: 830px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+    h2 {
+      color: var(--navy);
+      font-size: 1.06rem;
+      letter-spacing: 0.02em;
+    }
+    h3 {
+      color: var(--navy);
+      font-size: 0.96rem;
+    }
+    .hero p {
+      max-width: 860px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1rem;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 16px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 0.84rem;
+    }
+    .section {
+      padding: 18px 24px;
+    }
+    .section + .section {
+      border-top: 1px solid var(--line);
+    }
+    p { margin: 0 0 10px; color: var(--soft); }
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 14px;
+    }
+    .grid-2 { grid-template-columns: 1.15fr 0.85fr; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+    }
+    .panel.signal {
+      border-color: rgba(45, 144, 124, 0.2);
+      background: linear-gradient(180deg, var(--signal-soft) 0%, #f5fcfa 100%);
+    }
+    .panel.accent {
+      border-color: rgba(193, 125, 70, 0.18);
+      background: linear-gradient(180deg, var(--accent-soft) 0%, #fff6f0 100%);
+    }
+    .label {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(45, 144, 124, 0.1);
+      border: 1px solid rgba(45, 144, 124, 0.22);
+      color: var(--signal);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    ul { margin: 8px 0 0; padding-left: 18px; }
+    li { margin: 5px 0; }
+    .cta-band {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .cta {
+      border: 1px solid rgba(193, 125, 70, 0.18);
+      border-radius: 16px;
+      padding: 16px;
+      background:
+        linear-gradient(150deg, rgba(193, 125, 70, 0.08) 0%, rgba(193, 125, 70, 0.02) 100%),
+        #fff8f3;
+    }
+    .links {
+      display: grid;
+      gap: 10px;
+    }
+    .link-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--navy);
+      font-weight: 700;
+    }
+    .foot {
+      margin-top: 12px;
+      color: var(--soft);
+      font-size: 0.82rem;
+    }
+    @media (max-width: 920px) {
+      .grid-2, .grid-3, .cta-band { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <article class="card">
+      <header class="hero">
+        <div class="top">
+          <div class="chip">Private discussion draft</div>
+          <div class="brand">
+            <img src="../assets/logos/brand/boss-key-logo-refined.svg" alt="Boss Key">
+            <span>Prepared by Boss Key LLC</span>
+          </div>
+        </div>
+        <h1>[Client Name] Facilities Opportunity Memo</h1>
+        <p>[Two-to-three sentence summary of the buyer situation, what looks visible in the market, and why this memo exists now.]</p>
+        <div class="meta">
+          <span><strong>Date:</strong> [Month Day, Year]</span>
+          <span><strong>Market:</strong> [Region / geography]</span>
+          <span><strong>Service focus:</strong> [Janitorial / EVS / day porter / maintenance / other]</span>
+        </div>
+      </header>
+
+      <section class="section grid-2">
+        <div class="panel signal">
+          <span class="label">Executive view</span>
+          <h2>Current buyer situation</h2>
+          <p>[Describe what is driving urgency, how visible the likely opportunity is, and what the client probably needs to decide next.]</p>
+        </div>
+        <div class="panel accent">
+          <span class="label">Template note</span>
+          <p>Replace all bracketed fields before sending. Keep the memo tight and specific to one real situation, not a generic brochure.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Relevant signals</h2>
+        <div class="grid-3">
+          <article class="panel">
+            <h3>[Signal 01]</h3>
+            <p>[What was observed and why it matters.]</p>
+          </article>
+          <article class="panel">
+            <h3>[Signal 02]</h3>
+            <p>[What was observed and why it matters.]</p>
+          </article>
+          <article class="panel">
+            <h3>[Signal 03]</h3>
+            <p>[What was observed and why it matters.]</p>
+          </article>
+          <article class="panel">
+            <h3>[Signal 04]</h3>
+            <p>[What was observed and why it matters.]</p>
+          </article>
+          <article class="panel">
+            <h3>[Signal 05]</h3>
+            <p>[What was observed and why it matters.]</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Top risks to call out early</h2>
+        <div class="grid-3">
+          <article class="panel"><h3>Risk 01</h3><p>[Example: visibility is real but the buyer context is still too thin.]</p></article>
+          <article class="panel"><h3>Risk 02</h3><p>[Example: the owner is still holding too much pursuit logic personally.]</p></article>
+          <article class="panel"><h3>Risk 03</h3><p>[Example: pricing, staffing, and compliance are likely to converge too late.]</p></article>
+          <article class="panel"><h3>Risk 04</h3><p>[Example: the account may choose a shortcut vehicle instead of a full open bid.]</p></article>
+          <article class="panel"><h3>Risk 05</h3><p>[Example: the internal team does not yet have a clean review rhythm.]</p></article>
+        </div>
+      </section>
+
+      <section class="section grid-2">
+        <div class="panel signal">
+          <h2>Recommended starting engagement</h2>
+          <p><strong>[Choose one: briefing / Opportunity Foresight Sprint / procurement intelligence retainer / live capture support]</strong></p>
+          <p>[Explain in plain language why this is the right first move for the current facts.]</p>
+        </div>
+        <div class="panel">
+          <h2>What Boss Key would bring next</h2>
+          <ul>
+            <li>[First practical deliverable]</li>
+            <li>[Second practical deliverable]</li>
+            <li>[Third practical deliverable]</li>
+            <li>[Decision the client would be able to make after that work]</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section cta-band">
+        <div class="cta">
+          <h2>Next-step CTA</h2>
+          <p>[Example: Book a facilities opportunity briefing so we can pressure-test the target account, confirm the route, and decide whether a sprint or live support is the right move.]</p>
+        </div>
+        <div class="links">
+          <a class="link-pill schedule-cta" href="#">Book a facilities opportunity briefing</a>
+          <a class="link-pill" href="../facilities-diagnostic.html">Run the Facilities Pursuit Diagnostic</a>
+          <a class="link-pill" href="../contact.html?offering=facilities-pursuit-diagnostic">Send a private facilities inquiry</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <p class="foot">Discussion draft. Prepared for direct sharing, not public indexing.</p>
+      </section>
+    </article>
+  </div>
+
+  <script>
+  (function () {
+    const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+    const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+    document.querySelectorAll(".schedule-cta").forEach(function (link) {
+      link.href = calendarScheduleUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    });
+  })();
+  </script>
+</body>
+</html>
