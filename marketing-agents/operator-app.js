@@ -19,6 +19,8 @@ const FILES = {
   state: path.join(DATA_DIR, "call_session_state.json"),
   followUps: path.join(DATA_DIR, "follow_up_events.csv"),
   followUpsIcs: path.join(BRIEFS_DIR, "follow-up-events.ics"),
+  companyOs: path.join(DATA_DIR, "company_os_agents.json"),
+  engagementIntakeSummary: path.join(DATA_DIR, "engagement_intake_summary.json"),
 };
 
 function loadEnvFile(filePath) {
@@ -133,6 +135,15 @@ function readState(callDate) {
 function writeState(state) {
   state.updated_at = nowIso();
   fs.writeFileSync(FILES.state, `${JSON.stringify(state, null, 2)}\n`, "utf8");
+}
+
+function readJsonFile(filePath, fallback = null) {
+  if (!fs.existsSync(filePath)) return fallback;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch (_e) {
+    return fallback;
+  }
 }
 
 function nowIso() {
@@ -321,6 +332,7 @@ function buildProspectSnapshot(callRow, pipelineRow) {
 function getDashboard() {
   const callPlan = readCsv(FILES.callPlan);
   const pipeline = readCsv(FILES.pipeline);
+  const engagementIntake = readJsonFile(FILES.engagementIntakeSummary, null);
   const callDate = getActiveCallDate(callPlan);
   const calls = callPlan.filter((c) => c.call_date === callDate).sort((a, b) => Number(a.plan_order) - Number(b.plan_order));
   const callableCalls = calls.filter((c) => isCallable(c));
@@ -350,6 +362,16 @@ function getDashboard() {
         }
       : null,
     follow_up_ics: "marketing-agents/briefs/follow-up-events.ics",
+    engagement_intake: {
+      last_run_at: engagementIntake?.last_run_at || "",
+      signals_added: Number(engagementIntake?.signals_added || 0),
+      engagements_created: Number(engagementIntake?.engagements_created || 0),
+      engagements_updated: Number(engagementIntake?.engagements_updated || 0),
+      actions_added: Number(engagementIntake?.actions_added || 0),
+      approvals_added: Number(engagementIntake?.approvals_added || 0),
+      pending_approvals_open: Number(engagementIntake?.pending_approvals_open || 0),
+      recent_engagements: Array.isArray(engagementIntake?.recent_engagements) ? engagementIntake.recent_engagements : [],
+    },
   };
 }
 
@@ -745,10 +767,27 @@ async function handleApi(req, res, url) {
   if (req.method === "GET" && url.pathname === "/api/dashboard") {
     return json(res, 200, getDashboard());
   }
+  if (req.method === "GET" && url.pathname === "/api/company-os") {
+    try {
+      if (!fs.existsSync(FILES.companyOs)) return json(res, 404, { error: "Company OS data not found." });
+      const payload = JSON.parse(fs.readFileSync(FILES.companyOs, "utf8"));
+      return json(res, 200, payload);
+    } catch (e) {
+      return json(res, 500, { error: e.message });
+    }
+  }
   if (req.method === "POST" && url.pathname === "/api/run-morning-refresh") {
     try {
       const out = await runPsScript("run-daily-brief-job.ps1");
       return json(res, 200, { ok: true, output: out.stdout });
+    } catch (e) {
+      return json(res, 500, { ok: false, error: e.message });
+    }
+  }
+  if (req.method === "POST" && url.pathname === "/api/run-engagement-intake") {
+    try {
+      const out = await runPsScript("run-engagement-intake.ps1");
+      return json(res, 200, { ok: true, output: out.stdout, dashboard: getDashboard() });
     } catch (e) {
       return json(res, 500, { ok: false, error: e.message });
     }

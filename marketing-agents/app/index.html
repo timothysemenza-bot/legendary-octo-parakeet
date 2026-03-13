@@ -64,8 +64,10 @@
     <h1>Boss Key Operator Console</h1>
     <div class="top">
       <button class="btn" id="refreshBtn">Run Morning Refresh</button>
+      <button class="btn2" id="engagementIntakeBtn">Run Engagement Intake</button>
       <button class="btn2" id="resetBtn">Reset Queue</button>
       <button class="btn2" id="reloadBtn">Reload Dashboard</button>
+      <a class="btn2 btn-link" href="/company-os.html">Company OS</a>
       <a class="btn2 btn-link" href="/api/follow-up-ics">Follow-up ICS</a>
     </div>
 
@@ -87,6 +89,18 @@
           <button class="btn" id="startCallBtn">Start Next Call</button>
           <button class="btn2" id="launchDialBtn">Launch Aircall</button>
         </div>
+      </div>
+
+      <div class="card full">
+        <h2>Engagement Intake</h2>
+        <p><span class="k">Last Run:</span> <span class="v" id="intakeLastRun">-</span></p>
+        <div class="row">
+          <p><span class="k">Signals:</span> <span class="v" id="intakeSignals">0</span></p>
+          <p><span class="k">Engagements:</span> <span class="v" id="intakeEngagements">0 / 0</span></p>
+          <p><span class="k">Actions:</span> <span class="v" id="intakeActions">0</span></p>
+          <p><span class="k">Pending Approvals:</span> <span class="v" id="intakeApprovals">0</span></p>
+        </div>
+        <div class="mono" id="intakeRecent">No intake run recorded yet.</div>
       </div>
 
       <div class="card full">
@@ -222,6 +236,20 @@
       setText("totalCalls", String(model.total_calls || 0));
       setText("remaining", String(model.remaining || 0));
 
+      const intake = model.engagement_intake || {};
+      setText("intakeLastRun", intake.last_run_at || "-");
+      setText("intakeSignals", String(intake.signals_added || 0));
+      setText("intakeEngagements", `${intake.engagements_created || 0} created / ${intake.engagements_updated || 0} updated`);
+      setText("intakeActions", String(intake.actions_added || 0));
+      setText("intakeApprovals", String(intake.pending_approvals_open || 0));
+      const intakeRecent = Array.isArray(intake.recent_engagements) && intake.recent_engagements.length
+        ? intake.recent_engagements
+            .slice(0, 4)
+            .map((entry) => `${entry.client_name} | ${entry.route} | ${entry.last_signal_date}`)
+            .join("\n")
+        : "No intake run recorded yet.";
+      setText("intakeRecent", intakeRecent);
+
       const n = model.next_call || {};
       setText("nextCompany", n.company_name || "-");
       setText("nextContact", `${n.target_contact || "-"} ${n.role ? "(" + n.role + ")" : ""}`);
@@ -277,6 +305,17 @@
       try {
         await api("/api/run-morning-refresh", "POST");
         setText("statusLine", "Morning refresh complete.");
+        await load();
+      } catch (e) {
+        setText("statusLine", `Error: ${e.message}`);
+      }
+    };
+
+    document.getElementById("engagementIntakeBtn").onclick = async () => {
+      setText("statusLine", "Running engagement intake...");
+      try {
+        await api("/api/run-engagement-intake", "POST");
+        setText("statusLine", "Engagement intake complete.");
         await load();
       } catch (e) {
         setText("statusLine", `Error: ${e.message}`);

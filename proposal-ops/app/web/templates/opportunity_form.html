@@ -15,11 +15,15 @@
   {% endif %}
   <section>
     <h3>Start From RFP Files</h3>
-    <p>Upload solicitation files first to build an intake draft with inferred values and conservative defaults.</p>
+    <p>Upload solicitation files or paste RFP text first to build an intake draft with inferred values and conservative defaults.</p>
     <form method="post" action="/intake/rfp-drafts" enctype="multipart/form-data">
       <label>Actor <input name="actor" value="{{ form_data.actor or 'operator' }}" required /></label>
-      <label>Attach RFP Files <input type="file" name="files" multiple accept=".txt,.md,.pdf,.docx" required /></label>
-      <p>Supported file types: TXT, MD, PDF, DOCX. Unsupported files are skipped with warnings if at least one file parses.</p>
+      <label>Attach RFP Files <input type="file" name="files" multiple accept=".txt,.md,.pdf,.docx" /></label>
+      <label>Pasted RFP Text Filename <input name="raw_text_filename" value="pasted-rfp.txt" /></label>
+      <label>Pasted RFP Text
+        <textarea name="raw_text" rows="8" placeholder="Paste RFP text here if you do not have clean files yet."></textarea>
+      </label>
+      <p>Supported file types: TXT, MD, PDF, DOCX. Unsupported files are skipped with warnings if at least one file or pasted text block parses.</p>
       <button type="submit">Build Intake Draft From RFP Files</button>
     </form>
   </section>

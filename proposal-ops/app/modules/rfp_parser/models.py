@@ -20,6 +20,8 @@ class Solicitation(Base):
     extracted_deadline: Mapped[str | None] = mapped_column(String(40), nullable=True)
     extracted_evaluation_criteria: Mapped[str | None] = mapped_column(Text, nullable=True)
     extracted_submission_instructions: Mapped[str | None] = mapped_column(Text, nullable=True)
+    structured_fields_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    field_provenance_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     requirements: Mapped[list["Requirement"]] = relationship(back_populates="solicitation")

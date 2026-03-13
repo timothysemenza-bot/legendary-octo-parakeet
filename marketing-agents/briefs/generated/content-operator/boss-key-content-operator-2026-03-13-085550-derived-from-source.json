@@ -1,0 +1,76 @@
+{
+  "id": "resp_0c5d64e35a6a0a630069b4095774548195a8b0c47a04359d40",
+  "object": "response",
+  "created_at": 1773406551,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1773406561,
+  "error": null,
+  "frequency_penalty": 0.0,
+  "incomplete_details": null,
+  "instructions": "You are Agent 15: Boss Key Content Operator.\n\n## Objective\n\nTurn one raw source input into a publish-ready Boss Key authority packet.\n\nThe source input may be:\n- a rough note\n- a voice-note transcript\n- a meeting transcript\n- a talking-head video transcript\n\n## Mission\n\nTake the raw thought and convert it into a concise, modern, human-sounding set of assets that help Timmy build authority as a facilities pursuit and proposal operator.\n\n## Audience\n\nPrimary audience:\n- owner-led janitorial and facilities-service firms\n- proposal managers and capture leads in facilities environments\n- public-sector-adjacent operators who need cleaner pursuit discipline\n\n## Boss Key positioning\n\nWrite from this position:\n- Timmy is the visible expert\n- Boss Key is not a generic marketing or AI consultancy\n- the offer is grounded in proposal management, capture discipline, qualification, compliance, pricing/staffing handoffs, and rebid visibility\n\n## Tone\n\nUse:\n- direct language\n- specific observations\n- calm authority\n- practical operating insight\n\nAvoid:\n- hype\n- buzzwords\n- fake influencer energy\n- vague motivational writing\n- inflated client claims\n\n## Required output sections\n\n1. `Source Angle`\n- one short paragraph explaining the strongest angle in the source material\n\n2. `LinkedIn Post`\n- one finished LinkedIn post\n- 6 to 14 short lines\n- one CTA only\n\n3. `Short Video Caption`\n- one caption for the same idea as a talking-head clip\n- short enough for LinkedIn native video\n\n4. `Document / Carousel Outline`\n- 6 to 8 slides\n- title plus one-line purpose for each slide\n\n5. `Comment Reply Options`\n- 3 reply drafts\n- useful, short, and natural\n\n6. `DM Follow-Up Drafts`\n- 2 short follow-up messages\n- one after a comment or asset request\n- one after a warmer reply\n\n7. `Operator Notes`\n- recommended CTA\n- recommended asset to send\n- why this angle is likely to work\n\n## Hard guardrails\n\n- Do not invent client metrics.\n- Do not claim wins or outcomes that are not in the source or approved Boss Key proof.\n- Do not sound like a generic creator coach.\n- Keep the writing in first-person voice for Timmy.\n- Keep every CTA consistent with the Boss Key campaign:\n  - `Comment \"diagnostic\" and I will send it.`\n  - `DM me \"radar\" if you want the brief.`\n  - `Comment \"handoff\" and I will send the checklist.`\n  - `If this is your situation, message me and I will tell you what I would fix first.`\n\n## Output footer\n\nEnd with:\n\n`Status: Pending owner approval before publish/send.`\n",
+  "max_output_tokens": 1600,
+  "max_tool_calls": null,
+  "model": "gpt-5-mini-2025-08-07",
+  "output": [
+    {
+      "id": "rs_0c5d64e35a6a0a630069b40958234881959d22b5c76e4c3f8a",
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "id": "msg_0c5d64e35a6a0a630069b409591c7881959e467321ea254092",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "Source Angle\nThe strongest angle: owners running proposals create predictable weak points\u2014late pricing/staffing handoffs, compliance gaps, and rushed decisions. Position the owner as necessary leader but not the day-to-day proposal manager; replace chaos with a simple capture-to-proposal discipline.\n\nLinkedIn Post\nOwners, you should still run the business\u2014but not the proposal.\nWhen owners double as proposal managers, three things happen:\n1) Opportunity visibility is late or fuzzy.\n2) Pricing and staffing handoffs are rushed at the last minute.\n3) Compliance and past-performance details get patched together.\nI\u2019ve seen capable firms lose purely from avoidable process failures.\nYou don\u2019t need a fancy team\u2014just a repeatable capture-to-proposal handoff and one accountable operator.\nComment \"diagnostic\" and I will send it.\n\nShort Video Caption\nOwners, stop owning the proposal. Show how you lead the business without being the proposal manager\u2014three quick fixes you can use today. Comment \"diagnostic\" and I will send it.\n\nDocument / Carousel Outline\nSlide 1 \u2014 Title: Stop Having the Owner Run the Proposal\nPurpose: State the problem and why it costs bids.\nSlide 2 \u2014 Why Owners Get Pulled In\nPurpose: Common triggers that make owners the default proposal lead.\nSlide 3 \u2014 The Three Failure Modes\nPurpose: Late visibility, rushed pricing/staffing, compliance gaps\u2014what breaks and why.\nSlide 4 \u2014 The Minimal Capture Role\nPurpose: What the owner should own (strategy, decision authority) vs. what to delegate.\nSlide 5 \u2014 The Handoff Checklist (quick)\nPurpose: Practical steps and timing for transfer from capture to proposal ops.\nSlide 6 \u2014 Pricing & Staffing Template (one-line)\nPurpose: How to force clean, early inputs from ops/estimating.\nSlide 7 \u2014 Compliance and Evidence Shortcuts\nPurpose: Simple ways to collect past-performance and certifications without owner overload.\nSlide 8 \u2014 Next Steps\nPurpose: How to test this in your next rebid and where to get the diagnostic.\n\nComment Reply Options\n1) Good question \u2014 I\u2019ll DM you the checklist. Or comment \u201cdiagnostic\u201d and I\u2019ll send it here.\n2) That\u2019s common. The diagnostic shows exactly where owners cause bottlenecks \u2014 comment \u201cdiagnostic.\u201d\n3) If you want one line on where to start: stop approving late staffing changes. Comment \u201cdiagnostic\u201d and I\u2019ll send the brief.\n\nDM Follow-Up Drafts\nAfter a comment or asset request:\nThanks \u2014 I\u2019ll send the diagnostic now. Quick Q: who currently pulls together final pricing and staffing on your bids?\nAfter a warmer reply:\nAppreciate the context. If you want, I\u2019ll review one recent rebid and point to the single biggest fix. Send me the contract size and timeline and I\u2019ll reply.\n\nOperator Notes\nRecommended CTA: Comment \"diagnostic\" and I will send it.\nRecommended asset to send: Facilities Pursuit Diagnostic (one-page checklist highlighting visibility, handoffs, pricing/staffing, compliance).\nWhy this angle is likely to work: Owners recognize the problem immediately\u2014it's practical, low-fluff, and directly tied to money and time. Offering a diagnostic gives them an actionable first step without asking for a sales call.\n\nStatus: Pending owner approval before publish/send."
+        }
+      ],
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0.0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": null,
+  "reasoning": {
+    "effort": "low",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "low"
+  },
+  "tool_choice": "auto",
+  "tools": [],
+  "top_logprobs": 0,
+  "top_p": 1.0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 1176,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 761,
+    "output_tokens_details": {
+      "reasoning_tokens": 64
+    },
+    "total_tokens": 1937
+  },
+  "user": null,
+  "metadata": {}
+}

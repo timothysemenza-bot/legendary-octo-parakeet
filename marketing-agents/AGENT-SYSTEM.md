@@ -1,5 +1,7 @@
 # Boss Key Outbound Agent System
 
+Need the broader internal stack as well? See `marketing-agents/COMPANY-OPERATING-SYSTEM.md` for the full company-running architecture that extends this outbound system into finance, delivery, client success, staffing, knowledge, compliance, and founder control.
+
 This system is designed for initial outreach to service businesses and public-sector-adjacent organizations that need stronger operating systems and proposal discipline.
 
 ## Goal

@@ -26,7 +26,7 @@ from app.modules.opportunity_intake.schemas import (
     WorkflowTimelineEventResponse,
 )
 from app.modules.opportunity_intake.service import OpportunityIntakeService
-from app.modules.rfp_parser.document_reader import extract_text_from_upload_batch
+from app.modules.rfp_parser.document_reader import extract_text_from_mixed_inputs
 
 
 api_router = APIRouter(prefix="/api/opportunities", tags=["opportunity-intake"])
@@ -57,6 +57,21 @@ def _build_intake_payload(
         estimated_probability_win=estimated_probability_win,
         actor=actor,
     )
+
+
+async def _build_source_batch(
+    *,
+    files: list[UploadFile] | None,
+    raw_text: str | None = None,
+    raw_text_filename: str | None = None,
+):
+    upload_payloads: list[tuple[str, bytes]] = []
+    for file in files or []:
+        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
+    text_entries: list[tuple[str, str]] = []
+    if raw_text and raw_text.strip():
+        text_entries.append((raw_text_filename or "pasted-rfp.txt", raw_text))
+    return extract_text_from_mixed_inputs(upload_payloads, text_entries=text_entries)
 
 
 def _render_intake_form(
@@ -163,13 +178,16 @@ def intake_opportunity(payload: OpportunityIntakeRequest, db: Session = Depends(
 @api_router.post("/intake-rfp-drafts", response_model=OpportunityIntakeDraftResponse)
 async def create_intake_rfp_draft_api(
     actor: str = Form("operator"),
+    raw_text: str = Form(""),
+    raw_text_filename: str = Form("pasted-rfp.txt"),
     files: list[UploadFile] | None = File(None),
     db: Session = Depends(get_db),
 ) -> OpportunityIntakeDraftResponse:
-    upload_payloads: list[tuple[str, bytes]] = []
-    for file in files or []:
-        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
-    batch = extract_text_from_upload_batch(upload_payloads)
+    batch = await _build_source_batch(
+        files=files,
+        raw_text=raw_text,
+        raw_text_filename=raw_text_filename,
+    )
 
     service = OpportunityIntakeService(db)
     try:
@@ -213,6 +231,8 @@ async def intake_opportunity_with_rfp(
     strategic_alignment: int = Form(...),
     estimated_probability_win: int = Form(...),
     actor: str = Form("operator"),
+    raw_text: str = Form(""),
+    raw_text_filename: str = Form("pasted-rfp.txt"),
     files: list[UploadFile] | None = File(None),
     db: Session = Depends(get_db),
 ) -> OpportunityIntakeWithRfpResult:
@@ -227,10 +247,11 @@ async def intake_opportunity_with_rfp(
         estimated_probability_win=estimated_probability_win,
         actor=actor,
     )
-    upload_payloads: list[tuple[str, bytes]] = []
-    for file in files or []:
-        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
-    batch = extract_text_from_upload_batch(upload_payloads)
+    batch = await _build_source_batch(
+        files=files,
+        raw_text=raw_text,
+        raw_text_filename=raw_text_filename,
+    )
 
     service = OpportunityIntakeService(db)
     try:
@@ -404,13 +425,16 @@ def intake_form(request: Request, db: Session = Depends(get_db)) -> HTMLResponse
 async def intake_rfp_draft_submit(
     request: Request,
     actor: str = Form("operator"),
+    raw_text: str = Form(""),
+    raw_text_filename: str = Form("pasted-rfp.txt"),
     files: list[UploadFile] | None = File(None),
     db: Session = Depends(get_db),
 ) -> Response:
-    upload_payloads: list[tuple[str, bytes]] = []
-    for file in files or []:
-        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
-    batch = extract_text_from_upload_batch(upload_payloads)
+    batch = await _build_source_batch(
+        files=files,
+        raw_text=raw_text,
+        raw_text_filename=raw_text_filename,
+    )
     service = OpportunityIntakeService(db)
     try:
         draft = service.create_intake_rfp_draft(actor, batch)
@@ -568,6 +592,8 @@ async def intake_with_rfp_submit(
     strategic_alignment: int = Form(...),
     estimated_probability_win: int = Form(...),
     actor: str = Form("operator"),
+    raw_text: str = Form(""),
+    raw_text_filename: str = Form("pasted-rfp.txt"),
     files: list[UploadFile] | None = File(None),
     db: Session = Depends(get_db),
 ) -> HTMLResponse:
@@ -582,10 +608,11 @@ async def intake_with_rfp_submit(
         estimated_probability_win=estimated_probability_win,
         actor=actor,
     )
-    upload_payloads: list[tuple[str, bytes]] = []
-    for file in files or []:
-        upload_payloads.append((file.filename or "uploaded-document.txt", await file.read()))
-    batch = extract_text_from_upload_batch(upload_payloads)
+    batch = await _build_source_batch(
+        files=files,
+        raw_text=raw_text,
+        raw_text_filename=raw_text_filename,
+    )
     service = OpportunityIntakeService(db)
     try:
         result = service.intake_with_rfp_batch(payload, batch)

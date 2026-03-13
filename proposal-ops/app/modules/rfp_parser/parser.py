@@ -10,7 +10,7 @@ REQUIREMENT_PATTERNS = [
     re.compile(r"\bfailure to\b", re.IGNORECASE),
 ]
 
-DEADLINE_PATTERN = re.compile(
+DATE_PATTERN = re.compile(
     r"\b("
     r"\d{4}-\d{2}-\d{2}"
     r"|\d{1,2}/\d{1,2}/\d{2,4}"
@@ -19,6 +19,15 @@ DEADLINE_PATTERN = re.compile(
     r")\b",
     re.IGNORECASE,
 )
+TIME_PATTERN = re.compile(
+    r"\b\d{1,2}(?::\d{2})?\s*(?:a\.m\.|p\.m\.|am|pm)?(?:\s*(?:et|est|edt|ct|cst|cdt|mt|mst|mdt|pt|pst|pdt|local time))?\b",
+    re.IGNORECASE,
+)
+SOLICITATION_NUMBER_PATTERN = re.compile(
+    r"(?:rfp|rfq|ifb|itb|solicitation|bid)(?:\s+(?:number|no\.?))?[\s#:.-]*(?P<value>[A-Za-z0-9][A-Za-z0-9./-]{2,})",
+    re.IGNORECASE,
+)
+PAGE_HEADER_PATTERN = re.compile(r"^page\s+\d+\s+of\s+\d+$", re.IGNORECASE)
 
 ACTION_VERBS = (
     "submit",
@@ -64,14 +73,63 @@ EXCLUDE_PATTERNS = [
     re.compile(r"\bthe state intends to award\b", re.IGNORECASE),
     re.compile(r"\bbidders should note\b", re.IGNORECASE),
     re.compile(r"\bthis list is not exhaustive\b", re.IGNORECASE),
-    re.compile(r"\bstate reserves the right\b", re.IGNORECASE),
     re.compile(r"\bstate may request a revision\b", re.IGNORECASE),
     re.compile(r"\bpublicly announced\b", re.IGNORECASE),
     re.compile(r"\bdefinitions?\b", re.IGNORECASE),
-    re.compile(r"\bshall mean\b", re.IGNORECASE),
-    re.compile(r"\bfor example\b", re.IGNORECASE),
     re.compile(r"\bquick reference guides?\b", re.IGNORECASE),
 ]
+
+GENERIC_TITLE_LINES = {
+    "request for proposal",
+    "request for proposals",
+    "request for quotation",
+    "request for quotations",
+    "request for bid",
+    "request for bids",
+    "solicitation",
+    "solicitation document",
+}
+
+TITLE_BLOCKLIST = (
+    "issued by",
+    "issued for",
+    "due date",
+    "deadline",
+    "evaluation",
+    "criteria",
+    "submit",
+    "submission",
+    "instruction",
+    "shall",
+    "must",
+    "contract value",
+    "budget",
+    "not to exceed",
+)
+
+CLIENT_PATTERNS = (
+    re.compile(r"^issued by[:\s-]+(?P<value>.+)$", re.IGNORECASE),
+    re.compile(r"^issued for[:\s-]+(?P<value>.+)$", re.IGNORECASE),
+    re.compile(r"^agency[:\s-]+(?P<value>.+)$", re.IGNORECASE),
+    re.compile(r"^client[:\s-]+(?P<value>.+)$", re.IGNORECASE),
+)
+CLIENT_KEYWORDS = ("city", "county", "state", "university", "authority", "district", "board", "office", "department")
+CLIENT_BLOCKLIST = ("request", "proposal", "rfp", "due", "deadline", "evaluation", "submit", "shall", "must")
+CLIENT_ENTITY_SUFFIXES = (" city", " county", " state", " university", " authority", " district", " board", " office", " department")
+
+QUESTION_DUE_CUES = ("question due", "questions due", "written questions due", "questions deadline")
+PROPOSAL_DUE_CUES = ("proposal due", "proposals due", "submission due", "submissions due", "bid due", "bids due")
+ISSUE_DATE_CUES = ("issue date", "release date", "issued date", "rfp release date", "solicitation issued")
+CONTRACT_TERM_CUES = ("contract term", "term of the contract", "base year", "option year", "renewal term", "contract period")
+GEOGRAPHY_CUES = ("location", "locations", "site", "sites", "facility", "facilities", "county", "city", "region", "campus")
+SCOPE_CUES = ("scope of work", "scope summary", "services include", "the work includes", "services to be provided")
+SUBMISSION_CUES = ("submit", "submission", "portal", "upload", "electronic", "hard copy", "email")
+BONDING_CUES = ("bond", "bonding", "performance bond", "payment bond", "bid bond")
+INSURANCE_CUES = ("insurance", "certificate of insurance", "coverage", "general liability", "workers compensation")
+FORM_CUES = ("form", "forms", "attachment", "attachments", "appendix", "exhibit", "affidavit", "certification", "resume")
+MEETING_CUES = ("walkthrough", "walk-through", "pre-bid", "pre bid", "pre-proposal", "pre proposal", "site visit", "conference")
+INCUMBENT_CUES = ("incumbent", "current provider", "current contractor")
+OPERATIONAL_CUES = ("staffing", "janitorial", "cleaning", "transition", "supervision", "schedule", "mobilization", "site")
 
 SIMILARITY_STOPWORDS = {
     "the",
@@ -198,7 +256,6 @@ def _similarity_tokens(value: str) -> set[str]:
             continue
         if token in SIMILARITY_STOPWORDS:
             continue
-        # Tiny singularization step helps collapse "line/lines", "bidder/bidders".
         if len(token) > 4 and token.endswith("s"):
             token = token[:-1]
         tokens.append(token)
@@ -218,15 +275,12 @@ def _split_compound_requirement(line: str) -> list[str]:
     if not text:
         return []
 
-    # Split subject-repeated clauses:
-    # "... and the Bidder shall ...", "...; The Contractor shall ...".
     subject_break = re.compile(
         r"(?:(?:\s+and)?\s*;\s*|\s+and\s+)(?=(?:the\s+)?(?:bidder|bidders|offeror|contractor|subcontractor)\s+(?:shall|must|should)\b)",
         re.IGNORECASE,
     )
     parts = [p.strip(" ;") for p in subject_break.split(text) if p.strip(" ;")]
 
-    # Split simple "must/shall ... and must/shall ..." constructions.
     expanded: list[str] = []
     repeated_modal = re.compile(r"\s+and\s+(?=(?:must|shall|should)\b)", re.IGNORECASE)
     for part in parts:
@@ -249,7 +303,6 @@ def _split_compound_requirement(line: str) -> list[str]:
         else:
             expanded.extend(modal_parts)
 
-    # Avoid over-splitting very short fragments; keep original when split is noisy.
     cleaned = [p for p in expanded if len(p) >= 25]
     if len(cleaned) < 2:
         return [text]
@@ -267,7 +320,6 @@ def _is_actionable_requirement(line: str) -> bool:
     if any(pattern.search(line) for pattern in EXCLUDE_PATTERNS):
         return False
 
-    # Drop obvious term-definition headings ("Dealer/Distributor – ...")
     if re.match(r"^[A-Za-z0-9/\-\s\(\)]+[–-]\s", line) and " means " in f" {lowered} ":
         return False
 
@@ -290,16 +342,13 @@ def _is_actionable_requirement(line: str) -> bool:
         )
     )
 
-    # Keep "should" lines only when tied to compliance-enforcement language.
     if not has_trigger:
         if not (has_should and has_subject and has_should_action and has_enforcement):
             return False
 
-    # Keep lines that define direct bidder/contractor obligations or scope execution tasks.
     if has_subject and has_action:
         return True
 
-    # Some scope lines use "Contractor shall ..." without explicit action keyword from ACTION_VERBS list.
     if "contractor shall" in lowered:
         return True
 
@@ -320,7 +369,6 @@ def _dedupe_requirements(requirements: list[dict]) -> list[dict]:
         tokens = _similarity_tokens(text)
         is_duplicate = False
         for prior_tokens, prior_category in seen_semantic:
-            # Keep similarity strict to avoid dropping legitimately distinct obligations.
             similarity = _jaccard_similarity(tokens, prior_tokens)
             if similarity >= 0.85 and req["category"] == prior_category:
                 is_duplicate = True
@@ -343,8 +391,324 @@ def _dedupe_requirements(requirements: list[dict]) -> list[dict]:
     return numbered
 
 
+def _clean_line(value: str) -> str:
+    return re.sub(r"\s+", " ", value.strip(" -:;\t"))
+
+
+def _content_lines(raw_text: str) -> list[str]:
+    lines: list[str] = []
+    for raw_line in raw_text.splitlines():
+        cleaned = raw_line.strip()
+        if not cleaned or cleaned.lower().startswith("source file:") or PAGE_HEADER_PATTERN.match(cleaned):
+            continue
+        lines.append(cleaned)
+    return lines
+
+
+def _is_client_like(value: str) -> bool:
+    lowered = value.lower()
+    if any(marker in lowered for marker in CLIENT_BLOCKLIST):
+        return False
+    if any(pattern.search(value) for pattern in CLIENT_PATTERNS):
+        return True
+    if lowered.endswith(CLIENT_ENTITY_SUFFIXES):
+        return True
+    return "public schools" in lowered
+
+
+def _looks_like_title(value: str) -> bool:
+    if not value or len(value) > 140:
+        return False
+    lowered = value.lower()
+    normalized = re.sub(r"\([^)]*\)", "", lowered)
+    normalized = re.sub(r"[^a-z\s]", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    if normalized in GENERIC_TITLE_LINES:
+        return False
+    if any(marker in lowered for marker in TITLE_BLOCKLIST):
+        return False
+    if _is_client_like(value):
+        return False
+    if SOLICITATION_NUMBER_PATTERN.search(value):
+        return False
+    alpha_words = re.findall(r"[A-Za-z]{2,}", value)
+    return len(alpha_words) >= 2
+
+
+def _candidate_client_value(line: str) -> str | None:
+    cleaned = _clean_line(line)
+    if not cleaned:
+        return None
+    for pattern in CLIENT_PATTERNS:
+        match = pattern.search(cleaned)
+        if match:
+            return _clean_line(match.group("value"))
+    lowered = cleaned.lower()
+    if any(keyword in lowered for keyword in CLIENT_KEYWORDS) and not any(marker in lowered for marker in CLIENT_BLOCKLIST):
+        return cleaned
+    return None
+
+
+def _first_date(line: str) -> str | None:
+    match = DATE_PATTERN.search(line)
+    return match.group(1) if match else None
+
+
+def _first_time(line: str) -> str | None:
+    match = TIME_PATTERN.search(line)
+    if not match:
+        return None
+    value = _clean_line(match.group(0))
+    return value if any(token in value.lower() for token in ("am", "pm", ":")) else None
+
+
+def _record_provenance(field_provenance: dict[str, list[str]], field_name: str, line: str) -> None:
+    snippet = _clean_line(line)
+    if not snippet:
+        return
+    existing = field_provenance.setdefault(field_name, [])
+    if snippet in existing:
+        return
+    if len(existing) >= 3:
+        return
+    existing.append(snippet)
+
+
+def _set_scalar_field(
+    structured_fields: dict[str, object],
+    field_provenance: dict[str, list[str]],
+    field_name: str,
+    value: str | None,
+    line: str,
+) -> None:
+    if not value:
+        return
+    if structured_fields.get(field_name):
+        return
+    structured_fields[field_name] = _clean_line(value)
+    _record_provenance(field_provenance, field_name, line)
+
+
+def _append_list_field(
+    structured_fields: dict[str, object],
+    field_provenance: dict[str, list[str]],
+    field_name: str,
+    value: str | None,
+    line: str,
+    *,
+    limit: int = 8,
+) -> None:
+    if not value:
+        return
+    items = structured_fields.setdefault(field_name, [])
+    assert isinstance(items, list)
+    cleaned = _clean_line(value)
+    normalized = _normalize_text(cleaned)
+    if not cleaned or any(_normalize_text(existing) == normalized for existing in items):
+        return
+    if len(items) >= limit:
+        return
+    items.append(cleaned)
+    _record_provenance(field_provenance, field_name, line)
+
+
+def _extract_after_delimiter(line: str) -> str | None:
+    for delimiter in (":", " - ", " -- "):
+        if delimiter in line:
+            value = line.split(delimiter, 1)[1].strip()
+            return value or None
+    return None
+
+
+def _clip_sentence(value: str, *, max_length: int = 240) -> str:
+    cleaned = _clean_line(value)
+    if len(cleaned) <= max_length:
+        return cleaned
+    return cleaned[: max_length - 3].rstrip(" ,;:") + "..."
+
+
+def _empty_structured_fields() -> dict[str, object]:
+    return {
+        "client_name": None,
+        "opportunity_name": None,
+        "solicitation_number": None,
+        "issue_date": None,
+        "questions_due_date": None,
+        "proposal_due_date": None,
+        "proposal_due_time": None,
+        "contract_term": None,
+        "geography": [],
+        "scope_summary": None,
+        "submission_method": None,
+        "bonding_requirements": [],
+        "insurance_requirements": [],
+        "mandatory_forms": [],
+        "evaluation_criteria": [],
+        "mandatory_meetings": [],
+        "incumbent_hints": [],
+        "operational_requirements": [],
+    }
+
+
+def _extract_structured_fields(lines: list[str], requirements: list[dict]) -> tuple[dict[str, object], dict[str, list[str]]]:
+    structured_fields = _empty_structured_fields()
+    field_provenance: dict[str, list[str]] = {}
+
+    for line in lines:
+        cleaned = _clean_line(line)
+        lowered = cleaned.lower()
+
+        if not structured_fields["client_name"]:
+            client_value = _candidate_client_value(cleaned)
+            if client_value:
+                _set_scalar_field(structured_fields, field_provenance, "client_name", client_value, cleaned)
+
+        if not structured_fields["opportunity_name"] and _looks_like_title(cleaned):
+            _set_scalar_field(structured_fields, field_provenance, "opportunity_name", cleaned, cleaned)
+
+        if not structured_fields["solicitation_number"]:
+            solicitation_match = SOLICITATION_NUMBER_PATTERN.search(cleaned)
+            if solicitation_match:
+                _set_scalar_field(
+                    structured_fields,
+                    field_provenance,
+                    "solicitation_number",
+                    solicitation_match.group("value"),
+                    cleaned,
+                )
+
+        first_date = _first_date(cleaned)
+        if first_date and any(cue in lowered for cue in ISSUE_DATE_CUES):
+            _set_scalar_field(structured_fields, field_provenance, "issue_date", first_date, cleaned)
+        if first_date and any(cue in lowered for cue in QUESTION_DUE_CUES):
+            _set_scalar_field(structured_fields, field_provenance, "questions_due_date", first_date, cleaned)
+        if first_date and any(cue in lowered for cue in PROPOSAL_DUE_CUES):
+            _set_scalar_field(structured_fields, field_provenance, "proposal_due_date", first_date, cleaned)
+            _set_scalar_field(structured_fields, field_provenance, "proposal_due_time", _first_time(cleaned), cleaned)
+
+        if any(cue in lowered for cue in CONTRACT_TERM_CUES):
+            _set_scalar_field(
+                structured_fields,
+                field_provenance,
+                "contract_term",
+                _extract_after_delimiter(cleaned) or cleaned,
+                cleaned,
+            )
+
+        if any(cue in lowered for cue in GEOGRAPHY_CUES):
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "geography",
+                _extract_after_delimiter(cleaned) or cleaned,
+                cleaned,
+                limit=6,
+            )
+
+        if any(cue in lowered for cue in SCOPE_CUES):
+            _set_scalar_field(
+                structured_fields,
+                field_provenance,
+                "scope_summary",
+                _clip_sentence(_extract_after_delimiter(cleaned) or cleaned),
+                cleaned,
+            )
+
+        if any(cue in lowered for cue in SUBMISSION_CUES) and any(
+            marker in lowered for marker in ("portal", "upload", "electronic", "email", "hard copy", "sealed", "submit")
+        ):
+            _set_scalar_field(
+                structured_fields,
+                field_provenance,
+                "submission_method",
+                _extract_after_delimiter(cleaned) or cleaned,
+                cleaned,
+            )
+
+        if any(cue in lowered for cue in BONDING_CUES):
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "bonding_requirements",
+                cleaned,
+                cleaned,
+                limit=6,
+            )
+
+        if any(cue in lowered for cue in INSURANCE_CUES):
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "insurance_requirements",
+                cleaned,
+                cleaned,
+                limit=6,
+            )
+
+        if any(cue in lowered for cue in FORM_CUES) and any(marker in lowered for marker in ("must", "shall", "required", "include", "submit", "attach")):
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "mandatory_forms",
+                cleaned,
+                cleaned,
+                limit=10,
+            )
+
+        if "evaluation" in lowered or "criteria" in lowered or "factor" in lowered or "points" in lowered:
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "evaluation_criteria",
+                cleaned,
+                cleaned,
+                limit=10,
+            )
+
+        if any(cue in lowered for cue in MEETING_CUES):
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "mandatory_meetings",
+                cleaned,
+                cleaned,
+                limit=8,
+            )
+
+        if any(cue in lowered for cue in INCUMBENT_CUES):
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "incumbent_hints",
+                cleaned,
+                cleaned,
+                limit=6,
+            )
+
+    for req in requirements:
+        requirement_text = req["requirement_text"]
+        lowered = requirement_text.lower()
+        if any(cue in lowered for cue in OPERATIONAL_CUES) or req["category"] in {"TECHNICAL", "MANAGEMENT"}:
+            _append_list_field(
+                structured_fields,
+                field_provenance,
+                "operational_requirements",
+                requirement_text,
+                requirement_text,
+                limit=8,
+            )
+
+    if not structured_fields["scope_summary"] and structured_fields["operational_requirements"]:
+        first_requirement = structured_fields["operational_requirements"][0]
+        assert isinstance(first_requirement, str)
+        structured_fields["scope_summary"] = _clip_sentence(first_requirement)
+        _record_provenance(field_provenance, "scope_summary", first_requirement)
+
+    return structured_fields, field_provenance
+
+
 def parse_rfp_text(raw_text: str) -> dict:
-    lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
+    lines = _content_lines(raw_text)
 
     deadline = None
     deadline_priority = -1
@@ -353,7 +717,7 @@ def parse_rfp_text(raw_text: str) -> dict:
     requirements: list[dict] = []
 
     for line in lines:
-        deadline_match = DEADLINE_PATTERN.search(line)
+        deadline_match = DATE_PATTERN.search(line)
         if deadline_match and any(x in line.lower() for x in ["due", "deadline", "submit"]):
             line_priority = _deadline_priority(line)
             if line_priority > deadline_priority:
@@ -362,9 +726,9 @@ def parse_rfp_text(raw_text: str) -> dict:
 
         lowered = line.lower()
         if "evaluation" in lowered or "factor" in lowered or "criteria" in lowered:
-            criteria_hits.append(line)
-        if "submit" in lowered or "instruction" in lowered or "format" in lowered:
-            instructions_hits.append(line)
+            criteria_hits.append(_clean_line(line))
+        if "submit" in lowered or "instruction" in lowered or "format" in lowered or "portal" in lowered:
+            instructions_hits.append(_clean_line(line))
 
         for atomic in _split_compound_requirement(line):
             if _is_actionable_requirement(atomic):
@@ -381,10 +745,23 @@ def parse_rfp_text(raw_text: str) -> dict:
                 )
 
     deduped = _dedupe_requirements(requirements)
+    structured_fields, field_provenance = _extract_structured_fields(lines, deduped)
+    proposal_due_date = structured_fields.get("proposal_due_date")
+    if isinstance(proposal_due_date, str) and proposal_due_date:
+        deadline = proposal_due_date
+
+    evaluation_lines = structured_fields["evaluation_criteria"] if structured_fields["evaluation_criteria"] else criteria_hits[:10]
+    submission_lines: list[str] = []
+    submission_method = structured_fields.get("submission_method")
+    if isinstance(submission_method, str) and submission_method:
+        submission_lines.append(submission_method)
+    submission_lines.extend([line for line in instructions_hits[:10] if line not in submission_lines])
 
     return {
         "deadline": deadline,
-        "evaluation_criteria": "\n".join(criteria_hits[:10]) if criteria_hits else None,
-        "submission_instructions": "\n".join(instructions_hits[:10]) if instructions_hits else None,
+        "evaluation_criteria": "\n".join(evaluation_lines[:10]) if evaluation_lines else None,
+        "submission_instructions": "\n".join(submission_lines[:10]) if submission_lines else None,
+        "structured_fields": structured_fields,
+        "field_provenance": field_provenance,
         "requirements": deduped,
     }

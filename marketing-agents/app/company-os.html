@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Boss Key Company OS</title>
+  <link rel="stylesheet" href="/company-os.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Boss Key Company OS</p>
+        <h1 id="companyName">Loading company system...</h1>
+        <p class="lede" id="companyTagline"></p>
+        <p class="north-star" id="northStar"></p>
+        <div class="hero-actions">
+          <a class="action action-primary" href="/">Open Operator Console</a>
+          <a class="action action-secondary" href="#departments">View Departments</a>
+        </div>
+      </div>
+      <aside class="hero-panel">
+        <p class="panel-label">Operating Principles</p>
+        <ul id="principlesList" class="principles"></ul>
+      </aside>
+    </header>
+
+    <main id="app" hidden>
+      <section id="metricStrip" class="metric-strip" aria-label="Key company operating metrics"></section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Cadence</p>
+          <h2>Operating Rhythm</h2>
+          <p class="section-copy">Use these loops to decide what the company checks every day, every week, and every quarter.</p>
+        </div>
+        <div id="cadenceGrid" class="cadence-grid"></div>
+      </section>
+
+      <section class="section" id="departments">
+        <div class="section-heading">
+          <p class="eyebrow">Departments</p>
+          <h2>Department Agent Loops</h2>
+          <p class="section-copy">Each department below owns one part of the operating system, with explicit handoffs instead of vague "AI help."</p>
+        </div>
+        <div id="departmentDeck" class="department-deck"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Control Files</p>
+          <h2>Operating Data Layer</h2>
+          <p class="section-copy">These are the lightweight files the new agents use to keep revenue, delivery, and cash visible.</p>
+        </div>
+        <div id="fileGrid" class="file-grid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Approvals</p>
+          <h2>Human Gates</h2>
+          <p class="section-copy">Agents can prep and route. Humans still approve the moments where trust, money, or obligations move outside the company.</p>
+        </div>
+        <div id="approvalGrid" class="approval-grid"></div>
+      </section>
+    </main>
+
+    <div id="errorBox" class="error-box" hidden></div>
+  </div>
+
+  <script src="/company-os.js" defer></script>
+</body>
+</html>

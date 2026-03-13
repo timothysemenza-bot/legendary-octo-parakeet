@@ -78,3 +78,41 @@ If `OPENAI_API_KEY` is set in `.env` or `.env.local`, the same script will call 
 Audio/video inputs are supported when local transcription is installed:
 
 `pwsh -File .\marketing-agents\scripts\run-boss-key-content-operator.ps1 -InputFile .\path\to\clip.mp4`
+
+## Boss Key Company OS
+
+The full company-running agent stack now lives in:
+- blueprint: `marketing-agents/COMPANY-OPERATING-SYSTEM.md`
+- structured agent catalog: `marketing-agents/data/company_os_agents.json`
+- prompt specs: `marketing-agents/prompts/16_founder_control_tower.md` through `marketing-agents/prompts/31_lessons_knowledge_promotion_manager.md`
+- operator app dashboard: `http://localhost:3201/company-os.html`
+
+Use this layer when you need internal operating coverage beyond outbound and proposals:
+- founder control
+- finance and cash visibility
+- billing and collections
+- delivery planning
+- client success and renewals
+- staffing and hiring
+- SOP and knowledge capture
+- compliance and credential tracking
+- approved communication monitoring across email, transcripts, and meeting notes
+- structured engagement intake, routing, reverse timelines, and stakeholder coordination
+- one internal OS that can run every client engagement instead of separate systems by client
+
+The communication intake runner is now wired into the OS:
+- source registry: `marketing-agents/data/approved_communication_sources.csv`
+- manual drop zone for approved exports: `marketing-agents/data/engagement-inbox/`
+- runner: `marketing-agents/scripts/run-engagement-intake.ps1`
+- latest summary outputs:
+  - `marketing-agents/data/engagement_intake_summary.json`
+  - `marketing-agents/briefs/engagement-intake-latest.md`
+
+It writes directly into:
+- `marketing-agents/data/communication_signal_log.csv`
+- `marketing-agents/data/engagement_register.csv`
+- `marketing-agents/data/engagement_timeline.csv`
+- `marketing-agents/data/stakeholder_map.csv`
+- `marketing-agents/data/action_workbench.csv`
+- `marketing-agents/data/approval_router_queue.csv`
+- `marketing-agents/data/meeting_follow_through.csv`

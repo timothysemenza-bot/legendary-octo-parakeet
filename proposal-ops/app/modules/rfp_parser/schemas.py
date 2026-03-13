@@ -3,6 +3,27 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class RfpStructuredFields(BaseModel):
+    client_name: str | None = None
+    opportunity_name: str | None = None
+    solicitation_number: str | None = None
+    issue_date: str | None = None
+    questions_due_date: str | None = None
+    proposal_due_date: str | None = None
+    proposal_due_time: str | None = None
+    contract_term: str | None = None
+    geography: list[str] = Field(default_factory=list)
+    scope_summary: str | None = None
+    submission_method: str | None = None
+    bonding_requirements: list[str] = Field(default_factory=list)
+    insurance_requirements: list[str] = Field(default_factory=list)
+    mandatory_forms: list[str] = Field(default_factory=list)
+    evaluation_criteria: list[str] = Field(default_factory=list)
+    mandatory_meetings: list[str] = Field(default_factory=list)
+    incumbent_hints: list[str] = Field(default_factory=list)
+    operational_requirements: list[str] = Field(default_factory=list)
+
+
 class RfpSourceDocumentInput(BaseModel):
     source_filename: str = Field(min_length=1, max_length=255)
     content_type: str = Field(min_length=1, max_length=100)
@@ -68,6 +89,8 @@ class RfpParseResponse(BaseModel):
     extracted_deadline: str | None
     extracted_evaluation_criteria: str | None
     extracted_submission_instructions: str | None
+    structured_fields: RfpStructuredFields | None = None
+    field_provenance: dict[str, list[str]] = Field(default_factory=dict)
     requirements: list[RequirementRecord]
     source_documents: list[RfpSourceDocumentRecord] = Field(default_factory=list)
 

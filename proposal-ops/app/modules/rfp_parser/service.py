@@ -1,3 +1,4 @@
+import json
 import mimetypes
 import re
 from hashlib import sha256
@@ -18,6 +19,7 @@ from app.modules.rfp_parser.schemas import (
     RfpParseRequest,
     RfpParseResponse,
     RfpReparseRequest,
+    RfpStructuredFields,
     SourceDocumentDiffRecord,
     RfpSourceDocumentInput,
     RfpSourceDocumentRecord,
@@ -103,6 +105,16 @@ def _document_family_id(value: RfpSourceDocument | RfpSourceDocumentInput) -> st
     return family_id or row_id or str(uuid4())
 
 
+def _safe_json_object(raw: str | None) -> dict:
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
+
 class RfpParserService:
     def __init__(self, db: Session) -> None:
         self.db = db
@@ -166,6 +178,14 @@ class RfpParserService:
             extracted_deadline=solicitation.extracted_deadline,
             extracted_evaluation_criteria=solicitation.extracted_evaluation_criteria,
             extracted_submission_instructions=solicitation.extracted_submission_instructions,
+            structured_fields=RfpStructuredFields.model_validate(_safe_json_object(solicitation.structured_fields_json))
+            if solicitation.structured_fields_json
+            else None,
+            field_provenance={
+                key: [str(value) for value in values]
+                for key, values in _safe_json_object(solicitation.field_provenance_json).items()
+                if isinstance(values, list)
+            },
             requirements=requirements,
             source_documents=[
                 RfpSourceDocumentRecord.model_validate(row, from_attributes=True) for row in source_document_rows
@@ -550,6 +570,8 @@ class RfpParserService:
             extracted_deadline=parsed["deadline"],
             extracted_evaluation_criteria=parsed["evaluation_criteria"],
             extracted_submission_instructions=parsed["submission_instructions"],
+            structured_fields_json=json.dumps(parsed["structured_fields"]),
+            field_provenance_json=json.dumps(parsed["field_provenance"]),
         )
         self.db.add(solicitation)
         self.db.flush()
