@@ -24,6 +24,12 @@ For the automation workspace specifically, see [marketing-agents/README.md](mark
 - Run `npm start`.
 - Open `http://localhost:3000`.
 
+## Bunny dungeon crawler quick launch
+
+- Start the server with `npm start`.
+- Open `http://localhost:3000/bunny-dungeon-crawler.html`.
+- On iPhone: use swipe gestures on the board or tap the on-screen arrow controls.
+
 ## Environment variables
 
 Create `.env` from `.env.example` and adjust values.
