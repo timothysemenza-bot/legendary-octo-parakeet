@@ -379,6 +379,111 @@ class CommercialEngagement(Base):
     contractor: Mapped[Contractor | None] = relationship()
 
 
+class GrowthRelationshipProfile(Base):
+    __tablename__ = "growth_relationship_profiles"
+
+    relationship_id: Mapped[str] = mapped_column(String(120), primary_key=True)
+    contractor_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("contractors.id"), nullable=False, unique=True, index=True
+    )
+    current_opportunity_id: Mapped[str | None] = mapped_column(
+        String(36), ForeignKey("opportunities.id"), nullable=True, index=True
+    )
+    created_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    company_name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    contact_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    role: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    linkedin_profile_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    linkedin_company_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    relationship_stage: Mapped[str] = mapped_column(String(40), nullable=False, default="queued", index=True)
+    warm_signal: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    fit_confirmed: Mapped[str] = mapped_column(String(10), nullable=False, default="no")
+    pain_point: Mapped[str | None] = mapped_column(Text, nullable=True)
+    desired_outcome: Mapped[str | None] = mapped_column(Text, nullable=True)
+    offer_hypothesis: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    urgency_level: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    scope_breadth: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    stakeholder_complexity: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    research_load: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    delivery_intensity: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    last_touch_date: Mapped[date | None] = mapped_column(Date, nullable=True, index=True)
+    last_interaction_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    next_best_touch_type: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    next_best_touch_path: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    meeting_needed: Mapped[str] = mapped_column(String(10), nullable=False, default="no")
+    meeting_status: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    proposal_status: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    ptw_status: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    ptw_stage: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    ptw_recommendation: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    ptw_record_id: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    owner_decision: Mapped[str] = mapped_column(String(20), nullable=False, default="hold")
+    review_status: Mapped[str] = mapped_column(String(40), nullable=False, default="pending-review")
+    ready_state: Mapped[str] = mapped_column(String(60), nullable=False, default="draft-pending-review")
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=_utcnow, onupdate=_utcnow, nullable=False
+    )
+
+    contractor: Mapped[Contractor] = relationship()
+    current_opportunity: Mapped["Opportunity | None"] = relationship(foreign_keys=[current_opportunity_id])
+
+
+class GrowthMarketEvidence(Base):
+    __tablename__ = "growth_market_evidence"
+
+    knowledge_id: Mapped[str] = mapped_column(String(120), primary_key=True)
+    relationship_id: Mapped[str | None] = mapped_column(
+        String(120), ForeignKey("growth_relationship_profiles.relationship_id"), nullable=True, index=True
+    )
+    contractor_id: Mapped[str | None] = mapped_column(
+        String(36), ForeignKey("contractors.id"), nullable=True, index=True
+    )
+    opportunity_id: Mapped[str | None] = mapped_column(
+        String(36), ForeignKey("opportunities.id"), nullable=True, index=True
+    )
+    company_name: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    entity_type: Mapped[str | None] = mapped_column(String(60), nullable=True, index=True)
+    entity_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    source_type: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    source_reference: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_date: Mapped[date | None] = mapped_column(Date, nullable=True, index=True)
+    source_reliability: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    confidence: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    customer_objective: Mapped[str | None] = mapped_column(Text, nullable=True)
+    customer_need: Mapped[str | None] = mapped_column(Text, nullable=True)
+    customer_value_drivers: Mapped[str | None] = mapped_column(Text, nullable=True)
+    buyer_priorities: Mapped[str | None] = mapped_column(Text, nullable=True)
+    evaluation_priorities: Mapped[str | None] = mapped_column(Text, nullable=True)
+    buying_behavior: Mapped[str | None] = mapped_column(Text, nullable=True)
+    delivery_context: Mapped[str | None] = mapped_column(Text, nullable=True)
+    timing_context: Mapped[str | None] = mapped_column(Text, nullable=True)
+    budget_signal: Mapped[str | None] = mapped_column(Text, nullable=True)
+    budget_band: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    competitor_name: Mapped[str | None] = mapped_column(Text, nullable=True)
+    incumbent_status: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    alternative_option: Mapped[str | None] = mapped_column(Text, nullable=True)
+    big4_technical: Mapped[str | None] = mapped_column(Text, nullable=True)
+    big4_management: Mapped[str | None] = mapped_column(Text, nullable=True)
+    big4_past_performance: Mapped[str | None] = mapped_column(Text, nullable=True)
+    big4_cost_price: Mapped[str | None] = mapped_column(Text, nullable=True)
+    differentiation_hypothesis: Mapped[str | None] = mapped_column(Text, nullable=True)
+    evidence_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    assumptions: Mapped[str | None] = mapped_column(Text, nullable=True)
+    ethical_use_check: Mapped[str] = mapped_column(String(10), nullable=False, default="yes")
+    last_validated_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=_utcnow, onupdate=_utcnow, nullable=False
+    )
+
+    relationship_profile: Mapped[GrowthRelationshipProfile | None] = relationship()
+    contractor: Mapped[Contractor | None] = relationship()
+    opportunity: Mapped["Opportunity | None"] = relationship()
+
+
 class ProposalWorkflowSummary(Base):
     __tablename__ = "proposal_workflow_summaries"
     __table_args__ = (UniqueConstraint("opportunity_id", name="uq_proposal_summary_opportunity"),)

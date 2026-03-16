@@ -876,6 +876,24 @@ def dashboard_view(request: Request, db: Session = Depends(get_db)) -> HTMLRespo
     )
 
 
+@web_router.get("/bosskey/growth-os", response_class=HTMLResponse)
+def boss_key_growth_os_view(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
+    service = JanitorialOsService(db)
+    summary = service.boss_key_growth_os_summary()
+    return templates.TemplateResponse(
+        request=request,
+        name="bosskey_growth_os.html",
+        context={
+            "summary": summary,
+            "page_key": "bosskey-growth-os",
+            "build_command": "npm run bosskey:growth:build",
+            "apply_command": "npm run bosskey:growth:apply",
+            "packet_path": "marketing-agents/briefs/boss-key-review-packet-latest.md",
+            "decision_path": "marketing-agents/data/boss_key_review_decisions.csv",
+        },
+    )
+
+
 @web_router.post("/dashboard/seed-demo")
 def seed_demo_web(db: Session = Depends(get_db)) -> RedirectResponse:
     service = JanitorialOsService(db)

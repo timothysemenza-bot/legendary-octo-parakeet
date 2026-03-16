@@ -1,76 +1,65 @@
-# Aircall Automation Notes
+# Aircall Capture Notes
 
-## Recording
+## Current Model
 
-Call recording is controlled in Aircall admin/workspace settings, not in this app.
+The old local Operator Console webhook flow has been retired.
 
-Enable recording inside Aircall, then use one of these paths to log outcomes into Boss Key:
+Aircall activity should now enter the company OS through file capture:
 
-1. Paste notes/transcript into `Aircall Auto Log` panel in the Operator Console.
-2. Send JSON into `POST /api/aircall-ingest` from an automation tool.
-3. Use Aircall webhooks into `POST /api/aircall-webhook` for direct automatic logging.
+1. Save notes, transcripts, or exports from Aircall into a watched source folder.
+2. Run `marketing-agents/scripts/auto-call-intake-agent.ps1`.
+3. The script converts the call into a structured capture in `marketing-agents/data/engagement-inbox/call-intake/`.
+4. The company OS intake runner turns that capture into signals, engagements, actions, timelines, and approvals.
 
-## API payload for auto-log
-
-`POST http://localhost:3201/api/aircall-ingest`
-
-```json
-{
-  "company_name": "Delta Cleaning Service",
-  "contact_name": "Tom Richter",
-  "phone": "+1 609-265-8044",
-  "notes": "Left voicemail with specific margin angle.",
-  "transcript": "",
-  "outcome": "voicemail",
-  "next_action": "Follow up in two days",
-  "next_touch_date": "2026-02-25",
-  "interaction_id": "aircall-12345"
-}
-```
-
-If `outcome` is omitted, the app infers it from notes/transcript text.
-
-## Aircall Webhook Endpoint
-
-- URL: `POST http://localhost:3201/api/aircall-webhook`
-- Recommended auth:
-- Header token: set env `AIRCALL_WEBHOOK_TOKEN` and send `x-webhook-token`
-- HMAC signature: set env `AIRCALL_WEBHOOK_SECRET` and send `x-aircall-signature`
-
-Supported payload fields are flexible. The adapter auto-maps common fields:
-
-- IDs: `id`, `call_id`, `data.call_id`, `sid`
-- Company/contact: `company_name`, `contact.name`, `contact.company_name`
-- Phone: `phone`, `number`, `to`, `from`, `contact.phone_number`
-- Notes/transcript: `notes`, `summary`, `comment`, `transcript`
-- Outcome hints: `outcome`, `disposition`, `status`, `event`, `type`
-
-If not provided, the adapter infers outcome from note/transcript text.
-
-## Public tunnel (so Aircall can reach your local app)
-
-Start secure tunnel + token:
+## Recommended Command
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\start-aircall-webhook-tunnel.ps1
+powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\auto-call-intake-agent.ps1 -BusinessHoursOnly -BusinessStart 08:30 -BusinessEnd 17:30
 ```
 
-This command will:
+## Source Folder Setup
 
-- start/restart Operator Console on `localhost:3201`
-- create/store `AIRCALL_WEBHOOK_TOKEN` in `marketing-agents/.env.local`
-- start Cloudflare tunnel
-- print your public webhook URL and required header
+Configure transcript/export folders in:
 
-Stop tunnel:
+- `marketing-agents/data/call-capture/source-folders.txt`
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\stop-aircall-webhook-tunnel.ps1
-```
+Each line should be one absolute folder path where Aircall or related tooling drops transcripts, notes, or recordings.
+
+## Supported Inputs
+
+- `.txt`
+- `.md`
+- `.json`
+- `.srt`
+- `.wav`
+- `.mp3`
+- `.m4a`
+- `.aac`
+- `.mp4`
+- `.wma`
+
+Audio/video files need local transcription installed. The script tries:
+
+1. Python `faster-whisper`
+2. `whisper` CLI
+
+## Output Path
+
+The company OS captures land in:
+
+- `marketing-agents/data/engagement-inbox/call-intake/`
+
+They are then processed into:
+
+- `marketing-agents/data/communication_signal_log.csv`
+- `marketing-agents/data/engagement_register.csv`
+- `marketing-agents/data/engagement_timeline.csv`
+- `marketing-agents/data/action_workbench.csv`
+- `marketing-agents/data/approval_router_queue.csv`
+- `marketing-agents/data/meeting_follow_through.csv`
 
 ## Important
 
-- `localhost` endpoints only work on your machine unless you expose them through a secure tunnel.
-- Follow-up events are auto-created in:
-- `marketing-agents/data/follow_up_events.csv`
-- `marketing-agents/briefs/follow-up-events.ics`
+- No local webhook server is required anymore.
+- No `localhost:3201` dependency remains in the supported Aircall flow.
+- If you want immediate OS updates after each capture, do not pass `-SkipEngagementIntake`.

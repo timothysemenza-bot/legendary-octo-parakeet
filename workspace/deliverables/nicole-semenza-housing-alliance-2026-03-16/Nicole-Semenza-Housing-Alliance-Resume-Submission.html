@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nicole Semenza - Resume Submission</title>
+  <style>
+    :root {
+      --ink: #1a2430;
+      --muted: #5f6a76;
+      --accent: #1f4d63;
+      --accent-2: #6d8d73;
+      --accent-soft: #eef5f2;
+      --paper: #fffdfa;
+      --line: #d8e1de;
+      --bg: #eef3f4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(109, 141, 115, 0.14), transparent 32%),
+        linear-gradient(180deg, #edf3f4 0%, #f7f8f6 100%);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.32;
+    }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.18in;
+      padding: 0.42in 0.5in 0.38in;
+      background: var(--paper);
+      box-shadow: 0 22px 60px rgba(16, 24, 40, 0.12);
+      position: relative;
+      page-break-after: always;
+      overflow: hidden;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 0.16in;
+      background: linear-gradient(90deg, var(--accent) 0%, #3d6f72 52%, var(--accent-2) 100%);
+    }
+
+    .header {
+      padding-top: 0.06in;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.12in;
+      margin-bottom: 0.14in;
+    }
+
+    h1 {
+      margin: 0 0 0.03in;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24pt;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.02;
+      letter-spacing: 0.01em;
+    }
+
+    .subhead {
+      margin: 0 0 0.06in;
+      font-size: 9.2pt;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+    }
+
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.06in;
+      font-size: 9.3pt;
+      color: var(--muted);
+    }
+
+    .chip {
+      padding: 0.03in 0.08in;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fbfcfa;
+    }
+
+    .summary {
+      margin: 0 0 0.14in;
+      padding: 0.12in 0.14in;
+      border-left: 3px solid var(--accent-2);
+      background: linear-gradient(90deg, var(--accent-soft), rgba(255, 255, 255, 0));
+      font-size: 9.7pt;
+    }
+
+    .section {
+      margin-top: 0.12in;
+    }
+
+    .section-title {
+      margin: 0 0 0.08in;
+      padding-bottom: 0.03in;
+      border-bottom: 1px solid var(--line);
+      color: var(--accent);
+      font-size: 9.2pt;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .skills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.05in 0.18in;
+      margin: 0;
+      padding-left: 0.18in;
+      font-size: 9.15pt;
+    }
+
+    .entry {
+      margin-bottom: 0.12in;
+    }
+
+    .entry-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.16in;
+      align-items: baseline;
+      margin-bottom: 0.03in;
+    }
+
+    .entry-left {
+      min-width: 0;
+    }
+
+    .role {
+      font-size: 10.35pt;
+      font-weight: 700;
+      line-height: 1.22;
+    }
+
+    .org {
+      font-size: 9.45pt;
+      color: var(--accent);
+      font-weight: 700;
+      line-height: 1.22;
+    }
+
+    .meta {
+      flex: 0 0 auto;
+      text-align: right;
+      font-size: 8.85pt;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .entry ul {
+      margin: 0.04in 0 0;
+      padding-left: 0.18in;
+      font-size: 9.25pt;
+    }
+
+    .entry li {
+      margin-bottom: 0.04in;
+    }
+
+    .entry li::marker {
+      color: var(--accent-2);
+    }
+
+    .note {
+      margin: 0.03in 0 0;
+      font-size: 9.2pt;
+    }
+
+    .education-item {
+      margin-bottom: 0.08in;
+      font-size: 9.15pt;
+      line-height: 1.34;
+    }
+
+    .education-item strong {
+      color: var(--accent);
+    }
+
+    .footer {
+      position: absolute;
+      left: 0.5in;
+      right: 0.5in;
+      bottom: 0.18in;
+      display: flex;
+      justify-content: space-between;
+      font-size: 8.2pt;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    @page {
+      size: Letter;
+      margin: 0.34in;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        padding: 0.42in 0.5in 0.38in;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="page">
+      <header class="header">
+        <div class="subhead">Policy Director Application</div>
+        <h1>Nicole Semenza, LSW</h1>
+        <div class="contact">
+          <span class="chip">Cinnaminson, NJ</span>
+          <span class="chip">Philadelphia Region</span>
+          <span class="chip">(603) 661-8702</span>
+          <span class="chip">nicole.l.semenza@gmail.com</span>
+        </div>
+      </header>
+
+      <p class="summary">
+        Policy, research, and advocacy professional with 8+ years of experience advancing legislative priorities, building coalitions, translating research into policy action, and developing public-facing advocacy materials across health and social-impact issues. Track record of engaging legislators, staff, agencies, and partner organizations to move complex priorities through policy development, stakeholder outreach, and evidence-based communications. Strong writer and analyst experienced in policy analysis, technical briefs, legislative reports, action alerts, and partner-facing education. Philadelphia-region candidate based in South Jersey, available for regular in-person work in Philadelphia and frequent travel to Harrisburg.
+      </p>
+
+      <section class="section">
+        <h2 class="section-title">Core Competencies</h2>
+        <ul class="skills">
+          <li>Policy and legislative strategy</li>
+          <li>State and federal advocacy</li>
+          <li>Legislative tracking and policy analysis</li>
+          <li>Coalition-building and partner engagement</li>
+          <li>Policymaker meetings and stakeholder outreach</li>
+          <li>Public policy communications</li>
+          <li>Technical briefs and evidence reviews</li>
+          <li>Action alerts and advocacy toolkits</li>
+          <li>Policy briefings, reports, and presentations</li>
+          <li>Cross-sector relationship management</li>
+          <li>Research evaluation and content analysis</li>
+          <li>Policy reports and publications</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Relevant Experience</h2>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Policy Research Associate, Prenatal-to-Three Policy Impact Center</div>
+              <div class="org">The LBJ School of Public Affairs, University of Texas at Austin</div>
+            </div>
+            <div class="meta">Austin, TX | October 2020-March 2022</div>
+          </div>
+          <ul>
+            <li>Conducted policy research and technical evidence reviews on Medicaid expansion, group prenatal care, doula services, and child screening programs, translating complex findings for agencies and policymakers considering funding and program improvements.</li>
+            <li>Served as the women&apos;s and children&apos;s health policy subject-matter contributor, supporting evidence-based policy development and cross-team dissemination.</li>
+            <li>Responded to requests from legislative staff and partner organizations regarding policy positions and research to improve outcomes for families.</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Director, Legislative Affairs and Advocacy</div>
+              <div class="org">Venture Global Consulting</div>
+            </div>
+            <div class="meta">Alexandria, VA / Austin, TX | August 2018-September 2020</div>
+          </div>
+          <ul>
+            <li>Advanced client policy priorities by helping develop legislative agendas, track legislation, and engage legislators, staff, and external stakeholders.</li>
+            <li>Oversaw and organized Advocacy Days in Washington, DC to strengthen support for advocacy goals across partners with varied perspectives.</li>
+            <li>Developed public-facing advocacy materials, including op-eds, letters of support, and reports, to support legislative strategy and policy education.</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Public Policy Manager; Public Policy Associate</div>
+              <div class="org">Community Anti-Drug Coalitions of America (CADCA)</div>
+            </div>
+            <div class="meta">Alexandria, VA | June 2017-August 2018</div>
+          </div>
+          <ul>
+            <li>Managed stakeholder engagement across congressional chambers to build bipartisan support for national substance abuse prevention initiatives.</li>
+            <li>Developed advocacy toolkits and legislative alerts used by 5,000+ coalition members, helping local coalitions engage lawmakers across congressional districts.</li>
+            <li>Prepared reports, presentations, and publications highlighting grant program results for policymakers, partners, and member audiences.</li>
+            <li>Executed strategic community engagement initiatives to deepen external partnerships and advance coalition priorities.</li>
+          </ul>
+        </article>
+      </section>
+
+      <div class="footer">
+        <span>Nicole Semenza</span>
+        <span>Resume | 1</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <header class="header">
+        <div class="subhead">Housing Alliance of Pennsylvania</div>
+        <h1>Professional Experience Continued</h1>
+      </header>
+
+      <section class="section">
+        <h2 class="section-title">Relevant Experience Continued</h2>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Legislative Fellow</div>
+              <div class="org">The Office of Congresswoman Roybal-Allard (CA-40)</div>
+            </div>
+            <div class="meta">Washington, DC | January 2017-June 2017</div>
+          </div>
+          <ul>
+            <li>Managed the health policy portfolio for an appropriator, Congresswoman Roybal-Allard.</li>
+            <li>Served as congressional lead for the Women&apos;s Working Group on Immigration, partnering with public and private stakeholders to advance policy initiatives.</li>
+            <li>Worked in a fast-moving legislative environment that required clear communication and coordination across internal and external stakeholders.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Additional Experience</h2>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Full-Time Parent</div>
+            </div>
+            <div class="meta">Cinnaminson, NJ | March 2022-Present</div>
+          </div>
+          <p class="note">Career chapter focused on full-time caregiving and family leadership responsibilities.</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Research Associate</div>
+              <div class="org">UConn Rudd Center for Food Policy and Obesity</div>
+            </div>
+            <div class="meta">Hartford, CT | December 2015-April 2017</div>
+          </div>
+          <ul>
+            <li>Conducted content analysis for the FACTS 2017 report on food advertising targeting parents.</li>
+            <li>Managed participant recruitment and engagement for public health research studies.</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <div class="entry-left">
+              <div class="role">Volunteer in Service to America (VISTA)</div>
+              <div class="org">AmeriCorps, University of New Haven</div>
+            </div>
+            <div class="meta">West Haven, CT | August 2012-August 2013</div>
+          </div>
+          <ul>
+            <li>Managed the Community Work-Study program, increasing student participation by 40% through targeted outreach and collaboration.</li>
+            <li>Conducted site visits and built relationships with local nonprofit partners to strengthen university-community engagement.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Education</h2>
+
+        <div class="education-item">
+          <strong>University of Connecticut School of Social Work</strong><br>
+          Master of Social Work (MSW), Policy Practice Concentration<br>
+          Women, Children, and Families Specialization | Urban Service Track / Area Health Education Center Scholar
+        </div>
+
+        <div class="education-item">
+          <strong>University of Connecticut</strong><br>
+          Bachelor of Arts (BA), Psychology | Minor in Criminal Justice
+        </div>
+      </section>
+
+      <div class="footer">
+        <span>Nicole Semenza</span>
+        <span>Resume | 2</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

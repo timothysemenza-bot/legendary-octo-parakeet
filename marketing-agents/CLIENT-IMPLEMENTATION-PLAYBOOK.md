@@ -24,7 +24,7 @@ A practical operating system that helps clients:
 2. System Build + Enablement (4-6 weeks)
 - Stand up the agent workflow and data files.
 - Configure outreach, call planning, and review gates.
-- Deploy operator console and daily brief process.
+- Deploy the company OS data model, intake runners, and daily brief process.
 
 3. Run + Optimize (ongoing retainer)
 - Weekly KPI review and queue quality tuning.
@@ -70,17 +70,21 @@ Key scripts in `marketing-agents/scripts/`:
 - `scan-public-renewals-naics561720.ps1`: contract renewal scanner pattern
 
 ### 4) Execution Interface
-Operator app:
-- `marketing-agents/operator-app.js`
-- UI: `marketing-agents/app/index.html`
-- docs: `marketing-agents/OPERATOR-CONSOLE.md`
+Company OS runbooks:
+- `marketing-agents/COMPANY-OPERATING-SYSTEM.md`
+- `marketing-agents/README.md`
+- `marketing-agents/AUTO-CALL-INTAKE.md`
 
-Provides:
-- morning refresh
-- next-call routing
-- script visibility
-- outcome logging
-- ICS follow-up export
+Primary operating entry points:
+- `marketing-agents/scripts/run-engagement-intake.ps1`
+- `marketing-agents/scripts/auto-call-intake-agent.ps1`
+- `marketing-agents/scripts/generate-daily-brief.ps1`
+
+Primary outputs:
+- `marketing-agents/briefs/engagement-intake-latest.md`
+- `marketing-agents/data/engagement_intake_summary.json`
+- `marketing-agents/data/communication_signal_log.csv`
+- `marketing-agents/data/engagement_register.csv`
 
 ### 5) Channel Integrations (human-approved)
 Email:
@@ -145,10 +149,10 @@ Build:
 
 Deploy:
 - `run-daily-marketing.ps1`
-- operator console UX
+- company OS intake and briefing workflow
 
 Success criteria:
-- team runs day from one queue
+- team runs day from one auditable operating system
 - no orphaned follow-ups
 
 ### Phase 4: Proposal Ops Module (Week 3-5, optional)
@@ -191,10 +195,10 @@ Track at minimum:
 
 ## Client Operating Rhythm
 Daily (15-30 minutes admin):
-1. Run morning refresh.
-2. Review call plan and email drafts.
+1. Run engagement intake and the daily brief refresh.
+2. Review call plan, approvals, and email drafts.
 3. Execute approved calls and sends.
-4. Log outcomes same day.
+4. Log outcomes and new commitments the same day.
 
 Weekly (60 minutes):
 1. Review KPI dashboard and blocked opportunities.
@@ -213,7 +217,7 @@ Sell this as three implementation SKUs:
 - Basic daily cadence
 
 2. Full Outbound Engine
-- Foundation + call planning + operator console + calendar/cadence automation
+- Foundation + call planning + company OS intake + calendar/cadence automation
 
 3. Proposal and Public-Sector Add-On
 - Opportunity scan + proposal draft chain + compliance QA workflow
@@ -243,7 +247,8 @@ Keep unchanged:
 ## Repo Assets To Reuse Immediately
 - System blueprint: `marketing-agents/AGENT-SYSTEM.md`
 - Daily orchestration: `marketing-agents/scripts/run-daily-marketing.ps1`
-- Operator UX: `marketing-agents/operator-app.js`, `marketing-agents/app/index.html`
+- Company OS blueprint: `marketing-agents/COMPANY-OPERATING-SYSTEM.md`
+- Engagement intake: `marketing-agents/scripts/run-engagement-intake.ps1`
 - Proposal module: `marketing-agents/PROPOSAL-ENGINE.md`
 - Email review loop: `marketing-agents/scripts/run-email-review-cycle.ps1`
 - Call planning: `marketing-agents/scripts/generate-daily-call-plan.ps1`

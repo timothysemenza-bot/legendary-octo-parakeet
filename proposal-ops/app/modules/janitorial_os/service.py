@@ -1,11 +1,12 @@
 import csv
 import json
+import re
 from collections import Counter, defaultdict
 from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from typing import Any
 
-from sqlalchemy import delete, func, select
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.orm import Session
 
 from app.core.audit import log_audit_event
@@ -21,6 +22,8 @@ from app.modules.janitorial_os.models import (
     ContractorTouchpoint,
     EvidenceRecord,
     Facility,
+    GrowthMarketEvidence,
+    GrowthRelationshipProfile,
     IntelligenceNote,
     OpportunityMatch,
     Organization,
@@ -250,6 +253,24 @@ def _match_vertical_target(organization_type: str | None, facility_type: str | N
     if "MUNICIPAL" in joined or "CITY" in joined or "DISTRICT" in joined:
         return "MUNICIPAL"
     return None
+
+
+def _friendly_token_label(value: str | None) -> str | None:
+    if not value:
+        return None
+    cleaned = value.replace("_", " ").replace("-", " ").strip()
+    return " ".join(part.capitalize() for part in cleaned.split())
+
+
+def _parse_ptw_band(note_text: str | None) -> dict[str, float | None]:
+    result: dict[str, float | None] = {"compete": None, "win": None, "floor": None}
+    if not note_text:
+        return result
+    for key in result:
+        match = re.search(rf"{key}\s*:\s*([0-9]+(?:\.[0-9]+)?)", note_text, flags=re.IGNORECASE)
+        if match:
+            result[key] = float(match.group(1))
+    return result
 
 
 class JanitorialOsService:
@@ -1740,6 +1761,190 @@ class JanitorialOsService:
         self.db.commit()
         self.db.refresh(commercial)
         return commercial
+
+    def boss_key_growth_os_summary(self) -> dict[str, Any]:
+        profiles = list(
+            self.db.scalars(
+                select(GrowthRelationshipProfile).order_by(
+                    GrowthRelationshipProfile.last_touch_date.desc().nulls_last(),
+                    GrowthRelationshipProfile.updated_at.desc(),
+                    GrowthRelationshipProfile.company_name.asc(),
+                )
+            )
+        )
+        if not profiles:
+            return {
+                "generated_at": _utcnow(),
+                "total_relationships": 0,
+                "active_conversations": 0,
+                "qualified_relationships": 0,
+                "meeting_needed_total": 0,
+                "ready_to_send_total": 0,
+                "ptw_active_total": 0,
+                "review_blocked_total": 0,
+                "no_bid_total": 0,
+                "touchpoints_total": 0,
+                "evidence_total": 0,
+                "items": [],
+                "recent_touchpoints": [],
+                "recent_evidence": [],
+            }
+
+        relationship_ids = [row.relationship_id for row in profiles]
+        contractor_ids = [row.contractor_id for row in profiles if row.contractor_id]
+        opportunity_ids = [row.current_opportunity_id for row in profiles if row.current_opportunity_id]
+
+        contractors = {
+            row.id: row
+            for row in self.db.scalars(select(Contractor).where(Contractor.id.in_(contractor_ids)))
+        } if contractor_ids else {}
+        opportunities = {
+            row.id: row
+            for row in self.db.scalars(select(Opportunity).where(Opportunity.id.in_(opportunity_ids)))
+        } if opportunity_ids else {}
+        commercials = {
+            row.opportunity_id: row
+            for row in self.db.scalars(
+                select(CommercialEngagement).where(CommercialEngagement.opportunity_id.in_(opportunity_ids))
+            )
+        } if opportunity_ids else {}
+        proposal_summaries = {
+            row.opportunity_id: row
+            for row in self.db.scalars(
+                select(ProposalWorkflowSummary).where(ProposalWorkflowSummary.opportunity_id.in_(opportunity_ids))
+            )
+        } if opportunity_ids else {}
+
+        touchpoint_rows = list(
+            self.db.scalars(
+                select(ContractorTouchpoint)
+                .where(ContractorTouchpoint.contractor_id.in_(contractor_ids))
+                .order_by(ContractorTouchpoint.touchpoint_at.desc(), ContractorTouchpoint.created_at.desc())
+            )
+        ) if contractor_ids else []
+        touchpoints_by_contractor: dict[str, list[ContractorTouchpoint]] = defaultdict(list)
+        for row in touchpoint_rows:
+            bucket = touchpoints_by_contractor[row.contractor_id]
+            if len(bucket) < 4:
+                bucket.append(row)
+
+        evidence_rows = list(
+            self.db.scalars(
+                select(GrowthMarketEvidence)
+                .where(
+                    or_(
+                        GrowthMarketEvidence.relationship_id.in_(relationship_ids),
+                        GrowthMarketEvidence.contractor_id.in_(contractor_ids),
+                    )
+                )
+                .order_by(
+                    GrowthMarketEvidence.source_date.desc().nulls_last(),
+                    GrowthMarketEvidence.updated_at.desc(),
+                    GrowthMarketEvidence.knowledge_id.asc(),
+                )
+            )
+        ) if (relationship_ids or contractor_ids) else []
+        evidence_by_relationship: dict[str, list[GrowthMarketEvidence]] = defaultdict(list)
+        for row in evidence_rows:
+            key = row.relationship_id
+            if not key and row.contractor_id:
+                key = next(
+                    (profile.relationship_id for profile in profiles if profile.contractor_id == row.contractor_id),
+                    None,
+                )
+            if not key:
+                continue
+            bucket = evidence_by_relationship[key]
+            if len(bucket) < 5:
+                bucket.append(row)
+
+        items: list[dict[str, Any]] = []
+        active_stages = {
+            "connected",
+            "engaged",
+            "qualified-pre-consult",
+            "meeting-proposed",
+            "meeting-booked",
+            "proposal-drafted",
+            "proposal-approved",
+        }
+        qualified_stages = {
+            "qualified-pre-consult",
+            "meeting-proposed",
+            "meeting-booked",
+            "proposal-drafted",
+            "proposal-approved",
+            "closed-won",
+        }
+        review_blockers = {
+            "needs-ptw-input",
+            "market-assessment-only",
+            "owner-escalation-required",
+            "no-bid",
+            "awaiting-qualification",
+        }
+
+        for profile in profiles:
+            contractor = contractors.get(profile.contractor_id)
+            opportunity = opportunities.get(profile.current_opportunity_id) if profile.current_opportunity_id else None
+            commercial = commercials.get(profile.current_opportunity_id) if profile.current_opportunity_id else None
+            proposal_summary = proposal_summaries.get(profile.current_opportunity_id) if profile.current_opportunity_id else None
+            touchpoints = touchpoints_by_contractor.get(profile.contractor_id, [])
+            evidence = evidence_by_relationship.get(profile.relationship_id, [])
+            ptw_evidence = next(
+                (row for row in evidence if (row.entity_type or "").lower() == "ptw-model"),
+                None,
+            )
+            ptw_band = _parse_ptw_band(ptw_evidence.notes if ptw_evidence else None)
+            items.append(
+                {
+                    "profile": profile,
+                    "contractor": contractor,
+                    "opportunity": opportunity,
+                    "commercial": commercial,
+                    "proposal_summary": proposal_summary,
+                    "touchpoints": touchpoints,
+                    "latest_touchpoint": touchpoints[0] if touchpoints else None,
+                    "evidence": evidence,
+                    "latest_evidence": evidence[0] if evidence else None,
+                    "ptw_evidence": ptw_evidence,
+                    "ptw_band": ptw_band,
+                    "stage_label": _friendly_token_label(profile.relationship_stage),
+                    "ptw_status_label": _friendly_token_label(profile.ptw_status),
+                    "ptw_stage_label": _friendly_token_label(profile.ptw_stage),
+                    "ptw_recommendation_label": _friendly_token_label(profile.ptw_recommendation),
+                    "meeting_status_label": _friendly_token_label(profile.meeting_status),
+                    "proposal_status_label": _friendly_token_label(profile.proposal_status),
+                    "review_status_label": _friendly_token_label(profile.review_status),
+                    "ready_state_label": _friendly_token_label(profile.ready_state),
+                    "owner_decision_label": _friendly_token_label(profile.owner_decision),
+                }
+            )
+
+        return {
+            "generated_at": _utcnow(),
+            "total_relationships": len(items),
+            "active_conversations": sum(1 for item in items if item["profile"].relationship_stage in active_stages),
+            "qualified_relationships": sum(1 for item in items if item["profile"].relationship_stage in qualified_stages),
+            "meeting_needed_total": sum(1 for item in items if item["profile"].meeting_needed == "yes"),
+            "ready_to_send_total": sum(1 for item in items if item["profile"].ready_state == "ready-to-send"),
+            "ptw_active_total": sum(
+                1
+                for item in items
+                if item["profile"].ptw_stage or item["profile"].ptw_status not in {None, "", "not-qualified"}
+            ),
+            "review_blocked_total": sum(
+                1
+                for item in items
+                if item["profile"].proposal_status in review_blockers or item["profile"].ptw_recommendation == "no-bid"
+            ),
+            "no_bid_total": sum(1 for item in items if item["profile"].ptw_recommendation == "no-bid"),
+            "touchpoints_total": len(touchpoint_rows),
+            "evidence_total": len(evidence_rows),
+            "items": items,
+            "recent_touchpoints": touchpoint_rows[:8],
+            "recent_evidence": evidence_rows[:8],
+        }
 
     def dashboard_summary(self) -> DashboardSummaryResponse:
         today = date.today()

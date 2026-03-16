@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <div class="hero-grid">
+    <div class="stack">
+      <div>
+        <p class="eyebrow">Proposal-ops system of record</p>
+        <h2>Boss Key Growth OS</h2>
+        <p>
+          Review-first relationship operations for outbound follow-up, Competitive Price to Win, meeting progression,
+          and pre-consult proposals. The CSV queues are generated projections; the live source of truth is inside
+          this app now.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="status-chip">Review packet required before send</span>
+        <span class="status-chip neutral">LinkedIn remains human-in-the-loop</span>
+        <span class="status-chip warn">Only approved website RSS can auto-share</span>
+      </div>
+    </div>
+    <aside class="operator-card">
+      <p class="eyebrow">Operating loop</p>
+      <ol class="operator-steps">
+        <li><code>{{ build_command }}</code></li>
+        <li><code>{{ packet_path }}</code></li>
+        <li><code>{{ decision_path }}</code></li>
+        <li><code>{{ apply_command }}</code></li>
+      </ol>
+      <p class="muted">Current snapshot generated: {{ summary.generated_at }}</p>
+    </aside>
+  </div>
+</section>
+
+<section class="metric-grid">
+  <article class="metric-card">
+    <span class="metric-label">Relationships</span>
+    <strong class="metric-value">{{ summary.total_relationships }}</strong>
+    <span class="metric-note">{{ summary.active_conversations }} active conversations</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Qualified</span>
+    <strong class="metric-value">{{ summary.qualified_relationships }}</strong>
+    <span class="metric-note">{{ summary.meeting_needed_total }} need meeting progression</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">PTW Active</span>
+    <strong class="metric-value">{{ summary.ptw_active_total }}</strong>
+    <span class="metric-note">{{ summary.no_bid_total }} marked no-bid</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Ready To Send</span>
+    <strong class="metric-value">{{ summary.ready_to_send_total }}</strong>
+    <span class="metric-note">{{ summary.review_blocked_total }} still blocked by review logic</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Touchpoints</span>
+    <strong class="metric-value">{{ summary.touchpoints_total }}</strong>
+    <span class="metric-note">Recent relationship activity in the CRM layer</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Market Evidence</span>
+    <strong class="metric-value">{{ summary.evidence_total }}</strong>
+    <span class="metric-note">Reusable PTW and market signal records</span>
+  </article>
+</section>
+
+<section>
+  <div class="section-heading">
+    <div>
+      <h3>Relationship Board</h3>
+      <p class="muted">The fast scan for stage, PTW posture, next touch, and proposal readiness.</p>
+    </div>
+  </div>
+  {% if summary["items"] %}
+  <table>
+    <thead>
+      <tr>
+        <th>Account</th>
+        <th>Relationship</th>
+        <th>PTW</th>
+        <th>Proposal</th>
+        <th>Meeting</th>
+        <th>Next Touch</th>
+        <th>Current Opportunity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in summary["items"] %}
+      <tr>
+        <td>
+          <strong>{{ item.profile.company_name }}</strong><br />
+          <span class="muted">{{ item.profile.contact_name or "No contact named" }}</span>
+        </td>
+        <td>
+          <span class="status-chip neutral">{{ item.stage_label or "Unknown" }}</span><br />
+          <span class="muted">{{ item.profile.warm_signal or "No warm signal" }}</span>
+        </td>
+        <td>
+          <strong>{{ item.ptw_stage_label or "Not started" }}</strong><br />
+          <span class="muted">{{ item.ptw_recommendation_label or item.ptw_status_label or "No PTW decision yet" }}</span>
+        </td>
+        <td>
+          <strong>{{ item.proposal_status_label or "Draft pending" }}</strong><br />
+          <span class="muted">{{ item.ready_state_label or "No ready state" }}</span>
+        </td>
+        <td>
+          <strong>{{ item.meeting_status_label or "Not staged" }}</strong><br />
+          <span class="muted">{% if item.profile.meeting_needed == "yes" %}Meeting recommended{% else %}Meeting not needed yet{% endif %}</span>
+        </td>
+        <td>
+          <strong>{{ item.profile.next_best_touch_type or "-" }}</strong><br />
+          <span class="muted">{{ item.profile.last_touch_date or "-" }}</span>
+        </td>
+        <td>
+          {% if item.opportunity %}
+          <a href="/opportunities/{{ item.opportunity.id }}">{{ item.opportunity.name }}</a><br />
+          <span class="muted">{{ item.opportunity.pursuit_stage }} | {{ item.opportunity.proposal_stage }}</span>
+          {% else %}
+          <span class="muted">No linked opportunity</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No Boss Key growth profiles are in the system yet.</p>
+  {% endif %}
+</section>
+
+<section class="compact-grid">
+  <article class="operator-card">
+    <h3>Recent Touchpoints</h3>
+    {% if summary.recent_touchpoints %}
+    <ul class="activity-list">
+      {% for row in summary.recent_touchpoints %}
+      <li>
+        <strong>{{ row.contractor.name if row.contractor else row.contact_name or "Relationship" }}</strong>
+        <span class="muted">{{ row.touchpoint_at.strftime("%Y-%m-%d %H:%M") if row.touchpoint_at else "-" }}</span>
+        <div>{{ row.touchpoint_type }} | {{ row.summary }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">No touchpoints logged yet.</p>
+    {% endif %}
+  </article>
+  <article class="operator-card">
+    <h3>Recent PTW And Market Evidence</h3>
+    {% if summary.recent_evidence %}
+    <ul class="activity-list">
+      {% for row in summary.recent_evidence %}
+      <li>
+        <strong>{{ row.company_name or row.entity_name or "Evidence" }}</strong>
+        <span class="muted">{{ row.source_date or "-" }} | {{ row.source_type or "source" }}</span>
+        <div>{{ (row.evidence_summary or row.notes or "No summary yet.") | truncate(160) }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">No PTW evidence stored yet.</p>
+    {% endif %}
+  </article>
+</section>
+
+<section class="stack">
+  <div class="section-heading">
+    <div>
+      <h3>Account Operating Detail</h3>
+      <p class="muted">Each account ties relationship state, PTW evidence, opportunity context, and the next move together.</p>
+    </div>
+  </div>
+
+  {% for item in summary["items"] %}
+  <details class="relationship-details" {% if loop.first %}open{% endif %}>
+    <summary class="relationship-summary">
+      <div>
+        <strong>{{ item.profile.company_name }}</strong>
+        <span class="muted">{{ item.profile.contact_name or "No contact named" }}{% if item.profile.role %} | {{ item.profile.role }}{% endif %}</span>
+      </div>
+      <div class="chip-row">
+        <span class="status-chip neutral">{{ item.stage_label or "Unknown" }}</span>
+        {% if item.ptw_stage_label %}
+        <span class="status-chip">{{ item.ptw_stage_label }}</span>
+        {% endif %}
+        {% if item.proposal_status_label %}
+        <span class="status-chip warn">{{ item.proposal_status_label }}</span>
+        {% endif %}
+      </div>
+    </summary>
+    <div class="detail-card-grid">
+      <article class="data-card">
+        <h4>Relationship</h4>
+        <dl class="data-points">
+          <div><dt>Warm signal</dt><dd>{{ item.profile.warm_signal or "-" }}</dd></div>
+          <div><dt>Fit confirmed</dt><dd>{{ item.profile.fit_confirmed }}</dd></div>
+          <div><dt>Last touch</dt><dd>{{ item.profile.last_touch_date or "-" }}</dd></div>
+          <div><dt>Owner decision</dt><dd>{{ item.owner_decision_label or "-" }}</dd></div>
+          <div><dt>Review status</dt><dd>{{ item.review_status_label or "-" }}</dd></div>
+          <div><dt>Ready state</dt><dd>{{ item.ready_state_label or "-" }}</dd></div>
+        </dl>
+        <p><strong>Pain point:</strong> {{ item.profile.pain_point or "Not captured yet." }}</p>
+        <p><strong>Desired outcome:</strong> {{ item.profile.desired_outcome or "Not captured yet." }}</p>
+        <p><strong>Offer hypothesis:</strong> {{ item.profile.offer_hypothesis or "Not framed yet." }}</p>
+        <p><strong>Next best touch:</strong> {{ item.profile.next_best_touch_type or "Not staged" }}</p>
+        {% if item.profile.next_best_touch_path %}
+        <p class="mono-inline">{{ item.profile.next_best_touch_path }}</p>
+        {% endif %}
+        {% if item.profile.linkedin_profile_url or item.profile.linkedin_company_url %}
+        <p>
+          {% if item.profile.linkedin_profile_url %}<a href="{{ item.profile.linkedin_profile_url }}" target="_blank" rel="noreferrer">Profile</a>{% endif %}
+          {% if item.profile.linkedin_profile_url and item.profile.linkedin_company_url %} | {% endif %}
+          {% if item.profile.linkedin_company_url %}<a href="{{ item.profile.linkedin_company_url }}" target="_blank" rel="noreferrer">Company</a>{% endif %}
+        </p>
+        {% endif %}
+      </article>
+
+      <article class="data-card">
+        <h4>Opportunity And Commercial</h4>
+        {% if item.opportunity %}
+        <p><a href="/opportunities/{{ item.opportunity.id }}">{{ item.opportunity.name }}</a></p>
+        <dl class="data-points">
+          <div><dt>Client</dt><dd>{{ item.opportunity.client }}</dd></div>
+          <div><dt>Pursuit stage</dt><dd>{{ item.opportunity.pursuit_stage }}</dd></div>
+          <div><dt>Proposal stage</dt><dd>{{ item.opportunity.proposal_stage }}</dd></div>
+          <div><dt>Confidence</dt><dd>{{ item.opportunity.confidence_level }}</dd></div>
+          <div><dt>Weighted pipeline</dt><dd>{{ item.opportunity.weighted_pipeline_value|currency }}</dd></div>
+          <div><dt>Expected RFP</dt><dd>{{ item.opportunity.expected_rfp_date or "-" }}</dd></div>
+        </dl>
+        {% if item.commercial %}
+        <p><strong>Commercial retainer:</strong> {{ item.commercial.retainer_amount|currency }}</p>
+        <p><strong>Weighted expected value:</strong> {{ item.commercial.weighted_expected_value|currency }}</p>
+        {% endif %}
+        {% if item.proposal_summary %}
+        <p><strong>Proposal workflow:</strong> {{ item.proposal_summary.pricing_status }} | {{ item.proposal_summary.review_gate_status }}</p>
+        <p><strong>Submission milestone:</strong> {{ item.proposal_summary.submission_milestone }}</p>
+        {% endif %}
+        {% else %}
+        <p class="muted">No linked opportunity yet. This relationship is still being qualified or staged before a pursuit is created.</p>
+        {% endif %}
+      </article>
+
+      <article class="data-card">
+        <h4>PTW Posture</h4>
+        <dl class="data-points">
+          <div><dt>PTW stage</dt><dd>{{ item.ptw_stage_label or "-" }}</dd></div>
+          <div><dt>PTW status</dt><dd>{{ item.ptw_status_label or "-" }}</dd></div>
+          <div><dt>Recommendation</dt><dd>{{ item.ptw_recommendation_label or "-" }}</dd></div>
+          <div><dt>PTW record</dt><dd>{{ item.profile.ptw_record_id or "-" }}</dd></div>
+        </dl>
+        {% if item.ptw_band.compete or item.ptw_band.win or item.ptw_band.floor %}
+        <p><strong>PTW band:</strong></p>
+        <ul class="activity-list compact">
+          <li>Compete: {{ item.ptw_band.compete|currency if item.ptw_band.compete is not none else "-" }}</li>
+          <li>Win: {{ item.ptw_band.win|currency if item.ptw_band.win is not none else "-" }}</li>
+          <li>Floor: {{ item.ptw_band.floor|currency if item.ptw_band.floor is not none else "-" }}</li>
+        </ul>
+        {% endif %}
+        {% if item.ptw_evidence %}
+        <p><strong>Latest PTW rationale:</strong> {{ item.ptw_evidence.evidence_summary or item.ptw_evidence.notes or "No rationale stored yet." }}</p>
+        <p><strong>Assumptions:</strong> {{ item.ptw_evidence.assumptions or "No explicit assumptions stored." }}</p>
+        {% else %}
+        <p class="muted">No PTW model record linked yet.</p>
+        {% endif %}
+      </article>
+
+      <article class="data-card">
+        <h4>Activity And Evidence</h4>
+        {% if item.touchpoints %}
+        <p><strong>Recent touchpoints</strong></p>
+        <ul class="activity-list compact">
+          {% for touchpoint in item.touchpoints %}
+          <li>
+            <div>{{ touchpoint.touchpoint_at.strftime("%Y-%m-%d %H:%M") if touchpoint.touchpoint_at else "-" }} | {{ touchpoint.touchpoint_type }}</div>
+            <div>{{ touchpoint.summary }}</div>
+            {% if touchpoint.next_step %}<div class="muted">Next: {{ touchpoint.next_step }}</div>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="muted">No touchpoints logged yet.</p>
+        {% endif %}
+
+        {% if item.evidence %}
+        <p><strong>Latest evidence</strong></p>
+        <ul class="activity-list compact">
+          {% for row in item.evidence[:3] %}
+          <li>
+            <div>{{ row.source_date or "-" }} | {{ row.source_type or "source" }}{% if row.confidence %} | confidence {{ row.confidence }}{% endif %}</div>
+            <div>{{ row.evidence_summary or row.notes or "No summary yet." }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if item.profile.notes %}
+        <p><strong>Operator note:</strong> {{ item.profile.notes }}</p>
+        {% endif %}
+      </article>
+    </div>
+  </details>
+  {% endfor %}
+</section>
+{% endblock %}

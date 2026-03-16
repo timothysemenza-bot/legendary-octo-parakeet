@@ -1,0 +1,4 @@
+interface:
+  display_name: "Proposal Manager"
+  short_description: "Run proposal intake, planning, reviews, and submission control."
+  default_prompt: "Use $proposal-manager to review this solicitation and produce the kickoff pack, proposal schedule, and review plan."

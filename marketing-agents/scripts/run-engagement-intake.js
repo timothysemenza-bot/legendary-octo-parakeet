@@ -809,7 +809,7 @@ function seedApproval(item, tables, summary) {
     requested_person: OWNER,
     status: "pending",
     due_date: addDays(item.signalDate, 1),
-    channel: "operator-console",
+    channel: "company-os",
     policy_key: `${item.route}-intake-review`,
     notes: `Review the newly captured signal from ${item.provenanceRef}.`,
   });

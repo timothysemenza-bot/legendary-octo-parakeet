@@ -16,8 +16,9 @@ Workflow:
 2. Ingests transcript files directly (`.txt`, `.md`, `.json`, `.srt`).
 3. Attempts local transcription for audio files (`.wav`, `.mp3`, `.m4a`, `.aac`, `.mp4`, `.wma`).
 4. Extracts action-item style summary and outcome.
-5. Pushes into Operator API (`/api/aircall-ingest`) for auto logging and follow-up updates.
-6. Writes processing logs and moves files to `processed` or `failed`.
+5. Writes a structured capture into `marketing-agents/data/engagement-inbox/call-intake/`.
+6. Runs the company OS engagement intake so the call becomes a signal, engagement, action set, and approval item.
+7. Writes processing logs and moves files to `processed` or `failed`.
 
 ## Important practical constraint
 
@@ -40,18 +41,18 @@ The first run creates:
 
 Edit that file to include all export directories for Aircall/Teams/Zoom/Gemini/Copilot transcript dumps.
 
-## Recommended parallel runtime
+## Recommended runtime
 
-Run these at the same time:
+Run the auto intake agent directly:
 
-1. Operator Console
-```powershell
-npm run start:operator
-```
-
-2. Auto intake agent
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\auto-call-intake-agent.ps1 -BusinessHoursOnly -BusinessStart 08:30 -BusinessEnd 17:30
+```
+
+If you want it to capture files but defer OS processing until later, add:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\auto-call-intake-agent.ps1 -SkipEngagementIntake
 ```
 
 ## File naming convention (optional but useful)
@@ -69,9 +70,10 @@ This improves matching quality for automatic logging.
 ## Output files
 
 - Ingest log: `marketing-agents/data/call_capture_ingest_log.csv`
-- Pending queue (when API not available): `marketing-agents/data/call_capture_pending_ingest.csv`
+- Pending queue (when capture write fails): `marketing-agents/data/call_capture_pending_ingest.csv`
 - Processed files: `marketing-agents/data/call-capture/processed`
 - Failed files: `marketing-agents/data/call-capture/failed`
+- Company OS call captures: `marketing-agents/data/engagement-inbox/call-intake/`
 
 ## Local transcription options
 
@@ -100,9 +102,12 @@ powershell -ExecutionPolicy Bypass -File .\marketing-agents\scripts\setup-auto-c
 ## Daily brief integration
 
 Your daily brief already includes inbound and action focus areas.
-Call outcomes and follow-ups from this intake path flow into:
-- `interaction_log.csv`
-- `prospect_pipeline.csv`
-- follow-up events and ICS outputs
+Call captures from this intake path flow into the company OS files:
+- `communication_signal_log.csv`
+- `engagement_register.csv`
+- `engagement_timeline.csv`
+- `action_workbench.csv`
+- `approval_router_queue.csv`
+- `meeting_follow_through.csv`
 
 Then the normal brief job summarizes priorities.

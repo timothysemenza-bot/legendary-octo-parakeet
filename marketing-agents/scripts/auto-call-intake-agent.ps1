@@ -6,9 +6,11 @@ param(
     [string]$StateFile = "marketing-agents/data/call-capture/state.json",
     [string]$LogFile = "marketing-agents/data/call_capture_ingest_log.csv",
     [string]$PendingFile = "marketing-agents/data/call_capture_pending_ingest.csv",
-    [string]$OperatorApiBase = "http://localhost:3201/api",
+    [string]$CompanyOsInboxDir = "marketing-agents/data/engagement-inbox/call-intake",
+    [string]$EngagementIntakeScript = "marketing-agents/scripts/run-engagement-intake.ps1",
     [int]$PollSeconds = 20,
     [switch]$RunOnce,
+    [switch]$SkipEngagementIntake,
     [switch]$BusinessHoursOnly,
     [string]$BusinessStart = "08:30",
     [string]$BusinessEnd = "17:30"
@@ -277,9 +279,9 @@ function Append-CsvRow {
     Add-Content -Path $FilePath -Value $line -Encoding UTF8
 }
 
-function Push-ToOperator {
+function Write-CompanyOsCapture {
     param(
-        [string]$ApiBase,
+        [string]$OutputDir,
         [string]$Company,
         [string]$Contact,
         [string]$Phone,
@@ -288,19 +290,51 @@ function Push-ToOperator {
         [string]$Outcome,
         [string]$InteractionId
     )
-    $uri = ($ApiBase.TrimEnd("/") + "/aircall-ingest")
-    $payload = @{
-        company_name = $Company
-        contact_name = $Contact
-        phone = $Phone
-        notes = $Summary
-        transcript = $Transcript
-        outcome = $Outcome
-        interaction_id = $InteractionId
-        date = (Get-Date).ToString("yyyy-MM-dd")
-        next_action = $Summary
-    } | ConvertTo-Json -Depth 5
-    return Invoke-RestMethod -Uri $uri -Method Post -ContentType "application/json" -Body $payload -TimeoutSec 20
+    Ensure-Dir $OutputDir
+    $dateStamp = (Get-Date).ToString("yyyy-MM-dd")
+    $baseName = @($Company, $Contact, $InteractionId) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | ForEach-Object {
+        ([string]$_ -replace '[^\w\-\.\(\) ]', '_').Trim()
+    }
+    $slug = ($baseName -join "__")
+    if ([string]::IsNullOrWhiteSpace($slug)) { $slug = "call-capture" }
+    $path = Join-Path $OutputDir ("{0}__{1}.md" -f $dateStamp, $slug)
+
+    $actionItems = Extract-ActionItems -Text $Transcript
+    $content = @(
+        "Subject: Call Capture Intake"
+        "Direction: inbound"
+        ("Date: {0}" -f $dateStamp)
+        ("Company: {0}" -f $Company)
+        ("Contact: {0}" -f $Contact)
+        ("Phone: {0}" -f $Phone)
+        ("Outcome: {0}" -f $Outcome)
+        ("Interaction ID: {0}" -f $InteractionId)
+        "Source: Auto call intake agent"
+        ""
+        "Summary:"
+        $Summary
+        ""
+        "Action Items:"
+    )
+
+    foreach ($item in $actionItems) {
+        $content += ("- {0}" -f $item)
+    }
+
+    $content += @(
+        ""
+        "Transcript:"
+        ""
+        $Transcript
+    )
+
+    $content -join "`n" | Set-Content -Path $path -Encoding UTF8
+    return $path
+}
+
+function Invoke-EngagementIntake {
+    param([string]$ScriptPath)
+    & powershell -ExecutionPolicy Bypass -File $ScriptPath | Out-Null
 }
 
 $InboxDir = Resolve-RepoPath $InboxDir
@@ -310,10 +344,13 @@ $SourceDirsFile = Resolve-RepoPath $SourceDirsFile
 $StateFile = Resolve-RepoPath $StateFile
 $LogFile = Resolve-RepoPath $LogFile
 $PendingFile = Resolve-RepoPath $PendingFile
+$CompanyOsInboxDir = Resolve-RepoPath $CompanyOsInboxDir
+$EngagementIntakeScript = Resolve-RepoPath $EngagementIntakeScript
 
 Ensure-Dir $InboxDir
 Ensure-Dir $ProcessedDir
 Ensure-Dir $FailedDir
+Ensure-Dir $CompanyOsInboxDir
 Ensure-Dir (Split-Path -Parent $StateFile)
 Ensure-Dir (Split-Path -Parent $LogFile)
 Ensure-Dir (Split-Path -Parent $PendingFile)
@@ -325,7 +362,7 @@ $sourceDirs = Resolve-SourceDirs -ListFilePath $SourceDirsFile
 
 Write-Output ("Auto Call Intake Agent started. Inbox: {0}" -f $InboxDir)
 Write-Output ("Source folders list: {0}" -f $SourceDirsFile)
-Write-Output ("Operator API: {0}" -f $OperatorApiBase)
+Write-Output ("Company OS inbox: {0}" -f $CompanyOsInboxDir)
 
 while ($true) {
     if ($BusinessHoursOnly -and -not (Is-BusinessTime -StartText $BusinessStart -EndText $BusinessEnd)) {
@@ -341,6 +378,7 @@ while ($true) {
     }
 
     $files = Get-ChildItem -Path $InboxDir -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTimeUtc
+    $capturesWritten = 0
     foreach ($f in $files) {
         if (((Get-Date).ToUniversalTime() - $f.LastWriteTimeUtc).TotalSeconds -lt 5) { continue }
 
@@ -387,11 +425,12 @@ while ($true) {
 
         if ($status -eq "processed") {
             try {
-                $null = Push-ToOperator -ApiBase $OperatorApiBase -Company $meta.company -Contact $meta.contact -Phone $meta.phone -Summary $summary -Transcript $transcript -Outcome $outcome -InteractionId $interactionId
-                $notes = "Ingested to Operator API."
+                $capturePath = Write-CompanyOsCapture -OutputDir $CompanyOsInboxDir -Company $meta.company -Contact $meta.contact -Phone $meta.phone -Summary $summary -Transcript $transcript -Outcome $outcome -InteractionId $interactionId
+                $notes = ("Captured to Company OS inbox: {0}" -f $capturePath)
+                $capturesWritten++
             } catch {
                 $status = "queued"
-                $notes = "Operator API unavailable, queued for retry."
+                $notes = "Company OS capture write failed, queued for retry."
                 Append-CsvRow -FilePath $PendingFile -Headers @("queued_at","file_name","company_name","contact_name","phone","summary","outcome","transcript") -Row @{
                     queued_at = (Get-Date).ToString("s")
                     file_name = $f.Name
@@ -421,6 +460,15 @@ while ($true) {
 
         $state.processed | Add-Member -NotePropertyName $finger -NotePropertyValue (Get-Date).ToString("s") -Force
         Save-State -FilePath $StateFile -StateObject $state
+    }
+
+    if ($capturesWritten -gt 0 -and -not $SkipEngagementIntake) {
+        try {
+            Invoke-EngagementIntake -ScriptPath $EngagementIntakeScript
+            Write-Output ("Ran engagement intake for {0} new call capture(s)." -f $capturesWritten)
+        } catch {
+            Write-Warning ("Failed to run engagement intake automatically: {0}" -f $_.Exception.Message)
+        }
     }
 
     if ($RunOnce) { break }
