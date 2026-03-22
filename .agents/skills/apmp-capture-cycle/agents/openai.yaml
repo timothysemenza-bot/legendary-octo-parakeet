@@ -1,0 +1,3 @@
+display_name: APMP Capture Cycle
+short_description: Advance a pursuit with gate-ready actions, schedule discipline, and capture-plan thinking.
+default_prompt: Use $apmp-capture-cycle to assess this pursuit, refresh the capture actions and gate decision logic, and leave a short packet with owners, dates, risks, and the next recommended move.

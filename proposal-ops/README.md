@@ -1,4 +1,4 @@
-# ProposalOps Monorepo
+﻿# ProposalOps Monorepo
 
 Internal-first operating system for Boss Key's early-lifecycle government opportunity intelligence and capture advisory practice.
 
@@ -47,6 +47,10 @@ Current truth:
 - [Proposal Workflow](./docs/proposal-workflow.md)
 - [Janitorial Capture OS Operator Guide](./docs/runbooks/janitorial-capture-os-operator-guide.md)
 - [Execution Plan](./PLANS.md)
+
+## Phase-1 Direct Intake
+
+For direct federal consulting, proposal-support, and digital-service opportunities, the near-term intake surface is [`../projects/pipeline/federal-bid-cockpit/index.html`](../projects/pipeline/federal-bid-cockpit/index.html). Use that cockpit first for SAM.gov search, gate checks, and bid/no-bid scoring while `proposal-ops` remains the longer-term operating system. Keep NJSTART active as a secondary lane rather than the default lane.
 
 ## Quick Start
 
@@ -192,6 +196,90 @@ Reset local DB:
 ```bash
 powershell -ExecutionPolicy Bypass -File .\tools\reset-local-db.ps1
 ```
+
+## DEMO_RUNBOOK
+
+The fastest demo entrypoint is the client-safe Proposal Builder workflow.
+
+Local startup:
+
+```bash
+cd proposal-ops
+python -m pip install -r requirements.txt
+python -m alembic upgrade head
+python -m uvicorn app.main:app --reload
+```
+
+Recommended `.env` settings for live demos:
+
+```env
+OPENAI_API_KEY=...
+BOSSKEY_OPENAI_MODEL=gpt-5.4
+BOSSKEY_OPENAI_TIMEOUT_SECONDS=120
+BOSSKEY_OPENAI_EXTRACT_TIMEOUT_SECONDS=120
+BOSSKEY_OPENAI_SKELETON_TIMEOUT_SECONDS=180
+BOSSKEY_OPENAI_DRAFT_TIMEOUT_SECONDS=300
+```
+
+Restart Uvicorn after changing `.env` so the running app picks up the new values.
+
+Open:
+
+- `http://127.0.0.1:8000/proposal-builder`
+
+One-command shortcut on Windows:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\start-proposal-builder-demo.ps1
+```
+
+Demo click path:
+
+1. Open `/proposal-builder`
+2. Click `Launch Demo Sample` for the cleanest screen-share path, or upload a live PDF / paste text
+3. On the workspace, start with the `Opportunity Summary`, `Document Gaps`, `Assumption Flags`, `Evaluation Criteria`, and `Compliance Matrix`
+4. Click `Start Full Package Run`
+5. Let the background run progress through extraction, compliance mapping, customer strategy, content plan, full draft, and pricing
+6. When the dashboard pauses at pricing, click `Approve Pricing and Continue`
+7. Show the forms/attachments stage and the pink/red/gold review stages as they complete
+8. When the dashboard pauses at final export, click `Approve Final Export`
+9. Download the `Final Proposal DOCX`, `Pricing Workbook`, `Forms Bundle`, and `Support Bundle`
+10. Use the lower manual buttons only as a fallback or detail view if you want to show an individual stage outside the full package run
+
+Fallbacks if a stage fails:
+
+- If a live upload is messy, go back to `/proposal-builder` and use the checked-in demo sample
+- The workspace shows both `generation_mode` and `generation_reason`, so you can explain exactly why a run is live, sample-cached, or failed
+- Live model stages no longer downgrade into deterministic drafts when they time out; they stop, record the failure reason, and let you rerun with a longer timeout
+- The full package engine is live-only for AI stages. If customer strategy, content plan, full draft, or review stages fail, the dashboard will block explicitly instead of inventing content
+- If DOCX export fails, use the Markdown draft and ZIP bundle from `.artifacts/exports/`
+- If the inference step cannot name the opportunity or client, confirm those two fields on the built-in mini-confirm screen and continue
+
+## CLIENT_DEPLOYMENT_NOTES
+
+This Proposal Builder and full package engine are designed to be sold as a client-owned deployment rather than a SaaS platform.
+
+Recommended framing:
+
+- Delivery model: one-time implementation and configuration, then a light O&M retainer for parser tuning, prompt updates, APMP rubric tuning, approved-content maintenance, pricing/form mapping updates, and support
+- Runtime: FastAPI web app on a Windows-friendly host or VM
+- Storage: local or shared file storage for source documents and export bundles
+- Database: SQLite for pilot and light deployment; optional Postgres later if the client wants multi-user scale
+- Model access: client-owned `OPENAI_API_KEY`, outbound HTTPS access to OpenAI, and a configurable default model of `gpt-5.4`
+- Security boundary: the proposal team uses a normal browser workflow with background package runs, approval gates, and downloads; no prompt-writing, terminal use, or developer tooling is exposed
+
+High-level IT dependencies:
+
+- Outbound HTTPS access to `api.openai.com`
+- File upload allowance for PDF, DOCX, TXT, and Markdown
+- Permission to persist uploaded source documents and generated export bundles
+- Optional shared-drive or SharePoint handoff for Word finishing
+
+What the system owns versus what Microsoft Copilot can complement:
+
+- This system owns staged orchestration, requirement extraction, compliance mapping, APMP-derived review logic, proposal skeleton creation, reusable approved-content insertion, deterministic pricing, forms-and-attachments packaging, and export packaging
+- Microsoft Copilot can still help proposal staff refine tone or polish the last 10 percent inside Word
+- Copilot does not replace the structured intake, grounded compliance traceability, staged artifact reuse, or export workflow this build provides
 
 ## Working Assumptions
 

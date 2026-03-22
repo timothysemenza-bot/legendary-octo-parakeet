@@ -38,6 +38,33 @@ const CONTACT_EVENTS_FILE = path.resolve(
   __dirname,
   process.env.CONTACT_EVENTS_FILE || "marketing-agents/data/website_contact_events.csv"
 );
+const WRITING_CENTER_TRIBUTES_DIR = path.resolve(
+  __dirname,
+  process.env.WRITING_CENTER_TRIBUTES_DIR || "projects/shared/data/writing-center-tributes"
+);
+const WRITING_CENTER_TRIBUTES_FILE = path.join(WRITING_CENTER_TRIBUTES_DIR, "submissions.csv");
+const WRITING_CENTER_TRIBUTES_JSON_FILE = path.join(WRITING_CENTER_TRIBUTES_DIR, "submissions.json");
+const WRITING_CENTER_TRIBUTE_VIDEO_DIR = path.join(WRITING_CENTER_TRIBUTES_DIR, "videos");
+const WRITING_CENTER_TRIBUTE_SELFIE_DIR = path.join(WRITING_CENTER_TRIBUTES_DIR, "selfies");
+const WRITING_CENTER_TRIBUTE_VIDEO_MAX_BYTES =
+  Number(process.env.WRITING_CENTER_TRIBUTE_VIDEO_MAX_BYTES) || 18 * 1024 * 1024;
+const WRITING_CENTER_TRIBUTE_SELFIE_MAX_BYTES =
+  Number(process.env.WRITING_CENTER_TRIBUTE_SELFIE_MAX_BYTES) || 8 * 1024 * 1024;
+const WRITING_CENTER_TRIBUTE_PAYLOAD_MAX_BYTES =
+  Number(process.env.WRITING_CENTER_TRIBUTE_PAYLOAD_MAX_BYTES) || 28 * 1024 * 1024;
+const WRITING_CENTER_TRIBUTE_PUBLIC_DIR = path.resolve(
+  __dirname,
+  process.env.WRITING_CENTER_TRIBUTE_PUBLIC_DIR || "boss-key-website/data"
+);
+const WRITING_CENTER_TRIBUTE_PUBLIC_MEDIA_DIR = path.join(
+  WRITING_CENTER_TRIBUTE_PUBLIC_DIR,
+  "writing-center-tribute-media"
+);
+const WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE = path.join(
+  WRITING_CENTER_TRIBUTE_PUBLIC_DIR,
+  "writing-center-tribute-display.json"
+);
+const WRITING_CENTER_ADMIN_TOKEN = String(process.env.WRITING_CENTER_ADMIN_TOKEN || "").trim();
 const LIBRARY_FILE = path.resolve(
   __dirname,
   process.env.PROPOSAL_LIBRARY_PATH || process.env.LIBRARY_FILE || "content-library.json"
@@ -104,6 +131,33 @@ function ensureContactEventsFile() {
       "spam_reasons",
     ].join(",");
     fs.writeFileSync(CONTACT_EVENTS_FILE, `${header}\n`, "utf8");
+  }
+}
+function ensureWritingCenterTributesFile() {
+  ensureParentDir(WRITING_CENTER_TRIBUTES_FILE);
+  if (!fs.existsSync(WRITING_CENTER_TRIBUTE_VIDEO_DIR)) {
+    fs.mkdirSync(WRITING_CENTER_TRIBUTE_VIDEO_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(WRITING_CENTER_TRIBUTE_SELFIE_DIR)) {
+    fs.mkdirSync(WRITING_CENTER_TRIBUTE_SELFIE_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(WRITING_CENTER_TRIBUTES_FILE)) {
+    const header = getWritingCenterTributeHeaders().join(",");
+    fs.writeFileSync(WRITING_CENTER_TRIBUTES_FILE, `${header}\n`, "utf8");
+  }
+  if (!fs.existsSync(WRITING_CENTER_TRIBUTES_JSON_FILE)) {
+    fs.writeFileSync(WRITING_CENTER_TRIBUTES_JSON_FILE, "[]\n", "utf8");
+  }
+  if (!fs.existsSync(WRITING_CENTER_TRIBUTE_PUBLIC_MEDIA_DIR)) {
+    fs.mkdirSync(WRITING_CENTER_TRIBUTE_PUBLIC_MEDIA_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE)) {
+    ensureParentDir(WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE);
+    fs.writeFileSync(
+      WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE,
+      JSON.stringify({ updatedAt: "", items: [] }, null, 2),
+      "utf8"
+    );
   }
 }
 function ensureLibraryFile() {
@@ -196,12 +250,12 @@ function sendText(res, text, code = 200, contentType = "text/plain") {
   res.end(text);
 }
 
-function parseBody(req) {
+function parseBody(req, limit = 1e6) {
   return new Promise((resolve, reject) => {
     let data = "";
     req.on("data", (chunk) => {
       data += chunk;
-      if (data.length > 1e6) {
+      if (data.length > limit) {
         req.destroy();
         reject(new Error("Payload too large"));
       }
@@ -307,6 +361,532 @@ function appendContactEvent(row) {
     .join(",");
   fs.appendFileSync(CONTACT_EVENTS_FILE, `${line}\n`, "utf8");
 }
+
+function cleanSingleLine(value, maxLength = 300) {
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function cleanMultiline(value, maxLength = 5000) {
+  return String(value ?? "")
+    .replace(/\r\n/g, "\n")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
+}
+
+function toYesNo(value, fallback = "no") {
+  const normalized = cleanSingleLine(value, 8).toLowerCase();
+  if (["yes", "true", "1", "on"].includes(normalized)) return "yes";
+  if (["no", "false", "0", "off"].includes(normalized)) return "no";
+  return fallback;
+}
+
+function detectVideoType(mediaType) {
+  const normalized = String(mediaType || "").toLowerCase();
+  if (!normalized.startsWith("video/")) return null;
+  if (normalized.includes("video/webm")) return { ext: "webm", contentType: "video/webm" };
+  if (normalized.includes("video/mp4")) return { ext: "mp4", contentType: "video/mp4" };
+  if (normalized.includes("video/quicktime")) return { ext: "mov", contentType: "video/quicktime" };
+  if (normalized.includes("video/ogg")) return { ext: "ogv", contentType: "video/ogg" };
+  return null;
+}
+
+function saveWritingCenterVideo(videoPayload, submissionId) {
+  if (!videoPayload || typeof videoPayload !== "object") return null;
+  const dataUrl = typeof videoPayload.data_url === "string" ? videoPayload.data_url : videoPayload.dataUrl;
+  if (!dataUrl) return null;
+  const decoded = decodeDataUriValue(dataUrl);
+  if (!decoded || !decoded.data || decoded.data.length === 0) {
+    throw new Error("The video upload could not be decoded");
+  }
+  const detectedType = detectVideoType(decoded.mediaType || videoPayload.mime_type || videoPayload.mimeType);
+  if (!detectedType) {
+    throw new Error("Only MP4, WebM, MOV, or OGG video uploads are supported");
+  }
+  if (decoded.data.length > WRITING_CENTER_TRIBUTE_VIDEO_MAX_BYTES) {
+    throw new Error("Video uploads must be 18 MB or smaller");
+  }
+  const fileName = `${submissionId}.${detectedType.ext}`;
+  const filePath = path.join(WRITING_CENTER_TRIBUTE_VIDEO_DIR, fileName);
+  fs.writeFileSync(filePath, decoded.data);
+  return {
+    filename: fileName,
+    storagePath: path.relative(__dirname, filePath).replace(/\\/g, "/"),
+    mimeType: detectedType.contentType,
+    sizeBytes: decoded.data.length,
+  };
+}
+
+function detectImageType(mediaType) {
+  const normalized = String(mediaType || "").toLowerCase();
+  if (!normalized.startsWith("image/")) return null;
+  if (normalized.includes("image/jpeg") || normalized.includes("image/jpg")) {
+    return { ext: "jpg", contentType: "image/jpeg" };
+  }
+  if (normalized.includes("image/png")) return { ext: "png", contentType: "image/png" };
+  if (normalized.includes("image/webp")) return { ext: "webp", contentType: "image/webp" };
+  if (normalized.includes("image/gif")) return { ext: "gif", contentType: "image/gif" };
+  return null;
+}
+
+function saveWritingCenterSelfie(imagePayload, submissionId) {
+  if (!imagePayload || typeof imagePayload !== "object") return null;
+  const dataUrl = typeof imagePayload.data_url === "string" ? imagePayload.data_url : imagePayload.dataUrl;
+  if (!dataUrl) return null;
+  const decoded = decodeDataUriValue(dataUrl);
+  if (!decoded || !decoded.data || decoded.data.length === 0) {
+    throw new Error("The selfie upload could not be decoded");
+  }
+  const detectedType = detectImageType(decoded.mediaType || imagePayload.mime_type || imagePayload.mimeType);
+  if (!detectedType) {
+    throw new Error("Only JPG, PNG, WEBP, or GIF selfie uploads are supported");
+  }
+  if (decoded.data.length > WRITING_CENTER_TRIBUTE_SELFIE_MAX_BYTES) {
+    throw new Error("Selfie uploads must be 8 MB or smaller");
+  }
+  const fileName = `${submissionId}-selfie.${detectedType.ext}`;
+  const filePath = path.join(WRITING_CENTER_TRIBUTE_SELFIE_DIR, fileName);
+  fs.writeFileSync(filePath, decoded.data);
+  return {
+    filename: fileName,
+    storagePath: path.relative(__dirname, filePath).replace(/\\/g, "/"),
+    mimeType: detectedType.contentType,
+    sizeBytes: decoded.data.length,
+  };
+}
+
+function readJsonArray(filePath) {
+  try {
+    const raw = fs.readFileSync(filePath, "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function writeJsonFile(filePath, payload) {
+  ensureParentDir(filePath);
+  fs.writeFileSync(filePath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
+function loadWritingCenterTributes() {
+  return readJsonArray(WRITING_CENTER_TRIBUTES_JSON_FILE);
+}
+
+function toRepoAssetUrl(storagePath) {
+  const clean = String(storagePath || "").replace(/\\/g, "/").replace(/^\/+/, "");
+  return clean ? `/${clean}` : "";
+}
+
+function getWritingCenterTributeHeaders() {
+  return [
+    "submission_id",
+    "interest_submitted_at",
+    "full_name",
+    "email",
+    "graduation_year",
+    "current_role_org",
+    "linkedin_url",
+    "best_contact_method",
+    "network_interest",
+    "connection_path",
+    "verification_context",
+    "future_contact_ok",
+    "interest_status",
+    "interest_reviewed_at",
+    "interest_review_notes",
+    "vetting_score",
+    "vetting_status",
+    "vetting_summary",
+    "vetting_positive_signals",
+    "vetting_caution_signals",
+    "vetting_review_notes",
+    "invite_token",
+    "invite_status",
+    "invite_created_at",
+    "invite_sent_at",
+    "tribute_submitted_at",
+    "preferred_display_name",
+    "written_note",
+    "video_link",
+    "video_filename",
+    "video_storage_path",
+    "video_mime_type",
+    "video_size_bytes",
+    "selfie_filename",
+    "selfie_storage_path",
+    "selfie_mime_type",
+    "selfie_size_bytes",
+    "share_permission",
+    "display_permission",
+    "review_status",
+    "review_updated_at",
+    "review_notes",
+    "published_display_name",
+    "published_role_org",
+    "published_note",
+    "publish_to_screen",
+    "display_order",
+    "interest_source_page",
+    "tribute_source_page",
+    "referrer",
+    "user_agent",
+    "ip_hash",
+    "spam_score",
+    "spam_flag",
+    "spam_reasons",
+  ];
+}
+
+function writeWritingCenterTributesCsv(records) {
+  const header = getWritingCenterTributeHeaders();
+  const lines = [header.join(",")];
+  records.forEach((row) => {
+    const assessment = buildWritingCenterVettingAssessment(row);
+    const derived = {
+      vetting_score: String(assessment.score),
+      vetting_status: assessment.statusLabel,
+      vetting_summary: assessment.summary,
+      vetting_positive_signals: assessment.positiveSignals.join(" | "),
+      vetting_caution_signals: assessment.cautionSignals.join(" | "),
+      vetting_review_notes: row.vetting_review_notes || "",
+    };
+    const line = header.map((key) => csvEscape(derived[key] ?? row[key] ?? "")).join(",");
+    lines.push(line);
+  });
+  fs.writeFileSync(WRITING_CENTER_TRIBUTES_FILE, `${lines.join("\n")}\n`, "utf8");
+}
+
+function exportPublicSelfie(record) {
+  if (!record.selfie_storage_path) return "";
+  const sourcePath = path.resolve(__dirname, record.selfie_storage_path);
+  if (!fs.existsSync(sourcePath)) return "";
+  ensureParentDir(path.join(WRITING_CENTER_TRIBUTE_PUBLIC_MEDIA_DIR, "placeholder"));
+  const ext = path.extname(sourcePath) || ".jpg";
+  const fileName = `${record.submission_id}${ext}`;
+  const destPath = path.join(WRITING_CENTER_TRIBUTE_PUBLIC_MEDIA_DIR, fileName);
+  fs.copyFileSync(sourcePath, destPath);
+  return `./data/writing-center-tribute-media/${fileName}`;
+}
+
+function buildWritingCenterPublicFeed(records) {
+  const items = records
+    .filter((record) => {
+      return (
+        String(record.review_status || "") === "approved" &&
+        String(record.publish_to_screen || "") === "yes" &&
+        String(record.share_permission || "") === "yes" &&
+        String(record.display_permission || "") === "yes"
+      );
+    })
+    .sort((a, b) => {
+      const aOrder = Number(a.display_order || 999999);
+      const bOrder = Number(b.display_order || 999999);
+      if (aOrder !== bOrder) return aOrder - bOrder;
+      return String(a.tribute_submitted_at || a.interest_submitted_at || "").localeCompare(
+        String(b.tribute_submitted_at || b.interest_submitted_at || "")
+      );
+    })
+    .map((record, index) => ({
+      id: record.submission_id,
+      index: index + 1,
+      name: record.published_display_name || record.preferred_display_name || record.full_name,
+      roleOrg: record.published_role_org || record.current_role_org || "",
+      graduationYear: record.graduation_year || "",
+      note: record.published_note || record.written_note || "",
+      selfieUrl: exportPublicSelfie(record),
+      hasVideo: !!(record.video_filename || record.video_link),
+      updatedAt: record.review_updated_at || record.tribute_submitted_at || record.interest_submitted_at || "",
+    }));
+  const payload = {
+    updatedAt: new Date().toISOString(),
+    itemCount: items.length,
+    items,
+  };
+  writeJsonFile(WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE, payload);
+  return payload;
+}
+
+function saveWritingCenterTributes(records) {
+  writeJsonFile(WRITING_CENTER_TRIBUTES_JSON_FILE, records);
+  writeWritingCenterTributesCsv(records);
+  return buildWritingCenterPublicFeed(records);
+}
+
+function isLocalAdminRequest(req) {
+  const host = String(req.headers.host || "").toLowerCase();
+  const ip = getClientIp(req);
+  if (host.includes("localhost") || host.includes("127.0.0.1")) return true;
+  return ip === "::1" || ip === "127.0.0.1" || ip.startsWith("::ffff:127.0.0.1");
+}
+
+function authorizeWritingCenterAdmin(req) {
+  if (!WRITING_CENTER_ADMIN_TOKEN) {
+    if (isLocalAdminRequest(req)) return { ok: true, mode: "local" };
+    return { ok: false, status: 503, error: "WRITING_CENTER_ADMIN_TOKEN is not configured" };
+  }
+  const authHeader = String(req.headers.authorization || "");
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
+  const headerToken = cleanSingleLine(req.headers["x-admin-token"] || "", 240);
+  const token = headerToken || bearer;
+  if (!token || token !== WRITING_CENTER_ADMIN_TOKEN) {
+    return { ok: false, status: 401, error: "Invalid admin token" };
+  }
+  return { ok: true, mode: "token" };
+}
+
+function makeWritingCenterInviteToken() {
+  return crypto.randomBytes(18).toString("hex");
+}
+
+const WRITING_CENTER_DISPOSABLE_EMAIL_DOMAINS = new Set([
+  "10minutemail.com",
+  "dispostable.com",
+  "fakeinbox.com",
+  "guerrillamail.com",
+  "maildrop.cc",
+  "mailinator.com",
+  "tempmail.com",
+  "trashmail.com",
+  "yopmail.com",
+]);
+
+const WRITING_CENTER_VETTING_TERMS = [
+  { label: "Writing Center", regex: /\bwriting center\b/i },
+  { label: "tutor", regex: /\btutor(?:ed|ing|s)?\b/i },
+  { label: "consultant", regex: /\bconsultant(?:s)?\b/i },
+  { label: "ENGL 296", regex: /\bengl\s*296\b/i },
+  { label: "ENGL 3082", regex: /\bengl\s*3082\b/i },
+  { label: "practicum", regex: /\bpracticum\b/i },
+  { label: "Margie", regex: /\bmargie\b|\bouimette\b/i },
+  { label: "Tom", regex: /\btom\b|\bdeans\b/i },
+  { label: "UConn", regex: /\buconn\b|\buniversity of connecticut\b/i },
+  { label: "Nexus", regex: /\bnexus\b/i },
+  { label: "front office", regex: /\bfront office\b/i },
+];
+
+function getEmailDomain(value) {
+  const email = String(value || "").trim().toLowerCase();
+  const atIndex = email.lastIndexOf("@");
+  return atIndex >= 0 ? email.slice(atIndex + 1) : "";
+}
+
+function getMatchedWritingCenterTerms(text) {
+  const source = String(text || "");
+  return WRITING_CENTER_VETTING_TERMS.filter((entry) => entry.regex.test(source)).map((entry) => entry.label);
+}
+
+function buildWritingCenterVettingAssessment(record = {}) {
+  const positives = [];
+  const cautions = [];
+  let score = 20;
+
+  const fullName = String(record.full_name || "").trim();
+  const nameParts = fullName.split(/\s+/).filter(Boolean);
+  if (nameParts.length >= 2) {
+    score += 4;
+    positives.push("Submitted a full name instead of a single-handle identity.");
+  } else if (fullName) {
+    score -= 6;
+    cautions.push("Name field is thin and may need a quick identity check.");
+  } else {
+    score -= 12;
+    cautions.push("Missing a usable full name.");
+  }
+
+  const graduationYear = Number(record.graduation_year || 0);
+  const currentYear = new Date().getFullYear();
+  if (Number.isInteger(graduationYear) && graduationYear >= 1980 && graduationYear <= currentYear + 1) {
+    score += 8;
+    positives.push(`Includes a plausible graduation year (${graduationYear}).`);
+  } else {
+    score -= 10;
+    cautions.push("Graduation year is missing or falls outside the expected range.");
+  }
+
+  const connectionPath = String(record.connection_path || "").trim();
+  const normalizedPath = connectionPath.toLowerCase();
+  if (["tom", "kathleen", "nikki"].includes(normalizedPath)) {
+    score += 12;
+    positives.push(`Came through a known relationship path (${connectionPath}).`);
+  } else if (["linkedin", "social"].includes(normalizedPath)) {
+    score += 5;
+    positives.push(`Came through a traceable outreach path (${connectionPath}).`);
+  } else if (normalizedPath === "other") {
+    score += 2;
+    cautions.push("Connection path is generic, so the context should be reviewed more closely.");
+  } else if (!connectionPath) {
+    score -= 6;
+    cautions.push("Connection path is missing.");
+  }
+
+  const verificationContext = String(record.verification_context || "").trim();
+  if (verificationContext.length >= 120) {
+    score += 12;
+    positives.push("Provides detailed verification context.");
+  } else if (verificationContext.length >= 60) {
+    score += 8;
+    positives.push("Provides enough verification context to evaluate the claim.");
+  } else if (verificationContext.length >= 25) {
+    score += 3;
+    positives.push("Provides some verification context.");
+  } else {
+    score -= 14;
+    cautions.push("Verification context is brief and may not be enough on its own.");
+  }
+
+  const evidenceText = `${verificationContext} ${String(record.written_note || "").trim()}`.trim();
+  const matchedTerms = getMatchedWritingCenterTerms(evidenceText);
+  if (matchedTerms.length >= 3) {
+    score += 14;
+    positives.push(`References multiple Writing Center-specific details: ${matchedTerms.join(", ")}.`);
+  } else if (matchedTerms.length >= 1) {
+    score += 8;
+    positives.push(`References recognizable Writing Center details: ${matchedTerms.join(", ")}.`);
+  } else {
+    score -= 12;
+    cautions.push("Does not mention recognizable Writing Center-specific details yet.");
+  }
+
+  const emailDomain = getEmailDomain(record.email);
+  if (emailDomain && WRITING_CENTER_DISPOSABLE_EMAIL_DOMAINS.has(emailDomain)) {
+    score -= 24;
+    cautions.push(`Uses a disposable-looking email domain (${emailDomain}).`);
+  } else if (emailDomain.endsWith(".edu")) {
+    score += 4;
+    positives.push(`Uses an academic email domain (${emailDomain}).`);
+  } else if (emailDomain) {
+    score += 2;
+    positives.push(`Provides a direct contact email (${emailDomain}).`);
+  } else {
+    score -= 10;
+    cautions.push("Email domain could not be evaluated.");
+  }
+
+  const linkedinUrl = String(record.linkedin_url || "").trim();
+  if (linkedinUrl) {
+    if (/linkedin\.com/i.test(linkedinUrl)) {
+      score += 6;
+      positives.push("Includes a LinkedIn profile that can be corroborated.");
+    } else {
+      score += 2;
+      positives.push("Includes an external profile link for corroboration.");
+    }
+  } else {
+    score -= 4;
+    cautions.push("No LinkedIn or profile link was provided.");
+  }
+
+  if (String(record.current_role_org || "").trim()) {
+    score += 3;
+    positives.push("Shares a current role or organization.");
+  } else {
+    score -= 3;
+    cautions.push("No current role or organization was provided.");
+  }
+
+  if (String(record.network_interest || "").trim() || String(record.future_contact_ok || "").toLowerCase() === "yes") {
+    score += 2;
+    positives.push("Seems open to ongoing alumni contact beyond this one tribute.");
+  }
+
+  if (String(record.tribute_submitted_at || "").trim()) {
+    const writtenNote = String(record.written_note || "").trim();
+    if (writtenNote.length >= 80) {
+      score += 5;
+      positives.push("Tribute note includes enough detail to compare tone and context.");
+    } else if (writtenNote.length > 0) {
+      score += 2;
+      positives.push("Tribute note adds a little more direct evidence.");
+    }
+    if (String(record.selfie_filename || "").trim()) {
+      score += 3;
+      positives.push("Submitted a current selfie that can help with recognition.");
+    }
+    if (String(record.video_filename || record.video_link || "").trim()) {
+      score += 3;
+      positives.push("Submitted a video artifact that can be manually reviewed.");
+    }
+  }
+
+  const spamScore = Number(record.spam_score || 0);
+  if (String(record.spam_flag || "").toLowerCase() === "yes") {
+    score -= 40;
+    cautions.push("Submission was flagged by the spam filter and should be independently verified.");
+  } else if (Number.isFinite(spamScore) && spamScore >= 25) {
+    score -= 18;
+    cautions.push(`Spam score is elevated (${spamScore}).`);
+  }
+
+  score = Math.max(0, Math.min(100, score));
+
+  let status = "investigate";
+  let statusLabel = "Needs Investigation";
+  let summary = "The submission does not yet have enough specific support to be treated as confirmed without follow-up.";
+  if (score >= 82) {
+    status = "high_confidence";
+    statusLabel = "High Confidence";
+    summary = "Submitted details strongly suggest a real Writing Center connection.";
+  } else if (score >= 68) {
+    status = "credible";
+    statusLabel = "Credible";
+    summary = "Submitted details look plausible, with enough support for a light-touch human review.";
+  } else if (score >= 52) {
+    status = "needs_review";
+    statusLabel = "Needs Review";
+    summary = "Some signals look real, but the record would benefit from extra verification.";
+  }
+
+  return {
+    score,
+    status,
+    statusLabel,
+    summary,
+    positiveSignals: positives,
+    cautionSignals: cautions,
+  };
+}
+
+function buildWritingCenterWorkflowStage(record) {
+  if (String(record.review_status || "") === "approved" && String(record.publish_to_screen || "") === "yes") {
+    return "approved_for_display";
+  }
+  if (String(record.invite_status || "") === "tribute_submitted") {
+    return String(record.review_status || "") === "approved" ? "tribute_approved" : "needs_content_review";
+  }
+  if (String(record.interest_status || "") === "approved") {
+    if (String(record.invite_status || "") === "sent") return "awaiting_tribute";
+    return "approved_ready_to_invite";
+  }
+  if (String(record.interest_status || "") === "hold") return "interest_hold";
+  if (String(record.interest_status || "") === "rejected") return "rejected";
+  return "needs_interest_review";
+}
+
+function shapeWritingCenterReviewRecord(record) {
+  const assessment = buildWritingCenterVettingAssessment(record);
+  return {
+    ...record,
+    vetting_score: assessment.score,
+    vetting_status: assessment.status,
+    vetting_status_label: assessment.statusLabel,
+    vetting_summary: assessment.summary,
+    vetting_positive_signals: assessment.positiveSignals,
+    vetting_caution_signals: assessment.cautionSignals,
+    vetting_review_notes: record.vetting_review_notes || "",
+    selfie_preview_url: toRepoAssetUrl(record.selfie_storage_path),
+    video_preview_url: toRepoAssetUrl(record.video_storage_path),
+    workflow_stage: buildWritingCenterWorkflowStage(record),
+  };
+}
+
 function escapeXmlValue(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -338,6 +918,172 @@ function decodeDataUriValue(dataUrl) {
   }
 
   return null;
+}
+
+function normalizeWritingCenterInterest(body = {}, req) {
+  const submissionId = `tribute-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const fullName = cleanSingleLine(body.full_name || body.fullName, 120);
+  const email = cleanSingleLine(body.email, 160).toLowerCase();
+  const currentRoleOrg = cleanSingleLine(body.current_role_org || body.currentRoleOrg, 180);
+  const linkedinUrl = cleanSingleLine(body.linkedin_url || body.linkedinUrl, 300);
+  const bestContactMethod = cleanSingleLine(body.best_contact_method || body.bestContactMethod, 40).toLowerCase();
+  const networkInterest = cleanMultiline(body.network_interest || body.networkInterest, 1200);
+  const connectionPath = cleanSingleLine(body.connection_path || body.connectionPath, 80);
+  const verificationContext = cleanMultiline(body.verification_context || body.verificationContext, 1200);
+  const futureContactOk = toYesNo(body.future_contact_ok || body.futureContactOk, "no");
+  const graduationYear = String(body.graduation_year || body.graduationYear || "").trim();
+
+  if (!fullName) throw new Error("Full name is required");
+  if (!isValidEmail(email)) throw new Error("A valid email is required");
+  if (!/^\d{4}$/.test(graduationYear)) throw new Error("Graduation year must be a four-digit year");
+
+  const parsedYear = Number(graduationYear);
+  const currentYear = new Date().getFullYear();
+  if (parsedYear < 1980 || parsedYear > currentYear + 1) {
+    throw new Error(`Graduation year must fall between 1980 and ${currentYear + 1}`);
+  }
+
+  if (!connectionPath) throw new Error("Please tell us how you are connected to the Writing Center");
+  if (verificationContext.length < 8) {
+    throw new Error("Please include a little more context so we can verify your connection");
+  }
+  if (bestContactMethod && !["email", "linkedin", "either"].includes(bestContactMethod)) {
+    throw new Error("Best contact method must be email, LinkedIn, or either");
+  }
+
+  const inboundEvent = normalizeInboundEvent(
+    {
+      channel: "contact",
+      context: `${fullName} ${networkInterest || verificationContext}`.trim(),
+      source_page: body.source_page || body.pageUrl || body.page_url || "",
+      honeypot: body.website || body.honeypot || "",
+      referrer: body.referrer || "",
+      user_agent: body.user_agent || "",
+    },
+    req
+  );
+  const spam = scoreSpam(inboundEvent);
+  if (spam.isSpam) {
+    throw new Error("This submission was flagged as spam. Please email Tom directly instead.");
+  }
+
+  return {
+    submission_id: submissionId,
+    interest_submitted_at: new Date().toISOString(),
+    full_name: fullName,
+    email,
+    graduation_year: String(parsedYear),
+    current_role_org: currentRoleOrg,
+    linkedin_url: linkedinUrl,
+    best_contact_method: bestContactMethod || "email",
+    network_interest: networkInterest,
+    connection_path: connectionPath,
+    verification_context: verificationContext,
+    future_contact_ok: futureContactOk,
+    interest_status: "pending",
+    interest_reviewed_at: "",
+    interest_review_notes: "",
+    vetting_review_notes: "",
+    invite_token: "",
+    invite_status: "not_ready",
+    invite_created_at: "",
+    invite_sent_at: "",
+    tribute_submitted_at: "",
+    preferred_display_name: "",
+    written_note: "",
+    video_link: "",
+    video_filename: "",
+    video_storage_path: "",
+    video_mime_type: "",
+    video_size_bytes: "",
+    selfie_filename: "",
+    selfie_storage_path: "",
+    selfie_mime_type: "",
+    selfie_size_bytes: "",
+    share_permission: "",
+    display_permission: "",
+    review_status: "not_submitted",
+    review_updated_at: "",
+    review_notes: "",
+    published_display_name: "",
+    published_role_org: currentRoleOrg,
+    published_note: "",
+    publish_to_screen: "no",
+    display_order: "",
+    interest_source_page: inboundEvent.sourcePage,
+    tribute_source_page: "",
+    referrer: inboundEvent.referrer,
+    user_agent: inboundEvent.userAgent,
+    ip_hash: inboundEvent.ipHash,
+    spam_score: String(spam.score),
+    spam_flag: spam.isSpam ? "yes" : "no",
+    spam_reasons: spam.reasons.join("|"),
+  };
+}
+
+function applyWritingCenterTributeSubmission(record, body = {}, req) {
+  const preferredDisplayName = cleanSingleLine(body.preferred_display_name || body.preferredDisplayName || record.full_name, 120);
+  const updatedRoleOrg = cleanSingleLine(body.current_role_org || body.currentRoleOrg || record.current_role_org, 180);
+  const writtenNote = cleanMultiline(body.written_note || body.writtenNote, 5000);
+  const videoLink = cleanSingleLine(body.video_link || body.videoLink, 300);
+  const sharePermissionRaw = cleanSingleLine(body.share_permission || body.sharePermission, 12).toLowerCase();
+  const displayPermissionRaw = cleanSingleLine(body.display_permission || body.displayPermission, 12).toLowerCase();
+  const sharePermission = ["yes", "no"].includes(sharePermissionRaw) ? sharePermissionRaw : "unclear";
+  const displayPermission = ["yes", "no"].includes(displayPermissionRaw) ? displayPermissionRaw : "no";
+  const hasVideoUpload = !!(body.video && (body.video.data_url || body.video.dataUrl));
+  if (!writtenNote && !videoLink && !hasVideoUpload) {
+    throw new Error("Please include a written note, a short video, or a video link");
+  }
+
+  const inboundEvent = normalizeInboundEvent(
+    {
+      channel: "contact",
+      context: `${record.full_name} ${writtenNote || videoLink}`.trim(),
+      source_page: body.source_page || body.pageUrl || body.page_url || "",
+      honeypot: body.website || body.honeypot || "",
+      referrer: body.referrer || "",
+      user_agent: body.user_agent || "",
+    },
+    req
+  );
+  const spam = scoreSpam(inboundEvent);
+  if (spam.isSpam) {
+    throw new Error("This tribute submission was flagged as spam. Please contact Tom directly instead.");
+  }
+
+  const videoMeta = saveWritingCenterVideo(body.video, record.submission_id);
+  const selfieMeta = saveWritingCenterSelfie(body.selfie, record.submission_id);
+
+  record.current_role_org = updatedRoleOrg;
+  record.preferred_display_name = preferredDisplayName;
+  record.written_note = writtenNote;
+  record.video_link = videoLink;
+  if (videoMeta) {
+    record.video_filename = videoMeta.filename;
+    record.video_storage_path = videoMeta.storagePath;
+    record.video_mime_type = videoMeta.mimeType;
+    record.video_size_bytes = String(videoMeta.sizeBytes);
+  }
+  if (selfieMeta) {
+    record.selfie_filename = selfieMeta.filename;
+    record.selfie_storage_path = selfieMeta.storagePath;
+    record.selfie_mime_type = selfieMeta.mimeType;
+    record.selfie_size_bytes = String(selfieMeta.sizeBytes);
+  }
+  record.share_permission = sharePermission;
+  record.display_permission = displayPermission;
+  record.tribute_submitted_at = new Date().toISOString();
+  record.invite_status = "tribute_submitted";
+  record.review_status = "pending";
+  record.review_updated_at = "";
+  record.review_notes = "";
+  record.published_display_name = preferredDisplayName || record.full_name;
+  record.published_role_org = updatedRoleOrg;
+  record.published_note = writtenNote;
+  record.publish_to_screen = "no";
+  record.display_order = "";
+  record.tribute_source_page = inboundEvent.sourcePage;
+  return record;
 }
 
 function detectImageMetaFromGraphic(graphic, fallbackLabel) {
@@ -893,7 +1639,7 @@ function makeId() {
 }
 
 async function handleApiRequest(req, res, pathname, method) {
-    if (pathname === "/api/contact-events" && method === "POST") {
+  if (pathname === "/api/contact-events" && method === "POST") {
     try {
       const body = await parseBody(req);
       const event = normalizeInboundEvent(body, req);
@@ -920,6 +1666,216 @@ async function handleApiRequest(req, res, pathname, method) {
   if (pathname === "/api/contact-events") {
     return sendJson(res, { error: "Method not supported" }, 405);
   }
+
+  if (pathname === "/api/writing-center-tributes/published" && method === "GET") {
+    try {
+      const feed = fs.existsSync(WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE)
+        ? JSON.parse(fs.readFileSync(WRITING_CENTER_TRIBUTE_PUBLIC_FEED_FILE, "utf8"))
+        : { updatedAt: "", itemCount: 0, items: [] };
+      return sendJson(res, feed);
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 500);
+    }
+  }
+
+  if (pathname === "/api/writing-center-tributes/review" && method === "GET") {
+    const auth = authorizeWritingCenterAdmin(req);
+    if (!auth.ok) {
+      return sendJson(res, { error: auth.error }, auth.status);
+    }
+    const items = loadWritingCenterTributes()
+      .sort((a, b) =>
+        String(b.tribute_submitted_at || b.interest_submitted_at || "").localeCompare(
+          String(a.tribute_submitted_at || a.interest_submitted_at || "")
+        )
+      )
+      .map(shapeWritingCenterReviewRecord);
+    return sendJson(res, {
+      items,
+      admin_mode: auth.mode,
+      feed_path: "boss-key-website/data/writing-center-tribute-display.json",
+      invite_page_path: "boss-key-website/writing-center-alumni-tribute-compose.html",
+    });
+  }
+
+  if (pathname === "/api/writing-center-interest" && method === "POST") {
+    try {
+      const body = await parseBody(req, WRITING_CENTER_TRIBUTE_PAYLOAD_MAX_BYTES);
+      const submission = normalizeWritingCenterInterest(body, req);
+      const records = loadWritingCenterTributes();
+      records.push(submission);
+      saveWritingCenterTributes(records);
+      return sendJson(
+        res,
+        {
+          ok: true,
+          submission_id: submission.submission_id,
+        },
+        201
+      );
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 400);
+    }
+  }
+
+  const writingCenterInviteViewMatch = pathname.match(/^\/api\/writing-center-invites\/([^/]+)$/);
+  if (writingCenterInviteViewMatch && method === "GET") {
+    const inviteToken = writingCenterInviteViewMatch[1];
+    const record = loadWritingCenterTributes().find((item) => item.invite_token === inviteToken);
+    if (!record || String(record.interest_status || "") !== "approved") {
+      return sendJson(res, { error: "Invitation not found or no longer active" }, 404);
+    }
+    return sendJson(res, {
+      ok: true,
+      full_name: record.full_name,
+      preferred_display_name: record.preferred_display_name || record.full_name,
+      email: record.email,
+      graduation_year: record.graduation_year,
+      current_role_org: record.current_role_org,
+      network_interest: record.network_interest || "",
+      tribute_submitted: String(record.invite_status || "") === "tribute_submitted",
+      display_permission: record.display_permission || "no",
+      share_permission: record.share_permission || "yes",
+    });
+  }
+
+  const writingCenterInviteSubmitMatch = pathname.match(/^\/api\/writing-center-invites\/([^/]+)\/tribute$/);
+  if (writingCenterInviteSubmitMatch && method === "POST") {
+    try {
+      const inviteToken = writingCenterInviteSubmitMatch[1];
+      const body = await parseBody(req, WRITING_CENTER_TRIBUTE_PAYLOAD_MAX_BYTES);
+      const records = loadWritingCenterTributes();
+      const target = records.find((item) => item.invite_token === inviteToken);
+      if (!target || String(target.interest_status || "") !== "approved") {
+        return sendJson(res, { error: "Invitation not found or no longer active" }, 404);
+      }
+      applyWritingCenterTributeSubmission(target, body, req);
+      saveWritingCenterTributes(records);
+      return sendJson(
+        res,
+        {
+          ok: true,
+          submission_id: target.submission_id,
+          stored_video: !!target.video_filename,
+          stored_selfie: !!target.selfie_filename,
+        },
+        201
+      );
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 400);
+    }
+  }
+
+  const writingCenterTributeMatch = pathname.match(/^\/api\/writing-center-tributes\/([^/]+)$/);
+  if (writingCenterTributeMatch && method === "PUT") {
+    const auth = authorizeWritingCenterAdmin(req);
+    if (!auth.ok) {
+      return sendJson(res, { error: auth.error }, auth.status);
+    }
+    try {
+      const submissionId = writingCenterTributeMatch[1];
+      const body = await parseBody(req);
+      const records = loadWritingCenterTributes();
+      const target = records.find((record) => record.submission_id === submissionId);
+      if (!target) {
+        return sendJson(res, { error: "Submission not found" }, 404);
+      }
+
+      const nextInterestStatus = cleanSingleLine(body.interest_status || body.interestStatus || target.interest_status, 20).toLowerCase();
+      if (!["pending", "approved", "hold", "rejected"].includes(nextInterestStatus)) {
+        return sendJson(res, { error: "Invalid interest status" }, 400);
+      }
+
+      const nextInviteStatus = cleanSingleLine(body.invite_status || body.inviteStatus || target.invite_status, 24).toLowerCase();
+      if (!["not_ready", "generated", "sent", "tribute_submitted"].includes(nextInviteStatus)) {
+        return sendJson(res, { error: "Invalid invite status" }, 400);
+      }
+
+      const nextReviewStatus = cleanSingleLine(body.review_status || body.reviewStatus || target.review_status, 20).toLowerCase();
+      if (!["not_submitted", "pending", "approved", "hold", "rejected"].includes(nextReviewStatus)) {
+        return sendJson(res, { error: "Invalid review status" }, 400);
+      }
+
+      const nextPublishToScreen = toYesNo(body.publish_to_screen || body.publishToScreen || target.publish_to_screen, "no");
+      const nextDisplayOrder = cleanSingleLine(body.display_order || body.displayOrder || target.display_order, 12);
+      if (nextDisplayOrder && !/^\d+$/.test(nextDisplayOrder)) {
+        return sendJson(res, { error: "Display order must be a whole number" }, 400);
+      }
+
+      target.interest_status = nextInterestStatus;
+      target.interest_reviewed_at = new Date().toISOString();
+      target.interest_review_notes = cleanMultiline(
+        body.interest_review_notes || body.interestReviewNotes || target.interest_review_notes,
+        1600
+      );
+      target.vetting_review_notes = cleanMultiline(
+        body.vetting_review_notes || body.vettingReviewNotes || target.vetting_review_notes,
+        1600
+      );
+      target.best_contact_method = cleanSingleLine(
+        body.best_contact_method || body.bestContactMethod || target.best_contact_method,
+        40
+      ).toLowerCase();
+      target.current_role_org = cleanSingleLine(
+        body.current_role_org || body.currentRoleOrg || target.current_role_org,
+        180
+      );
+      target.linkedin_url = cleanSingleLine(body.linkedin_url || body.linkedinUrl || target.linkedin_url, 300);
+      target.network_interest = cleanMultiline(
+        body.network_interest || body.networkInterest || target.network_interest,
+        1200
+      );
+
+      if (nextInterestStatus === "approved" && !target.invite_token) {
+        target.invite_token = makeWritingCenterInviteToken();
+        target.invite_created_at = new Date().toISOString();
+      }
+
+      if (nextInterestStatus !== "approved") {
+        target.invite_status = "not_ready";
+      } else {
+        target.invite_status = nextInviteStatus === "not_ready" ? "generated" : nextInviteStatus;
+      }
+      if (target.invite_status === "generated" && !target.invite_created_at) {
+        target.invite_created_at = new Date().toISOString();
+      }
+      if (target.invite_status === "sent" && !target.invite_sent_at) {
+        target.invite_sent_at = new Date().toISOString();
+      }
+
+      target.review_status = nextReviewStatus;
+      target.review_updated_at = nextReviewStatus === "not_submitted" ? "" : new Date().toISOString();
+      target.review_notes = cleanMultiline(body.review_notes || body.reviewNotes || target.review_notes, 1600);
+      target.published_display_name = cleanSingleLine(
+        body.published_display_name || body.publishedDisplayName || target.published_display_name || target.preferred_display_name || target.full_name,
+        120
+      );
+      target.published_role_org = cleanSingleLine(
+        body.published_role_org || body.publishedRoleOrg || target.published_role_org || target.current_role_org,
+        180
+      );
+      target.published_note = cleanMultiline(
+        body.published_note || body.publishedNote || target.published_note || target.written_note,
+        5000
+      );
+      target.publish_to_screen = nextPublishToScreen;
+      target.display_order = nextDisplayOrder;
+
+      saveWritingCenterTributes(records);
+      return sendJson(res, { ok: true, item: shapeWritingCenterReviewRecord(target) });
+    } catch (error) {
+      return sendJson(res, { error: error.message }, 400);
+    }
+  }
+
+  if (
+    pathname === "/api/writing-center-tributes" ||
+    pathname === "/api/writing-center-interest" ||
+    pathname.startsWith("/api/writing-center-invites/")
+  ) {
+    return sendJson(res, { error: "Method not supported" }, 405);
+  }
+
   if (pathname === "/api/library" && method === "GET") {
     await getContentLibrary();
     return sendJson(res, CONTENT_LIBRARY);
@@ -1091,6 +2047,16 @@ function serveStatic(res, pathname, reqPathname) {
     ? "image/webp"
     : ext === ".bmp"
     ? "image/bmp"
+    : ext === ".mp4"
+    ? "video/mp4"
+    : ext === ".webm"
+    ? "video/webm"
+    : ext === ".mov"
+    ? "video/quicktime"
+    : ext === ".csv"
+    ? "text/csv"
+    : ext === ".md" || ext === ".txt"
+    ? "text/plain"
     : ext === ".svg"
     ? "image/svg+xml"
     : "application/octet-stream";
@@ -1120,6 +2086,9 @@ async function requestHandler(req, res) {
   const pathname = url.pathname.endsWith("/") && url.pathname.length > 1 ? url.pathname.slice(0, -1) : url.pathname;
   if (
     pathname === "/api/contact-events" ||
+    pathname === "/api/writing-center-interest" ||
+    pathname.startsWith("/api/writing-center-invites") ||
+    pathname.startsWith("/api/writing-center-tributes") ||
     pathname === "/api/library" ||
     pathname.startsWith("/api/content/") ||
     pathname === "/api/export/docx" ||
@@ -1133,6 +2102,7 @@ async function requestHandler(req, res) {
 async function main() {
   ensureDataFile();
   ensureContactEventsFile();
+  ensureWritingCenterTributesFile();
   ensureLibraryFile();
   loadStore();
   initializeContentProvider();

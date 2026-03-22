@@ -1,0 +1,3 @@
+display_name: Project Bootstrap
+short_description: Scaffold a new project folder with Codex-friendly structure and instructions.
+default_prompt: Use $project-bootstrap to create a new project home under projects/, including docs, inputs, working space, and local instructions.

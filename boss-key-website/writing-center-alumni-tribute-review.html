@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Center Tribute Review Console</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#f3efe7;--soft:#bcc7d4;--line:#334557;--paper:#0d1620;--card:#12202d;--card-soft:#162635;--accent:#d6a359;--ok:#3ea37b;--warn:#c47a3a;--danger:#a33e55;--radius:20px;--max:1280px}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;background:radial-gradient(circle at 12% 0%,rgba(214,163,89,.16) 0%,rgba(214,163,89,0) 24%),linear-gradient(180deg,#101923 0%,#081119 100%);color:var(--ink);font-family:"Manrope","Segoe UI",sans-serif;line-height:1.6}
+    .wrap{width:min(var(--max),94vw);margin:0 auto;padding:24px 0 40px}.hero,.toolbar,.card{border:1px solid var(--line);border-radius:var(--radius);background:rgba(18,32,45,.94);box-shadow:0 20px 48px rgba(0,0,0,.28)}
+    .hero,.toolbar,.card{padding:20px}.hero-top,.toolbar-top,.meta,.badge-row,.card-grid,.actions,.split,.hero-branding{display:flex;flex-wrap:wrap;gap:12px}.hero-top,.toolbar-top{justify-content:space-between;align-items:center}.hero-branding{align-items:center;justify-content:flex-end}
+    .eyebrow,.tag,.pill,.status-badge,.brand-chip{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:.79rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+    .eyebrow{padding:7px 12px;background:rgba(214,163,89,.13);border:1px solid rgba(214,163,89,.26);color:#efc888}.tag{padding:7px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--soft)}
+    .brand-chip{gap:10px;padding:7px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#f0eadf}.brand-logo{width:22px;height:22px;display:block;flex:none}
+    h1,h2,h3{margin:0 0 10px;font-family:"Fraunces",Georgia,serif;line-height:1.08}h1{font-size:clamp(2.25rem,4.5vw,3.5rem)}h2{font-size:1.45rem}h3{font-size:1.14rem}p{margin:0 0 10px;color:var(--soft)}
+    .meta .pill,.badge-row .pill{padding:8px 12px;background:#162635;border:1px solid rgba(255,255,255,.08);color:#d9e2ec;text-transform:none;font-size:.9rem;font-weight:600}
+    .partnership-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding:16px 18px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.05) 0%,rgba(214,163,89,.08) 100%)}.partnership-lockup{display:flex;align-items:center;gap:14px;flex:1 1 520px;flex-wrap:wrap}.partner-badge{display:flex;align-items:center;justify-content:center;min-height:92px;padding:14px 18px;border-radius:22px;border:1px solid rgba(255,255,255,.08)}.partner-badge img{display:block;height:auto}.wc-badge{background:linear-gradient(135deg,#0394c9 0%,#027aa8 100%);min-width:220px}.wc-badge img{width:min(210px,34vw)}.bk-badge{background:#09121d;padding:0;border-color:rgba(255,255,255,.04);overflow:hidden}.bk-badge img{width:min(300px,42vw)}.partner-x{font-family:"Fraunces",Georgia,serif;font-size:2rem;font-weight:700;color:#efc888;padding:0 4px}.partnership-copy{flex:0 1 300px;color:#e2d8cb;font-size:1rem}
+    .toolbar{margin-top:16px}.toolbar label,.card label{display:grid;gap:6px;font-size:.92rem;color:#e9edf2;font-weight:700}.toolbar-grid,.edit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+    input,textarea,select{width:100%;padding:11px 12px;border-radius:14px;border:1px solid #3b4e61;background:#0d1721;color:#f3efe7;font:inherit}textarea{min-height:110px;resize:vertical}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:14px;border:1px solid transparent;font-weight:800;cursor:pointer}.btn-primary{background:linear-gradient(135deg,#d6a359 0%,#b57b34 100%);color:#101923}.btn-secondary{background:#172736;color:#e9edf2;border-color:#34485b}.btn-ghost{background:transparent;color:#d9e2ec;border-color:#34485b}
+    .cards{display:grid;gap:16px;margin-top:18px}.card{background:linear-gradient(180deg,#132331 0%,#10202c 100%)}.card-grid{align-items:flex-start}.card-main{flex:1 1 720px}.card-side{flex:0 0 280px;display:grid;gap:12px}.section{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+    .status-badge{padding:7px 11px}.status-needs_interest_review{background:rgba(196,122,58,.16);color:#f2bf86;border:1px solid rgba(196,122,58,.3)}.status-approved_ready_to_invite,.status-awaiting_tribute{background:rgba(214,163,89,.16);color:#efc888;border:1px solid rgba(214,163,89,.28)}.status-needs_content_review{background:rgba(62,163,123,.16);color:#91e1c0;border:1px solid rgba(62,163,123,.28)}.status-approved_for_display,.status-tribute_approved{background:rgba(62,163,123,.16);color:#91e1c0;border:1px solid rgba(62,163,123,.28)}.status-interest_hold{background:rgba(214,163,89,.16);color:#efc888;border:1px solid rgba(214,163,89,.28)}.status-rejected{background:rgba(163,62,85,.16);color:#f0a6b8;border:1px solid rgba(163,62,85,.28)}
+    .media{width:100%;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:#091018;display:block}.empty{border:1px dashed #3b4e61;border-radius:16px;padding:16px;color:#95a7b9;text-align:center}.muted{color:#90a0b0;font-size:.92rem}.actions{margin-top:14px}.loading,.error{margin-top:16px;padding:14px 16px;border-radius:16px}.loading{background:#152433;border:1px solid #304457;color:#dfe6ee}.error{background:rgba(163,62,85,.16);border:1px solid rgba(163,62,85,.28);color:#f0a6b8}
+    .readonly{font-family:Consolas,monospace;font-size:.88rem}.copy-note{font-size:.84rem;color:#9fb0c0}
+    .vetting-grid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:14px}.score-card{border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;background:#101c28}.score-card.score-high_confidence{border-color:rgba(62,163,123,.42);background:rgba(62,163,123,.12)}.score-card.score-credible{border-color:rgba(214,163,89,.42);background:rgba(214,163,89,.12)}.score-card.score-needs_review,.score-card.score-investigate{border-color:rgba(163,62,85,.34);background:rgba(163,62,85,.12)}.score-label{font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#e6e1d8}.score-value{font-size:3rem;line-height:1;font-weight:800;color:#fff7e9}.signal-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.signal-list{margin:8px 0 0;padding-left:18px}.signal-list li{margin:6px 0;color:#d8e2eb}.signal-list.positive li::marker{color:#91e1c0}.signal-list.caution li::marker{color:#f0a6b8}
+    @media (max-width:1080px){.toolbar-grid,.edit-grid,.vetting-grid,.signal-columns{grid-template-columns:1fr}.card-side{flex:1 1 100%}.partnership-banner{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-top">
+        <span class="eyebrow">Private Review Console</span>
+        <div class="hero-branding">
+          <span class="tag">Interest approval + tribute approval</span>
+          <span class="brand-chip"><img class="brand-logo" src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key support</span></span>
+        </div>
+      </div>
+      <h1>Approve people first, then approve content.</h1>
+      <p>This console now handles the full staged workflow: interest capture, invitation readiness, tribute submission, and the final screen-display review layer. The intake side is for alumni reconnection and tribute participation, not fundraising.</p>
+      <div class="meta">
+        <span class="pill">Review alumni-network contact data</span>
+        <span class="pill">Generate private tribute invites</span>
+        <span class="pill">Approve only the content Margie should actually see</span>
+      </div>
+      <div class="partnership-banner">
+        <div class="partnership-lockup">
+          <div class="partner-badge wc-badge">
+            <img src="./assets/logos/brand/uconn-writing-center-logo-transparent.png" alt="UConn Writing Center logo">
+          </div>
+          <div class="partner-x" aria-hidden="true">x</div>
+          <div class="partner-badge bk-badge">
+            <img src="./assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key logo">
+          </div>
+        </div>
+        <p class="partnership-copy">Internal workspace for the shared Writing Center x Boss Key alumni-connection, vetting, invitation, and display workflow.</p>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="toolbar-top">
+        <h2>Review queue</h2>
+        <a class="btn btn-ghost" href="./writing-center-alumni-tribute-display.html" target="_blank" rel="noopener noreferrer">Open reception display</a>
+      </div>
+      <div class="toolbar-grid">
+        <label for="adminToken">Admin token<input id="adminToken" type="password" placeholder="Optional locally, recommended in production"></label>
+        <label for="stageFilter">Stage filter
+          <select id="stageFilter">
+            <option value="all">All records</option>
+            <option value="needs_interest_review">Needs interest review</option>
+            <option value="approved_ready_to_invite">Approved, ready to invite</option>
+            <option value="awaiting_tribute">Invite sent, awaiting tribute</option>
+            <option value="needs_content_review">Tribute submitted, needs content review</option>
+            <option value="approved_for_display">Approved for display</option>
+            <option value="interest_hold">On hold</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </label>
+        <div class="actions">
+          <button class="btn btn-primary" id="loadButton" type="button">Load queue</button>
+          <button class="btn btn-secondary" id="refreshButton" type="button">Refresh</button>
+        </div>
+      </div>
+      <div id="queueStatus" class="loading">Load the queue to review interest records, generate invite links, and approve tribute content for the community-centered project.</div>
+    </section>
+
+    <section class="cards" id="cards"></section>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="card">
+      <div class="card-grid">
+        <div class="card-main">
+          <div class="hero-top">
+            <div>
+              <h2 data-bind="full_name"></h2>
+              <p class="muted"><span data-bind="email"></span> | Class of <span data-bind="graduation_year"></span></p>
+            </div>
+            <span data-bind="workflow_badge" class="status-badge"></span>
+          </div>
+          <div class="badge-row">
+            <span class="pill">Interest: <strong data-bind="interest_status"></strong></span>
+            <span class="pill">Invite: <strong data-bind="invite_status"></strong></span>
+            <span class="pill">Content review: <strong data-bind="review_status"></strong></span>
+            <span class="pill">Connection: <strong data-bind="connection_path"></strong></span>
+          </div>
+
+          <div class="section">
+            <h3>Identity vetting</h3>
+            <div class="vetting-grid">
+              <div data-bind="vetting_score_card" class="score-card">
+                <div class="score-label" data-bind="vetting_status_label"></div>
+                <div class="score-value" data-bind="vetting_score"></div>
+                <p class="muted">Auto signal only, based on submitted details.</p>
+              </div>
+              <div>
+                <p><strong>Auto summary</strong><br><span data-bind="vetting_summary"></span></p>
+                <div class="signal-columns">
+                  <div>
+                    <strong>Convincing signals</strong>
+                    <ul data-bind="vetting_positive_signals" class="signal-list positive"></ul>
+                  </div>
+                  <div>
+                    <strong>Needs follow-up</strong>
+                    <ul data-bind="vetting_caution_signals" class="signal-list caution"></ul>
+                  </div>
+                </div>
+                <label>Manual vetting note<textarea data-edit="vetting_review_notes" placeholder="Optional: note anything that confirms, weakens, or needs follow-up on this record."></textarea></label>
+                <p class="copy-note">Use this to support human review, not replace it. Strong submissions can still be spot-checked before invitation or display.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Network profile</h3>
+            <div class="edit-grid">
+              <label>Current role or organization<input data-edit="current_role_org" type="text"></label>
+              <label>LinkedIn URL<input data-edit="linkedin_url" type="url"></label>
+              <label>Best contact method
+                <select data-edit="best_contact_method">
+                  <option value="email">Email</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="either">Either</option>
+                </select>
+              </label>
+            </div>
+            <p><strong>Verification context</strong><br><span data-bind="verification_context"></span></p>
+            <label>How they want to stay connected<textarea data-edit="network_interest"></textarea></label>
+          </div>
+
+          <div class="section">
+            <h3>Interest approval</h3>
+            <div class="edit-grid">
+              <label>Interest status
+                <select data-edit="interest_status">
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="hold">Hold</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </label>
+              <label>Invite status
+                <select data-edit="invite_status">
+                  <option value="not_ready">Not ready</option>
+                  <option value="generated">Generated</option>
+                  <option value="sent">Sent</option>
+                  <option value="tribute_submitted">Tribute submitted</option>
+                </select>
+              </label>
+              <label>Future alumni contact okay
+                <input data-bind="future_contact_ok" class="readonly" type="text" readonly>
+              </label>
+            </div>
+            <label>Interest review notes<textarea data-edit="interest_review_notes"></textarea></label>
+            <div class="split">
+              <label style="flex:1 1 320px;">Invite link<input data-bind="invite_url" class="readonly" type="text" readonly></label>
+              <label style="flex:1 1 320px;">Invite email draft<textarea data-bind="invite_draft" class="readonly" readonly></textarea></label>
+            </div>
+            <p class="copy-note">Once interest status is approved, an invite link is generated. Mark invite status as sent after you actually send it.</p>
+          </div>
+
+          <div class="section" data-bind="tribute_section">
+            <h3>Tribute submission</h3>
+            <p><strong>Preferred display name</strong><br><span data-bind="preferred_display_name"></span></p>
+            <p><strong>Original note</strong><br><span data-bind="written_note"></span></p>
+            <p><strong>External video link</strong><br><a data-bind="video_link" target="_blank" rel="noopener noreferrer"></a></p>
+            <div class="badge-row">
+              <span class="pill">Share at reception: <strong data-bind="share_permission"></strong></span>
+              <span class="pill">Screen permission: <strong data-bind="display_permission"></strong></span>
+            </div>
+            <div class="edit-grid">
+              <label>Content review status
+                <select data-edit="review_status">
+                  <option value="not_submitted">Not submitted</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="hold">Hold</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </label>
+              <label>Publish to reception screen
+                <select data-edit="publish_to_screen">
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </label>
+              <label>Display order<input data-edit="display_order" type="number" min="1" step="1" placeholder="Optional"></label>
+            </div>
+            <div class="edit-grid">
+              <label>Display name<input data-edit="published_display_name" type="text"></label>
+              <label>Display role or org<input data-edit="published_role_org" type="text"></label>
+              <label>Content review notes<textarea data-edit="review_notes"></textarea></label>
+            </div>
+            <label>Public display note<textarea data-edit="published_note"></textarea></label>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" data-action="save" type="button">Save review</button>
+            <span class="muted" data-bind="updated_text"></span>
+          </div>
+        </div>
+
+        <aside class="card-side">
+          <div>
+            <h3>Selfie</h3>
+            <img data-bind="selfie_preview_url" class="media hidden" alt="Selfie preview">
+            <div data-bind="selfie_empty" class="empty">No selfie uploaded yet</div>
+          </div>
+          <div>
+            <h3>Uploaded video</h3>
+            <video data-bind="video_preview_url" class="media hidden" controls playsinline></video>
+            <div data-bind="video_empty" class="empty">No uploaded video file</div>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    (function(){
+      const storageKey="wcTributeAdminToken";
+      const adminTokenInput=document.getElementById("adminToken");
+      const stageFilter=document.getElementById("stageFilter");
+      const queueStatus=document.getElementById("queueStatus");
+      const cards=document.getElementById("cards");
+      const template=document.getElementById("cardTemplate");
+      const loadButton=document.getElementById("loadButton");
+      const refreshButton=document.getElementById("refreshButton");
+      let submissions=[];
+
+      adminTokenInput.value=window.localStorage.getItem(storageKey)||"";
+
+      function setQueueStatus(message,isError){
+        queueStatus.textContent=message;
+        queueStatus.className=isError?"error":"loading";
+      }
+
+      function statusClass(stage){
+        return "status-badge status-"+String(stage||"needs_interest_review");
+      }
+
+      function authHeaders(){
+        const token=adminTokenInput.value.trim();
+        if(token){window.localStorage.setItem(storageKey,token)}
+        return token?{"x-admin-token":token}:{};
+      }
+
+      function buildInviteUrl(item){
+        if(!item.invite_token)return "";
+        return new URL("./writing-center-alumni-tribute-compose.html?token="+encodeURIComponent(item.invite_token),window.location.href).toString();
+      }
+
+      function buildInviteDraft(item,inviteUrl){
+        if(!inviteUrl)return "";
+        return [
+          "Subject: Invitation to contribute to the Writing Center tribute for Margie",
+          "",
+          "Hi "+(item.full_name||"there")+",",
+          "",
+          "Thanks for sharing your interest in the UConn Writing Center alumni tribute project.",
+          "",
+          "We reviewed your intake and would be glad to invite you to submit the actual tribute content for Margie's retirement project. You can use the private link below to send a written note, a selfie, or a short video:",
+          inviteUrl,
+          "",
+          "That page is the second step only. Your tribute will still go through review before anything is shown publicly or used at the reception.",
+          "",
+          "Warmly,",
+          "Tom"
+        ].join("\n");
+      }
+
+      function renderSignalList(list,items,emptyText){
+        list.innerHTML="";
+        const source=Array.isArray(items)?items:[];
+        if(!source.length){
+          const note=document.createElement("li");
+          note.textContent=emptyText;
+          list.appendChild(note);
+          return;
+        }
+        source.forEach(function(text){
+          const item=document.createElement("li");
+          item.textContent=text;
+          list.appendChild(item);
+        });
+      }
+
+      function renderCards(){
+        cards.innerHTML="";
+        const filter=stageFilter.value;
+        const filtered=submissions.filter(function(item){return filter==="all"||item.workflow_stage===filter});
+        if(!filtered.length){
+          cards.innerHTML='<div class="empty">No records match the current filter.</div>';
+          return;
+        }
+        filtered.forEach(function(item){
+          const node=template.content.firstElementChild.cloneNode(true);
+          const inviteUrl=buildInviteUrl(item);
+          node.dataset.id=item.submission_id;
+          node.querySelector('[data-bind="full_name"]').textContent=item.full_name||"Unnamed record";
+          node.querySelector('[data-bind="email"]').textContent=item.email||"";
+          node.querySelector('[data-bind="graduation_year"]').textContent=item.graduation_year||"";
+          node.querySelector('[data-bind="interest_status"]').textContent=item.interest_status||"pending";
+          node.querySelector('[data-bind="invite_status"]').textContent=item.invite_status||"not_ready";
+          node.querySelector('[data-bind="review_status"]').textContent=item.review_status||"not_submitted";
+          node.querySelector('[data-bind="connection_path"]').textContent=item.connection_path||"";
+          node.querySelector('[data-bind="vetting_status_label"]').textContent=item.vetting_status_label||"Needs Review";
+          node.querySelector('[data-bind="vetting_score"]').textContent=String(item.vetting_score??"--");
+          node.querySelector('[data-bind="vetting_summary"]').textContent=item.vetting_summary||"No vetting summary available.";
+          node.querySelector('[data-bind="vetting_score_card"]').className="score-card score-"+String(item.vetting_status||"needs_review");
+          renderSignalList(
+            node.querySelector('[data-bind="vetting_positive_signals"]'),
+            item.vetting_positive_signals,
+            "No strong positive signals surfaced yet."
+          );
+          renderSignalList(
+            node.querySelector('[data-bind="vetting_caution_signals"]'),
+            item.vetting_caution_signals,
+            "No major caution signals surfaced from the submission."
+          );
+          node.querySelector('[data-bind="verification_context"]').textContent=item.verification_context||"";
+          node.querySelector('[data-bind="future_contact_ok"]').value=item.future_contact_ok||"no";
+          node.querySelector('[data-bind="invite_url"]').value=inviteUrl;
+          node.querySelector('[data-bind="invite_draft"]').value=buildInviteDraft(item,inviteUrl);
+          const badge=node.querySelector('[data-bind="workflow_badge"]');
+          badge.textContent=String(item.workflow_stage||"needs_interest_review").replace(/_/g," ");
+          badge.className=statusClass(item.workflow_stage);
+          node.querySelector('[data-edit="current_role_org"]').value=item.current_role_org||"";
+          node.querySelector('[data-edit="linkedin_url"]').value=item.linkedin_url||"";
+          node.querySelector('[data-edit="best_contact_method"]').value=item.best_contact_method||"email";
+          node.querySelector('[data-edit="network_interest"]').value=item.network_interest||"";
+          node.querySelector('[data-edit="vetting_review_notes"]').value=item.vetting_review_notes||"";
+          node.querySelector('[data-edit="interest_status"]').value=item.interest_status||"pending";
+          node.querySelector('[data-edit="invite_status"]').value=item.invite_status||"not_ready";
+          node.querySelector('[data-edit="interest_review_notes"]').value=item.interest_review_notes||"";
+          node.querySelector('[data-edit="review_status"]').value=item.review_status||"not_submitted";
+          node.querySelector('[data-edit="publish_to_screen"]').value=item.publish_to_screen||"no";
+          node.querySelector('[data-edit="display_order"]').value=item.display_order||"";
+          node.querySelector('[data-edit="published_display_name"]').value=item.published_display_name||item.preferred_display_name||item.full_name||"";
+          node.querySelector('[data-edit="published_role_org"]').value=item.published_role_org||item.current_role_org||"";
+          node.querySelector('[data-edit="published_note"]').value=item.published_note||item.written_note||"";
+          node.querySelector('[data-edit="review_notes"]').value=item.review_notes||"";
+          node.querySelector('[data-bind="preferred_display_name"]').textContent=item.preferred_display_name||"Not submitted yet";
+          node.querySelector('[data-bind="written_note"]').textContent=item.written_note||"No tribute submitted yet.";
+          const videoLink=node.querySelector('[data-bind="video_link"]');
+          if(item.video_link){videoLink.href=item.video_link;videoLink.textContent=item.video_link}else{videoLink.textContent="No external video link";videoLink.removeAttribute("href")}
+          node.querySelector('[data-bind="share_permission"]').textContent=item.share_permission||"n/a";
+          node.querySelector('[data-bind="display_permission"]').textContent=item.display_permission||"n/a";
+          const updatedParts=[];
+          if(item.interest_reviewed_at)updatedParts.push("Interest reviewed: "+new Date(item.interest_reviewed_at).toLocaleString());
+          if(item.review_updated_at)updatedParts.push("Content reviewed: "+new Date(item.review_updated_at).toLocaleString());
+          node.querySelector('[data-bind="updated_text"]').textContent=updatedParts.join(" | ")||"Not reviewed yet";
+          const tributeSection=node.querySelector('[data-bind="tribute_section"]');
+          if(!item.tribute_submitted_at){tributeSection.querySelector('[data-bind="written_note"]').textContent="No tribute submitted yet.";tributeSection.querySelector('[data-bind="preferred_display_name"]').textContent="Invite not completed yet"}
+          const selfie=node.querySelector('[data-bind="selfie_preview_url"]');
+          const selfieEmpty=node.querySelector('[data-bind="selfie_empty"]');
+          if(item.selfie_preview_url){selfie.src=item.selfie_preview_url;selfie.classList.remove("hidden");selfieEmpty.classList.add("hidden")}
+          const video=node.querySelector('[data-bind="video_preview_url"]');
+          const videoEmpty=node.querySelector('[data-bind="video_empty"]');
+          if(item.video_preview_url){video.src=item.video_preview_url;video.classList.remove("hidden");videoEmpty.classList.add("hidden")}
+          node.querySelector('[data-action="save"]').addEventListener("click",function(){saveCard(node,item.submission_id)});
+          cards.appendChild(node);
+        });
+      }
+
+      async function loadQueue(){
+        setQueueStatus("Loading records...",false);
+        try{
+          const response=await fetch("/api/writing-center-tributes/review",{headers:authHeaders()});
+          const result=await response.json();
+          if(!response.ok)throw new Error(result.error||"Unable to load review queue");
+          submissions=result.items||[];
+          setQueueStatus("Loaded "+submissions.length+" records. Saving any card updates also refreshes the public display feed.",false);
+          renderCards();
+        }catch(error){
+          setQueueStatus(error.message||"Unable to load review queue.",true);
+        }
+      }
+
+      async function saveCard(node,id){
+        const payload={
+          current_role_org:node.querySelector('[data-edit="current_role_org"]').value,
+          linkedin_url:node.querySelector('[data-edit="linkedin_url"]').value,
+          best_contact_method:node.querySelector('[data-edit="best_contact_method"]').value,
+          network_interest:node.querySelector('[data-edit="network_interest"]').value,
+          vetting_review_notes:node.querySelector('[data-edit="vetting_review_notes"]').value,
+          interest_status:node.querySelector('[data-edit="interest_status"]').value,
+          invite_status:node.querySelector('[data-edit="invite_status"]').value,
+          interest_review_notes:node.querySelector('[data-edit="interest_review_notes"]').value,
+          review_status:node.querySelector('[data-edit="review_status"]').value,
+          publish_to_screen:node.querySelector('[data-edit="publish_to_screen"]').value,
+          display_order:node.querySelector('[data-edit="display_order"]').value,
+          published_display_name:node.querySelector('[data-edit="published_display_name"]').value,
+          published_role_org:node.querySelector('[data-edit="published_role_org"]').value,
+          published_note:node.querySelector('[data-edit="published_note"]').value,
+          review_notes:node.querySelector('[data-edit="review_notes"]').value
+        };
+        try{
+          const response=await fetch("/api/writing-center-tributes/"+encodeURIComponent(id),{
+            method:"PUT",
+            headers:Object.assign({"Content-Type":"application/json"},authHeaders()),
+            body:JSON.stringify(payload)
+          });
+          const result=await response.json();
+          if(!response.ok)throw new Error(result.error||"Unable to save review");
+          submissions=submissions.map(function(item){return item.submission_id===id?result.item:item});
+          setQueueStatus("Saved record for "+(result.item.full_name||id)+". Invite and display feeds are current.",false);
+          renderCards();
+        }catch(error){
+          setQueueStatus(error.message||"Unable to save review.",true);
+        }
+      }
+
+      loadButton.addEventListener("click",loadQueue);
+      refreshButton.addEventListener("click",loadQueue);
+      stageFilter.addEventListener("change",renderCards);
+    })();
+  </script>
+</body>
+</html>

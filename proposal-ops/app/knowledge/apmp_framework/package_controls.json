@@ -1,0 +1,30 @@
+{
+  "bucket": "package_controls",
+  "topics": [
+    {
+      "id": "price_to_win",
+      "title": "Price-to-Win and Commercial Discipline",
+      "description": "Pricing must be grounded in deterministic assumptions, traceable labor categories, and approval-controlled margin logic."
+    },
+    {
+      "id": "cost_pricing_data",
+      "title": "Cost and Pricing Data Integrity",
+      "description": "Workbooks, assumptions, and pricing narrative must reconcile with each other."
+    },
+    {
+      "id": "production_management",
+      "title": "Production Management",
+      "description": "The export package should include the narrative, pricing, forms, reviews, and production checklist in a controlled bundle."
+    },
+    {
+      "id": "lessons_learned",
+      "title": "Lessons Learned and Continuous Improvement",
+      "description": "The run should preserve findings and blockers that can improve the authority pack and future bids."
+    },
+    {
+      "id": "knowledge_management",
+      "title": "Knowledge Management",
+      "description": "Only approved and current assets should feed the narrative, pricing, forms, and attachments."
+    }
+  ]
+}

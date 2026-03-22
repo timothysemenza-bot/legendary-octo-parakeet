@@ -22,6 +22,21 @@ Use it when you need the agent architecture for:
 - communication monitoring across approved business channels
 - cross-client engagement orchestration from one internal system
 
+## Wave 1 Source of Truth
+
+For Wave 1 (engagement and founder operations), `proposal-ops` is the system of record.
+- `proposal-ops` is the durable source for engagement status, founder brief pipeline state, commitments, approvals, and operational decisions.
+- `marketing-agents/data/*.csv` are generated projections for operator compatibility and reporting, not the canonical CRM/state source.
+- `marketing-agents/briefs/*` are generated founder and intake artifacts and should be treated as consumable snapshots.
+
+## Operating Principles (Wave 1)
+
+- Manual-first ingress: process only approved exports and controlled file-drop inputs until wider capture channels are explicitly added.
+- AI as assistant: use AI for extraction, summaries, and draft copy while keeping humans in the decision loop for execution.
+- Tight operational scope first: keep engagement/founder workflows stable before automating additional adjacent domains.
+- Human approval for external actions: no external calls, sends, post actions, or commitment updates without explicit approval.
+- Visible provenance/disclosure: keep source IDs, decision provenance, and run metadata in generated outputs so operators can trace every routed decision.
+
 ## Operating Promise
 
 The system should keep four truths visible at all times:
@@ -124,7 +139,7 @@ The existing revenue files stay in place. Add these internal operating files und
 - `meeting_follow_through.csv`
 - `executive_scoreboard.csv`
 
-These files give the new agents stable inputs and outputs without forcing a CRM or PM migration first.
+These files give the new agents stable inputs and outputs without forcing a CRM or PM migration first, and in Wave 1 they are projections generated from canonical `proposal-ops` state.
 
 ## Daily Rhythm
 
@@ -195,6 +210,10 @@ Humans still approve:
 - hiring offers
 - formal compliance filings or renewals
 - promotion of draft lessons into company-standard assets
+
+For operational hygiene:
+- Treat `marketing-agents/data/*.csv` and `marketing-agents/briefs/*` as regenerated projections tied to `proposal-ops`, not as the source of truth.
+- Keep approval gates and provenance fields visible in all generated routing or compliance outputs.
 
 ## What Good Looks Like
 

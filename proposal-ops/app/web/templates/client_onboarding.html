@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="proposal-builder-shell">
+  <div class="proposal-builder-toolbar">
+    <div>
+      <p class="eyebrow">Admin Setup</p>
+      <h1>Client Onboarding</h1>
+      <p class="lead">Upload one onboarding pack, review what was parsed, approve the playbook and defaults, then activate the client environment.</p>
+    </div>
+    <div class="builder-link-row">
+      <a href="/proposal-builder">Back to Proposal Builder</a>
+      <a href="/client-profiles">Client Profiles</a>
+    </div>
+  </div>
+
+  {% if success_message %}
+  <div class="builder-alert builder-alert-success">{{ success_message }}</div>
+  {% endif %}
+
+  {% if error_message %}
+  <div class="builder-alert builder-alert-error">{{ error_message }}</div>
+  {% endif %}
+
+  <div class="builder-stage-rail builder-stage-rail-simple">
+    <div class="builder-stage complete">
+      <span class="builder-stage-label">1. Upload Client Pack</span>
+      <span class="builder-stage-description">Upload one zip or a set of source files.</span>
+    </div>
+    <div class="builder-stage">
+      <span class="builder-stage-label">2. Review Parsed Assets</span>
+      <span class="builder-stage-description">Check classifications, setup gaps, and generated defaults.</span>
+    </div>
+    <div class="builder-stage">
+      <span class="builder-stage-label">3. Approve Playbook and Defaults</span>
+      <span class="builder-stage-description">Approve the generated client README and imported runtime assets.</span>
+    </div>
+    <div class="builder-stage">
+      <span class="builder-stage-label">4. Activate Client Environment</span>
+      <span class="builder-stage-description">Make this pack the active runtime environment for the deployment.</span>
+    </div>
+  </div>
+
+  <div class="builder-grid">
+    <div class="builder-card builder-card-highlight">
+      <h2>Upload Client Pack</h2>
+      <form method="post" action="/client-onboarding/packs" enctype="multipart/form-data" class="builder-form">
+        <label>Client display name
+          <input type="text" name="client_display_name" placeholder="St. Moritz Security Services" />
+        </label>
+        <label>Pack name
+          <input type="text" name="pack_name" placeholder="Spring 2026 onboarding pack" />
+        </label>
+        <label>Zip upload
+          <input type="file" name="archive" accept=".zip" />
+        </label>
+        <label>Or upload files directly
+          <input type="file" name="files" multiple />
+        </label>
+        <button type="submit">Upload Client Pack</button>
+      </form>
+      <p class="builder-helper">The uploader can ingest branding, templates, pricing files, forms, sample proposals, resumes, references, certifications, and internal playbook documents.</p>
+    </div>
+
+    <div class="builder-card">
+      <h2>Optional Manifest</h2>
+      <p class="builder-helper">If you include a <code>client-onboarding.json</code> file, the importer can map files to roles before review.</p>
+      <pre class="builder-draft-body">{
+  "client": {
+    "display_name": "Example Client",
+    "aliases": ["Example Co"],
+    "approved_content_tags": ["security", "public-sector"],
+    "region_tags": ["mid-atlantic"],
+    "service_tags": ["guarding", "mobile-patrol"]
+  },
+  "asset_roles": {
+    "proposal-template.docx": "proposal_template",
+    "pricing-model.xlsx": "pricing_artifact",
+    "resume-ops-director.docx": "resume"
+  },
+  "playbook": {
+    "default_tone": "formal, buyer-focused, and consultative",
+    "preferred_terminology": ["officer", "site leadership"],
+    "avoid_terminology": ["vendor", "cheap"],
+    "required_attachments": ["Pricing workbook", "Signed forms"]
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="builder-card">
+    <div class="builder-card-header">
+      <h2>Recent Client Packs</h2>
+      <div class="builder-link-row">
+        <a href="/client-profiles">Open Client Profiles</a>
+      </div>
+    </div>
+    {% if packs %}
+    <table class="builder-table">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Pack</th>
+          <th>Status</th>
+          <th>Setup gaps</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pack in packs %}
+        <tr>
+          <td><strong>{{ pack.client_profile_name }}</strong></td>
+          <td>
+            <a href="/client-onboarding/{{ pack.id }}">{{ pack.pack_name }}</a>
+            <div class="muted">v{{ pack.version }} | {{ pack.source_mode }}</div>
+          </td>
+          <td>{{ pack.status }}</td>
+          <td>{{ pack.setup_gaps|length }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No onboarding packs have been uploaded yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

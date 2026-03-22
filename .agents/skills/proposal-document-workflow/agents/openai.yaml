@@ -1,0 +1,3 @@
+display_name: Proposal Document Workflow
+short_description: Assemble proposal and document deliverables from templates through packaging.
+default_prompt: Use $proposal-document-workflow to build this document from reusable templates and package the review-ready deliverable cleanly.

@@ -109,6 +109,36 @@ function Export-BossKeyCsv {
     $normalized | Export-Csv -Path $resolved -NoTypeInformation
 }
 
+function Get-BossKeyContentQueuePropertyOrder {
+    return @(
+        "content_id",
+        "created_date",
+        "cadence_type",
+        "source_id",
+        "source_type",
+        "source_path",
+        "source_title",
+        "title",
+        "slug",
+        "summary",
+        "article_draft_path",
+        "research_pack_path",
+        "distillation_path",
+        "article_output_path",
+        "company_linkedin_draft_path",
+        "personal_linkedin_draft_path",
+        "scheduled_publish_date",
+        "owner_decision",
+        "review_status",
+        "website_status",
+        "rss_status",
+        "linkedin_company_status",
+        "linkedin_personal_status",
+        "published_date",
+        "notes"
+    )
+}
+
 function ConvertTo-BossKeySlug {
     param([string]$Value)
 
@@ -223,100 +253,17 @@ function Convert-BossKeyMarkdownToHtml {
         return ""
     }
 
-    $lines = $Markdown -split "`r?`n"
-    $html = New-Object System.Collections.Generic.List[string]
-    $paragraph = New-Object System.Collections.Generic.List[string]
-    $inList = $false
-
-    function Flush-Paragraph {
-        param(
-            [System.Collections.Generic.List[string]]$ParagraphBuffer,
-            [System.Collections.Generic.List[string]]$OutputBuffer
-        )
-
-        if ($ParagraphBuffer.Count -eq 0) {
-            return
+    try {
+        $rendered = ConvertFrom-Markdown -InputObject $Markdown -ErrorAction Stop
+        $html = [string]$rendered.Html
+        if ([string]::IsNullOrWhiteSpace($html)) {
+            return ""
         }
-
-        $text = ($ParagraphBuffer -join " ").Trim()
-        if (-not [string]::IsNullOrWhiteSpace($text)) {
-            $OutputBuffer.Add("<p>$([string](Escape-BossKeyHtml -Value $text))</p>")
-        }
-        $ParagraphBuffer.Clear()
+        return $html.Trim()
+    } catch {
+        $safeText = Escape-BossKeyHtml -Value $Markdown.Trim()
+        return "<pre><code>$safeText</code></pre>"
     }
-
-    foreach ($rawLine in $lines) {
-        $line = [string]$rawLine
-        $trimmed = $line.Trim()
-
-        if ([string]::IsNullOrWhiteSpace($trimmed)) {
-            Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-            if ($inList) {
-                $html.Add("</ul>")
-                $inList = $false
-            }
-            continue
-        }
-
-        if ($trimmed -match '^###\s+(.+)$') {
-            Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-            if ($inList) {
-                $html.Add("</ul>")
-                $inList = $false
-            }
-            $html.Add("<h3>$([string](Escape-BossKeyHtml -Value $matches[1].Trim()))</h3>")
-            continue
-        }
-
-        if ($trimmed -match '^##\s+(.+)$') {
-            Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-            if ($inList) {
-                $html.Add("</ul>")
-                $inList = $false
-            }
-            $html.Add("<h2>$([string](Escape-BossKeyHtml -Value $matches[1].Trim()))</h2>")
-            continue
-        }
-
-        if ($trimmed -match '^#\s+(.+)$') {
-            Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-            if ($inList) {
-                $html.Add("</ul>")
-                $inList = $false
-            }
-            $html.Add("<h1>$([string](Escape-BossKeyHtml -Value $matches[1].Trim()))</h1>")
-            continue
-        }
-
-        if ($trimmed -match '^[-*]\s+(.+)$') {
-            Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-            if (-not $inList) {
-                $html.Add("<ul>")
-                $inList = $true
-            }
-            $html.Add("<li>$([string](Escape-BossKeyHtml -Value $matches[1].Trim()))</li>")
-            continue
-        }
-
-        if ($trimmed -match '^\d+\.\s+(.+)$') {
-            Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-            if (-not $inList) {
-                $html.Add("<ul>")
-                $inList = $true
-            }
-            $html.Add("<li>$([string](Escape-BossKeyHtml -Value $matches[1].Trim()))</li>")
-            continue
-        }
-
-        $paragraph.Add($trimmed)
-    }
-
-    Flush-Paragraph -ParagraphBuffer $paragraph -OutputBuffer $html
-    if ($inList) {
-        $html.Add("</ul>")
-    }
-
-    return ($html -join "`n").Trim()
 }
 
 function Normalize-BossKeyDecision {

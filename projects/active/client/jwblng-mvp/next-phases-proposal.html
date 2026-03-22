@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JWBLNG | Website Next Steps Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --plum: #6f2f84;
+      --plum-deep: #4d205d;
+      --paper: #fdfbfe;
+      --line: #e4d8ea;
+      --ink: #25192c;
+      --muted: #65556f;
+      --soft: #fbf7fd;
+      --mint: #eef7f1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 320px at 100% -120px, #eadcf0 0%, transparent 70%),
+        var(--paper);
+    }
+    .wrap { width: min(1020px, 92vw); margin: 0 auto; }
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(253, 251, 254, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .top-inner {
+      width: min(1020px, 92vw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--plum);
+      font-weight: 700;
+    }
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      object-fit: cover;
+      background: #fff;
+    }
+    .hero {
+      padding: 26px 0 10px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 12px;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      color: #341a40;
+      line-height: 1.05;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 3.1rem); }
+    h2 { font-size: 1.45rem; }
+    h3 { font-size: 1.1rem; }
+    p { color: var(--muted); margin: 10px 0 0; line-height: 1.65; }
+    .stamp {
+      margin-top: 12px;
+      display: inline-block;
+      font-size: 0.82rem;
+      color: var(--plum);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #faf4fc;
+      font-weight: 700;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fbf7fd;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .kpi strong { display: block; color: var(--plum); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 10px 0;
+    }
+    .list {
+      margin: 10px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .list li {
+      list-style: none;
+      border-left: 3px solid #ead8f1;
+      background: var(--soft);
+      border-radius: 8px;
+      padding: 8px 0 8px 10px;
+      color: #5f4f68;
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+    .list li strong { color: var(--plum); }
+    .callout {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #dbeadf;
+      background: var(--mint);
+      color: #355044;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .decision {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+    .decision .eyebrow {
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--plum);
+      font-weight: 700;
+    }
+    .decision h3 { margin-top: 6px; }
+    .decision p { font-size: 0.92rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #faf4fc;
+      color: #44244f;
+      font-weight: 700;
+    }
+    .money { white-space: nowrap; font-weight: 700; color: var(--plum-deep); }
+    .footer {
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      padding: 14px 0 26px;
+      color: #776785;
+      font-size: 0.88rem;
+    }
+    @media (max-width: 880px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .meta { grid-template-columns: 1fr 1fr; }
+      .decision-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="./index.html">
+        <img src="./assets/jwblng-logo-screenshot.png" alt="JWBLNG logo">
+        <span>JWBLNG Next Steps</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <article class="panel">
+        <h1>Website Next Steps Proposal</h1>
+        <p>Phase 1 gave JWBLNG a strong foundation: a clearer public website, a simpler join path, and starter communications inside Kajabi. This proposal outlines the next steps for building on that foundation with focused, clearly scoped project phases.</p>
+        <span class="stamp">Prepared for Jessica Rabinowitz and Marcy Fried</span>
+      </article>
+
+      <aside class="panel">
+        <h3>At A Glance</h3>
+        <div class="meta">
+          <div class="kpi"><strong>Structure</strong>2 project phases + optional monthly support</div>
+          <div class="kpi"><strong>Billing</strong>Fixed project fees</div>
+          <div class="kpi"><strong>Nonprofit Rate</strong>Reduced nonprofit pricing included</div>
+          <div class="kpi"><strong>Recommended Start</strong>Phase 2</div>
+        </div>
+        <div class="callout">
+          Phase 1 created the foundation. The work below is designed to expand the website thoughtfully and support the next stage of JWBLNG's growth.
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>What Is Already In Place</h2>
+        <ul class="list">
+          <li><strong>Clear join path:</strong> a simpler public path into JWBLNG membership request and onboarding.</li>
+          <li><strong>Core website pages:</strong> homepage, About, Contact, Events, Support, and three program pages.</li>
+          <li><strong>Starter communications:</strong> welcome, reminder, and monthly digest templates.</li>
+          <li><strong>Basic launch setup:</strong> one donation path, one standard event flow, and the operating basics needed to launch.</li>
+          <li><strong>Handoff materials:</strong> supporting documentation, QA notes, launch checklist, and rollback checklist.</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Final Phase 1 Closeout</h2>
+        <ul class="list">
+          <li><strong>Email testing:</strong> complete and record the remaining seed-test proof for key email assets.</li>
+          <li><strong>Sender readiness:</strong> confirm sender/domain setup and note any outside dependency, if needed.</li>
+          <li><strong>Handoff session:</strong> complete the walkthrough for approvals, events, and email operations.</li>
+          <li><strong>Sign-off:</strong> confirm any deferred, asset-dependent items and formally close the phase.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Phase 2</h2>
+        <p>Website Expansion and Trust-Building</p>
+        <ul class="list">
+          <li><strong>Selected Wix migration:</strong> bring over approved copy and visuals that strengthen the public website.</li>
+          <li><strong>Leadership and credibility:</strong> add a board or leadership section, plus testimonials or endorsements when approved materials are available.</li>
+          <li><strong>Content homes:</strong> create the structure for blog, resources, and podcast content so future updates have a clear place to live.</li>
+          <li><strong>Homepage and donation refinement:</strong> strengthen trust-building content and finalize donation details if mailing information is provided.</li>
+          <li><strong>Visual refresh:</strong> update imagery using approved photos and references that reflect the community well.</li>
+        </ul>
+        <div class="callout">Best next step if the priority is to make the public website feel more complete, welcoming, and representative of JWBLNG.</div>
+      </article>
+
+      <article class="panel">
+        <h2>Phase 3</h2>
+        <p>Communications and Member Experience</p>
+        <ul class="list">
+          <li><strong>Email readiness:</strong> finalize sender/domain setup and polish key email campaigns.</li>
+          <li><strong>Event and onboarding workflows:</strong> finish reminder flows and refine the member approval experience.</li>
+          <li><strong>Content organization:</strong> create a clearer structure for future public and member-only content.</li>
+          <li><strong>Future program setup:</strong> prepare Kajabi for future classes, workshops, or paid offerings.</li>
+          <li><strong>Measurement and cleanup:</strong> add basic analytics and clean up Kajabi areas that need tightening.</li>
+        </ul>
+        <div class="callout">Best follow-on phase if the priority is smoother communications, stronger member operations, and better preparation for future growth.</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Recommended Next Step</h2>
+      <div class="decision-grid">
+        <article class="decision">
+          <div class="eyebrow">Start Here</div>
+          <h3>Begin With Phase 2</h3>
+          <p>Start with the public-facing work so JWBLNG can strengthen its website, bring in key content, and present a fuller picture of the organization.</p>
+        </article>
+        <article class="decision">
+          <div class="eyebrow">After That</div>
+          <h3>Revisit Phase 3</h3>
+          <p>Once the website is expanded, it will be easier to decide whether the next priority should be communications, member operations, or future program setup.</p>
+        </article>
+        <article class="decision">
+          <div class="eyebrow">If Helpful</div>
+          <h3>Add Monthly Support Later</h3>
+          <p>Ongoing support can be useful after a build phase is complete, especially for publishing, campaigns, and smaller updates over time.</p>
+        </article>
+      </div>
+      <div class="callout">
+        If budget is the main concern, the best adjustment is to narrow the scope of Phase 2 rather than dilute the full project. That keeps expectations clear and protects quality.
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Investment</h2>
+      <p>To keep pricing transparent, I have shown both my standard project rate and the reduced nonprofit rate I am offering JWBLNG.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Offer</th>
+            <th>Standard Rate</th>
+            <th>JWBLNG Nonprofit Rate</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phase 2: Website Expansion and Trust-Building</td>
+            <td class="money">$6,400</td>
+            <td class="money">$4,800</td>
+            <td>Best immediate next step if the main goal is a stronger public-facing site.</td>
+          </tr>
+          <tr>
+            <td>Phase 3: Communications and Member Experience</td>
+            <td class="money">$8,400</td>
+            <td class="money">$6,300</td>
+            <td>Best follow-on phase if the goal is smoother systems, cleaner campaigns, and stronger future readiness.</td>
+          </tr>
+          <tr>
+            <td>Optional Monthly Support</td>
+            <td class="money">$1,500/mo</td>
+            <td class="money">$1,125/mo</td>
+            <td>Limited support for event updates, email sends, minor edits, and advisory after a paid build phase.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Why This Is Split Into Phases</h2>
+        <ul class="list">
+          <li><strong>Easier to budget:</strong> each phase has a clear scope, fee, and timeline.</li>
+          <li><strong>Easier to prioritize:</strong> JWBLNG can move forward with the public website first, then decide what to do next.</li>
+          <li><strong>Easier to manage:</strong> missing assets only affect the related deliverables instead of holding up everything.</li>
+          <li><strong>Easier to sustain:</strong> monthly support is available later if ongoing help would be useful.</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>What I Would Need From JWBLNG</h2>
+        <ul class="list">
+          <li>Board bios and headshots</li>
+          <li>Approved testimonials, endorsements, and images</li>
+          <li>Final mailing details for check donations, if those should be published</li>
+          <li>Timely approvals and feedback on content and design decisions</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">JWBLNG | Website Next Steps Proposal | Delivered by Boss Key LLC | March 17, 2026</div>
+  </footer>
+</body>
+</html>

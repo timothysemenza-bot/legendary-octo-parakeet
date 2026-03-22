@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+{% set summary = workspace.opportunity_summary %}
+<section class="proposal-preview-shell">
+  <div class="proposal-preview-toolbar">
+    <div>
+      <p class="eyebrow">HTML Proposal Preview</p>
+      <h1>{{ workspace.opportunity_name }}</h1>
+      <p class="lead">{{ workspace.client_name }}{% if summary and summary.proposal_due_date %} | Due {{ summary.proposal_due_date }} {{ summary.proposal_due_time or "" }}{% endif %}</p>
+    </div>
+    <div class="proposal-preview-actions">
+      <a class="ghost-button" href="/opportunities/{{ workspace.opportunity_id }}/proposal-builder">Back to workspace</a>
+      {% if workspace.export_manifest %}
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/docx">Download Word Draft</a>
+      {% else %}
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export" class="builder-stage-form" data-stage-label="Create Presentable Word Draft" data-timeout-seconds="45">
+        <input type="hidden" name="actor" value="operator" />
+        <button type="submit">Create Word Draft</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if success_message %}
+  <div class="builder-alert builder-alert-success">{{ success_message }}</div>
+  {% endif %}
+
+  {% if error_message %}
+  <div class="builder-alert builder-alert-error">{{ error_message }}</div>
+  {% endif %}
+
+  {% if workspace.export_manifest %}
+  <div class="builder-alert builder-alert-info">
+    The Word draft is synced to the current section content.
+  </div>
+  {% elif workspace.draft_package %}
+  <div class="builder-alert builder-alert-warning">
+    The HTML preview reflects your current edits. Refresh the Word draft when you want the download to match.
+  </div>
+  {% endif %}
+
+  {% if not workspace.draft_package %}
+  <div class="builder-card builder-card-emphasis">
+    <div class="builder-card-header">
+      <h2>Create the draft first</h2>
+    </div>
+    <p>The HTML preview appears once the proposal sections have been drafted.</p>
+    <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/best-draft" class="builder-stage-form" data-stage-label="Create Presentable Word Draft Fast" data-timeout-seconds="{{ workspace.workflow_summary.stage_runtime_guidance.extract_seconds + workspace.workflow_summary.stage_runtime_guidance.skeleton_seconds + workspace.workflow_summary.stage_runtime_guidance.draft_seconds + 45 }}">
+      <input type="hidden" name="actor" value="operator" />
+      <button type="submit">Create Presentable Word Draft Fast</button>
+    </form>
+  </div>
+  {% else %}
+  <article class="proposal-preview-page">
+    <header class="proposal-preview-hero">
+      <div class="proposal-preview-band"></div>
+      <div class="proposal-preview-brand">
+        <h2>{{ workspace.proposal_config.client_profile_name if workspace.proposal_config and workspace.proposal_config.client_profile_name else (summary.client_name if summary and summary.client_name else workspace.client_name) }}</h2>
+        <p>{{ summary.solicitation_number if summary and summary.solicitation_number else "Working Draft" }}</p>
+      </div>
+      <div class="proposal-preview-titleblock">
+        <p class="proposal-preview-kicker">Proposal Response</p>
+        <h1>{{ summary.opportunity_name if summary and summary.opportunity_name else workspace.opportunity_name }}</h1>
+        <p class="proposal-preview-subtitle">{{ summary.scope_summary if summary and summary.scope_summary else "Buyer-facing draft prepared for final polish and export." }}</p>
+      </div>
+      <dl class="proposal-preview-meta">
+        <div>
+          <dt>Prepared by</dt>
+          <dd>{{ workspace.proposal_config.client_profile_name if workspace.proposal_config and workspace.proposal_config.client_profile_name else "Response team" }}</dd>
+        </div>
+        <div>
+          <dt>Prepared for</dt>
+          <dd>{{ workspace.client_name }}</dd>
+        </div>
+        <div>
+          <dt>Proposal due</dt>
+          <dd>{% if summary and summary.proposal_due_date %}{{ summary.proposal_due_date }} {{ summary.proposal_due_time or "" }}{% else %}Pending confirmation{% endif %}</dd>
+        </div>
+        <div>
+          <dt>Submission method</dt>
+          <dd>{{ summary.submission_method if summary and summary.submission_method else "See workspace instructions" }}</dd>
+        </div>
+      </dl>
+    </header>
+
+    {% for section in preview_sections %}
+    <section class="proposal-preview-section">
+      <div class="proposal-preview-section-header">
+        <div>
+          <p class="proposal-preview-section-eyebrow">Section {{ loop.index }}</p>
+          <h2>{{ section.section_title }}</h2>
+        </div>
+      </div>
+      <div class="proposal-preview-section-body">{{ section.body_html|safe }}</div>
+      <details class="proposal-preview-editor">
+        <summary>Edit this section</summary>
+        <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/preview/sections/{{ section.index }}" class="builder-form builder-package-form" data-stage-label="Save Section Changes" data-timeout-seconds="20">
+          <input type="hidden" name="actor" value="operator" />
+          <label>{{ section.section_title }}
+            <textarea name="body_markdown" rows="14">{{ section.body_markdown }}</textarea>
+          </label>
+          <div class="proposal-preview-editor-actions">
+            <button type="submit">Save section changes</button>
+          </div>
+        </form>
+      </details>
+    </section>
+    {% endfor %}
+  </article>
+  {% endif %}
+</section>
+
+<div id="builder-processing-overlay" class="builder-processing-overlay" hidden>
+  <div class="builder-processing-card">
+    <p class="eyebrow">Working</p>
+    <h2 id="builder-processing-title">Updating preview</h2>
+    <p id="builder-processing-note" class="lead">The app is applying your changes.</p>
+    <div class="builder-progress-track">
+      <div id="builder-progress-fill" class="builder-progress-fill"></div>
+    </div>
+    <p id="builder-processing-elapsed" class="muted">Elapsed: 0s</p>
+    <p class="muted">Keep this tab open while the update finishes.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const forms = Array.from(document.querySelectorAll(".builder-stage-form, .builder-package-form"));
+  if (!forms.length) {
+    return;
+  }
+
+  const overlay = document.getElementById("builder-processing-overlay");
+  const title = document.getElementById("builder-processing-title");
+  const note = document.getElementById("builder-processing-note");
+  const elapsed = document.getElementById("builder-processing-elapsed");
+  const fill = document.getElementById("builder-progress-fill");
+  let timerId = null;
+  let startTime = 0;
+  let maxSeconds = 45;
+
+  function startOverlay(stageLabel, timeoutSeconds) {
+    if (!overlay || !title || !note || !elapsed || !fill) {
+      return;
+    }
+    startTime = Date.now();
+    maxSeconds = Math.max(timeoutSeconds || 45, 20);
+    title.textContent = stageLabel;
+    note.textContent = `This step can take up to ${maxSeconds} seconds.`;
+    fill.style.width = "8%";
+    overlay.hidden = false;
+    timerId = window.setInterval(() => {
+      const seconds = Math.floor((Date.now() - startTime) / 1000);
+      const progress = Math.min(92, 8 + Math.floor((seconds / maxSeconds) * 84));
+      fill.style.width = `${progress}%`;
+      elapsed.textContent = `Elapsed: ${seconds}s`;
+    }, 1000);
+  }
+
+  forms.forEach((form) => {
+    form.addEventListener("submit", () => {
+      const stageLabel = form.dataset.stageLabel || "Updating preview";
+      const timeoutSeconds = Number.parseInt(form.dataset.timeoutSeconds || "45", 10);
+      startOverlay(stageLabel, timeoutSeconds);
+    });
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+Review and display workflow
+Generated: 2026-03-16
+
+Pages
+
+1. Intake page
+   boss-key-website/writing-center-alumni-tribute.html
+   Public-facing alumni interest intake for name, contact details, verification context, and alumni-network information.
+
+2. Review console
+   boss-key-website/writing-center-alumni-tribute-review.html
+   Private working page for approving contacts first, generating invite links, reviewing submitted tribute content, scoring submission credibility, and deciding what moves to the reception screen.
+
+3. Invite-only tribute page
+   boss-key-website/writing-center-alumni-tribute-compose.html
+   Private second-step page where approved invitees can submit the actual note, selfie, or short video.
+
+4. Reception display
+   boss-key-website/writing-center-alumni-tribute-display.html
+   Standalone looping screen page that only reads from the approved public feed.
+
+How approval works
+
+- Raw submissions are stored under workspace/data/writing-center-tributes/
+- Interest intake happens first.
+- Interest approval happens before any tribute invitation is sent.
+- Tribute content is collected only through invite-only links.
+- Each record gets an internal vetting score with positive and caution signals based on the submitted details.
+- The review console edits the working store in submissions.json
+- Each save also refreshes:
+  boss-key-website/data/writing-center-tribute-display.json
+- The reception display page reads only that approved feed, not the raw queue
+
+Hosting note
+
+- The display page and approved feed can live on the Boss Key website as static assets.
+- The intake page and review console currently depend on server.js endpoints, so they need the local Node server or a future serverless/backend equivalent if they are going to work on a fully static production host.
+- For anything beyond localhost review, set WRITING_CENTER_ADMIN_TOKEN so the review API is not left open.

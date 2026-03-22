@@ -1,5 +1,9 @@
-# Node/artifacts
+﻿# Node/artifacts
 node_modules/
+dist/
+.npm-cache/
+.tmp/
+.wrangler/
 
 # Logs
 *.log
@@ -21,40 +25,44 @@ Thumbs.db
 .env
 !.env.example
 
-# Generated test docs
+# Generated documents/packages
 *.docx
 *.doc
+*-deploy.zip
 
 # Local scratch files
 *.tmp
 *.temp
 temp_*
+tmp-*-check.txt
 tmp-linkedin-*.html
 .recording_state.json
-recordings/
-__docx_probe/
+outputs/scratch/recordings/
+outputs/scratch/docx-probe/
+workspace/tmp-frames/
+workspace/scratch/chrome-profile/
+workspace/scratch/pdf-server.pid
 
-# Local ML models
-ggml-base.en.bin
-
-# Playwright local automation artifacts
-jwblng-mvp/playwright/.auth/
-jwblng-mvp/playwright/.profile/
-jwblng-mvp/playwright/artifacts/
-jwblng-mvp/playwright/playwright-report/
-jwblng-mvp/playwright/test-results/
+# Local browser/test automation artifacts
+.chrome-headless/
+projects/active/client/jwblng-mvp/playwright/.auth/
+projects/active/client/jwblng-mvp/playwright/.profile/
+projects/active/client/jwblng-mvp/playwright/artifacts/
+projects/active/client/jwblng-mvp/playwright/playwright-report/
+projects/active/client/jwblng-mvp/playwright/test-results/
 proposal-ops/.artifacts/playwright-demo/
 proposal-ops/demo-artifacts/
 proposal-ops/playwright-report/
 proposal-ops/test-results/
 
-# Apple receipts automation outputs
-output/
+# Local ML models
+ggml-base.en.bin
+
+# Python/cache outputs
+outputs/generated/
 credentials/
 *.token.json
 __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
-
-dist/

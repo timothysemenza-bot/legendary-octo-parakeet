@@ -40,7 +40,7 @@
   {% if detail.archive_reason %}
   <p><strong>Archive Reason:</strong> {{ detail.archive_reason }}</p>
   {% endif %}
-  <p><a href="/opportunities/{{ detail.id }}/capture-workbench">Capture Workbench</a> | <a href="/opportunities/{{ detail.id }}/capture-plan">Capture Plan</a> | <a href="/opportunities/{{ detail.id }}/proposal-outline">Proposal Outline</a> | <a href="/opportunities/{{ detail.id }}/rfp-upload">Parse RFP</a> | <a href="/opportunities/{{ detail.id }}/compliance-matrix">View Compliance Matrix</a> | <a href="/opportunities/{{ detail.id }}/reviews">Review Dashboard</a> | <a href="/opportunities/{{ detail.id }}/submission">Submission Readiness</a> | <a href="/opportunities/{{ detail.id }}/lessons">Lessons Learned</a> | <a href="/opportunities/{{ detail.id }}/timeline">Workflow Timeline</a></p>
+  <p><a href="/opportunities/{{ detail.id }}/proposal-builder">Proposal Builder</a> | <a href="/opportunities/{{ detail.id }}/capture-workbench">Capture Workbench</a> | <a href="/opportunities/{{ detail.id }}/capture-plan">Capture Plan</a> | <a href="/opportunities/{{ detail.id }}/proposal-outline">Proposal Outline</a> | <a href="/opportunities/{{ detail.id }}/rfp-upload">Parse RFP</a> | <a href="/opportunities/{{ detail.id }}/compliance-matrix">View Compliance Matrix</a> | <a href="/opportunities/{{ detail.id }}/reviews">Review Dashboard</a> | <a href="/opportunities/{{ detail.id }}/submission">Submission Readiness</a> | <a href="/opportunities/{{ detail.id }}/lessons">Lessons Learned</a> | <a href="/opportunities/{{ detail.id }}/timeline">Workflow Timeline</a></p>
 
   {% if not detail.archived_at %}
   <h3>Record Gate Decision</h3>

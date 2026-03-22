@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crawford Proposal Operations Modernization | Boss Key</title>
+  <meta name="description" content="Private proposal microsite for Crawford & Company outlining Boss Key's proposal operations modernization framework for automation-readiness, knowledge governance, and disciplined growth-to-proposal execution.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <link rel="icon" type="image/svg+xml" href="./assets/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f4efe6;
+      --card: rgba(255, 252, 246, 0.92);
+      --card-strong: rgba(255, 250, 242, 0.98);
+      --ink: #1f2d38;
+      --muted: #5d6a73;
+      --line: rgba(48, 66, 79, 0.14);
+      --navy: #173448;
+      --teal: #2b6e68;
+      --gold: #a6752c;
+      --rust: #9b5a41;
+      --shadow: 0 24px 60px rgba(31, 45, 56, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(43, 110, 104, 0.12) 0%, rgba(43, 110, 104, 0) 30%),
+        radial-gradient(circle at 100% 10%, rgba(166, 117, 44, 0.12) 0%, rgba(166, 117, 44, 0) 28%),
+        linear-gradient(180deg, #f7f2ea 0%, #f0e8dd 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .shell {
+      width: min(var(--max), 92vw);
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .page {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255, 252, 247, 0.98) 0%, rgba(248, 242, 233, 0.98) 100%);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      position: relative;
+      padding: 26px 30px 30px;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(23, 52, 72, 0.08) 0%, rgba(23, 52, 72, 0) 28%),
+        linear-gradient(145deg, #fbf7f0 0%, #f1e7da 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -100px;
+      top: -120px;
+      width: 340px;
+      height: 340px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(43, 110, 104, 0.12) 0%, rgba(43, 110, 104, 0) 72%);
+      pointer-events: none;
+    }
+
+    .hero-top,
+    .hero-grid,
+    .section,
+    .sticky-nav {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .pill,
+    .brand-pill,
+    .meta-pill,
+    .nav-link,
+    .doc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: rgba(23, 52, 72, 0.08);
+      border: 1px solid rgba(23, 52, 72, 0.12);
+    }
+
+    .brand-pill {
+      padding: 8px 12px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      color: var(--rust);
+      background: rgba(155, 90, 65, 0.08);
+      border: 1px solid rgba(155, 90, 65, 0.12);
+    }
+
+    .brand-pill img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      font-family: "Fraunces", Georgia, serif;
+    }
+
+    h1 {
+      font-size: clamp(2.45rem, 5vw, 4.55rem);
+      color: #102938;
+      max-width: 11ch;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+      color: #173448;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 1.22rem;
+      color: #173448;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+
+    .lede {
+      max-width: 52rem;
+      color: #243744;
+      font-size: 1.08rem;
+    }
+
+    .hero-meta,
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta-pill {
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      color: #30424f;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(48, 66, 79, 0.12);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-weight: 800;
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      color: #f9fffd;
+      background: linear-gradient(145deg, var(--teal) 0%, #215c56 100%);
+      box-shadow: 0 14px 28px rgba(43, 110, 104, 0.18);
+    }
+
+    .btn-secondary {
+      color: var(--navy);
+      background: rgba(23, 52, 72, 0.06);
+      border-color: rgba(23, 52, 72, 0.14);
+    }
+
+    .hero-aside {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid rgba(23, 52, 72, 0.12);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255, 253, 248, 0.95) 0%, rgba(245, 239, 230, 0.95) 100%);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat,
+    .aside-note,
+    .card,
+    .phase-card,
+    .friction-card,
+    .layer-card,
+    .summary-card,
+    .email-card,
+    .doc-card,
+    .pilot-card {
+      border: 1px solid rgba(48, 66, 79, 0.1);
+      border-radius: var(--radius-md);
+      background: var(--card);
+      box-shadow: 0 10px 26px rgba(31, 45, 56, 0.06);
+    }
+
+    .stat {
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.35rem;
+      color: var(--navy);
+    }
+
+    .stat span {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .aside-note {
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(220, 232, 240, 0.7) 0%, rgba(255, 252, 246, 0.95) 100%);
+    }
+
+    .aside-note strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--navy);
+    }
+
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(252, 247, 240, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-link {
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: #415360;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(48, 66, 79, 0.12);
+    }
+
+    .section {
+      padding: 28px 30px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(166, 117, 44, 0.14);
+      background: rgba(166, 117, 44, 0.08);
+      color: var(--gold);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .grid-2,
+    .grid-3,
+    .friction-grid,
+    .layer-grid,
+    .phase-grid,
+    .docs-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 { grid-template-columns: 1.05fr 0.95fr; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .friction-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .layer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .phase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .docs-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .summary-card,
+    .card,
+    .friction-card,
+    .layer-card,
+    .phase-card,
+    .pilot-card,
+    .email-card,
+    .doc-card {
+      padding: 18px;
+    }
+
+    .summary-card.highlight {
+      background: linear-gradient(180deg, rgba(23, 52, 72, 0.05) 0%, rgba(255, 252, 246, 0.94) 100%);
+    }
+
+    .quote {
+      padding: 22px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(43, 110, 104, 0.18);
+      background: linear-gradient(180deg, rgba(222, 243, 239, 0.9) 0%, rgba(255, 252, 246, 0.96) 100%);
+    }
+
+    .quote strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--teal);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .quote p {
+      margin: 0;
+      font-size: 1.08rem;
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: #344550;
+    }
+
+    li { margin: 6px 0; }
+
+    .friction-card {
+      background: linear-gradient(180deg, rgba(243, 223, 213, 0.55) 0%, rgba(255, 252, 246, 0.96) 100%);
+    }
+
+    .friction-card h3 { color: var(--rust); }
+
+    .layer-card.operating {
+      background: linear-gradient(180deg, rgba(220, 232, 240, 0.78) 0%, rgba(255, 252, 246, 0.95) 100%);
+    }
+
+    .layer-card.knowledge {
+      background: linear-gradient(180deg, rgba(243, 228, 199, 0.8) 0%, rgba(255, 252, 246, 0.95) 100%);
+    }
+
+    .layer-card.automation {
+      background: linear-gradient(180deg, rgba(222, 243, 239, 0.8) 0%, rgba(255, 252, 246, 0.95) 100%);
+    }
+
+    .layer-kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(23, 52, 72, 0.9);
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(23, 52, 72, 0.08);
+    }
+
+    .phase-card {
+      display: grid;
+      gap: 14px;
+      background: var(--card-strong);
+    }
+
+    .phase-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .phase-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(145deg, var(--navy) 0%, #274d66 100%);
+      box-shadow: 0 8px 20px rgba(23, 52, 72, 0.16);
+    }
+
+    .phase-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .phase-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .phase-item {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.66);
+      border: 1px solid rgba(48, 66, 79, 0.08);
+    }
+
+    .phase-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(48, 66, 79, 0.1);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.68);
+      box-shadow: 0 10px 26px rgba(31, 45, 56, 0.06);
+    }
+
+    table {
+      width: 100%;
+      min-width: 740px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid rgba(48, 66, 79, 0.08);
+      color: #31424f;
+      font-size: 0.93rem;
+    }
+
+    th {
+      background: rgba(23, 52, 72, 0.08);
+      color: var(--navy);
+      font-size: 0.83rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .pilot-card {
+      background:
+        radial-gradient(circle at 100% 0%, rgba(43, 110, 104, 0.08) 0%, rgba(43, 110, 104, 0) 26%),
+        linear-gradient(180deg, rgba(255, 252, 246, 0.97) 0%, rgba(236, 228, 215, 0.95) 100%);
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .score {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(48, 66, 79, 0.1);
+      background: rgba(255, 255, 255, 0.72);
+      text-align: center;
+    }
+
+    .score strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+    }
+
+    .email-card {
+      background: linear-gradient(180deg, rgba(220, 232, 240, 0.4) 0%, rgba(255, 252, 246, 0.95) 100%);
+    }
+
+    .email-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .email-meta {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(48, 66, 79, 0.1);
+      color: #42525f;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .email-body {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(48, 66, 79, 0.08);
+    }
+
+    .doc-card { display: grid; gap: 12px; }
+
+    .doc-link {
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: rgba(23, 52, 72, 0.06);
+      border: 1px solid rgba(23, 52, 72, 0.12);
+    }
+
+    .footer {
+      padding: 22px 30px 28px;
+      border-top: 1px solid var(--line);
+      color: #5f6d77;
+      font-size: 0.86rem;
+      background: linear-gradient(180deg, rgba(248, 242, 233, 0.94) 0%, rgba(240, 232, 221, 0.96) 100%);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .grid-2,
+      .friction-grid,
+      .layer-grid,
+      .phase-grid,
+      .docs-grid,
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 780px) {
+      .shell { width: min(96vw, var(--max)); }
+      .hero,
+      .section,
+      .footer {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+      .sticky-nav {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+      .stat-grid { grid-template-columns: 1fr; }
+      .hero-actions .btn,
+      .doc-link {
+        width: 100%;
+      }
+      h1 { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <article class="page">
+      <header class="hero">
+        <div class="hero-top">
+          <span class="pill">Private Proposal Microsite</span>
+          <span class="brand-pill">
+            <img src="./assets/boss-key-logo-refined.svg" alt="Boss Key logo">
+            <span>Prepared by Boss Key LLC</span>
+          </span>
+        </div>
+        <div class="hero-grid">
+          <section>
+            <h1>A practical path to stronger proposal operations for Marc Cunningham's team.</h1>
+            <p class="lede">Boss Key helps growth and proposal leaders tighten the chain between qualification, capture thinking, pricing support, sales-to-proposal handoff, review discipline, content governance, and execution so automation can become reliable later.</p>
+            <p>This page is written around the questions a senior growth leader is likely to care about: where proposal work gets noisier than it should, what needs to change upstream, and how to test modernization in a low-risk way without assuming facts about Crawford's current environment.</p>
+            <div class="hero-meta">
+              <span class="meta-pill">Prepared for Marc Cunningham and Crawford growth, proposal, and operational stakeholders</span>
+              <span class="meta-pill">Date: March 20, 2026</span>
+              <span class="meta-pill">Focus: proposal operations and automation-readiness</span>
+            </div>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#one-pager">See the executive view</a>
+              <a class="btn btn-secondary" href="#pilot">Review the recommended starting point</a>
+              <a class="btn btn-secondary" href="./01-crawford-proposal-ops-modernization-proposal.md">Read the detailed proposal</a>
+            </div>
+          </section>
+          <aside class="hero-aside">
+            <div class="stat-grid">
+              <div class="stat">
+                <strong>3</strong>
+                <span>Linked layers</span>
+              </div>
+              <div class="stat">
+                <strong>5</strong>
+                <span>Engagement phases</span>
+              </div>
+              <div class="stat">
+                <strong>1</strong>
+                <span>Focused pilot</span>
+              </div>
+            </div>
+            <div class="aside-note">
+              <strong>What this is really solving</strong>
+              <p>If proposal work is becoming more cross-functional, more compressed, and more dependent on reusable content, the real issue is usually not drafting speed. It is the strength of the chain feeding the draft.</p>
+            </div>
+            <div class="aside-note">
+              <strong>Why Boss Key is relevant here</strong>
+              <p>The Broadspire connection matters, but lightly. What matters more is the underlying operating instinct: turning messy growth situations into structured, usable systems and keeping reusable content tied to real owners over time.</p>
+            </div>
+          </aside>
+        </div>
+      </header>
+
+      <nav class="sticky-nav">
+        <a class="nav-link" href="#one-pager">Executive View</a>
+        <a class="nav-link" href="#breaks">Pressure Points</a>
+        <a class="nav-link" href="#model">Boss Key Model</a>
+        <a class="nav-link" href="#phases">How We'd Work</a>
+        <a class="nav-link" href="#deliverables">What Changes</a>
+        <a class="nav-link" href="#pilot">Recommended Start</a>
+        <a class="nav-link" href="#email">Next Conversation</a>
+      </nav>
+
+      <section class="section" id="one-pager">
+        <div class="section-head">
+          <span class="eyebrow">Executive View</span>
+          <h2>What this would help your team do</h2>
+          <p>If these patterns rhyme with Crawford's world, the opportunity is to reduce proposal drag upstream so the team can work from stronger inputs, stronger content, and clearer decisions.</p>
+        </div>
+        <div class="grid-2">
+          <div class="quote">
+            <strong>Thesis</strong>
+            <p>Proposal automation becomes much more reliable when the operating chain upstream is disciplined first.</p>
+          </div>
+          <div class="summary-card highlight">
+            <h3>What this gives Marc and team</h3>
+            <p>A practical framework for deciding where proposal operations should tighten first, what content should be governed more deliberately, and where automation is likely to be worth testing.</p>
+            <div class="hero-actions">
+              <a class="doc-link" href="./02-crawford-executive-summary-one-page.md">Open the one-page summary</a>
+              <a class="doc-link" href="#pilot">Jump to the recommended pilot</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top: 14px;">
+          <article class="summary-card">
+            <h3>Reduce operating drag</h3>
+            <p>Many teams are not short on reusable text. They are short on disciplined qualification, structured intake, cleaner handoffs, and repeatable review behavior.</p>
+          </article>
+          <article class="summary-card">
+            <h3>Improve content trustworthiness</h3>
+            <p>Automation-readiness starts when source content is current, owner-backed, and organized as reusable knowledge objects instead of loosely managed fragments.</p>
+          </article>
+          <article class="summary-card">
+            <h3>Make automation safer to use</h3>
+            <p>In cross-functional proposal environments, the payoff is not just faster drafting. It is better drafts, less rework, fewer executive fire drills, and more confidence in what the team is reusing.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="breaks">
+        <div class="section-head">
+          <span class="eyebrow">Pressure Points</span>
+          <h2>Where proposal automation usually breaks</h2>
+          <p>For a senior growth leader, these are the patterns that usually create unnecessary pressure on proposal teams and senior reviewers. They are common in comparable organizations and may or may not show up in the same way at Crawford.</p>
+        </div>
+        <div class="friction-grid">
+          <article class="friction-card">
+            <h3>Strategy arrives late</h3>
+            <p>Sales brings in opportunities before win strategy, solution shape, and buyer-relevant proof are clear enough to support a strong proposal plan.</p>
+          </article>
+          <article class="friction-card">
+            <h3>Proposal joins under compression</h3>
+            <p>Proposal teams engage after major decisions are already in motion, so planning and drafting happen at the same time.</p>
+          </article>
+          <article class="friction-card">
+            <h3>Pricing is reactive</h3>
+            <p>Pricing support enters late instead of shaping qualification and offer posture early, which increases churn and can weaken margin protection.</p>
+          </article>
+          <article class="friction-card">
+            <h3>Executive reviews become fire drills</h3>
+            <p>Senior stakeholders get pulled into urgent escalation because decision checkpoints were not defined in advance.</p>
+          </article>
+          <article class="friction-card">
+            <h3>Reusable content is not fully trustworthy</h3>
+            <p>Libraries contain fragments that are technically reusable, but ownership, recency, and business context are too weak to support confident reuse.</p>
+          </article>
+          <article class="friction-card">
+            <h3>Teams keep rebuilding</h3>
+            <p>Source content exists somewhere, but not in governed formats that make proof points, solution narratives, and service descriptions easy to retrieve with confidence.</p>
+          </article>
+        </div>
+        <div class="card" style="margin-top: 14px;">
+          <h3>Why this is a different kind of proposal modernization effort</h3>
+          <p>Qvidian-style reuse often centers on document-fragment reuse. Boss Key is proposing operating-model-driven reuse: a content environment where current, buyer-relevant material can be assembled from governed reusable knowledge objects instead of stale fragments lifted from legacy libraries.</p>
+        </div>
+      </section>
+
+      <section class="section" id="model">
+        <div class="section-head">
+          <span class="eyebrow">Solution Overview</span>
+          <h2>Boss Key proposal operations model</h2>
+          <p>For Marc and team, the practical question is not whether automation matters. It is where the operating chain needs to be tightened first so automation can later be used with more confidence.</p>
+        </div>
+        <div class="layer-grid">
+          <article class="layer-card operating">
+            <span class="layer-kicker">Operating Layer</span>
+            <h3>Give the team a cleaner operating rhythm</h3>
+            <ul>
+              <li>qualification criteria and go/no-go discipline</li>
+              <li>structured sales-to-proposal intake</li>
+              <li>role clarity across sales, proposal, pricing, SMEs, and executives</li>
+              <li>proposal kickoff and content-plan discipline</li>
+              <li>review cadence and escalation paths</li>
+            </ul>
+            <p><strong>Result:</strong> cleaner opportunity planning, cleaner proposal planning, and less avoidable churn once execution begins.</p>
+          </article>
+          <article class="layer-card knowledge">
+            <span class="layer-kicker">Knowledge Layer</span>
+            <h3>Make reusable content more trustworthy</h3>
+            <ul>
+              <li>content inventory and repository architecture</li>
+              <li>taxonomy and tagging for retrieval discipline</li>
+              <li>source-of-truth mapping and ownership</li>
+              <li>proof-point governance and stale-content detection</li>
+              <li>migration path away from blind boilerplate reuse</li>
+            </ul>
+            <p><strong>Result:</strong> reusable knowledge objects that are current, owner-backed, and materially easier to trust.</p>
+          </article>
+          <article class="layer-card automation">
+            <span class="layer-kicker">Automation Layer</span>
+            <h3>Apply automation where it will actually hold up</h3>
+            <ul>
+              <li>retrieval-ready content modules</li>
+              <li>Git-based or similarly governed repository approach</li>
+              <li>structured prompts, templates, and workflows</li>
+              <li>human-in-the-loop controls</li>
+              <li>rapid draft assembly from governed source content</li>
+            </ul>
+            <p><strong>Result:</strong> selective automation that improves quality and speed without hiding weak inputs behind faster drafting.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="phases">
+        <div class="section-head">
+          <span class="eyebrow">How We'd Work</span>
+          <h2>A low-disruption way to work with Crawford</h2>
+          <p>The intent is to start narrow, prove value, and give Marc and the team a fact base for what should be standardized, governed, and selectively automated next.</p>
+        </div>
+        <div class="phase-grid">
+          <article class="phase-card">
+            <div class="phase-top">
+              <div>
+                <div class="phase-label">Phase 1</div>
+                <h3>Diagnostic</h3>
+              </div>
+              <span class="phase-num">1</span>
+            </div>
+            <div class="phase-list">
+              <div class="phase-item"><strong>Purpose</strong>Establish a baseline for proposal operations, knowledge governance, and automation-readiness within a defined scope.</div>
+              <div class="phase-item"><strong>Key Activities</strong>Stakeholder interviews, sample pursuit review, intake and handoff mapping, content trustworthiness assessment.</div>
+              <div class="phase-item"><strong>Deliverables</strong>Current-state diagnostic, friction map, automation-readiness scorecard, pilot-scope recommendation.</div>
+              <div class="phase-item"><strong>Client Participation</strong>Provide cross-functional access, sample materials, and current process context.</div>
+              <div class="phase-item"><strong>Indicative Outcomes</strong>A clear view of where operating friction and stale-content risk are slowing quality and cycle time.</div>
+            </div>
+          </article>
+          <article class="phase-card">
+            <div class="phase-top">
+              <div>
+                <div class="phase-label">Phase 2</div>
+                <h3>Operating-Model Design</h3>
+              </div>
+              <span class="phase-num">2</span>
+            </div>
+            <div class="phase-list">
+              <div class="phase-item"><strong>Purpose</strong>Define the decision discipline and working rhythm required to improve proposal execution before automation is introduced.</div>
+              <div class="phase-item"><strong>Key Activities</strong>Qualification design, intake redesign, role mapping, kickoff framework, review cadence, escalation model.</div>
+              <div class="phase-item"><strong>Deliverables</strong>Future-state operating model, intake checklist, role map, kickoff standard, review-gate framework.</div>
+              <div class="phase-item"><strong>Client Participation</strong>Working sessions with growth, proposal, pricing, operations, and executive stakeholders.</div>
+              <div class="phase-item"><strong>Indicative Outcomes</strong>Cleaner handoffs, clearer ownership, and fewer midstream surprises.</div>
+            </div>
+          </article>
+          <article class="phase-card">
+            <div class="phase-top">
+              <div>
+                <div class="phase-label">Phase 3</div>
+                <h3>Repository And Governance Build</h3>
+              </div>
+              <span class="phase-num">3</span>
+            </div>
+            <div class="phase-list">
+              <div class="phase-item"><strong>Purpose</strong>Create the structure that turns reusable information into governed reusable knowledge objects.</div>
+              <div class="phase-item"><strong>Key Activities</strong>Content inventory, taxonomy design, source-of-truth mapping, ownership assignment, stale-content controls.</div>
+              <div class="phase-item"><strong>Deliverables</strong>Repository architecture recommendation, taxonomy schema, ownership matrix, maintenance workflow.</div>
+              <div class="phase-item"><strong>Client Participation</strong>Content-owner input, sample library review, stewardship decisions.</div>
+              <div class="phase-item"><strong>Indicative Outcomes</strong>More trustworthy content, less reinvention, and a stronger base for retrieval.</div>
+            </div>
+          </article>
+          <article class="phase-card">
+            <div class="phase-top">
+              <div>
+                <div class="phase-label">Phase 4</div>
+                <h3>Automation Enablement Pilot</h3>
+              </div>
+              <span class="phase-num">4</span>
+            </div>
+            <div class="phase-list">
+              <div class="phase-item"><strong>Purpose</strong>Test automation only where the first two layers are strong enough to support it.</div>
+              <div class="phase-item"><strong>Key Activities</strong>Pilot use-case selection, content-module design, prompt and template setup, human review controls.</div>
+              <div class="phase-item"><strong>Deliverables</strong>Pilot workflow design, governed retrieval set, review protocol, findings readout.</div>
+              <div class="phase-item"><strong>Client Participation</strong>Pilot-team input, sample pursuits or segment access, quality feedback.</div>
+              <div class="phase-item"><strong>Indicative Outcomes</strong>Evidence of what is feasible now, what is premature, and what improves reliability most.</div>
+            </div>
+          </article>
+          <article class="phase-card" style="grid-column: 1 / -1;">
+            <div class="phase-top">
+              <div>
+                <div class="phase-label">Phase 5</div>
+                <h3>Stabilization / O&amp;M</h3>
+              </div>
+              <span class="phase-num">5</span>
+            </div>
+            <div class="phase-list">
+              <div class="phase-item"><strong>Purpose</strong>Stabilize the model so the organization does not revert to legacy habits once the pilot ends.</div>
+              <div class="phase-item"><strong>Key Activities</strong>Governance cadence launch, playbook refinement, issue triage, KPI tracking, lessons-learned capture.</div>
+              <div class="phase-item"><strong>Deliverables</strong>Stabilization plan, O&amp;M cadence, governance checkpoint schedule, KPI and issue-log framework, next-phase roadmap.</div>
+              <div class="phase-item"><strong>Client Participation</strong>Designated owners, regular checkpoints, and sustained stewardship.</div>
+              <div class="phase-item"><strong>Indicative Outcomes</strong>Durable content trustworthiness, repeatable review behavior, and a stronger foundation for broader automation over time.</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="deliverables">
+        <div class="section-head">
+          <span class="eyebrow">What Changes</span>
+          <h2>What Crawford would receive and what would improve</h2>
+          <p>The first table shows the working outputs. The second shows the operating shift those outputs are designed to support.</p>
+        </div>
+        <div class="table-wrap" style="margin-bottom: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Workstream</th>
+                <th>Deliverable</th>
+                <th>Why It Matters</th>
+                <th>Boss Key Role</th>
+                <th>Client Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Operating</td>
+                <td>Qualification and go/no-go framework</td>
+                <td>Screens weak opportunities earlier and protects scarce proposal capacity.</td>
+                <td>Facilitate design and document decision criteria.</td>
+                <td>Validate business fit and adopt decision gates.</td>
+              </tr>
+              <tr>
+                <td>Operating</td>
+                <td>Structured intake and kickoff package</td>
+                <td>Improves the handoff from sales and capture into proposal planning.</td>
+                <td>Design the intake model and kickoff standard.</td>
+                <td>Provide current inputs and assign owners.</td>
+              </tr>
+              <tr>
+                <td>Operating</td>
+                <td>Review cadence and escalation map</td>
+                <td>Reduces executive fire drills and clarifies when escalation is warranted.</td>
+                <td>Define checkpoints, agendas, and decision paths.</td>
+                <td>Attend checkpoints and honor decision discipline.</td>
+              </tr>
+              <tr>
+                <td>Knowledge</td>
+                <td>Content inventory and trustworthiness assessment</td>
+                <td>Identifies what is reusable, stale, missing, or ownerless.</td>
+                <td>Review assets, classify gaps, and recommend priorities.</td>
+                <td>Provide sample content and name business owners.</td>
+              </tr>
+              <tr>
+                <td>Knowledge</td>
+                <td>Repository architecture and taxonomy</td>
+                <td>Makes retrieval practical, structured, and easier to govern.</td>
+                <td>Design the reusable knowledge-object model.</td>
+                <td>Approve taxonomy and align stewardship.</td>
+              </tr>
+              <tr>
+                <td>Knowledge</td>
+                <td>Ownership and update workflow</td>
+                <td>Prevents libraries from becoming stale again.</td>
+                <td>Define governance process and maintenance rules.</td>
+                <td>Maintain assets and enforce ownership.</td>
+              </tr>
+              <tr>
+                <td>Automation</td>
+                <td>Retrieval-ready content modules</td>
+                <td>Creates reliable building blocks for draft assembly.</td>
+                <td>Structure high-value content for controlled reuse.</td>
+                <td>Review modules for accuracy and usability.</td>
+              </tr>
+              <tr>
+                <td>Automation</td>
+                <td>Pilot prompt, template, and review workflow</td>
+                <td>Tests automation under governed conditions rather than guesswork.</td>
+                <td>Configure the pilot workflow and measure results.</td>
+                <td>Supply pilot scenarios and review outputs.</td>
+              </tr>
+              <tr>
+                <td>Stabilization</td>
+                <td>KPI and governance cadence</td>
+                <td>Keeps improvements visible and durable after the pilot.</td>
+                <td>Stand up the monitoring model and readout format.</td>
+                <td>Participate in cadence and act on findings.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Current-state pattern</th>
+                <th>Future-state pattern</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Boilerplate reuse from static libraries</td>
+                <td>Governed reusable content objects tied to owners and recency</td>
+              </tr>
+              <tr>
+                <td>Reactive bid response</td>
+                <td>Earlier qualification and capture discipline before proposal launch</td>
+              </tr>
+              <tr>
+                <td>Ad hoc SME outreach</td>
+                <td>Structured intake, assigned ownership, and planned content requests</td>
+              </tr>
+              <tr>
+                <td>Last-minute executive reviews</td>
+                <td>Predefined checkpoints with clear escalation paths</td>
+              </tr>
+              <tr>
+                <td>Opportunity planning that does not transition cleanly into proposal planning</td>
+                <td>Documented strategy transfer from qualification and capture into proposal execution</td>
+              </tr>
+              <tr>
+                <td>Automation on bad inputs</td>
+                <td>Automation on governed inputs with human review</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="pilot">
+        <div class="section-head">
+          <span class="eyebrow">Recommended Start</span>
+          <h2>A focused pilot for one business line or pursuit segment</h2>
+          <p>The cleanest starting point for Crawford is a focused proposal-ops diagnostic and automation-readiness pilot in one bounded area. The goal is practical evidence, not a broad rollout before the facts are clearer.</p>
+        </div>
+        <div class="pilot-card">
+          <h3>What the pilot would answer for Marc and team</h3>
+          <p>A good pilot answers five concrete questions at once: can the content be trusted, can the repository be structured for retrieval, are intake and handoffs usable, which automation use cases are feasible now, and do cycle time and quality improve under tighter operating discipline?</p>
+          <div class="score-grid">
+            <div class="score">
+              <strong>Trustworthiness</strong>
+              <span>Which assets are current enough to reuse</span>
+            </div>
+            <div class="score">
+              <strong>Repository Structure</strong>
+              <span>Whether content can become governed knowledge objects</span>
+            </div>
+            <div class="score">
+              <strong>Intake Discipline</strong>
+              <span>Whether proposal receives usable strategy, pricing, and solution input</span>
+            </div>
+            <div class="score">
+              <strong>Automation Feasibility</strong>
+              <span>Which tasks are ready now and which should wait</span>
+            </div>
+            <div class="score">
+              <strong>Measured Improvement</strong>
+              <span>Cycle-time, quality, and review-burden deltas</span>
+            </div>
+          </div>
+          <p style="margin-top: 16px;">That makes the pilot a low-risk starting point. Crawford would leave with a grounded fact base for what should be standardized first, what content should be governed more tightly, what automation use cases are viable now, and what should remain manual until the operating model is stronger.</p>
+        </div>
+      </section>
+
+      <section class="section" id="email">
+        <div class="section-head">
+          <span class="eyebrow">Next Conversation</span>
+          <h2>A practical next step for Marc and team</h2>
+          <p>If this direction feels relevant, the next conversation should stay concrete: one business line, one pursuit segment, or one part of the growth-to-proposal chain where the team wants a clearer operating picture.</p>
+        </div>
+        <div class="email-card">
+          <div class="email-head">
+            <span class="email-meta">Recommended follow-up</span>
+            <span class="email-meta">Working session, not sales pitch</span>
+          </div>
+          <div class="email-body">
+            <p>The best next step would be a working session around one bounded area of Crawford's world: a business line, a pursuit segment, or a recurring handoff pattern that leadership wants to understand more clearly.</p>
+            <p>That conversation should center on a few practical questions: where good information gets lost, where executive time is being pulled unnecessarily, which content is trusted enough to reuse, and what has to tighten before automation becomes meaningfully useful.</p>
+            <p>If the fit is real, the output should be a narrow pilot with measurable outcomes rather than a broad transformation discussion.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="documents">
+        <div class="section-head">
+          <span class="eyebrow">Supporting Materials</span>
+          <h2>Additional ways to review the framework</h2>
+          <p>If a shorter or more detailed format is helpful, the same proposal can also be reviewed as a one-page summary, a fuller written proposal, or a slide-outline version for later presentation use.</p>
+        </div>
+        <div class="docs-grid">
+          <article class="doc-card">
+            <h3>Full proposal</h3>
+            <p>The complete proposal-ops modernization framework with the full section set, phased engagement, tables, and pilot recommendation.</p>
+            <a class="doc-link" href="./01-crawford-proposal-ops-modernization-proposal.md">Read the full proposal</a>
+          </article>
+          <article class="doc-card">
+            <h3>Executive summary</h3>
+            <p>A one-page version for faster executive review or quick forwarding after an initial conversation.</p>
+            <a class="doc-link" href="./02-crawford-executive-summary-one-page.md">Read the one-page summary</a>
+          </article>
+          <article class="doc-card">
+            <h3>Slide path</h3>
+            <p>A seven-slide outline suitable for turning the same story into a later PowerPoint without reworking the narrative.</p>
+            <a class="doc-link" href="./04-crawford-slide-outline.md">Review the slide outline</a>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        Prepared by Boss Key LLC for Marc Cunningham and Crawford &amp; Company leadership review. This page is a private discussion draft and intentionally marked noindex.
+      </footer>
+    </article>
+  </main>
+</body>
+</html>

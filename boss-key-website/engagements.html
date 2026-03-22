@@ -3,26 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capture Strategy and Proposal Execution | Boss Key LLC</title>
-  <meta name="description" content="Boss Key helps clients move from likely government opportunities into disciplined capture strategy and formal proposal execution.">
+  <title>Pursuits and Proposals | Boss Key LLC</title>
+  <meta name="description" content="Boss Key helps teams choose better pursuits, tighten handoffs, and keep live bids from turning into deadline chaos.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    :root{--ink:#f4f2ed;--paper:#081018;--line:#243245;--soft:#b7c2cf;--accent:#d4a35f;--accent-2:#f0ddba;--max:1120px}
-    *{box-sizing:border-box}html,body{margin:0;padding:0;color:var(--ink);background:radial-gradient(circle at 18% 0%,#1d2835 0%,#0b1219 44%),linear-gradient(155deg,#111a24 0%,#071018 100%);font-family:"Manrope","Segoe UI",sans-serif;line-height:1.6}
-    a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),92vw);margin:0 auto}header{padding:16px 0;border-bottom:1px solid #1a2532;position:sticky;top:0;background:rgba(8,16,24,.84);backdrop-filter:blur(10px)}
-    .nav{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}.brand{display:inline-flex;align-items:center;gap:10px;font-weight:700}.brand img{width:32px;height:32px}.links{display:flex;flex-wrap:wrap;gap:8px}.links a{border:1px solid #314050;border-radius:999px;padding:6px 11px;background:#121c27;color:var(--soft);font-size:.86rem;font-weight:700}
-    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid transparent;padding:11px 15px;font-weight:700;line-height:1.1}.btn-primary{background:linear-gradient(145deg,#e0b06e,#bc8440);color:#10161e}.btn-secondary{background:#121c27;color:#e7edf5;border-color:#314050}
-    main{padding:26px 0 42px}section{margin:16px 0;border:1px solid var(--line);border-radius:18px;background:linear-gradient(165deg,#121b26 0%,#0b1219 100%);padding:24px}
-    h1,h2{font-family:"Fraunces",Georgia,serif;margin:0 0 12px;line-height:1.1}h1{font-size:clamp(2.2rem,4.5vw,3.6rem)}h2{font-size:clamp(1.4rem,2.6vw,2rem)}h3{margin:0 0 8px;font-size:1.05rem}
-    p{margin:0 0 12px;color:var(--soft)}ul{margin:0;padding-left:18px;color:#d7dde6}li{margin:8px 0}.eyebrow{display:inline-block;margin-bottom:10px;border:1px solid rgba(212,163,95,.38);border-radius:999px;padding:6px 10px;background:rgba(212,163,95,.1);color:var(--accent-2);font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-    .grid-2,.grid-3{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .panel{border:1px solid #2a3949;border-radius:14px;background:#101924;padding:16px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-    .flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.flow article{border:1px solid #2a3949;border-radius:14px;background:#101924;padding:14px}
-    footer{border-top:1px solid var(--line);color:#9eabb9;font-size:.88rem;padding:16px 0 28px}
-    @media (max-width:980px){.grid-2,.grid-3,.flow{grid-template-columns:1fr}.buttons .btn{width:100%}}
+    :root {
+      --ink: #f4f2ed;
+      --soft: #bec8d5;
+      --muted: #93a2b3;
+      --line: #273648;
+      --accent: #dd9b54;
+      --accent-soft: #f6dcc0;
+      --signal: #62a6ff;
+      --signal-soft: #d9e8ff;
+      --rose: #ff6f7f;
+      --rose-soft: #ffd4db;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(221, 155, 84, 0.16) 0%, transparent 34%),
+        linear-gradient(160deg, #101722 0%, #071018 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 16px 0;
+      border-bottom: 1px solid #192332;
+      background: rgba(8, 16, 24, 0.84);
+      backdrop-filter: blur(10px);
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+    .brand img { width: 32px; height: 32px; }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .links a {
+      border: 1px solid #304255;
+      border-radius: 999px;
+      padding: 6px 11px;
+      background: #121c27;
+      color: var(--soft);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      padding: 11px 15px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--accent), #b87431);
+      color: #10161e;
+      box-shadow: 0 12px 30px rgba(221, 155, 84, 0.24);
+    }
+    .btn-secondary {
+      background: #121c27;
+      color: #e7edf5;
+      border-color: #304255;
+    }
+    main { padding: 24px 0 42px; }
+    section {
+      margin: 14px 0;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(165deg, rgba(18, 27, 38, 0.98), rgba(10, 16, 23, 0.98));
+      padding: 24px;
+    }
+    h1, h2 {
+      margin: 0 0 10px;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.3rem, 4.8vw, 4rem); }
+    h2 { font-size: clamp(1.4rem, 2.6vw, 2.1rem); }
+    h3 { margin: 0 0 8px; font-size: 1.04rem; }
+    p { margin: 0 0 10px; color: var(--soft); }
+    .eyebrow, .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .eyebrow {
+      margin-bottom: 12px;
+      border: 1px solid rgba(221, 155, 84, 0.35);
+      background: rgba(221, 155, 84, 0.1);
+      color: var(--accent-soft);
+    }
+    .tag {
+      margin-bottom: 12px;
+      border: 1px solid rgba(98, 166, 255, 0.28);
+      background: rgba(98, 166, 255, 0.12);
+      color: var(--signal-soft);
+    }
+    .hero, .grid-2, .grid-3 {
+      display: grid;
+      gap: 12px;
+    }
+    .hero { grid-template-columns: 1.05fr 0.95fr; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel, .card, .step-card {
+      border: 1px solid #304255;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(16, 25, 36, 0.96), rgba(12, 18, 27, 0.96));
+      padding: 16px;
+    }
+    .compare-before {
+      background: linear-gradient(180deg, rgba(53, 16, 25, 0.5), rgba(19, 21, 28, 0.96));
+      border-color: rgba(255, 111, 127, 0.3);
+    }
+    .compare-after {
+      background: linear-gradient(180deg, rgba(18, 37, 69, 0.48), rgba(19, 21, 28, 0.96));
+      border-color: rgba(98, 166, 255, 0.32);
+    }
+    .signal-list, .step-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .signal-row, .step-card {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+    .step-card { grid-template-columns: 42px 1fr; }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 6px;
+      background: var(--signal);
+      box-shadow: 0 0 16px rgba(98, 166, 255, 0.45);
+    }
+    .dot-rose {
+      background: var(--rose);
+      box-shadow: 0 0 16px rgba(255, 111, 127, 0.38);
+    }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(145deg, var(--signal), #2e64a8);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .small-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #9eabb9;
+      font-size: 0.88rem;
+      padding: 16px 0 28px;
+    }
+    @media (max-width: 980px) {
+      .hero, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .buttons .btn { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -30,92 +218,132 @@
   <div class="wrap nav">
     <a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a>
     <nav class="links" aria-label="Main navigation">
-      <a href="./about.html">About</a>
       <a href="./services.html">Services</a>
       <a href="./facilities.html">Facilities</a>
-      <a href="./coaching.html">Intelligence</a>
-      <a href="./engagements.html">Capture + Proposal</a>
+      <a href="./coaching.html">Market Signals</a>
+      <a href="./engagements.html">Pursuits + Proposals</a>
+      <a href="./about.html">About</a>
       <a href="./proof.html">Proof</a>
       <a href="./faq.html">FAQ</a>
       <a href="./contact.html">Contact</a>
     </nav>
-    <a class="btn btn-primary schedule-cta" href="#">Book briefing</a>
+    <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
   </div>
 </header>
 <main class="wrap">
-  <section>
-    <span class="eyebrow">Downstream Execution</span>
-    <h1>Turn a likely opportunity into a disciplined pursuit, then carry it into proposal execution.</h1>
-    <p>Boss Key’s downstream work starts once a likely buying event is real enough to qualify and position. Capture strategy defines the pre-RFP action plan. Proposal execution support continues the same logic once the formal solicitation is released.</p>
-    <div class="buttons">
-      <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
-      <a class="btn btn-secondary" href="./contact.html?offering=capture-strategy-engagement">Request capture scope</a>
-    </div>
+  <section class="hero">
+    <article>
+      <span class="eyebrow">Pursuits + Proposals</span>
+      <h1>Get the right people lined up before the bid turns chaotic.</h1>
+      <p>Boss Key helps teams decide whether a pursuit is worth it, tighten ownership, and keep live proposals from collapsing into deadline-driven scramble.</p>
+      <div class="signal-list">
+        <div class="signal-row">
+          <div class="dot" aria-hidden="true"></div>
+          <div><strong>Choose better</strong><span>Pressure-test whether the team should really chase the work.</span></div>
+        </div>
+        <div class="signal-row">
+          <div class="dot dot-rose" aria-hidden="true"></div>
+          <div><strong>Align faster</strong><span>Get growth, ops, pricing, and proposal work moving in the same direction.</span></div>
+        </div>
+        <div class="signal-row">
+          <div class="dot" aria-hidden="true"></div>
+          <div><strong>Deliver cleaner</strong><span>Bring more structure into the live bid while there is still time to work.</span></div>
+        </div>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
+        <a class="btn btn-secondary" href="./contact.html?offering=pursuit-support">Ask about pursuit help</a>
+      </div>
+    </article>
+    <aside class="panel compare-after">
+      <span class="tag">What better looks like</span>
+      <div class="signal-list">
+        <div class="signal-row"><div class="dot" aria-hidden="true"></div><div><strong>Cleaner ownership</strong><span>People know who is doing what before the schedule tightens.</span></div></div>
+        <div class="signal-row"><div class="dot dot-rose" aria-hidden="true"></div><div><strong>Stronger handoffs</strong><span>Ops, pricing, and content inputs arrive in a more usable way.</span></div></div>
+        <div class="signal-row"><div class="dot" aria-hidden="true"></div><div><strong>Calmer reviews</strong><span>The proposal gets more structure before the final rush.</span></div></div>
+      </div>
+    </aside>
   </section>
 
   <section>
-    <h2>Capture strategy engagement</h2>
-    <div class="grid-2">
-      <article class="panel">
-        <h3>What it solves</h3>
-        <p>Clients often see a likely opportunity forming but do not yet have a disciplined way to qualify it, map stakeholders, or decide what needs to happen before the RFP appears.</p>
-        <ul>
-          <li>Opportunity qualification</li>
-          <li>Stakeholder and agency mapping</li>
-          <li>Positioning themes and win logic</li>
-          <li>Incumbent, competitor, and teaming implications</li>
-          <li>Pursuit action calendar</li>
-        </ul>
-      </article>
-      <article class="panel">
-        <h3>Best fit</h3>
-        <p>Teams that know a likely procurement is forming and need structured pre-RFP positioning support instead of reactive business development activity.</p>
-        <p><strong>What clients gain:</strong> clearer pursuit decisions, better-timed stakeholder engagement, and stronger pre-RFP positioning.</p>
-      </article>
-    </div>
-  </section>
-
-  <section>
-    <h2>Proposal execution support</h2>
-    <div class="grid-2">
-      <article class="panel">
-        <h3>What continues when the bid is live</h3>
-        <ul>
-          <li>Proposal architecture and compliance framing</li>
-          <li>Content planning and section strategy</li>
-          <li>Review support and production discipline</li>
-          <li>Pricing coordination support</li>
-          <li>AI-assisted proposal operations where useful</li>
-        </ul>
-      </article>
-      <article class="panel">
-        <h3>Why this stage matters</h3>
-        <p>Proposal support works best when it inherits real capture context instead of trying to invent strategy during production. Boss Key is designed so proposal work is the downstream expansion service, not the only thing the firm can do.</p>
-        <p><strong>What clients gain:</strong> proposal execution that starts from a better-informed position instead of rebuilding the strategy at the last minute.</p>
-      </article>
-    </div>
-  </section>
-
-  <section>
-    <h2>How the work sequences</h2>
-    <div class="flow">
-      <article><strong>Signal becomes likely opportunity</strong><p>Intelligence work identifies a buying event worth serious attention.</p></article>
-      <article><strong>Capture brief and stakeholder map</strong><p>Boss Key translates the signal into a real pursuit plan with named actions and hypotheses.</p></article>
-      <article><strong>Go or no-go decision</strong><p>The client decides whether to commit serious resources before the formal release.</p></article>
-      <article><strong>Proposal execution</strong><p>When the procurement goes live, the proposal starts from a better-informed and better-positioned base.</p></article>
-    </div>
-  </section>
-
-  <section>
-    <h2>What changes when the work is joined up</h2>
+    <h2>When teams call Boss Key</h2>
     <div class="grid-3">
-      <article class="panel"><h3>Less rework</h3><p>Capture and proposal decisions build on the same upstream context instead of restarting from scratch at each stage.</p></article>
-      <article class="panel"><h3>Better timing</h3><p>Teams know what to do before release, during qualification, and once the solicitation becomes real.</p></article>
-      <article class="panel"><h3>Stronger execution continuity</h3><p>The advisory chain stays intact from early positioning through proposal delivery.</p></article>
+      <article class="card">
+        <span class="tag">Situation 1</span>
+        <h3>We have a real target now.</h3>
+        <p>Use this when a promising opportunity is forming and leadership needs clearer go or no-go thinking.</p>
+      </article>
+      <article class="card">
+        <span class="tag">Situation 2</span>
+        <h3>The handoff is getting messy.</h3>
+        <p>Use it when pricing, operations, reviews, and content are starting to drift out of sync.</p>
+      </article>
+      <article class="card">
+        <span class="tag">Situation 3</span>
+        <h3>The bid is already live.</h3>
+        <p>Use it when the work needs more control immediately and the current pace is headed toward thrash.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="grid-2">
+    <article class="compare-before panel">
+      <span class="tag">Before</span>
+      <h2>Reactive pursuit work</h2>
+      <div class="signal-list">
+        <div class="signal-row"><div class="dot dot-rose" aria-hidden="true"></div><div><strong>Weak fit checks</strong><span>Too much time goes into opportunities that should have been screened out earlier.</span></div></div>
+        <div class="signal-row"><div class="dot dot-rose" aria-hidden="true"></div><div><strong>Late inputs</strong><span>Critical staffing, pricing, or ops decisions arrive after they are most useful.</span></div></div>
+        <div class="signal-row"><div class="dot dot-rose" aria-hidden="true"></div><div><strong>Compressed reviews</strong><span>The proposal gets serious attention only when the deadline is already close.</span></div></div>
+      </div>
+    </article>
+    <article>
+      <h2>How support usually works</h2>
+      <div class="step-stack">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <strong>Confirm the target</strong>
+            <p>Pressure-test fit and decide whether the pursuit deserves real effort.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <strong>Line up the work</strong>
+            <p>Clarify ownership, the next moves, and the inputs that have to arrive early.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <strong>Steady the live bid</strong>
+            <p>Keep reviews, handoffs, and proposal delivery cleaner while the deadline is still manageable.</p>
+          </div>
+        </div>
+      </div>
+      <p class="small-note">The goal is not commentary around the pursuit. The goal is a better-run pursuit.</p>
+    </article>
+  </section>
+
+  <section>
+    <h2>Good fit</h2>
+    <div class="grid-2">
+      <article class="card">
+        <h3>Usually a fit when...</h3>
+        <p>You have a real opportunity, a messy live bid, or a team that needs clearer ownership and follow-through.</p>
+      </article>
+      <article class="card">
+        <h3>Usually not a fit when...</h3>
+        <p>You want generic writing help only, or you are not ready to bring a real opportunity into the conversation yet.</p>
+      </article>
+    </div>
+    <div class="buttons">
+      <a class="btn btn-secondary" href="./services.html">See all services</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=proposal-support">Send an inquiry</a>
     </div>
   </section>
 </main>
-<footer><div class="wrap">Boss Key LLC | Capture strategy | Pre-RFP positioning | Proposal execution support</div></footer>
+<footer><div class="wrap">Boss Key LLC | Better pursuit choices | Cleaner handoffs | Stronger proposal delivery</div></footer>
 <script>
 (function(){
   const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';

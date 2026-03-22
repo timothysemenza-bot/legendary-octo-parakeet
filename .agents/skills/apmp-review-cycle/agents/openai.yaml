@@ -1,0 +1,3 @@
+display_name: APMP Review Cycle
+short_description: Prepare, run, and close proposal reviews with clear action logs and rework priorities.
+default_prompt: Use $apmp-review-cycle to assess review readiness for this proposal, prepare the right review package, and consolidate feedback into a clean action log.

@@ -35,13 +35,7 @@ if (-not $SkipProposalOpsSync) {
         -ProposalQueueFile $ProposalQueueFile | Out-Null
 }
 
-$contentPropertyOrder = @(
-    "content_id", "created_date", "cadence_type", "source_id", "source_type",
-    "source_path", "source_title", "title", "slug", "summary", "article_draft_path",
-    "article_output_path", "company_linkedin_draft_path", "personal_linkedin_draft_path",
-    "scheduled_publish_date", "owner_decision", "review_status", "website_status",
-    "rss_status", "linkedin_company_status", "linkedin_personal_status", "published_date", "notes"
-)
+$contentPropertyOrder = Get-BossKeyContentQueuePropertyOrder
 
 $relationshipPropertyOrder = @(
     "relationship_id", "created_date", "company_name", "contact_name", "role",
@@ -559,7 +553,7 @@ foreach ($content in $contentQueue | Where-Object { $_.review_status -eq "pendin
         revision_notes = ""
         send_mode = "publish"
         scheduled_date = [string]$content.scheduled_publish_date
-        notes = "Approving publishes the article to the Insights hub, regenerates the RSS feed, and readies the personal LinkedIn draft."
+        notes = "Approving publishes the article to the Insights hub, regenerates the RSS feed, and readies any optional distillation layer for manual use."
     })
 }
 
@@ -666,6 +660,12 @@ if ($contentItems.Count -gt 0) {
         $packetLines += "- Cadence: $($item.cadence_type)"
         $packetLines += "- Scheduled publish date: $($item.scheduled_publish_date)"
         $packetLines += "- Article draft: $($item.article_draft_path)"
+        if (-not [string]::IsNullOrWhiteSpace($item.research_pack_path)) {
+            $packetLines += "- Research pack: $($item.research_pack_path)"
+        }
+        if (-not [string]::IsNullOrWhiteSpace($item.distillation_path)) {
+            $packetLines += "- Distillation layer: $($item.distillation_path)"
+        }
         $packetLines += "- Company LinkedIn draft: $($item.company_linkedin_draft_path)"
         $packetLines += "- Personal LinkedIn draft: $($item.personal_linkedin_draft_path)"
         $packetLines += ""

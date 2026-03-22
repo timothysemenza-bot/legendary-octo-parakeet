@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="proposal-builder-shell">
+  <div class="proposal-builder-hero">
+    <p class="eyebrow">Proposal Builder</p>
+    <h1>Upload an RFP</h1>
+    <p class="lead">
+      Drop in an RFP and the app will turn it into a presentable Word draft your team can review, edit, and share quickly.
+    </p>
+    <p class="builder-helper">You only need a source document to start, such as the RFP itself. The fastest path after upload is a Word draft with complete proposal sections, and you can keep adding addenda, buyer notes, meeting transcripts, and capture material as the pursuit evolves.</p>
+  </div>
+
+  {% if errors %}
+  <div class="builder-alert builder-alert-error">
+    <strong>We need one quick fix:</strong>
+    <ul>
+      {% for error in errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if warnings %}
+  <div class="builder-alert builder-alert-warn">
+    <strong>Upload notes</strong>
+    <ul>
+      {% for warning in warnings %}
+      <li>{{ warning }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if draft_id %}
+  <div class="builder-card">
+    <h2>Confirm the opportunity</h2>
+    <p>The upload worked. Give the opportunity a clean name so the proposal workspace is ready for your team.</p>
+    <form method="post" action="/proposal-builder/confirm" class="builder-form builder-form-compact builder-start-form" data-stage-label="Create Proposal Workspace" data-timeout-seconds="120">
+      <input type="hidden" name="draft_id" value="{{ draft_id }}" />
+      <input type="hidden" name="actor" value="operator" />
+      <label>Opportunity name
+        <input type="text" name="name" value="{{ suggested_name }}" required />
+      </label>
+      <label>Client or agency
+        <input type="text" name="client" value="{{ suggested_client }}" required />
+      </label>
+      <button type="submit">Open Proposal Workspace</button>
+    </form>
+  </div>
+  {% else %}
+  <div class="builder-grid">
+    <div class="builder-card builder-card-highlight">
+      <h2>Start proposal</h2>
+      <form method="post" action="/proposal-builder/start" enctype="multipart/form-data" class="builder-form builder-start-form" data-stage-label="Create Proposal Workspace" data-timeout-seconds="120">
+        <input type="hidden" name="actor" value="operator" />
+        <input type="hidden" name="raw_text_filename" value="pasted-rfp.txt" />
+        <label>Upload your RFP files
+          <input type="file" name="files" multiple />
+        </label>
+        <label>Or paste the RFP text
+          <textarea name="raw_text" rows="12" placeholder="Paste the RFP here if that is faster.">{{ form_data.raw_text or "" }}</textarea>
+        </label>
+        <button type="submit">Start Proposal</button>
+      </form>
+    </div>
+
+    <div class="builder-card">
+      <h2>Launch the demo sample</h2>
+      <p>Use a clean sample RFP so you can walk through the full experience without uploading files first.</p>
+      <form method="post" action="/proposal-builder/start" class="builder-form builder-start-form" data-stage-label="Launch Demo Sample" data-timeout-seconds="120">
+        <input type="hidden" name="use_demo_sample" value="true" />
+        <input type="hidden" name="actor" value="operator" />
+        <button type="submit">Launch Demo Sample</button>
+      </form>
+      <ul class="builder-checklist">
+        <li>Reads the RFP and pulls out key dates</li>
+        <li>Builds a checklist and a presentable Word draft</li>
+        <li>Lets you add new material later and refresh the package</li>
+      </ul>
+    </div>
+  </div>
+
+  <details class="builder-accordion">
+    <summary>Admin setup</summary>
+    <div class="builder-accordion-body">
+      <p class="builder-helper">Client profiles, pricing models, and branded templates are managed separately so the sales screen stays simple.</p>
+      <div class="builder-link-row">
+        <a href="/client-profiles">Manage Client Profiles</a>
+        <a href="/client-onboarding">Client Onboarding</a>
+      </div>
+    </div>
+  </details>
+  {% endif %}
+</section>
+
+<div id="builder-processing-overlay" class="builder-processing-overlay" hidden>
+  <div class="builder-processing-card">
+    <p class="eyebrow">Working</p>
+    <h2 id="builder-processing-title">Creating proposal workspace</h2>
+    <p id="builder-processing-note" class="lead">The app is reading the upload and setting up the workspace.</p>
+    <div class="builder-progress-track">
+      <div id="builder-progress-fill" class="builder-progress-fill"></div>
+    </div>
+    <p id="builder-processing-elapsed" class="muted">Elapsed: 0s</p>
+    <p class="muted">Keep this tab open while the upload finishes.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const forms = Array.from(document.querySelectorAll(".builder-start-form"));
+  if (!forms.length) {
+    return;
+  }
+
+  const overlay = document.getElementById("builder-processing-overlay");
+  const title = document.getElementById("builder-processing-title");
+  const note = document.getElementById("builder-processing-note");
+  const elapsed = document.getElementById("builder-processing-elapsed");
+  const fill = document.getElementById("builder-progress-fill");
+  let timerId = null;
+  let startTime = 0;
+  let maxSeconds = 120;
+
+  function startOverlay(stageLabel, timeoutSeconds) {
+    if (!overlay || !title || !note || !elapsed || !fill) {
+      return;
+    }
+    startTime = Date.now();
+    maxSeconds = Math.max(timeoutSeconds || 120, 45);
+    title.textContent = stageLabel;
+    note.textContent = `This first step can take up to ${maxSeconds} seconds.`;
+    fill.style.width = "6%";
+    overlay.hidden = false;
+    timerId = window.setInterval(() => {
+      const seconds = Math.floor((Date.now() - startTime) / 1000);
+      const progress = Math.min(92, 6 + Math.floor((seconds / maxSeconds) * 86));
+      fill.style.width = `${progress}%`;
+      elapsed.textContent = `Elapsed: ${seconds}s`;
+    }, 1000);
+  }
+
+  forms.forEach((form) => {
+    form.addEventListener("submit", () => {
+      const stageLabel = form.dataset.stageLabel || "Creating proposal workspace";
+      const timeoutSeconds = Number.parseInt(form.dataset.timeoutSeconds || "120", 10);
+      startOverlay(stageLabel, timeoutSeconds);
+    });
+  });
+})();
+</script>
+{% endblock %}

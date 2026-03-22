@@ -1,12 +1,15 @@
 import csv
 import json
+import logging
 import re
 from collections import Counter, defaultdict
 from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from typing import Any
+from uuid import uuid4
 
 from sqlalchemy import delete, func, or_, select
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from app.core.audit import log_audit_event
@@ -92,6 +95,8 @@ ETHICS_GUIDANCE = (
     "inferences, and authorized conversations only. Do not store confidential procurement information."
 )
 
+logger = logging.getLogger(__name__)
+
 
 def _utcnow() -> datetime:
     return datetime.now(UTC).replace(tzinfo=None)
@@ -168,6 +173,42 @@ def _ux_feedback_response(row: UxFeedback) -> UxFeedbackResponse:
         voice_note_status=row.voice_note_status,
         voice_note_asset_ref=row.voice_note_asset_ref,
         created_at=row.created_at,
+    )
+
+
+def _fallback_ux_event_response(payload: UxEventCreate, *, actor: str | None = None) -> UxEventResponse:
+    return UxEventResponse(
+        id=str(uuid4()),
+        session_id=payload.session_id,
+        actor=actor,
+        event_type=payload.event_type.value,
+        page_key=payload.page_key,
+        path=payload.path,
+        referrer_path=payload.referrer_path,
+        form_name=payload.form_name,
+        target_key=payload.target_key,
+        field_name=payload.field_name,
+        duration_ms=payload.duration_ms,
+        count_value=payload.count_value,
+        metadata_json=_load_ux_json(_dump_ux_json(payload.metadata_json)),
+        created_at=_utcnow(),
+    )
+
+
+def _fallback_ux_feedback_response(payload: UxFeedbackCreate, *, actor: str | None = None) -> UxFeedbackResponse:
+    return UxFeedbackResponse(
+        id=str(uuid4()),
+        session_id=payload.session_id,
+        actor=actor,
+        feedback_type=payload.feedback_type.value,
+        page_key=payload.page_key,
+        path=payload.path,
+        form_name=payload.form_name,
+        note_text=payload.note_text,
+        context_json=_load_ux_json(_dump_ux_json(payload.context_json)),
+        voice_note_status=payload.voice_note_status.value,
+        voice_note_asset_ref=payload.voice_note_asset_ref,
+        created_at=_utcnow(),
     )
 
 
@@ -848,10 +889,16 @@ class JanitorialOsService:
             count_value=payload.count_value,
             metadata_json=_dump_ux_json(payload.metadata_json),
         )
-        self.db.add(row)
-        self.db.commit()
-        self.db.refresh(row)
-        return _ux_event_response(row)
+        try:
+            self.db.add(row)
+            self.db.commit()
+            self.db.refresh(row)
+            return _ux_event_response(row)
+        except OperationalError:
+            # UX telemetry should never block the core proposal workflow if SQLite is busy.
+            self.db.rollback()
+            logger.warning("Skipped UX event write because the database was busy.")
+            return _fallback_ux_event_response(payload, actor=actor)
 
     def submit_ux_feedback(self, payload: UxFeedbackCreate, *, actor: str | None = None) -> UxFeedbackResponse:
         row = UxFeedback(
@@ -866,32 +913,37 @@ class JanitorialOsService:
             voice_note_status=payload.voice_note_status.value,
             voice_note_asset_ref=payload.voice_note_asset_ref,
         )
-        self.db.add(row)
-        self.db.flush()
-        event_type = (
-            UxEventType.MANUAL_OVERRIDE.value
-            if payload.feedback_type == UxFeedbackType.MANUAL_WORKAROUND
-            else UxEventType.FEEDBACK_SUBMITTED.value
-        )
-        self.db.add(
-            UxEvent(
-                session_id=payload.session_id,
-                actor=actor,
-                page_key=payload.page_key,
-                path=payload.path,
-                referrer_path=None,
-                event_type=event_type,
-                form_name=payload.form_name,
-                target_key=None,
-                field_name=None,
-                duration_ms=None,
-                count_value=1,
-                metadata_json=_dump_ux_json({"feedback_type": payload.feedback_type.value, **payload.context_json}),
+        try:
+            self.db.add(row)
+            self.db.flush()
+            event_type = (
+                UxEventType.MANUAL_OVERRIDE.value
+                if payload.feedback_type == UxFeedbackType.MANUAL_WORKAROUND
+                else UxEventType.FEEDBACK_SUBMITTED.value
             )
-        )
-        self.db.commit()
-        self.db.refresh(row)
-        return _ux_feedback_response(row)
+            self.db.add(
+                UxEvent(
+                    session_id=payload.session_id,
+                    actor=actor,
+                    page_key=payload.page_key,
+                    path=payload.path,
+                    referrer_path=None,
+                    event_type=event_type,
+                    form_name=payload.form_name,
+                    target_key=None,
+                    field_name=None,
+                    duration_ms=None,
+                    count_value=1,
+                    metadata_json=_dump_ux_json({"feedback_type": payload.feedback_type.value, **payload.context_json}),
+                )
+            )
+            self.db.commit()
+            self.db.refresh(row)
+            return _ux_feedback_response(row)
+        except OperationalError:
+            self.db.rollback()
+            logger.warning("Skipped UX feedback write because the database was busy.")
+            return _fallback_ux_feedback_response(payload, actor=actor)
 
     def list_recommendation_checkpoints(self) -> list[UxRecommendationCheckpoint]:
         stmt = select(UxRecommendationCheckpoint).order_by(

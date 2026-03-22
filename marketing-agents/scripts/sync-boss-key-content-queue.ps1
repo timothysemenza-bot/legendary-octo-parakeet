@@ -10,31 +10,7 @@ $ErrorActionPreference = "Stop"
 
 . (Join-Path $PSScriptRoot "boss-key-growth-os-helpers.ps1")
 
-$queuePropertyOrder = @(
-    "content_id",
-    "created_date",
-    "cadence_type",
-    "source_id",
-    "source_type",
-    "source_path",
-    "source_title",
-    "title",
-    "slug",
-    "summary",
-    "article_draft_path",
-    "article_output_path",
-    "company_linkedin_draft_path",
-    "personal_linkedin_draft_path",
-    "scheduled_publish_date",
-    "owner_decision",
-    "review_status",
-    "website_status",
-    "rss_status",
-    "linkedin_company_status",
-    "linkedin_personal_status",
-    "published_date",
-    "notes"
-)
+$queuePropertyOrder = Get-BossKeyContentQueuePropertyOrder
 
 function Get-BossKeyArticleDraftText {
     param(
@@ -268,6 +244,8 @@ foreach ($source in $sources) {
         slug = $slug
         summary = $summary
         article_draft_path = $articleDraftPath
+        research_pack_path = if ($null -eq $existing) { "" } else { [string]$existing.research_pack_path }
+        distillation_path = if ($null -eq $existing) { "" } else { [string]$existing.distillation_path }
         article_output_path = $articleOutputPath
         company_linkedin_draft_path = $companyDraftPath
         personal_linkedin_draft_path = $personalDraftPath

@@ -14,6 +14,8 @@ from app.modules.capture_plan.api import api_router as capture_api_router
 from app.modules.capture_plan.api import web_router as capture_web_router
 from app.modules.compliance_matrix.api import api_router as compliance_api_router
 from app.modules.compliance_matrix.api import web_router as compliance_web_router
+from app.modules.company_os.api import api_router as company_os_api_router
+from app.modules.company_os.api import web_router as company_os_web_router
 from app.modules.identity.api import api_router as identity_api_router
 from app.modules.identity.api import web_router as identity_web_router
 from app.modules.janitorial_os.api import api_router as janitorial_api_router
@@ -27,6 +29,9 @@ from app.modules.ops_reporting.api import web_router as ops_web_router
 from app.modules.opportunity_intelligence.api import api_router as intelligence_api_router
 from app.modules.opportunity_intelligence.api import web_router as intelligence_web_router
 from app.modules.opportunity_intake.api import api_router, web_router
+from app.modules.proposal_builder.api import admin_api_router as proposal_builder_admin_api_router
+from app.modules.proposal_builder.api import api_router as proposal_builder_api_router
+from app.modules.proposal_builder.api import web_router as proposal_builder_web_router
 from app.modules.proposal_outline.api import api_router as outline_api_router
 from app.modules.proposal_outline.api import web_router as outline_web_router
 from app.modules.review_manager.api import api_router as review_api_router
@@ -58,6 +63,8 @@ app.include_router(rfp_api_router)
 app.include_router(rfp_web_router)
 app.include_router(compliance_api_router)
 app.include_router(compliance_web_router)
+app.include_router(company_os_api_router)
+app.include_router(company_os_web_router)
 app.include_router(identity_api_router)
 app.include_router(identity_web_router)
 app.include_router(knowledge_api_router)
@@ -68,6 +75,9 @@ app.include_router(ops_api_router)
 app.include_router(ops_web_router)
 app.include_router(intelligence_api_router)
 app.include_router(intelligence_web_router)
+app.include_router(proposal_builder_admin_api_router)
+app.include_router(proposal_builder_api_router)
+app.include_router(proposal_builder_web_router)
 app.include_router(outline_api_router)
 app.include_router(outline_web_router)
 app.include_router(review_api_router)

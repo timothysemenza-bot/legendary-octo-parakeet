@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boss Key | Menu of Services for St. Moritz</title>
+  <style>
+    :root {
+      --ink: #f3f5f8;
+      --paper: #0a0a0b;
+      --accent: #c5162e;
+      --accent-soft: #ffd7dc;
+      --line: #2d2f35;
+      --card: #16171a;
+      --soft: #c3c8d3;
+      --radius: 16px;
+    }
+    @page {
+      size: Letter;
+      margin: 0.55in;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
+      font-family: "Manrope", "Segoe UI", Arial, sans-serif;
+      line-height: 1.42;
+    }
+    .sheet {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
+      padding: 18px 18px 14px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .wordmark {
+      height: 22px;
+      width: auto;
+    }
+    h1 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 24px;
+      line-height: 1.16;
+      color: #ffffff;
+    }
+    .sub {
+      margin: 4px 0 0;
+      color: var(--soft);
+      font-size: 12px;
+    }
+    .for {
+      color: var(--accent-soft);
+      font-weight: 700;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      padding: 10px 10px 8px;
+      break-inside: avoid;
+    }
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      color: #ffffff;
+    }
+    .outcome {
+      margin: 0 0 6px;
+      color: var(--accent-soft);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    ul {
+      margin: 0;
+      padding-left: 16px;
+    }
+    li {
+      margin: 0 0 4px;
+      font-size: 10.5px;
+      color: var(--ink);
+    }
+    .band {
+      margin-top: 10px;
+      border: 1px solid #3a2025;
+      background: #1b0f12;
+      border-radius: 12px;
+      padding: 9px 10px;
+    }
+    .band h3 {
+      margin: 0 0 6px;
+      color: #ffffff;
+      font-size: 12px;
+    }
+    .band p, .band li {
+      color: #ffd7dc;
+      font-size: 10.5px;
+    }
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .footer {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      font-size: 10px;
+      color: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <section class="header">
+      <div>
+        <div class="brand-row">
+          <img class="wordmark" src="../../../../../boss-key-website/assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key">
+        </div>
+        <h1>AI RFP Digest Menu of Services</h1>
+        <p class="for">Prepared for St. Moritz Security Services, Inc.</p>
+        <p class="sub">Prepared: February 25, 2026</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h3>1) NDA + Security Scoping</h3>
+        <p class="outcome">Outcome: legal coverage and implementation guardrails.</p>
+        <ul>
+          <li>Mutual NDA execution support and scope alignment.</li>
+          <li>Data handling map for intake, storage, retention, and deletion.</li>
+          <li>Role-based access model and audit trail requirements.</li>
+          <li>Security constraints captured for pilot and production.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>2) RFP Ingestion Pipeline</h3>
+        <p class="outcome">Outcome: reliable intake of all solicitation artifacts.</p>
+        <ul>
+          <li>Intake from PDF, Word, email exports, and attachments.</li>
+          <li>OCR processing for scanned documents as needed.</li>
+          <li>Structured parsing into requirements, dates, and sections.</li>
+          <li>Version tracking across amendments and Q&amp;A releases.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>3) AI RFP Digest Engine</h3>
+        <p class="outcome">Outcome: decision-ready summary in hours, not days.</p>
+        <ul>
+          <li>Executive summary for effort, risk, and bid posture.</li>
+          <li>Requirements matrix with owner and due-date mapping.</li>
+          <li>Risk and gap log across compliance, staffing, and technical areas.</li>
+          <li>Win-theme extraction and response strategy prompts.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>4) Interactive Q&amp;A Copilot</h3>
+        <p class="outcome">Outcome: searchable intelligence across the full corpus.</p>
+        <ul>
+          <li>Natural-language Q&amp;A over RFP package and addenda.</li>
+          <li>Evidence-linked answers with source references.</li>
+          <li>Role-tailored views for sales, legal, operations, and finance.</li>
+          <li>Prompt guardrails to enforce citation-backed outputs.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>5) Deployment + Compliance Options</h3>
+        <p class="outcome">Outcome: secure architecture aligned to client policy.</p>
+        <ul>
+          <li>Client-side deployment options: on-prem, private cloud, or VPC.</li>
+          <li>Identity and access integration planning.</li>
+          <li>Retention, logging, and governance control configuration.</li>
+          <li>Security addendum support for procurement/legal review.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>6) Pilot to Production Delivery</h3>
+        <p class="outcome">Outcome: low-risk rollout with measurable value.</p>
+        <ul>
+          <li>2-week pilot on live or recent RFP documents.</li>
+          <li>Weekly checkpoint cadence with stakeholder readouts.</li>
+          <li>KPI tracking: time-to-digest, review effort, and risk detection.</li>
+          <li>Production hardening plan and ownership transition.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="band">
+      <h3>Commercial Structure</h3>
+      <div class="two">
+        <ul>
+          <li>Business Retainer (monthly): <strong>$6,000</strong>.</li>
+          <li>Diagnostic Engagement (fixed fee): <strong>$5,500</strong> per RFP cycle.</li>
+          <li>Optional Light Advisory Retainer: <strong>$2,500</strong> per month.</li>
+        </ul>
+        <ul>
+          <li>2-week pilot: <strong>$5,500</strong> after scoping confirmation.</li>
+          <li>Capacity intentionally capped to preserve delivery quality.</li>
+          <li>Post-pilot: monthly managed service or project-based expansion.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="footer">
+      <div>Primary Contact: Timmy Semenza, Founder</div>
+      <div>Boss Key LLC</div>
+    </section>
+  </main>
+</body>
+</html>

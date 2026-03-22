@@ -15,7 +15,7 @@ DATE_PATTERN = re.compile(
     r"\d{4}-\d{2}-\d{2}"
     r"|\d{1,2}/\d{1,2}/\d{2,4}"
     r"|(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|"
-    r"sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2},\s+\d{4}"
+    r"sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?,\s+\d{4}"
     r")\b",
     re.IGNORECASE,
 )
@@ -112,13 +112,42 @@ CLIENT_PATTERNS = (
     re.compile(r"^issued for[:\s-]+(?P<value>.+)$", re.IGNORECASE),
     re.compile(r"^agency[:\s-]+(?P<value>.+)$", re.IGNORECASE),
     re.compile(r"^client[:\s-]+(?P<value>.+)$", re.IGNORECASE),
+    re.compile(r"\bon behalf of\s+(?P<value>.+?)\s*\((?:owner|client)\)", re.IGNORECASE),
 )
 CLIENT_KEYWORDS = ("city", "county", "state", "university", "authority", "district", "board", "office", "department")
 CLIENT_BLOCKLIST = ("request", "proposal", "rfp", "due", "deadline", "evaluation", "submit", "shall", "must")
 CLIENT_ENTITY_SUFFIXES = (" city", " county", " state", " university", " authority", " district", " board", " office", " department")
 
-QUESTION_DUE_CUES = ("question due", "questions due", "written questions due", "questions deadline")
-PROPOSAL_DUE_CUES = ("proposal due", "proposals due", "submission due", "submissions due", "bid due", "bids due")
+QUESTION_DUE_CUES = (
+    "question due",
+    "questions due",
+    "written questions due",
+    "questions deadline",
+    "questions must be received by",
+)
+PROPOSAL_DUE_CUES = (
+    "proposal due",
+    "proposals due",
+    "proposal deadline",
+    "submission due",
+    "submissions due",
+    "submission deadline",
+    "response due",
+    "responses due",
+    "response deadline",
+    "proposal closing date",
+    "responses must be received by",
+    "proposals must be received by",
+    "submissions must be received by",
+    "bids must be received by",
+    "responses must be submitted by",
+    "proposals must be submitted by",
+    "submissions must be submitted by",
+    "bids must be submitted by",
+    "submitted by close of business",
+    "bid due",
+    "bids due",
+)
 ISSUE_DATE_CUES = ("issue date", "release date", "issued date", "rfp release date", "solicitation issued")
 CONTRACT_TERM_CUES = ("contract term", "term of the contract", "base year", "option year", "renewal term", "contract period")
 GEOGRAPHY_CUES = ("location", "locations", "site", "sites", "facility", "facilities", "county", "city", "region", "campus")
@@ -130,6 +159,35 @@ FORM_CUES = ("form", "forms", "attachment", "attachments", "appendix", "exhibit"
 MEETING_CUES = ("walkthrough", "walk-through", "pre-bid", "pre bid", "pre-proposal", "pre proposal", "site visit", "conference")
 INCUMBENT_CUES = ("incumbent", "current provider", "current contractor")
 OPERATIONAL_CUES = ("staffing", "janitorial", "cleaning", "transition", "supervision", "schedule", "mobilization", "site")
+GEOGRAPHY_BLOCKLIST = (
+    "walkthrough",
+    "walk-through",
+    "pre-bid",
+    "pre proposal",
+    "pre-proposal",
+    "conference",
+    "insurance",
+    "evaluation",
+    "criteria",
+    "submit",
+    "submission",
+    "proposal due",
+    "questions due",
+    "shall",
+    "must",
+    "required",
+    "staffing plan",
+    "references",
+)
+INSURANCE_STRICT_CUES = (
+    "insurance",
+    "certificate of insurance",
+    "general liability",
+    "workers compensation",
+    "workers' compensation",
+    "umbrella",
+)
+FORM_STRICT_CUES = ("attachment", "attachments", "form", "forms", "workbook", "certification", "certifications", "addenda", "addendum")
 
 SIMILARITY_STOPWORDS = {
     "the",
@@ -166,15 +224,40 @@ SIMILARITY_STOPWORDS = {
 
 def _deadline_priority(line: str) -> int:
     lowered = line.lower()
-    if "proposal due" in lowered or "proposals due" in lowered:
+    if _is_proposal_due_line(lowered):
         return 4
     if "submission due" in lowered or "submissions due" in lowered:
         return 3
     if "bid due" in lowered or "bids due" in lowered or "deadline" in lowered:
         return 2
-    if "questions due" in lowered or "written questions due" in lowered:
+    if _is_question_due_line(lowered):
         return 1
     return 0
+
+
+def _is_question_due_line(lowered: str) -> bool:
+    return any(cue in lowered for cue in QUESTION_DUE_CUES) or (
+        "question" in lowered and any(marker in lowered for marker in ("deadline", "must be received by"))
+    )
+
+
+def _is_proposal_due_line(lowered: str) -> bool:
+    if _is_question_due_line(lowered):
+        return False
+    if any(cue in lowered for cue in PROPOSAL_DUE_CUES):
+        return True
+    due_markers = (
+        "due",
+        "deadline",
+        "must be received by",
+        "received by",
+        "must be submitted by",
+        "submitted by",
+        "closing date",
+        "close of business",
+    )
+    proposal_subjects = ("proposal", "proposals", "submission", "submissions", "response", "responses", "bid", "bids")
+    return any(subject in lowered for subject in proposal_subjects) and any(marker in lowered for marker in due_markers)
 
 
 def _classify_requirement(text: str) -> str:
@@ -451,15 +534,17 @@ def _candidate_client_value(line: str) -> str | None:
 
 def _first_date(line: str) -> str | None:
     match = DATE_PATTERN.search(line)
-    return match.group(1) if match else None
+    if not match:
+        return None
+    return re.sub(r"(?<=\d)(st|nd|rd|th)(?=,)", "", match.group(1), flags=re.IGNORECASE)
 
 
 def _first_time(line: str) -> str | None:
-    match = TIME_PATTERN.search(line)
-    if not match:
-        return None
-    value = _clean_line(match.group(0))
-    return value if any(token in value.lower() for token in ("am", "pm", ":")) else None
+    for match in TIME_PATTERN.finditer(line):
+        value = _clean_line(match.group(0))
+        if any(token in value.lower() for token in ("am", "pm", ":")):
+            return value
+    return None
 
 
 def _record_provenance(field_provenance: dict[str, list[str]], field_name: str, line: str) -> None:
@@ -550,6 +635,57 @@ def _empty_structured_fields() -> dict[str, object]:
     }
 
 
+def _looks_like_geography_line(line: str) -> bool:
+    lowered = line.lower()
+    if not any(cue in lowered for cue in GEOGRAPHY_CUES):
+        return False
+    if not lowered.startswith(("location", "locations", "site location", "site locations", "facility", "facilities")):
+        return False
+    if any(marker in lowered for marker in GEOGRAPHY_BLOCKLIST):
+        return False
+    return True
+
+
+def _extract_geography_items(line: str) -> list[str]:
+    if not _looks_like_geography_line(line):
+        return []
+    value = _extract_after_delimiter(line) or line
+    parts = [_clean_line(part) for part in re.split(r"[;,]", value) if _clean_line(part)]
+    if not parts:
+        return []
+
+    cleaned_parts: list[str] = []
+    for part in parts:
+        lowered = part.lower()
+        if any(marker in lowered for marker in GEOGRAPHY_BLOCKLIST):
+            continue
+        if len(part.split()) > 8 and "," not in value:
+            continue
+        if part not in cleaned_parts:
+            cleaned_parts.append(part)
+    return cleaned_parts[:6]
+
+
+def _looks_like_insurance_line(line: str) -> bool:
+    lowered = line.lower()
+    if not any(cue in lowered for cue in INSURANCE_STRICT_CUES):
+        return False
+    if any(marker in lowered for marker in ("staffing plan", "evaluation criteria", "walkthrough", "references")):
+        return False
+    return True
+
+
+def _looks_like_mandatory_form_line(line: str) -> bool:
+    lowered = line.lower()
+    if not any(cue in lowered for cue in FORM_STRICT_CUES):
+        return False
+    if any(marker in lowered for marker in ("evaluation criteria", "criteria include", "weight", "points")):
+        return False
+    if not any(marker in lowered for marker in ("must", "shall", "required", "include", "submit", "attach", "complete", "acknowledge")):
+        return False
+    return True
+
+
 def _extract_structured_fields(lines: list[str], requirements: list[dict]) -> tuple[dict[str, object], dict[str, list[str]]]:
     structured_fields = _empty_structured_fields()
     field_provenance: dict[str, list[str]] = {}
@@ -580,9 +716,9 @@ def _extract_structured_fields(lines: list[str], requirements: list[dict]) -> tu
         first_date = _first_date(cleaned)
         if first_date and any(cue in lowered for cue in ISSUE_DATE_CUES):
             _set_scalar_field(structured_fields, field_provenance, "issue_date", first_date, cleaned)
-        if first_date and any(cue in lowered for cue in QUESTION_DUE_CUES):
+        if first_date and _is_question_due_line(lowered):
             _set_scalar_field(structured_fields, field_provenance, "questions_due_date", first_date, cleaned)
-        if first_date and any(cue in lowered for cue in PROPOSAL_DUE_CUES):
+        if first_date and _is_proposal_due_line(lowered):
             _set_scalar_field(structured_fields, field_provenance, "proposal_due_date", first_date, cleaned)
             _set_scalar_field(structured_fields, field_provenance, "proposal_due_time", _first_time(cleaned), cleaned)
 
@@ -595,12 +731,12 @@ def _extract_structured_fields(lines: list[str], requirements: list[dict]) -> tu
                 cleaned,
             )
 
-        if any(cue in lowered for cue in GEOGRAPHY_CUES):
+        for geography_item in _extract_geography_items(cleaned):
             _append_list_field(
                 structured_fields,
                 field_provenance,
                 "geography",
-                _extract_after_delimiter(cleaned) or cleaned,
+                geography_item,
                 cleaned,
                 limit=6,
             )
@@ -635,7 +771,7 @@ def _extract_structured_fields(lines: list[str], requirements: list[dict]) -> tu
                 limit=6,
             )
 
-        if any(cue in lowered for cue in INSURANCE_CUES):
+        if _looks_like_insurance_line(cleaned):
             _append_list_field(
                 structured_fields,
                 field_provenance,
@@ -645,7 +781,7 @@ def _extract_structured_fields(lines: list[str], requirements: list[dict]) -> tu
                 limit=6,
             )
 
-        if any(cue in lowered for cue in FORM_CUES) and any(marker in lowered for marker in ("must", "shall", "required", "include", "submit", "attach")):
+        if _looks_like_mandatory_form_line(cleaned):
             _append_list_field(
                 structured_fields,
                 field_provenance,
@@ -717,11 +853,11 @@ def parse_rfp_text(raw_text: str) -> dict:
     requirements: list[dict] = []
 
     for line in lines:
-        deadline_match = DATE_PATTERN.search(line)
-        if deadline_match and any(x in line.lower() for x in ["due", "deadline", "submit"]):
+        first_date = _first_date(line)
+        if first_date and any(x in line.lower() for x in ["due", "deadline", "submit"]):
             line_priority = _deadline_priority(line)
             if line_priority > deadline_priority:
-                deadline = deadline_match.group(1)
+                deadline = first_date
                 deadline_priority = line_priority
 
         lowered = line.lower()

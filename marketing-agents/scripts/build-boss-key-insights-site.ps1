@@ -10,31 +10,7 @@ $ErrorActionPreference = "Stop"
 
 . (Join-Path $PSScriptRoot "boss-key-growth-os-helpers.ps1")
 
-$queuePropertyOrder = @(
-    "content_id",
-    "created_date",
-    "cadence_type",
-    "source_id",
-    "source_type",
-    "source_path",
-    "source_title",
-    "title",
-    "slug",
-    "summary",
-    "article_draft_path",
-    "article_output_path",
-    "company_linkedin_draft_path",
-    "personal_linkedin_draft_path",
-    "scheduled_publish_date",
-    "owner_decision",
-    "review_status",
-    "website_status",
-    "rss_status",
-    "linkedin_company_status",
-    "linkedin_personal_status",
-    "published_date",
-    "notes"
-)
+$queuePropertyOrder = Get-BossKeyContentQueuePropertyOrder
 
 function Get-BossKeyArticleMetaDate {
     param([pscustomobject]$Row)
@@ -52,6 +28,36 @@ function Get-BossKeyArticleMetaDate {
     }
 
     return Get-Date
+}
+
+function Get-BossKeyArticleSiteRelativePath {
+    param(
+        [string]$ArticleOutputPath,
+        [string]$SiteRootPath
+    )
+
+    if ([string]::IsNullOrWhiteSpace($ArticleOutputPath)) {
+        return ""
+    }
+
+    if ([System.IO.Path]::IsPathRooted($ArticleOutputPath)) {
+        $resolvedOutput = Resolve-BossKeyGrowthPath $ArticleOutputPath
+        $resolvedSiteRoot = Resolve-BossKeyGrowthPath $SiteRootPath
+        if ((Test-Path $resolvedOutput) -and (Test-Path $resolvedSiteRoot)) {
+            $outputUri = [System.Uri]((Resolve-Path -Path $resolvedOutput).Path)
+            $rootUri = [System.Uri]((Resolve-Path -Path $resolvedSiteRoot).Path + [System.IO.Path]::DirectorySeparatorChar)
+            return [System.Uri]::UnescapeDataString($rootUri.MakeRelativeUri($outputUri).ToString()).Replace('\', '/')
+        }
+        return $ArticleOutputPath.Replace('\', '/')
+    }
+
+    $normalizedOutput = $ArticleOutputPath.Replace('\', '/')
+    $normalizedSiteRoot = $SiteRootPath.Replace('\', '/').TrimEnd('/')
+    if ($normalizedOutput.StartsWith($normalizedSiteRoot + "/")) {
+        return $normalizedOutput.Substring($normalizedSiteRoot.Length + 1)
+    }
+
+    return $normalizedOutput
 }
 
 function Get-BossKeyArticlePageHtml {
@@ -176,8 +182,70 @@ function Get-BossKeyArticlePageHtml {
     h2 { font-size: clamp(1.4rem, 2.8vw, 2rem); margin-top: 28px; }
     h3 { font-size: 1.1rem; margin-top: 22px; }
     p { margin: 0 0 14px; color: var(--soft); }
-    ul { margin: 0 0 16px; padding-left: 20px; color: #dbe2eb; }
+    ul, ol { margin: 0 0 16px; padding-left: 20px; color: #dbe2eb; }
     li { margin: 8px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 22px;
+      overflow: hidden;
+      border: 1px solid #314253;
+      border-radius: 14px;
+      background: #0d151e;
+    }
+    thead th {
+      background: #13202c;
+      color: #ffffff;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #263546;
+      vertical-align: top;
+      color: var(--soft);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    pre {
+      margin: 18px 0 22px;
+      padding: 16px;
+      overflow-x: auto;
+      border: 1px solid #324255;
+      border-radius: 14px;
+      background: #0b131c;
+    }
+    code {
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      font-size: 0.95em;
+    }
+    p code, li code {
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: rgba(212, 163, 95, 0.12);
+      color: #ffe5bf;
+    }
+    blockquote {
+      margin: 18px 0 22px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      background: rgba(212, 163, 95, 0.08);
+      color: #f0dcc0;
+    }
+    .content a {
+      color: #8ce6d9;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    .content strong { color: #ffffff; }
+    .content > * + * { margin-top: 0; }
+    .content h2 {
+      margin-top: 34px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(49, 66, 83, 0.7);
+    }
+    .content h3 { margin-top: 26px; }
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -354,7 +422,7 @@ foreach ($row in $published) {
     $publishDate = Get-BossKeyArticleMetaDate -Row $row
     $title = Escape-BossKeyHtml -Value ([string]$row.title)
     $summary = Escape-BossKeyHtml -Value ([string]$row.summary)
-    $urlPath = ([string]$row.article_output_path).Replace("boss-key-website\", "").Replace("\", "/")
+    $urlPath = Get-BossKeyArticleSiteRelativePath -ArticleOutputPath ([string]$row.article_output_path) -SiteRootPath $SiteRoot
     $cards += @"
       <article class="card">
         <span class="eyebrow">$([string](Escape-BossKeyHtml -Value (([string]$row.cadence_type).Replace("_", " "))))</span>
@@ -366,8 +434,12 @@ foreach ($row in $published) {
         </div>
       </article>
 "@
-    if ($urlPath -ne ("insights/" + $row.slug + ".html") -and $urlPath -ne ("insights/" + $row.slug)) {
-        $cards[$cards.Count - 1] = $cards[$cards.Count - 1].Replace("./" + $row.slug + ".html", "../" + ($urlPath.Substring("insights/".Length)))
+    if ($urlPath -ne ("insights/" + $row.slug + ".html") -and $urlPath -ne ("insights/" + $row.slug) -and -not [string]::IsNullOrWhiteSpace($urlPath)) {
+        if ($urlPath.StartsWith("insights/")) {
+            $cards[$cards.Count - 1] = $cards[$cards.Count - 1].Replace("./" + $row.slug + ".html", "../" + ($urlPath.Substring("insights/".Length)))
+        } else {
+            $cards[$cards.Count - 1] = $cards[$cards.Count - 1].Replace("./" + $row.slug + ".html", "../" + $urlPath)
+        }
     }
 }
 
@@ -519,6 +591,10 @@ $indexHtml = @"
       color: var(--muted);
       font-size: 0.9rem;
     }
+    .card .meta {
+      margin-top: 14px;
+      justify-content: space-between;
+    }
     footer {
       border-top: 1px solid var(--line);
       color: #9eadbc;
@@ -592,7 +668,7 @@ $indexHtml | Set-Content -Path $indexResolved -Encoding UTF8
 
 $feedItems = foreach ($row in $published) {
     $publishDate = (Get-BossKeyArticleMetaDate -Row $row).ToUniversalTime().ToString("r")
-    $pathValue = ([string]$row.article_output_path).Replace("boss-key-website\", "").Replace("\", "/")
+    $pathValue = Get-BossKeyArticleSiteRelativePath -ArticleOutputPath ([string]$row.article_output_path) -SiteRootPath $SiteRoot
     $linkPath = if ($pathValue.StartsWith("insights/")) { $pathValue } else { "insights/{0}.html" -f $row.slug }
     $fullLink = "{0}/{1}" -f $BaseUrl.TrimEnd('/'), $linkPath.TrimStart('/')
 @"

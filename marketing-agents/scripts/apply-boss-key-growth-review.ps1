@@ -14,13 +14,7 @@ $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "boss-key-growth-os-helpers.ps1")
 . (Join-Path $PSScriptRoot "boss-key-ptw-helpers.ps1")
 
-$contentPropertyOrder = @(
-    "content_id", "created_date", "cadence_type", "source_id", "source_type",
-    "source_path", "source_title", "title", "slug", "summary", "article_draft_path",
-    "article_output_path", "company_linkedin_draft_path", "personal_linkedin_draft_path",
-    "scheduled_publish_date", "owner_decision", "review_status", "website_status",
-    "rss_status", "linkedin_company_status", "linkedin_personal_status", "published_date", "notes"
-)
+$contentPropertyOrder = Get-BossKeyContentQueuePropertyOrder
 
 $relationshipPropertyOrder = @(
     "relationship_id", "created_date", "company_name", "contact_name", "role",
@@ -118,7 +112,14 @@ foreach ($decision in $decisions) {
                     $row.website_status = "approved"
                     $row.rss_status = "approved"
                     $row.linkedin_company_status = "rss-auto"
-                    $row.linkedin_personal_status = "ready-to-send"
+                    $row.linkedin_personal_status = if (
+                        -not [string]::IsNullOrWhiteSpace([string]$row.personal_linkedin_draft_path) -or
+                        -not [string]::IsNullOrWhiteSpace([string]$row.distillation_path)
+                    ) {
+                        "ready-to-send"
+                    } else {
+                        "not-generated"
+                    }
                 }
                 "revise" {
                     $row.owner_decision = "revise"

@@ -3,147 +3,218 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tom Deans | Writing Center Operating Sprint</title>
+  <title>Tom Deans | Margie Tribute Outreach Pilot</title>
   <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
   <style>
     :root {
-      --ink: #eef3fa;
-      --paper: #0c1219;
-      --panel: #131c27;
-      --line: #2a3a4d;
-      --soft: #b8c8db;
-      --accent: #c5162e;
-      --accent-soft: #ffd6dd;
-      --ok: #8fd5a8;
+      --ink: #1f2430;
+      --paper: #f6f1ea;
+      --panel: #fffdfa;
+      --line: #d9d1c5;
+      --muted: #605a54;
+      --accent: #9f1223;
+      --accent-soft: #f7d9de;
+      --accent-deep: #4a1017;
+      --ok: #d9f0df;
+      --warn: #fff2da;
       --max: 1080px;
-      --radius: 14px;
+      --radius: 16px;
+      --shadow: 0 18px 46px rgba(66, 34, 26, 0.14);
     }
+
     * { box-sizing: border-box; }
+
     html, body {
       margin: 0;
       padding: 0;
       color: var(--ink);
-      background: radial-gradient(circle at 15% 0%, #1f2d3d 0%, #121a24 40%, #090c11 100%);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(159, 18, 35, 0.16) 0%, rgba(159, 18, 35, 0) 28%),
+        linear-gradient(180deg, #f3ede4 0%, #f6f1ea 45%, #efe7dc 100%);
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      line-height: 1.55;
+      line-height: 1.58;
     }
+
     .wrap {
       width: min(var(--max), 94vw);
       margin: 0 auto;
-      padding: 20px 0 34px;
+      padding: 22px 0 38px;
     }
+
     .card {
-      background: linear-gradient(155deg, #172230 0%, #121b26 100%);
-      border: 1px solid var(--line);
+      background: rgba(255, 253, 250, 0.94);
+      border: 1px solid rgba(96, 90, 84, 0.12);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 10px 38px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
     }
+
     .hero {
-      padding: 18px 18px 20px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(140deg, #1b2837 0%, #141f2a 60%, #101821 100%);
+      padding: 22px 22px 24px;
+      background:
+        linear-gradient(135deg, rgba(159, 18, 35, 0.08) 0%, rgba(159, 18, 35, 0) 42%),
+        linear-gradient(180deg, #fef9f4 0%, #f8f0e6 100%);
+      border-bottom: 5px solid var(--accent);
     }
+
     .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
-    .chip {
-      border: 1px solid #3d5169;
-      border-radius: 999px;
-      padding: 6px 11px;
-      font-size: 0.78rem;
-      color: var(--soft);
-      background: #101824;
-    }
+
+    .chip,
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      border: 1px solid #5f232b;
+      padding: 7px 12px;
       border-radius: 999px;
-      padding: 6px 10px;
-      background: #1a1114;
-    }
-    .brand img {
-      height: 24px;
-      width: auto;
-      display: block;
-    }
-    .brand span {
-      font-size: 0.76rem;
-      color: var(--soft);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
     }
-    h1, h2, h3 { margin: 0 0 8px; line-height: 1.2; }
+
+    .chip {
+      border: 1px solid rgba(159, 18, 35, 0.18);
+      background: #fff6f7;
+      color: var(--accent);
+    }
+
+    .brand {
+      border: 1px solid rgba(74, 16, 23, 0.12);
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--accent-deep);
+    }
+
+    h1, h2, h3 { margin: 0 0 8px; line-height: 1.15; }
+
     h1 {
+      max-width: 860px;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
-      color: #fff;
-      margin-bottom: 10px;
+      font-size: clamp(1.95rem, 3.8vw, 2.95rem);
+      color: #241d1a;
+      margin-bottom: 12px;
     }
+
+    h2 {
+      color: var(--accent);
+      font-size: 1.08rem;
+      letter-spacing: 0.02em;
+    }
+
+    h3 {
+      color: #2f2520;
+      font-size: 0.98rem;
+    }
+
     .hero p {
       margin: 0;
-      color: #cfdaee;
-      max-width: 920px;
+      max-width: 860px;
+      color: #443933;
+      font-size: 1.03rem;
     }
+
     .meta {
-      margin-top: 12px;
+      margin-top: 16px;
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
-      color: #aab7ce;
+      color: var(--muted);
       font-size: 0.85rem;
     }
-    .section { padding: 16px 18px; }
-    .section + .section { border-top: 1px solid var(--line); }
-    h2 { color: var(--accent-soft); font-size: 1.07rem; }
-    h3 { color: #fff; font-size: 0.96rem; }
-    .muted { color: var(--soft); }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+
+    .section {
+      padding: 18px 22px;
     }
+
+    .section + .section {
+      border-top: 1px solid var(--line);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2,
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
     .panel {
       border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 12px;
-      background: #121a24;
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fffdfa 0%, #fffaf5 100%);
     }
-    .kpi {
-      border-left: 4px solid #8d2d3b;
-      background: #18131a;
+
+    .panel.soft-red {
+      background: linear-gradient(180deg, #fff8f8 0%, #fff2f3 100%);
+      border-color: #efc5cc;
     }
-    .next {
-      border: 1px solid #4e2a31;
-      border-radius: 10px;
-      padding: 12px;
-      background: #1f1317;
+
+    .panel.soft-gold {
+      background: linear-gradient(180deg, #fffdf8 0%, #fff6e8 100%);
+      border-color: #ecd5ae;
     }
-    .next strong { color: #ffe4e8; }
+
+    .panel.soft-green {
+      background: linear-gradient(180deg, #fbfffc 0%, #f0faf2 100%);
+      border-color: #cfe3d3;
+    }
+
+    .timeline {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, #b51a2c 0%, #d88c32 100%);
+    }
+
     ul {
-      margin: 6px 0 0;
+      margin: 8px 0 0;
       padding-left: 18px;
     }
-    li { margin: 4px 0; }
-    .foot {
-      margin-top: 12px;
-      font-size: 0.82rem;
-      color: #a1b1c5;
+
+    li {
+      margin: 5px 0;
     }
-    @media (max-width: 900px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+
+    .callout {
+      border: 1px solid rgba(159, 18, 35, 0.16);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fff7f8 0%, #fff3f4 100%);
+    }
+
+    .foot {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -152,112 +223,181 @@
     <article class="card">
       <header class="hero">
         <div class="top">
-          <span class="chip">Operating Sprint Draft • One-Page Pilot Scope</span>
-          <span class="brand">
-            <img src="../assets/logos/brand/boss-key-logo-refined.svg" alt="Boss Key">
-            <span>Prepared by Boss Key LLC</span>
-          </span>
+          <span class="chip">Phase 1 Brief | March 17-31, 2026</span>
+          <span class="brand">Prepared by Boss Key LLC</span>
         </div>
-        <h1>UConn Writing Center Operating Sprint</h1>
-        <p>A focused pilot scope based on the March 4, 2026 conversation with Tom Deans to improve alumni reactivation, reporting readiness, and operational alignment with Student Success workflows.</p>
+        <h1>UConn Writing Center Alumni Tribute Pilot</h1>
+        <p>A tribute-first phase 1 pilot for Tom Deans that uses Margie Ouimette's March 31, 2026 retirement reception to test lightweight alumni outreach, collect reply-ready memories and well-wishes, and stand up a reusable workflow for later Writing Center alumni reactivation.</p>
         <div class="meta">
           <span>Prepared for: Tom Deans, University of Connecticut Writing Center</span>
-          <span>Date: March 6, 2026</span>
-          <span>Scope: 30-day pilot planning sprint</span>
+          <span>Date: March 16, 2026</span>
+          <span>Visible sender: Tom via UConn email</span>
+          <span>Response deadline: March 27, 2026 at 5:00 PM ET</span>
         </div>
       </header>
 
       <section class="section">
-        <h2>Primary Objective</h2>
-        <p class="muted">Launch a practical pilot that helps the Writing Center recover and reactivate its alumni network, define Nexus integration boundaries, and produce leadership-ready impact reporting without adding unsustainable staff burden.</p>
+        <h2>Phase 1 Objective</h2>
+        <p class="muted">Collect and curate alumni memories and well-wishes for Margie while building a reply-based outreach process that can later support a broader alumni network, reporting, and development work without forcing those later-phase goals into the first live touchpoint.</p>
       </section>
 
       <section class="section">
-        <h2>Call-Derived Action Items</h2>
+        <h2>Why This First</h2>
+        <div class="grid-2">
+          <div class="panel soft-red">
+            <h3>Immediate, human reason to reconnect</h3>
+            <p class="muted">Margie's March 31 reception creates a natural, generous reason for former tutors to reply. The ask is meaningful on its own and does not read like fundraising or program marketing.</p>
+          </div>
+          <div class="panel soft-gold">
+            <h3>Low-friction test of the larger system</h3>
+            <p class="muted">A reply-based tribute campaign lets the Writing Center validate list-building, message tone, permissions handling, and curation workflow before attempting broader alumni reactivation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Phase 1 Deliverables</h2>
         <div class="grid-2">
           <div class="panel">
-            <h3>1) Pilot Offer Definition</h3>
+            <h3>1) Revised brief and Tom reply draft</h3>
             <ul>
-              <li>Package scope as alumni reactivation + impact reporting + fundraising readiness.</li>
-              <li>Keep pilot limited to one center and one term.</li>
+              <li>One-pager reframed around the March 31 milestone.</li>
+              <li>Reply draft to Tom's March 16 email that confirms the tribute-first workflow.</li>
             </ul>
           </div>
           <div class="panel">
-            <h3>2) Alumni Data Recovery Plan</h3>
+            <h3>2) Warm-cohort working tracker</h3>
             <ul>
-              <li>Map 20 years of tutor/GA sources and contact data quality gaps.</li>
-              <li>Build segmented outreach cadence for re-engagement.</li>
+              <li>Phase 1 alumni tracker seeded from the practicum export.</li>
+              <li>Built to capture outreach status, permissions, and reusable phase 2 contact notes.</li>
             </ul>
           </div>
-          <div class="panel">
-            <h3>3) 20th Anniversary Relaunch Path</h3>
+          <div class="panel soft-green">
+            <h3>3) Tom-led outreach copy</h3>
             <ul>
-              <li>Design event flow that captures updated alumni records.</li>
-              <li>Use event as community + development reactivation moment.</li>
+              <li>Initial tribute email with a clear reply ask.</li>
+              <li>One respectful reminder for non-responders.</li>
             </ul>
           </div>
-          <div class="panel">
-            <h3>4) Nexus Boundary Mapping</h3>
+          <div class="panel soft-gold">
+            <h3>4) Reception curation workflow</h3>
             <ul>
-              <li>Define what enters Nexus vs stays in Writing Center workflow.</li>
-              <li>Document minimum compliant data fields and ownership.</li>
+              <li>Triage replies into shareable, private, and unclear-permission buckets.</li>
+              <li>Prepare a short reception packet plus a longer appendix of approved notes.</li>
             </ul>
           </div>
-          <div class="panel">
-            <h3>5) First-Gen Impact Reporting</h3>
+          <div class="panel soft-red">
+            <h3>5) Optional public interest intake path</h3>
             <ul>
-              <li>Create aggregate reporting template tied to leadership needs.</li>
-              <li>Prioritize low-friction data capture.</li>
-            </ul>
-          </div>
-          <div class="panel">
-            <h3>6) Stakeholder Alignment</h3>
-            <ul>
-              <li>Identify one co-owner in Student Success and one data stakeholder.</li>
-              <li>Secure intro pathways via Tom for pilot approvals and coordination.</li>
+              <li>A lightweight public participation layer for LinkedIn and social outreach beyond Tom's direct email list, only if needed.</li>
+              <li>This could live on the existing Writing Center site, a simple approved page or form, or another low-lift entry point rather than requiring a standalone custom site.</li>
+              <li>Its role is to collect verified contact details, graduation year, and alumni-network context before inviting approved people to submit an actual note, selfie, or short video.</li>
             </ul>
           </div>
         </div>
       </section>
 
       <section class="section">
-        <h2>30-60-90 Execution</h2>
+        <h2>Internal Asks For Tom And Kathleen</h2>
+        <div class="callout">
+          <ul>
+            <li>Confirm the March 31 reception timing and any hard submission cutoff needed before that date.</li>
+            <li>Confirm Tom as the visible sender from his UConn account.</li>
+            <li>Identify any must-include alumni, obvious excludes, or sensitivity concerns about how Margie's retirement should be framed.</li>
+            <li>Supply any known current emails, LinkedIn matches, or high-confidence alumni connections that should move from "roster only" to warm-cohort priority.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Execution Timeline</h2>
         <div class="grid-3">
-          <div class="panel kpi">
-            <h3>30 Days</h3>
+          <div class="panel timeline">
+            <h3>March 17</h3>
             <ul>
-              <li>Pilot brief finalized.</li>
-              <li>Data-source map completed.</li>
-              <li>Nexus boundary draft produced.</li>
+              <li>Send Tom the revised brief and reply draft.</li>
+              <li>Lock reception timing, sender model, and sensitivity notes.</li>
             </ul>
           </div>
-          <div class="panel kpi">
-            <h3>60 Days</h3>
+          <div class="panel timeline">
+            <h3>March 18-20</h3>
             <ul>
-              <li>Initial alumni outreach launched.</li>
-              <li>First reporting template tested.</li>
-              <li>Anniversary event model drafted.</li>
+              <li>Seed the tracker from practicum roster exports.</li>
+              <li>Layer in Tom and Kathleen's warm-contact adds and corrections.</li>
             </ul>
           </div>
-          <div class="panel kpi">
-            <h3>90 Days</h3>
+          <div class="panel timeline">
+            <h3>March 21</h3>
             <ul>
-              <li>Working alumni contact baseline established.</li>
-              <li>Leadership report delivered.</li>
-              <li>Expansion recommendation for regional/high-school pipeline.</li>
+              <li>Finalize outreach copy, subject line, and send list.</li>
+              <li>Lock reply-handling and curation rules.</li>
+            </ul>
+          </div>
+          <div class="panel timeline">
+            <h3>March 24</h3>
+            <ul>
+              <li>Tom sends the initial tribute-first alumni outreach.</li>
+              <li>All rows remain tracked for later phase 2 follow-up.</li>
+              <li>Use an optional public intake path only as needed for alumni found through LinkedIn or other socials.</li>
+            </ul>
+          </div>
+          <div class="panel timeline">
+            <h3>March 26-27</h3>
+            <ul>
+              <li>Send one reminder to non-responders.</li>
+              <li>Close collection at 5:00 PM ET on March 27.</li>
+            </ul>
+          </div>
+          <div class="panel timeline">
+            <h3>March 28-31</h3>
+            <ul>
+              <li>Curate 10-15 usable excerpts for the reception packet.</li>
+              <li>Keep unclear or private replies internal only.</li>
             </ul>
           </div>
         </div>
       </section>
 
       <section class="section">
-        <h2>Immediate Next Steps</h2>
-        <div class="next">
-          <p><strong>Within 24 hours:</strong> Send a one-page pilot brief to Tom (objective, timeline, deliverables, internal asks).</p>
-          <p><strong>Within 7 days:</strong> Confirm stakeholders and schedule a pilot kickoff session.</p>
-          <p><strong>Within 14 days:</strong> Deliver v1 alumni data recovery framework and Nexus integration boundary memo.</p>
+        <h2>Success By March 31</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <ul>
+              <li>A working 25-40 person phase 1 tracker exists and can be reused for phase 2.</li>
+              <li>Tom has an approved initial email and one reminder, both written in his voice.</li>
+              <li>Every reply is captured with permission status and display-preference fields.</li>
+            </ul>
+          </div>
+          <div class="panel soft-green">
+            <ul>
+              <li>Tom has a short packet of shareable notes for the retirement reception.</li>
+              <li>Tom also has a private appendix for replies that should not be read publicly.</li>
+              <li>The first live outreach produces real contact intelligence for the later alumni-network build.</li>
+            </ul>
+          </div>
         </div>
-        <p class="foot">Draft prepared from call notes and transcript highlights. Intended for internal pilot planning discussion.</p>
+      </section>
+
+      <section class="section">
+        <h2>Explicitly Deferred To Later Phases</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <ul>
+              <li>Full alumni database build and full-contact enrichment across the entire practicum history.</li>
+              <li>Broader alumni reactivation asks, mentoring programs, or visible network-building language.</li>
+              <li>Fundraising activation beyond quiet tracker preparation for later follow-up.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <ul>
+              <li>Formal Nexus boundary memo and operational alignment work with Student Success.</li>
+              <li>First-gen impact reporting templates and leadership dashboards.</li>
+              <li>Any scaled campaign beyond this tribute-first test; any public intake path stays supplemental, not the main motion.</li>
+              <li>Any standalone custom site build or formal WC-site integration work beyond a lightweight optional participation layer.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="foot">This brief intentionally keeps phase 1 narrow. The March 16, 2026 Tom email thread is the primary live trigger, and the March 4 transcript remains background context for later-phase reporting and alumni-network work.</p>
       </section>
     </article>
   </main>

@@ -1,0 +1,158 @@
+{
+  "title": "Reactive Qualification Is the Hidden Cost Center in Facilities Pursuits",
+  "meta_summary": "A deep-research article on why facilities-service firms lose margin and probability before proposal work starts, and how to replace reactive qualification with a staged intake system.",
+  "abstract": "Facilities-service firms often describe bid/no-bid failure as a judgment problem. In practice it is usually a system problem. The organization does not convert market signals into decision evidence early enough, so qualification happens after labor, pricing assumptions, and executive attention have already been consumed. That sequence turns a gate into a salvage exercise. This article argues that the real control point sits upstream of proposal planning and introduces a staged intake model that forces evidence normalization before commitment. The model links signal triage, commercial thresholds, delivery feasibility, and proposal readiness into one operating frame. It also shows where AI can compress evidence assembly without displacing commercial ownership. The central insight is simple: firms do not improve bid/no-bid outcomes by making proposal teams write faster; they improve them by preventing weak, ambiguous, or under-specified pursuits from entering proposal execution in the first place.",
+  "core_thesis": "Most facilities-service organizations lose margin and probability before the response team ever opens the draft because they qualify too late and decide under sunk-cost pressure instead of under controlled evidence thresholds.",
+  "system_model_name": "Progressive Pursuit Intake",
+  "problem_definition": "In many facilities-service organizations, the formal bid/no-bid event occurs after the organization has already behaved as though it chose to pursue. A branch leader asks for a quick read, pricing begins roughing in labor, an executive signals interest because the customer matters, and proposal support starts gathering legacy material. By the time the gate discussion happens, the decision is contaminated by effort already spent. That is why weak pursuits survive longer than they should and why strong pursuits arrive at proposal kickoff with incomplete assumptions. The operational failure is not indecision. It is delayed qualification. Firms let a pursuit consume delivery, pricing, and proposal bandwidth before they force the evidence needed for a real go or no-go posture. The result is a hidden cost center made of rework, margin drift, and executive overrides.",
+  "current_state_analysis": "Current practice usually follows a predictable sequence. First, opportunity signals arrive through fragmented channels: account chatter, incumbent hints, procurement portals, or a customer request that lacks full scope detail. Second, a manager asks for a fast reaction because the team wants to stay close to the account. Third, different functions begin partial work in parallel. Sales frames the upside, operations estimates feasibility from memory, pricing uses placeholder assumptions, and proposal support begins collecting boilerplate and prior responses. The organization interprets this motion as progress even though the central questions remain unresolved: Is the account strategically worth the effort, do delivery facts support a credible solution, what margin floor applies, and who owns the decision? Time and money are lost in three places. Labor is consumed by pursuits that never clear a disciplined threshold. Margin is weakened because pricing begins before delivery constraints are normalized. Probability is lost because proposal teams inherit ambiguity and spend deadline time discovering facts that should have been settled upstream.",
+  "failure_modes": [
+    {
+      "name": "Sunk-cost qualification",
+      "pattern": "The team delays a true decision until pricing, staffing assumptions, or proposal collection work has already started, so the meeting asks whether to stop rather than whether to start.",
+      "observable_signs": "People refer to work already completed as a reason to keep going, and the gate conversation focuses on effort spent instead of evidence quality.",
+      "operational_effect": "Weak pursuits stay alive, stronger pursuits lose capacity, and leadership begins managing salvage decisions instead of pipeline quality."
+    },
+    {
+      "name": "Executive override without shared thresholds",
+      "pattern": "A senior leader keeps a pursuit open because the account is visible or strategically attractive, but the organization has no agreed evidence standard for when that exception is justified.",
+      "observable_signs": "The rationale for continuing lives in side conversations, no written threshold is referenced, and teams cannot explain why similar opportunities were rejected.",
+      "operational_effect": "Commercial discipline becomes inconsistent and the proposal lane absorbs work created by hierarchy rather than by fit."
+    },
+    {
+      "name": "Proposal kickoff without operating facts",
+      "pattern": "The proposal team receives a go decision before delivery assumptions, staffing availability, pricing posture, and stakeholder commitments are settled in one place.",
+      "observable_signs": "Kickoff meetings generate new discovery questions, reviewers debate basic solution boundaries, and compliance tracking starts before the offer is commercially coherent.",
+      "operational_effect": "Proposal execution becomes an expensive discovery mechanism, driving rework, rushed approvals, and avoidable margin exposure."
+    }
+  ],
+  "system_model": {
+    "premise": "Progressive Pursuit Intake treats qualification as a staged operating system rather than a single meeting. The model creates three evidence thresholds. Signal triage determines whether the organization should spend any labor at all. Commitment screening tests strategic fit, delivery feasibility, and commercial posture before pricing and proposal work expand. Proposal readiness confirms that the team has a coherent offer, explicit assumptions, and named decision ownership before kickoff. By moving these decisions forward, the firm reduces ambiguity entering proposal execution and makes leadership intervention auditable instead of anecdotal.",
+    "components": [
+      {
+        "name": "Signal Register",
+        "purpose": "Captures weak pursuit signals in one queue before any cross-functional labor begins.",
+        "inputs": "Customer chatter, portal notices, incumbent intelligence, account-manager notes",
+        "outputs": "Triage record with confidence, timing, and fit hypothesis",
+        "owner": "Sales operations or capture ops"
+      },
+      {
+        "name": "Commitment Screen",
+        "purpose": "Tests whether the pursuit deserves pricing and delivery attention.",
+        "inputs": "Triage record, account fit, delivery constraints, margin guardrails",
+        "outputs": "Go, hold, or no-go posture with named rationale",
+        "owner": "Pursuit lead with pricing and operations review"
+      },
+      {
+        "name": "Proposal Readiness Gate",
+        "purpose": "Prevents kickoff until the team inherits explicit assumptions and decision ownership.",
+        "inputs": "Approved posture, offer shape, stakeholder map, review cadence",
+        "outputs": "Kickoff authorization and operating packet",
+        "owner": "Proposal director or pursuit operator"
+      }
+    ],
+    "decision_logic": [
+      "If the signal lacks enough evidence to justify cross-functional labor, keep it in the Signal Register and assign a low-cost evidence action instead of opening a pursuit.",
+      "If strategic fit is attractive but delivery feasibility or margin posture is unclear, hold the pursuit in Commitment Screen until the missing facts are resolved in writing.",
+      "Authorize proposal kickoff only when the offer shape, pricing boundaries, review cadence, and stakeholder commitments are explicit enough that the proposal team is executing rather than discovering."
+    ],
+    "operating_rules": [
+      "No proposal drafting begins before Commitment Screen records a named decision and rationale.",
+      "Any executive exception must document the threshold being overridden and the evidence that justifies it.",
+      "Delivery constraints and margin floors must be written into the readiness packet before the kickoff date is set."
+    ],
+    "artifact_blocks": [
+      {
+        "artifact_type": "scoring_model",
+        "title": "Intake scoring model",
+        "content_markdown": "| Criterion | Question | Score 0 | Score 3 | Score 5 |\n| --- | --- | --- | --- | --- |\n| Strategic fit | Is the customer worth scarce pursuit capacity? | Opportunistic only | Relevant but not advantaged | Core account or targeted adjacency |\n| Delivery feasibility | Can operations support the likely scope credibly? | Unknown or weak | Partially understood | Strong evidence and named owner |\n| Commercial posture | Is there a defendable price and margin path? | No price discipline | Approximate range only | Guardrails and floor confirmed |\n| Proposal readiness | Would kickoff start execution rather than discovery? | Basic facts missing | Mixed readiness | Assumptions and review cadence explicit |",
+        "usage_note": "Use before proposal kickoff. A weak score does not trigger drafting; it triggers fact-finding or no-go."
+      }
+    ]
+  },
+  "ai_enablement": {
+    "role_of_ai": "AI belongs in the evidence-normalization layer, not in the final commercial decision. It can consolidate account notes, summarize procurement artifacts, compare past pursuits, and expose missing inputs faster than a manual analyst can. It should not determine whether the firm accepts pricing risk, approves delivery assumptions, or overrides a weak strategic fit signal.",
+    "automate": [
+      "Normalize fragmented pursuit signals into one structured intake record.",
+      "Summarize procurement notices, incumbent facts, and prior pursuit history into comparable evidence fields.",
+      "Flag missing inputs, contradictory assumptions, and incomplete readiness packets before kickoff."
+    ],
+    "human_control_points": [
+      "Humans approve any go, hold, or no-go posture because commercial exposure belongs to accountable leaders.",
+      "Humans own delivery-feasibility judgments because staffing reality and service risk are contextual, not purely textual.",
+      "Humans approve pricing floors and executive exceptions because those decisions change margin and portfolio capacity."
+    ],
+    "execution_notes": [
+      "Use AI to shorten cycle time on evidence assembly, not to replace pursuit judgment.",
+      "Require provenance on summarized inputs so reviewers can trace every recommendation back to source material.",
+      "Treat model output as a draft operating view that must be confirmed before commitment."
+    ]
+  },
+  "implementation_path": [
+    {
+      "step_name": "Define the decision packet",
+      "action": "Standardize the minimum intake fields, scoring criteria, and exception language used before any pursuit receives pricing or proposal labor.",
+      "output": "One shared intake template and scoring sheet",
+      "owner": "Proposal director and sales operations lead"
+    },
+    {
+      "step_name": "Insert the Commitment Screen",
+      "action": "Create a short cross-functional checkpoint that forces delivery, pricing, and leadership inputs before kickoff authorization is granted.",
+      "output": "Documented go, hold, or no-go rationale",
+      "owner": "Pursuit lead"
+    },
+    {
+      "step_name": "Instrument readiness and outcomes",
+      "action": "Track which pursuits entered proposal work with low readiness, then compare rework, cycle time, and margin strain against better-scoped pursuits.",
+      "output": "Calibration data for threshold tuning",
+      "owner": "Proposal operations manager"
+    }
+  ],
+  "case_illustration": {
+    "scenario_label": "Composite regional janitorial rebid",
+    "context": "A regional facilities contractor hears that an incumbent janitorial account will likely rebid within ninety days. The account is visible, but the scope is shifting toward more day-porter coverage and new reporting requirements. In the old model the team would start gathering boilerplate immediately and ask operations for a rough staffing view. Under Progressive Pursuit Intake, the signal first enters the register with a low-confidence timing note and a delivery-feasibility question attached.",
+    "constraints": [
+      "Operations is already staffing two active launches and cannot absorb speculative estimating work.",
+      "The incumbent relationship gives partial visibility but not a complete future-state scope picture.",
+      "Leadership wants the account but has limited tolerance for low-margin defensive bids."
+    ],
+    "walk_through": [
+      "The Signal Register captures the rebid hint and assigns one evidence action: confirm whether the service model is changing enough to alter staffing assumptions.",
+      "Once the team confirms likely daytime coverage expansion, the pursuit moves to Commitment Screen, where operations and pricing document whether the account remains feasible under the new labor mix.",
+      "Only after margin guardrails and review ownership are written does the organization authorize proposal kickoff, so the proposal team begins with a real offer shape instead of a collection exercise."
+    ],
+    "tradeoffs": [
+      "The organization spends a little more time upfront before calling the pursuit active.",
+      "Leaders lose some informal flexibility because exceptions must be documented."
+    ],
+    "result": "The team either declines the opportunity early with a clear rationale or enters proposal execution with a tighter operating packet, lower discovery burden, and a stronger chance of protecting margin while staying competitive."
+  },
+  "leadership_implications": [
+    "Win-rate improvement begins with better pursuit entry criteria, not with asking proposal teams to rescue ambiguous work faster.",
+    "Margin protection depends on when pricing discipline is introduced, not just on how aggressively the final number is negotiated.",
+    "Executives should measure how many pursuits reach kickoff with explicit assumptions, named owners, and documented exceptions."
+  ],
+  "conclusion": "Reactive qualification looks efficient because it creates motion quickly, but it usually converts uncertainty into hidden operating cost. Facilities-service firms improve pursuit performance when they move qualification upstream, force evidence before commitment, and give proposal teams a controlled operating packet instead of a late-stage fact-finding problem. Progressive Pursuit Intake is useful because it joins signal handling, commercial discipline, delivery feasibility, and proposal readiness into one system. AI strengthens that system when it accelerates evidence normalization and exception visibility. It weakens the system when leaders use it to justify commitment without accountability.",
+  "distillation_posts": [
+    {
+      "idea_title": "Qualification happens too late",
+      "post": "Facilities teams often think bid/no-bid is weak because leaders lack judgment. More often the problem is timing. The real decision happens after pricing assumptions and proposal labor are already underway, so the meeting is managing sunk cost instead of strategy. Better qualification starts earlier, before effort becomes evidence."
+    },
+    {
+      "idea_title": "Proposal teams inherit ambiguity",
+      "post": "Proposal groups are frequently asked to solve problems they did not create. If kickoff starts before delivery facts, pricing guardrails, and review ownership are explicit, the proposal team becomes a discovery engine. That is not speed. It is expensive rework under deadline."
+    },
+    {
+      "idea_title": "AI belongs in evidence assembly",
+      "post": "AI can make pursuit intake materially better when it normalizes fragmented signals, compares prior pursuits, and exposes missing facts. It should not own the commercial decision. Margin floors, delivery feasibility, and executive exceptions still need accountable humans."
+    },
+    {
+      "idea_title": "Document the exception",
+      "post": "If leadership wants to pursue an account that misses the normal threshold, the answer is not informal override. The answer is a written exception with the rule being broken and the reason it is justified. That preserves discipline while keeping strategy visible."
+    },
+    {
+      "idea_title": "Faster writing is not the first fix",
+      "post": "A lot of proposal improvement work starts in the wrong place. Teams ask how to draft faster when the higher-value question is how to keep ambiguous pursuits out of the proposal lane. Better intake usually creates more lift than better prose production."
+    }
+  ]
+}

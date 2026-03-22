@@ -91,3 +91,71 @@ def test_parse_rfp_text_collapses_near_duplicate_requirements() -> None:
     parsed = parse_rfp_text(sample)
     texts = [r["requirement_text"] for r in parsed["requirements"]]
     assert len(texts) == 1
+
+
+def test_parse_rfp_text_keeps_demo_structured_fields_clean() -> None:
+    sample = """
+    REQUEST FOR PROPOSALS
+    Airport Terminal Janitorial and Day Porter Services
+    Issued by: Metro Regional Airport Authority
+    Solicitation Number: MR-AA-2026-041
+    Issue Date: March 18, 2026
+
+    Questions due: March 26, 2026
+    Proposal due date: April 10, 2026 at 2:00 PM ET
+    Contract term: Three-year base term with two one-year renewal options
+    Locations: Main terminal, concourse connector, baggage claim, airport administration building
+
+    Mandatory pre-proposal walkthrough: April 1, 2026 at 9:00 AM local time at the Metro Regional Airport Authority administration lobby.
+    Evaluation criteria include technical approach, management and staffing plan, relevant airport or transportation past performance, transition and mobilization plan, and pricing.
+    The offeror shall include resumes for the contract manager and day-shift supervisor.
+    The offeror must complete Attachment A Pricing Workbook and Attachment B Certification Forms.
+    The offeror shall provide evidence of general liability, workers compensation, and umbrella insurance coverage.
+    """
+    parsed = parse_rfp_text(sample)
+    fields = parsed["structured_fields"]
+
+    assert fields["solicitation_number"] == "MR-AA-2026-041"
+    assert fields["questions_due_date"] == "March 26, 2026"
+    assert fields["proposal_due_date"] == "April 10, 2026"
+    assert fields["proposal_due_time"] == "2:00 PM ET"
+    assert fields["geography"] == [
+        "Main terminal",
+        "concourse connector",
+        "baggage claim",
+        "airport administration building",
+    ]
+    assert fields["insurance_requirements"] == [
+        "The offeror shall provide evidence of general liability, workers compensation, and umbrella insurance coverage."
+    ]
+    assert fields["mandatory_forms"] == [
+        "The offeror must complete Attachment A Pricing Workbook and Attachment B Certification Forms."
+    ]
+
+
+def test_parse_rfp_text_extracts_response_due_phrasing() -> None:
+    sample = """
+    RFP responses must be received by March 4, 2026 at 3:00 PM ET through the procurement portal.
+    Questions must be received by February 20, 2026.
+    The contractor shall provide a staffing plan.
+    """
+    parsed = parse_rfp_text(sample)
+    fields = parsed["structured_fields"]
+
+    assert parsed["deadline"] == "March 4, 2026"
+    assert fields["proposal_due_date"] == "March 4, 2026"
+    assert fields["proposal_due_time"] == "3:00 PM ET"
+    assert fields["questions_due_date"] == "February 20, 2026"
+
+
+def test_parse_rfp_text_extracts_ordinal_month_name_deadline() -> None:
+    sample = """
+    ALL BIDS MUST BE SUBMITTED VIA THE PRISM PLATFORM.
+    Bid proposals must be submitted by close of business on Tuesday, March 10th, 2026, to be considered.
+    A walk-through of the properties is scheduled to take place on Monday, March 2nd, 2026, at 10:00 AM.
+    """
+    parsed = parse_rfp_text(sample)
+    fields = parsed["structured_fields"]
+
+    assert parsed["deadline"] == "March 10, 2026"
+    assert fields["proposal_due_date"] == "March 10, 2026"

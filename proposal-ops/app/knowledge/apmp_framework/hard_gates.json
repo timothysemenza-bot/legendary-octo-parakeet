@@ -1,0 +1,56 @@
+{
+  "bucket": "hard_gates",
+  "topics": [
+    {
+      "id": "compliance_responsiveness",
+      "title": "Compliance and Responsiveness",
+      "description": "The package must address mandatory requirements, submission instructions, and stated evaluation criteria without contradiction or omission.",
+      "checks": [
+        "Every mandatory requirement is mapped to a proposal section or completed form.",
+        "Submission path, due date, due time, and mandatory meeting requirements are confirmed.",
+        "No unsupported promises appear in the client-facing draft."
+      ],
+      "default_status": "needs_revision"
+    },
+    {
+      "id": "content_plan",
+      "title": "Content Plan and Section Ownership",
+      "description": "The proposal organization, section briefs, and section ownership need to be established before drafting.",
+      "checks": [
+        "Every draft section has a defined objective and supporting requirements.",
+        "Every scorable topic has a named owner role and expected artifacts."
+      ],
+      "default_status": "needs_revision"
+    },
+    {
+      "id": "executive_summary",
+      "title": "Executive Summary Discipline",
+      "description": "The opening narrative should focus on buyer priorities, discriminators, and confidence in execution.",
+      "checks": [
+        "The executive summary reflects buyer priorities and win themes.",
+        "The executive summary avoids internal process language."
+      ],
+      "default_status": "needs_revision"
+    },
+    {
+      "id": "reviews_schedule",
+      "title": "Gate Decisions, Reviews, and Schedule",
+      "description": "The package run should reflect formal review gates and production readiness checkpoints.",
+      "checks": [
+        "Pink, red, and gold review outputs are recorded.",
+        "Pricing approval and export approval are explicit human gates."
+      ],
+      "default_status": "needs_revision"
+    },
+    {
+      "id": "document_design",
+      "title": "Page and Document Design Readiness",
+      "description": "The export should be production-friendly and easy for the proposal team to finish in Word.",
+      "checks": [
+        "The DOCX uses business-appropriate titles and headings.",
+        "The appendix and attachment set are organized for production."
+      ],
+      "default_status": "needs_revision"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "title": "Bad Draft",
+  "meta_summary": "Short summary.",
+  "abstract": "This draft is intentionally weak and too short to pass the validator.",
+  "core_thesis": "Weak qualification is bad.",
+  "system_model_name": "",
+  "problem_definition": "Too short.",
+  "current_state_analysis": "Too short.",
+  "failure_modes": [
+    {
+      "name": "One mode only",
+      "pattern": "This is not enough detail.",
+      "observable_signs": "Few signs.",
+      "operational_effect": "Poor output."
+    }
+  ],
+  "system_model": {
+    "premise": "Short premise.",
+    "components": [
+      {
+        "name": "One",
+        "purpose": "Short",
+        "inputs": "Short",
+        "outputs": "Short",
+        "owner": "Ops"
+      }
+    ],
+    "decision_logic": [
+      "One weak line."
+    ],
+    "operating_rules": [
+      "One weak rule."
+    ],
+    "artifact_blocks": []
+  },
+  "ai_enablement": {
+    "role_of_ai": "AI helps.",
+    "automate": [
+      "One"
+    ],
+    "human_control_points": [],
+    "execution_notes": [
+      "One"
+    ]
+  },
+  "implementation_path": [
+    {
+      "step_name": "One",
+      "action": "Short.",
+      "output": "Short.",
+      "owner": "Ops"
+    }
+  ],
+  "case_illustration": {
+    "scenario_label": "Short case",
+    "context": "Short.",
+    "constraints": [
+      "Short."
+    ],
+    "walk_through": [
+      "Short."
+    ],
+    "tradeoffs": [
+      "Short."
+    ],
+    "result": "Short."
+  },
+  "leadership_implications": [
+    "Short."
+  ],
+  "conclusion": "In today's fast-paced world this is a game changer."
+}

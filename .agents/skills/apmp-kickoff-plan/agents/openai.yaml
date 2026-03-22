@@ -1,0 +1,3 @@
+display_name: APMP Kickoff Plan
+short_description: Build kickoff-ready proposal plans, schedules, roles, and launch materials.
+default_prompt: Use $apmp-kickoff-plan to prepare or refresh the kickoff package for this pursuit, including the proposal schedule, roles, outline, and launch guidance for the team.

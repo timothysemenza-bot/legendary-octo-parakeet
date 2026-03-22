@@ -1,0 +1,153 @@
+{
+  "assets": [
+    {
+      "id": "company-overview-airside-facilities",
+      "title": "Boss Key Facilities Services Overview",
+      "asset_type": "company_boilerplate",
+      "approval_status": "approved",
+      "effective_date": "2026-01-15",
+      "expiry_date": "2027-01-15",
+      "client_tags": ["public-sector", "airport", "facilities"],
+      "service_tags": ["janitorial", "day-porter", "quality-assurance"],
+      "region_tags": ["mid-atlantic", "national"],
+      "source_of_truth": "Approved marketing narrative",
+      "body": "Boss Key delivers disciplined janitorial and day porter operations with visible supervision, documented quality control, and issue-response accountability across high-traffic public environments."
+    },
+    {
+      "id": "executive-summary-operations-control",
+      "title": "Executive Summary Operations Control Block",
+      "asset_type": "executive_summary_block",
+      "approval_status": "approved",
+      "effective_date": "2026-01-20",
+      "expiry_date": "2027-01-20",
+      "client_tags": ["public-sector", "airport"],
+      "service_tags": ["janitorial", "mobilization"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved pursuit messaging",
+      "body": "Our approach emphasizes service continuity, visible leadership, and measurable daily quality control so the buyer receives consistent facility presentation and rapid issue resolution from day one."
+    },
+    {
+      "id": "service-description-janitorial-dayporter",
+      "title": "Janitorial and Day Porter Service Description",
+      "asset_type": "service_description",
+      "approval_status": "approved",
+      "effective_date": "2026-01-10",
+      "expiry_date": "2027-01-10",
+      "client_tags": ["airport", "transportation", "multi-site"],
+      "service_tags": ["janitorial", "day-porter", "disinfection"],
+      "region_tags": ["mid-atlantic", "southeast"],
+      "source_of_truth": "Approved service library",
+      "body": "Standard service scope includes routine cleaning, high-touch disinfection, day porter support, restroom replenishment, trash and recycling handling, inspection logging, and irregular operations response."
+    },
+    {
+      "id": "resume-operations-director",
+      "title": "Operations Director Resume Summary",
+      "asset_type": "resume",
+      "approval_status": "approved",
+      "effective_date": "2026-02-01",
+      "expiry_date": "2026-12-31",
+      "client_tags": ["airport", "public-sector"],
+      "service_tags": ["operations", "mobilization"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved resume packet",
+      "body": "Senior operations leader with multi-site janitorial oversight, mobilization planning, quality audit management, and public-facing facility support experience."
+    },
+    {
+      "id": "resume-account-manager",
+      "title": "Account Manager Resume Summary",
+      "asset_type": "resume",
+      "approval_status": "approved",
+      "effective_date": "2026-02-01",
+      "expiry_date": "2026-12-31",
+      "client_tags": ["airport", "public-sector"],
+      "service_tags": ["account-management", "reporting"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved resume packet",
+      "body": "Account manager with responsibility for daily service coordination, customer reporting, KPI tracking, and issue escalation management."
+    },
+    {
+      "id": "reference-regional-airport",
+      "title": "Regional Airport Reference",
+      "asset_type": "reference",
+      "approval_status": "approved",
+      "effective_date": "2026-02-10",
+      "expiry_date": "2026-10-31",
+      "client_tags": ["airport"],
+      "service_tags": ["janitorial", "day-porter", "quality-assurance"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved reference sheet",
+      "body": "Comparable airport environment with daily janitorial, day porter, and quality inspection reporting across public and back-of-house areas."
+    },
+    {
+      "id": "reference-civic-center",
+      "title": "Civic Center Reference",
+      "asset_type": "reference",
+      "approval_status": "approved",
+      "effective_date": "2026-02-10",
+      "expiry_date": "2026-10-31",
+      "client_tags": ["public-sector", "high-traffic"],
+      "service_tags": ["janitorial", "mobilization"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved reference sheet",
+      "body": "High-traffic public facility contract highlighting rapid mobilization, staffing discipline, and issue-response reporting."
+    },
+    {
+      "id": "local-office-profile-richmond",
+      "title": "Richmond Area Operations Profile",
+      "asset_type": "local_office_profile",
+      "approval_status": "approved",
+      "effective_date": "2026-01-12",
+      "expiry_date": "2026-12-31",
+      "client_tags": ["mid-atlantic", "airport"],
+      "service_tags": ["operations", "staffing"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved office profile",
+      "body": "Regional operations coverage includes on-site leadership, field supervision, recruiting support, and rapid escalation resources for airport and public-sector facilities."
+    },
+    {
+      "id": "insurance-certificate-summary",
+      "title": "Insurance and Certification Summary",
+      "asset_type": "insurance",
+      "approval_status": "approved",
+      "effective_date": "2026-01-01",
+      "expiry_date": "2026-12-31",
+      "client_tags": ["public-sector"],
+      "service_tags": ["janitorial"],
+      "region_tags": ["national"],
+      "source_of_truth": "Risk and compliance file",
+      "body": "Approved insurance file includes general liability, workers compensation, automobile liability, and umbrella coverage summaries ready for proposal packaging."
+    },
+    {
+      "id": "price-profile-airport-janitorial",
+      "title": "Airport Janitorial Price Profile",
+      "asset_type": "pricing_profile",
+      "approval_status": "approved",
+      "effective_date": "2026-01-05",
+      "expiry_date": "2026-12-31",
+      "client_tags": ["airport"],
+      "service_tags": ["janitorial", "day-porter"],
+      "region_tags": ["mid-atlantic"],
+      "source_of_truth": "Approved estimating sheet",
+      "rate_card": {
+        "day_porter": {"hourly_rate": 24.5, "burden_factor": 1.28, "markup_factor": 1.18},
+        "janitor": {"hourly_rate": 22.0, "burden_factor": 1.28, "markup_factor": 1.18},
+        "supervisor": {"hourly_rate": 31.0, "burden_factor": 1.24, "markup_factor": 1.16},
+        "project_manager": {"hourly_rate": 42.0, "burden_factor": 1.22, "markup_factor": 1.14}
+      },
+      "body": "Airport-oriented pricing profile with approved labor categories, burden assumptions, and markup controls."
+    },
+    {
+      "id": "template-transmittal-letter",
+      "title": "Transmittal Letter Template",
+      "asset_type": "form_template",
+      "approval_status": "approved",
+      "effective_date": "2026-01-08",
+      "expiry_date": "2027-01-08",
+      "client_tags": ["public-sector"],
+      "service_tags": ["proposal-production"],
+      "region_tags": ["national"],
+      "source_of_truth": "Proposal production template",
+      "body": "Standard transmittal letter shell for proposal packaging and signature routing."
+    }
+  ]
+}

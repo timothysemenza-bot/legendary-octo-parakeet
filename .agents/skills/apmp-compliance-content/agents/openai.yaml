@@ -1,0 +1,3 @@
+display_name: APMP Compliance + Content
+short_description: Build compliance control, requirements baselines, and writer-ready content plans.
+default_prompt: Use $apmp-compliance-content to shred the requirements, update the compliance matrix, and produce an annotated outline and section guidance for the current proposal.

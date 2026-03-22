@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <div class="hero-grid">
+    <div class="stack">
+      <div>
+        <p class="eyebrow">Company OS Wave 1</p>
+        <h2>Engagement Inbox</h2>
+        <p>
+          Manual-first intake for approved exports and file-drop sources. AI helps capture, classify, and project;
+          humans keep control over approvals and any external action.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="status-chip">Proposal-ops is the source of truth</span>
+        <span class="status-chip neutral">CSV files are generated projections</span>
+        <span class="status-chip warn">No autonomous outbound execution</span>
+      </div>
+    </div>
+    <aside class="operator-card">
+      <h3>Operator Controls</h3>
+      <form method="post" action="/company-os/run-intake" class="stack">
+        <input type="hidden" name="next_url" value="/company-os/inbox" />
+        <label>Source config override
+          <input type="text" name="source_config_path" placeholder="Optional path" />
+        </label>
+        <label>Projection root override
+          <input type="text" name="marketing_agents_root" placeholder="Optional path" />
+        </label>
+        <label>Owner
+          <input type="text" name="owner" value="Timmy Semenza" />
+        </label>
+        <button type="submit">Run Intake</button>
+      </form>
+      <form method="post" action="/company-os/run-projections" class="stack">
+        <input type="hidden" name="next_url" value="/company-os/inbox" />
+        <label>Projection root override
+          <input type="text" name="marketing_agents_root" placeholder="Optional path" />
+        </label>
+        <button type="submit">Refresh Projections</button>
+      </form>
+      <p class="muted"><code>npm run os:intake</code> still works and now routes through proposal-ops.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="metric-grid">
+  <article class="metric-card">
+    <span class="metric-label">Recent Signals</span>
+    <strong class="metric-value">{{ signals|length }}</strong>
+    <span class="metric-note">Most recent captured items from approved sources</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Pending Approvals</span>
+    <strong class="metric-value">{{ approvals_open }}</strong>
+    <span class="metric-note">Human gates waiting on review</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Open Commitments</span>
+    <strong class="metric-value">{{ commitments_open }}</strong>
+    <span class="metric-note">Follow-through still open after meetings</span>
+  </article>
+</section>
+
+<section class="compact-grid">
+  <article class="operator-card">
+    <h3>Guardrails</h3>
+    <ul class="activity-list compact">
+      {% for item in guardrails %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+  <article class="operator-card">
+    <h3>Navigation</h3>
+    <ul class="activity-list compact">
+      <li><a href="/company-os/engagements">Engagement Register</a></li>
+      <li><a href="/company-os/approvals">Approval Queue</a></li>
+      <li><a href="/company-os/founder-brief">Founder Brief</a></li>
+      <li><a href="/company-os/scoreboard">Executive Scoreboard</a></li>
+    </ul>
+  </article>
+</section>
+
+<section>
+  <div class="section-heading">
+    <div>
+      <h3>Recent Signals</h3>
+      <p class="muted">Every item carries provenance so operators can trace how the record was created.</p>
+    </div>
+  </div>
+  {% if signals %}
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Client</th>
+        <th>Route</th>
+        <th>Summary</th>
+        <th>Agent</th>
+        <th>Provenance</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for signal in signals %}
+      <tr>
+        <td>{{ signal.signal_date }}</td>
+        <td>{{ signal.client_name }}</td>
+        <td><span class="status-chip neutral">{{ signal.route }}</span></td>
+        <td>{{ signal.summary }}</td>
+        <td>{{ signal.agent_id }} | {{ signal.run_id }}</td>
+        <td><code>{{ signal.provenance_ref }}</code></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No source signals have been captured yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{
+  "topic": "Bid/No-Bid Decision Systems in Facilities Services",
+  "thesis": "Most organizations lose deals before the RFP is released because qualification models activate after real resource commitments have already been made.",
+  "target_audience": "VP Sales, Proposal Director",
+  "industry_context": "Janitorial / Facilities Management",
+  "artifact_focus": "Intake scoring model",
+  "length": 3000,
+  "include_distillation": false,
+  "model": "gpt-5",
+  "timeout_sec": 300,
+  "prompt_only": false
+}

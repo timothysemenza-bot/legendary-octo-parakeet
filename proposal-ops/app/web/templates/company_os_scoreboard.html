@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <div class="hero-grid">
+    <div>
+      <p class="eyebrow">Company OS</p>
+      <h2>Executive Scoreboard</h2>
+      <p>Read-only commercial and engagement views for pipeline, cash, and risk signals.</p>
+    </div>
+    <aside class="operator-card">
+      <form method="post" action="/company-os/scoreboard/generate" class="stack">
+        <input type="hidden" name="next_url" value="/company-os/scoreboard" />
+        <button type="submit">Refresh Snapshot</button>
+      </form>
+      <ul class="activity-list compact">
+        {% for item in guardrails %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+{% if snapshot %}
+<section class="metric-grid">
+  <article class="metric-card">
+    <span class="metric-label">Pipeline</span>
+    <strong class="metric-value">{{ snapshot.pipeline_value|currency }}</strong>
+    <span class="metric-note">Weighted {{ snapshot.weighted_pipeline|currency }}</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Meetings Booked</span>
+    <strong class="metric-value">{{ snapshot.meetings_booked }}</strong>
+    <span class="metric-note">{{ snapshot.proposal_count }} proposal-stage pursuits</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Overdue Invoices</span>
+    <strong class="metric-value">{{ snapshot.overdue_invoices }}</strong>
+    <span class="metric-note">{{ snapshot.total_ar_over_30|currency }} over 30 days</span>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Urgent Risks</span>
+    <strong class="metric-value">{{ snapshot.urgent_risks }}</strong>
+    <span class="metric-note">Generated {{ snapshot.snapshot_date }}</span>
+  </article>
+</section>
+
+<section class="compact-grid">
+  <article class="data-card">
+    <h3>Revenue Forecast</h3>
+    <ul class="activity-list">
+      {% for row in revenue_rows %}
+      <li>{{ row.account_name }} | {{ row.stage }} | {{ row.weighted_amount|currency }} | {{ row.expected_close_date or "TBD" }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+  <article class="data-card">
+    <h3>Cashflow Forecast</h3>
+    <ul class="activity-list">
+      {% for row in cash_rows %}
+      <li>{{ row.week_start }} | cash in {{ row.projected_cash_in|currency }} | ending {{ row.ending_cash_balance|currency }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+</section>
+{% else %}
+<section><p class="muted">No executive scoreboard snapshot has been generated yet.</p></section>
+{% endif %}
+{% endblock %}

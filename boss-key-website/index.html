@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Government Opportunity Intelligence and Capture Advisory | Boss Key LLC</title>
-  <meta name="description" content="Boss Key helps contractors, service providers, and nonprofits see public-sector opportunities before the bid is posted through policy intelligence, opportunity forecasting, capture strategy, and proposal execution support.">
+  <title>Find Better Government Opportunities Sooner | Boss Key LLC</title>
+  <meta name="description" content="Boss Key helps service businesses and nonprofits spot likely public-sector work sooner, choose the right targets, and stay organized when a live bid appears.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,8 +134,8 @@
     }
     .hero {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 16px;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 18px;
       align-items: stretch;
     }
     .panel, .card {
@@ -144,51 +144,145 @@
       background: linear-gradient(180deg, rgba(18, 23, 32, 0.96), rgba(13, 17, 24, 0.96));
       padding: 16px;
     }
-    .hero-metrics {
+    .hero-highlights {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 14px;
+      margin-top: 18px;
     }
-    .metric {
+    .highlight-row {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      gap: 12px;
+      align-items: start;
       border: 1px solid #334052;
-      border-radius: 12px;
-      padding: 12px;
-      background: #111722;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(17, 23, 34, 0.9);
     }
-    .metric strong {
+    .highlight-row strong,
+    .outcome-mini strong,
+    .step-card strong {
       display: block;
       margin-bottom: 4px;
-      font-size: 1.15rem;
       color: #fff;
     }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 7px;
+    }
+    .dot-blue { background: #4d8cff; box-shadow: 0 0 18px rgba(77, 140, 255, 0.55); }
+    .dot-red { background: #ff5c72; box-shadow: 0 0 18px rgba(255, 92, 114, 0.45); }
+    .dot-gold { background: #ffcf70; box-shadow: 0 0 18px rgba(255, 207, 112, 0.4); }
     .buttons {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 14px;
     }
-    .grid-2, .grid-3 {
+    .grid-2, .grid-3, .scenario-grid, .compare, .cta-split, .outcome-grid {
       display: grid;
       gap: 12px;
     }
     .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .timeline {
+    .scenario-grid,
+    .outcome-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .compare,
+    .cta-split { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .signal-board {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(45, 108, 223, 0.18), transparent 34%),
+        radial-gradient(circle at 10% 90%, rgba(191, 32, 52, 0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18, 23, 32, 0.98), rgba(12, 16, 23, 0.98));
+    }
+    .signal-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .signal-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid #385171;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #d8e6ff;
+      background: rgba(21, 31, 47, 0.88);
+    }
+    .outcome-card {
+      border: 1px solid rgba(77, 140, 255, 0.25);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 12px;
+      background: linear-gradient(155deg, rgba(31, 76, 159, 0.18), rgba(17, 23, 34, 0.9));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+    .outcome-card h3 {
+      font-size: 1.35rem;
+      line-height: 1.15;
+    }
+    .outcome-mini,
+    .scenario-card,
+    .compare-panel,
+    .step-card,
+    .cta-card {
+      border: 1px solid #34404f;
+      border-radius: 16px;
+      background: rgba(16, 22, 31, 0.95);
+      padding: 16px;
+    }
+    .compare-before {
+      background: linear-gradient(180deg, rgba(53, 16, 25, 0.5), rgba(19, 21, 28, 0.96));
+      border-color: rgba(191, 32, 52, 0.3);
+    }
+    .compare-after {
+      background: linear-gradient(180deg, rgba(18, 37, 69, 0.48), rgba(19, 21, 28, 0.96));
+      border-color: rgba(45, 108, 223, 0.32);
+    }
+    .compare-panel ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 12px;
+    }
+    .compare-panel li {
+      position: relative;
+      padding-left: 18px;
+      color: #d9dee8;
+    }
+    .compare-panel li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.8;
+    }
+    .step-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 12px;
+    }
+    .step-stack {
       display: grid;
       gap: 10px;
+      margin-top: 14px;
     }
-    .timeline-step {
+    .step-card {
       display: grid;
       grid-template-columns: 44px 1fr;
       gap: 12px;
       align-items: start;
-      border: 1px solid #304257;
-      border-radius: 14px;
-      padding: 14px;
-      background: #111722;
     }
-    .timeline-step strong:first-child,
     .step-num {
       display: inline-flex;
       align-items: center;
@@ -222,6 +316,11 @@
       border: 1px solid rgba(45, 108, 223, 0.32);
       color: var(--accent-2-soft);
     }
+    .small-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
     .small { color: var(--muted); font-size: 0.9rem; }
     footer {
       border-top: 1px solid var(--line);
@@ -230,7 +329,7 @@
       padding: 16px 0 26px;
     }
     @media (max-width: 920px) {
-      .hero, .grid-2, .grid-3, .hero-metrics { grid-template-columns: 1fr; }
+      .hero, .grid-2, .grid-3, .scenario-grid, .compare, .cta-split, .outcome-grid, .step-layout { grid-template-columns: 1fr; }
       .buttons .btn { width: 100%; }
     }
   </style>
@@ -242,181 +341,162 @@
     <nav class="links" aria-label="Main navigation">
       <a href="./services.html">Services</a>
       <a href="./facilities.html">Facilities</a>
-      <a href="./coaching.html">Policy Intelligence</a>
-      <a href="./engagements.html">Capture + Proposal</a>
+      <a href="./coaching.html">Market Signals</a>
+      <a href="./engagements.html">Pursuits + Proposals</a>
       <a href="./about.html">About</a>
       <a href="./proof.html">Proof</a>
       <a href="./faq.html">FAQ</a>
       <a href="./contact.html">Contact</a>
     </nav>
-    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+    <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
   </div>
 </header>
 
 <main class="wrap">
   <section class="hero">
     <article>
-      <span class="eyebrow">Early-lifecycle government opportunity advisory</span>
-      <h1>See public-sector opportunities before the bid is posted.</h1>
-      <p>Boss Key helps contractors, service providers, and nonprofits act earlier in the government contracting lifecycle. We combine policy intelligence, opportunity forecasting, capture strategy, and proposal execution support so clients can position months before formal procurements are released.</p>
-      <ul>
-        <li>Track policy, budget, governance, and procurement-adjacent signals before the market reacts.</li>
-        <li>Turn early signals into a forecasted opportunity map and pre-RFP action plan.</li>
-        <li>Carry the same advisory work forward into capture strategy and proposal execution when the procurement goes live.</li>
-      </ul>
+      <span class="eyebrow">Public-sector growth support</span>
+      <h1>Find better government opportunities sooner.</h1>
+      <p>Boss Key helps teams see likely work earlier, choose better targets, and steady live bids before they turn into deadline chaos.</p>
       <div class="buttons">
-        <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
-        <a class="btn btn-secondary" href="./services.html">View service architecture</a>
+        <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
+        <a class="btn btn-secondary" href="./services.html">See how it works</a>
       </div>
-      <div class="hero-metrics">
-        <div class="metric"><strong>Earlier visibility</strong><span>Policy and funding signals interpreted before formal release.</span></div>
-        <div class="metric"><strong>Cleaner qualification</strong><span>Forecasted opportunities filtered before costly bid reaction begins.</span></div>
-        <div class="metric"><strong>Stronger capture timing</strong><span>Stakeholder maps and positioning themes built before the procurement opens.</span></div>
-        <div class="metric"><strong>Downstream execution continuity</strong><span>Proposal support remains available once the solicitation is live.</span></div>
+      <div class="hero-highlights">
+        <div class="highlight-row">
+          <div class="dot dot-blue" aria-hidden="true"></div>
+          <div><strong>Earlier visibility</strong><span>Stop waiting for the posted bid to tell you what matters.</span></div>
+        </div>
+        <div class="highlight-row">
+          <div class="dot dot-red" aria-hidden="true"></div>
+          <div><strong>Better target choices</strong><span>Put time into the opportunities that actually fit your team.</span></div>
+        </div>
+        <div class="highlight-row">
+          <div class="dot dot-gold" aria-hidden="true"></div>
+          <div><strong>Calmer live bids</strong><span>Bring more structure into the handoff before the deadline gets ugly.</span></div>
+        </div>
       </div>
     </article>
-    <aside class="panel">
-      <span class="tag tag-blue">The Boss Key model</span>
-      <p><strong>Policy Intelligence -> Opportunity Forecasting -> Capture Strategy -> Proposal Execution</strong></p>
-      <p>Most proposal consultancies enter at the posted-RFP stage. Boss Key is designed to start earlier, when agency priorities, funding shifts, and market timing still create positioning advantage.</p>
-      <p class="small">Built for teams that want a clearer path from public-sector movement to qualified opportunity, capture action, and proposal readiness.</p>
+    <aside class="panel signal-board">
+      <span class="tag tag-blue">What better looks like</span>
+      <div class="signal-cloud">
+        <span class="signal-pill">Budgets move</span>
+        <span class="signal-pill">Contracts turn</span>
+        <span class="signal-pill">Programs shift</span>
+        <span class="signal-pill">Teams act earlier</span>
+      </div>
+      <div class="outcome-card">
+        <h3>See the signal. Act before the scramble.</h3>
+        <p>Boss Key turns public movement into a practical read on what may be coming and what deserves attention now.</p>
+      </div>
+      <div class="outcome-grid">
+        <div class="outcome-mini"><strong>Less guessing</strong><span>Cleaner calls on what to watch.</span></div>
+        <div class="outcome-mini"><strong>Less waste</strong><span>Fewer bad-fit pursuits soaking up time.</span></div>
+        <div class="outcome-mini"><strong>More control</strong><span>Clearer handoffs once the bid goes live.</span></div>
+      </div>
     </aside>
   </section>
 
   <section>
-    <h2>Why this exists</h2>
-    <div class="grid-3">
-      <article class="card">
-        <span class="tag tag-red">Reactive buyers lose time</span>
-        <p>Most contractors wait for a posted solicitation, which means positioning, teaming, and agency understanding all begin too late.</p>
+    <h2>When teams call Boss Key</h2>
+    <div class="scenario-grid">
+      <article class="scenario-card">
+        <span class="tag tag-blue">Scenario 1</span>
+        <h3>We keep hearing about work too late.</h3>
+        <p>Start with a market watch or a focused scan so the team can see likely opportunities before the rush.</p>
       </article>
-      <article class="card">
-        <span class="tag tag-blue">Signals exist earlier</span>
-        <p>Budgets, council agendas, appropriations, rebid windows, program changes, and public governance activity often point to buying events months ahead.</p>
+      <article class="scenario-card">
+        <span class="tag tag-red">Scenario 2</span>
+        <h3>We are chasing too much.</h3>
+        <p>Start with target choice and qualification help so energy goes to the opportunities with the best fit.</p>
       </article>
-      <article class="card">
-        <span class="tag tag-red">Boss Key bridges the gap</span>
-        <p>Boss Key translates those signals into an opportunity forecast, then turns that forecast into practical capture and proposal support.</p>
+      <article class="scenario-card">
+        <span class="tag tag-blue">Scenario 3</span>
+        <h3>The bid is live and things are messy.</h3>
+        <p>Start with pursuit or proposal support to tighten ownership, reviews, and delivery before the deadline closes in.</p>
       </article>
     </div>
   </section>
 
   <section>
-    <h2>How Boss Key works</h2>
-    <div class="timeline">
-      <div class="timeline-step">
-        <div class="step-num">1</div>
-        <div>
-          <h3>Policy and procurement intelligence</h3>
-          <p>Monitor budgets, legislation, agency priorities, council and board agendas, program changes, contract expirations, rebid timing, and public operating signals.</p>
+    <h2>What changes</h2>
+    <div class="compare">
+      <article class="compare-panel compare-before">
+        <span class="tag tag-red">Before</span>
+        <h3>Reactive growth work</h3>
+        <ul>
+          <li>Bids appear late and force rushed decisions.</li>
+          <li>Teams chase too many weak-fit opportunities.</li>
+          <li>Ops, pricing, and proposal work collide under pressure.</li>
+        </ul>
+      </article>
+      <article class="compare-panel compare-after">
+        <span class="tag tag-blue">After</span>
+        <h3>Sharper, calmer execution</h3>
+        <ul>
+          <li>Likely work is visible earlier and easier to read.</li>
+          <li>Leadership can choose where to focus faster.</li>
+          <li>Live bids have clearer ownership and cleaner handoffs.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="step-layout">
+    <article>
+      <h2>How the first step works</h2>
+      <p>Bring one real growth question. Boss Key helps narrow the next move fast instead of handing you a long report to decode.</p>
+      <div class="step-stack">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <strong>Quick briefing</strong>
+            <span>Talk through one market, one pursuit, or one problem that keeps repeating.</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <strong>Pick the smallest useful move</strong>
+            <span>Start with a watchlist, a focused sprint, or live support depending on timing.</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <strong>Use it right away</strong>
+            <span>The work should help the next decision, the next outreach move, or the next proposal.</span>
+          </div>
         </div>
       </div>
-      <div class="timeline-step">
-        <div class="step-num">2</div>
-        <div>
-          <h3>Opportunity forecasting</h3>
-          <p>Translate those signals into likely buying events, timing hypotheses, target agencies, and a realistic opportunity watchlist.</p>
-        </div>
+      <p class="small-note">Most teams do not need a giant transformation. They need a clearer read and a practical first move.</p>
+    </article>
+    <aside class="panel">
+      <span class="tag tag-red">Pick your lane</span>
+      <div class="cta-split">
+        <article class="cta-card">
+          <h3>Facilities teams</h3>
+          <p>Use the facilities lane if rebids, handoffs, and live proposal pressure are the main issue.</p>
+          <div class="buttons">
+            <a class="btn btn-secondary" href="./facilities.html">Open facilities page</a>
+            <a class="btn btn-secondary" href="./facilities-diagnostic.html">Run the diagnostic</a>
+          </div>
+        </article>
+        <article class="cta-card">
+          <h3>Everyone else</h3>
+          <p>Bring one real growth question and Boss Key will help narrow the right first move.</p>
+          <div class="buttons">
+            <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
+            <a class="btn btn-secondary" href="./contact.html?offering=opportunity-briefing">Send an inquiry</a>
+          </div>
+        </article>
       </div>
-      <div class="timeline-step">
-        <div class="step-num">3</div>
-        <div>
-          <h3>Capture strategy</h3>
-          <p>Build stakeholder maps, positioning themes, pursuit decisions, and pre-RFP action plans before the procurement formally opens.</p>
-        </div>
-      </div>
-      <div class="timeline-step">
-        <div class="step-num">4</div>
-        <div>
-          <h3>Proposal execution</h3>
-          <p>Support proposal architecture, compliance framing, pricing coordination, review strategy, and AI-assisted proposal operations once the RFP is live.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>The two-partner model</h2>
-    <div class="grid-2">
-      <article class="card">
-        <span class="tag tag-blue">Partner 1</span>
-        <h3>Capture and proposal strategy</h3>
-        <p>Proposal architecture, capture strategy, pricing support, proposal execution discipline, and AI-assisted proposal operations.</p>
-      </article>
-      <article class="card">
-        <span class="tag tag-red">Partner 2</span>
-        <h3>Policy and program intelligence</h3>
-        <p>Legislative and regulatory analysis, program interpretation, stakeholder mapping, agency-priority analysis, and upstream signal interpretation.</p>
-      </article>
-    </div>
-  </section>
-
-  <section>
-    <h2>Where we are especially useful</h2>
-    <div class="grid-3">
-      <article class="card"><h3>Facilities and municipal service contractors</h3><p>Janitorial, EVS, day porter, maintenance, staffing, and operational support providers working in state and local markets.</p></article>
-      <article class="card"><h3>Service providers and nonprofits</h3><p>Healthcare, workforce, education, human services, and mission-driven operators pursuing government-funded work.</p></article>
-      <article class="card"><h3>Public-sector market entrants</h3><p>Technology vendors and specialty providers that need earlier visibility and a sharper capture path.</p></article>
-    </div>
-    <p class="small">Especially effective for regional public-sector markets where budgets, board activity, rebid cycles, and operating pressure create visible buying signals.</p>
-  </section>
-
-  <section>
-    <h2>First wedge: facilities contractors</h2>
-    <div class="grid-2">
-      <article class="card">
-        <span class="tag tag-blue">New lane</span>
-        <h3>Facilities revenue stack</h3>
-        <p>Boss Key now has a facilities-specific path for janitorial, EVS, day porter, and maintenance contractors that need earlier rebid visibility, cleaner qualification discipline, and a stronger capture-to-proposal handoff.</p>
-      </article>
-      <article class="card">
-        <span class="tag tag-red">Start here</span>
-        <p>Use the facilities page for the full buyer path, the Facilities Pursuit Diagnostic for route logic, and the facilities proof pack for referral follow-up.</p>
-        <div class="buttons">
-          <a class="btn btn-secondary" href="./facilities.html">Explore the facilities lane</a>
-          <a class="btn btn-secondary" href="./facilities-diagnostic.html">Request the Facilities Pursuit Diagnostic</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section>
-    <h2>Start with the minimum viable engagement</h2>
-    <div class="grid-2">
-      <article class="card">
-        <span class="tag tag-blue">Entry offer</span>
-        <h3>Opportunity Foresight Sprint</h3>
-        <p>A 3-4 week paid sprint that produces a target-market signal scan, likely opportunity forecast, top-priority pursuit shortlist, and capture brief for the most actionable targets.</p>
-      </article>
-      <article class="card">
-        <span class="tag tag-red">Expansion path</span>
-        <h3>Retainer -> Capture -> Proposal</h3>
-        <p>The sprint is designed to convert into a recurring intelligence retainer, opportunity-specific capture strategy, and downstream proposal execution support when formal procurement begins.</p>
-      </article>
-    </div>
-  </section>
-
-  <section>
-    <h2>What we monitor</h2>
-    <div class="grid-3">
-      <article class="card"><h3>Funding signals</h3><p>Budgets, appropriations, capital plans, bond programs, and pass-through funding that indicate likely buying capacity.</p></article>
-      <article class="card"><h3>Governance signals</h3><p>Council agendas, board meetings, committee activity, public authority approvals, audits, and operating controversies.</p></article>
-      <article class="card"><h3>Procurement signals</h3><p>Contract expirations, rebid windows, amendments, pre-solicitation notices, forecast schedules, and vendor outreach activity.</p></article>
-    </div>
-  </section>
-
-  <section>
-    <h2>Next step</h2>
-    <p>If your public-sector pipeline still starts at the posted-RFP stage, start earlier with an opportunity briefing.</p>
-    <div class="buttons">
-      <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
-      <a class="btn btn-secondary" href="./contact.html?offering=opportunity-briefing">Request a briefing</a>
-    </div>
+    </aside>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">Boss Key LLC | Government opportunity intelligence | Capture advisory | Proposal execution support</div>
+  <div class="wrap">Boss Key LLC | Earlier opportunity visibility | Better pursuit choices | Practical proposal support</div>
 </footer>
 
 <script>

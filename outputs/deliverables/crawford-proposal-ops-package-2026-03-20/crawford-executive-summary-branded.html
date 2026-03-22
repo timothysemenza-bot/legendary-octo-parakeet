@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crawford Executive Summary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    @page { size: Letter; margin: 0; }
+    :root {
+      --craw-blue: #204486;
+      --craw-bright: #0071b8;
+      --craw-magenta: #df195c;
+      --ink: #17303d;
+      --muted: #556670;
+      --line: #d6e0ea;
+      --panel: #f3f7fb;
+      --panel-2: #eef4fb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #dfe6ee;
+      color: var(--ink);
+      font-family: "Roboto", "Segoe UI", Arial, sans-serif;
+      line-height: 1.42;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.08;
+      font-family: "Roboto Slab", Georgia, serif;
+    }
+    p { margin: 0 0 9px; }
+    .sheet {
+      position: relative;
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      padding: 0.5in 0.58in 0.5in;
+      background: #fff;
+      overflow: hidden;
+    }
+    .top-rule {
+      height: 10px;
+      margin: -0.5in -0.58in 24px;
+      background: linear-gradient(90deg, var(--craw-blue) 0%, var(--craw-bright) 72%, var(--craw-magenta) 100%);
+    }
+    .brand-row,
+    .meta-row,
+    .grid-3,
+    .grid-2 {
+      display: grid;
+      gap: 14px;
+    }
+    .brand-row { grid-template-columns: 1.2fr 0.8fr; align-items: start; }
+    .meta-row { grid-template-columns: repeat(3, 1fr); margin-top: 14px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); margin-top: 16px; }
+    .grid-2 { grid-template-columns: 1.06fr 0.94fr; margin-top: 16px; }
+    .logo { width: 230px; max-width: 100%; }
+    .boss {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: #8f123e;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .boss img { width: 22px; height: 22px; }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(32, 68, 134, 0.08);
+      color: var(--craw-blue);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: 31px;
+      color: var(--craw-blue);
+      max-width: none;
+      margin-bottom: 12px;
+    }
+    .lede {
+      font-size: 14px;
+      color: #223a47;
+      max-width: 6.9in;
+    }
+    .meta,
+    .card,
+    .summary-box,
+    .pilot-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .meta,
+    .card,
+    .summary-box,
+    .pilot-box { padding: 14px 16px; }
+    .meta strong,
+    .card strong,
+    .pilot-box strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--craw-blue);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .meta p,
+    .card p,
+    .pilot-box p { font-size: 11px; color: var(--muted); }
+    .summary-box {
+      margin-top: 20px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(32, 68, 134, 0.06) 0%, rgba(0, 113, 184, 0.02) 60%, rgba(223, 25, 92, 0.05) 100%);
+    }
+    .summary-box strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--craw-magenta);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .summary-box p {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.34;
+      color: var(--ink);
+    }
+    .section-title {
+      font-size: 22px;
+      color: var(--craw-blue);
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .footer {
+      position: absolute;
+      left: 0.58in;
+      right: 0.58in;
+      bottom: 0.28in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #6c7d88;
+      font-size: 10px;
+    }
+    .page-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--craw-blue);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <div class="brand-row">
+      <div>
+        <img class="logo" src="./assets/crawford-logo-blue.png" alt="Crawford & Company logo">
+        <div class="boss">
+          <img src="./assets/boss-key-logo-refined.svg" alt="Boss Key logo">
+          <span>Prepared by Boss Key LLC</span>
+        </div>
+      </div>
+      <div class="meta">
+        <strong>Prepared For</strong>
+        <p>Marc Cunningham and Crawford &amp; Company growth, proposal, and operational stakeholders</p>
+        <strong style="margin-top: 10px;">Date</strong>
+        <p>March 20, 2026</p>
+      </div>
+    </div>
+
+    <span class="eyebrow">Executive Summary</span>
+    <h1>Proposal operations modernization<br>for a more reliable<br>growth-to-proposal chain.</h1>
+    <p class="lede">Boss Key helps growth and proposal leaders tighten the chain between qualification, capture thinking, pricing support, handoffs, review discipline, content governance, and execution so automation can later be used with greater confidence.</p>
+
+    <div class="summary-box">
+      <strong>Core argument</strong>
+      <p>Most proposal organizations do not need more boilerplate. They need a stronger operating chain upstream of proposal execution.</p>
+    </div>
+
+    <div class="meta-row">
+      <div class="meta">
+        <strong>What usually fails</strong>
+        <p>Strategy arrives late, proposal joins under compression, pricing turns reactive, executive reviews become fire drills, and reusable content is not consistently trustworthy.</p>
+      </div>
+      <div class="meta">
+        <strong>What automation-readiness means</strong>
+        <p>Opportunities are qualified earlier, intake is structured, source content is current and owner-backed, and reusable knowledge objects can be retrieved with confidence.</p>
+      </div>
+      <div class="meta">
+        <strong>Why this matters</strong>
+        <p>The payoff is not just faster drafting. It is better drafts, less rework, less executive thrash, and more confidence in what the team is reusing.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Boss Key's three linked layers</h2>
+    <div class="grid-3">
+      <div class="card">
+        <strong>Operating</strong>
+        <p>Qualification criteria, structured intake, role clarity, kickoff discipline, review cadence, and escalation paths.</p>
+      </div>
+      <div class="card">
+        <strong>Knowledge</strong>
+        <p>Content inventory, repository architecture, taxonomy, source-of-truth mapping, proof-point governance, and stale-content controls.</p>
+      </div>
+      <div class="card">
+        <strong>Automation</strong>
+        <p>Retrieval-ready modules, governed repository approach, structured prompts and templates, and human-in-the-loop review.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="pilot-box">
+        <strong>Recommended start</strong>
+        <p>The cleanest first move for Crawford is a focused proposal-ops diagnostic and automation-readiness pilot within one business line or one pursuit segment.</p>
+      </div>
+      <div class="pilot-box">
+        <strong>What the pilot should prove</strong>
+        <p>Content trustworthiness, repository structure, intake discipline, automation feasibility, and measurable cycle-time and quality improvement.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Branding references sourced from crawco.com official assets and stylesheet.</span>
+      <span class="page-num">1</span>
+    </div>
+  </section>
+</body>
+</html>

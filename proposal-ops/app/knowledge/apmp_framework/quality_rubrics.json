@@ -1,0 +1,65 @@
+{
+  "bucket": "quality_rubrics",
+  "topics": [
+    {
+      "id": "proposal_organization",
+      "title": "Proposal Organization",
+      "description": "Organize sections around evaluator priorities and the solicitation's stated needs rather than a generic boilerplate order.",
+      "score_labels": {
+        "pass": "Sections are aligned to the scoring logic and buyer priorities.",
+        "needs_revision": "Sections are present but unevenly tied to the buyer's scoring logic.",
+        "fail": "The package reads like generic boilerplate."
+      }
+    },
+    {
+      "id": "strategy_win_themes",
+      "title": "Strategy and Win Themes",
+      "description": "Win themes should be differentiating, buyer-relevant, and reinforced throughout the draft.",
+      "score_labels": {
+        "pass": "Themes are specific, buyer-facing, and supported by proof.",
+        "needs_revision": "Themes exist but feel generic or lightly supported.",
+        "fail": "The package lacks a coherent strategy."
+      }
+    },
+    {
+      "id": "value_proposition",
+      "title": "Value Proposition and Discriminators",
+      "description": "The narrative should convert service features into buyer outcomes, control, and reduced performance risk.",
+      "score_labels": {
+        "pass": "Benefits and differentiators are clear and specific.",
+        "needs_revision": "Benefits are implied but not strongly framed.",
+        "fail": "The draft is feature-heavy and outcome-light."
+      }
+    },
+    {
+      "id": "proof_points",
+      "title": "Proof Points and Support",
+      "description": "Claims should be backed by approved references, resumes, certifications, or grounded solicitation facts.",
+      "score_labels": {
+        "pass": "Key claims are supported by approved assets or source material.",
+        "needs_revision": "Some claims need stronger supporting proof.",
+        "fail": "Major claims are unsupported."
+      }
+    },
+    {
+      "id": "persuasive_writing",
+      "title": "Persuasive Writing and Readability",
+      "description": "The draft should be easy to evaluate, direct, and free from internal process jargon.",
+      "score_labels": {
+        "pass": "The writing is buyer-facing and easy to score.",
+        "needs_revision": "The writing is understandable but still generic or process-heavy.",
+        "fail": "The draft is clearly internal or meta."
+      }
+    },
+    {
+      "id": "graphics_action_captions",
+      "title": "Graphics and Action Captions",
+      "description": "Where graphics are implied, the draft should identify what visual proof or graphic would strengthen evaluation.",
+      "score_labels": {
+        "pass": "Sections note meaningful graphics or proof artifacts when helpful.",
+        "needs_revision": "A few sections would benefit from supporting visuals.",
+        "fail": "The draft misses obvious opportunities for proof visuals."
+      }
+    }
+  ]
+}

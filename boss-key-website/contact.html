@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact | Opportunity Briefing Intake | Boss Key LLC</title>
-  <meta name="description" content="Start a Boss Key opportunity briefing for procurement intelligence, capture strategy, or proposal execution support.">
+  <title>Contact | Talk Through the Next Step | Boss Key LLC</title>
+  <meta name="description" content="Tell Boss Key what you are trying to improve, pursue, or understand, and get pointed to the right practical next step.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,39 +29,39 @@
   <div class="wrap nav">
     <a class="brand" href="./index.html"><img src="./assets/logos/brand/boss-key-logo-refined.svg" alt=""><span>Boss Key LLC</span></a>
     <nav class="links" aria-label="Main navigation">
-      <a href="./about.html">About</a>
       <a href="./services.html">Services</a>
       <a href="./facilities.html">Facilities</a>
-      <a href="./coaching.html">Intelligence</a>
-      <a href="./engagements.html">Capture + Proposal</a>
+      <a href="./coaching.html">Market Signals</a>
+      <a href="./engagements.html">Pursuits + Proposals</a>
+      <a href="./about.html">About</a>
       <a href="./proof.html">Proof</a>
       <a href="./faq.html">FAQ</a>
       <a href="./contact.html">Contact</a>
     </nav>
-    <a class="btn btn-primary schedule-cta" href="#">Book briefing</a>
+    <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
   </div>
 </header>
 <main class="wrap">
   <section>
-    <h1>Start with an opportunity briefing.</h1>
-    <p>The intake below helps route the conversation into the right part of the lifecycle: early opportunity visibility, recurring intelligence, capture strategy, proposal execution, or the facilities-specific diagnostic path.</p>
+    <h1>Tell us what you need.</h1>
+    <p>If you are not sure where to start, describe the problem in plain language. Boss Key will help point you to the right first step.</p>
     <div class="buttons">
-      <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
-      <a class="btn btn-secondary" href="./facilities-diagnostic.html">Request the Facilities Pursuit Diagnostic</a>
+      <a class="btn btn-primary schedule-cta" href="#">Book a quick briefing</a>
+      <a class="btn btn-secondary" href="./facilities-diagnostic.html">Use the facilities diagnostic</a>
     </div>
   </section>
 
   <section>
-    <h2>What each path is for</h2>
+    <h2>What people usually ask for</h2>
     <div class="grid-3">
-      <article class="panel"><h3>Opportunity foresight</h3><p>Use this when you want to test the model quickly and build a focused opportunity map.</p></article>
-      <article class="panel"><h3>Procurement intelligence</h3><p>Use this when you need recurring visibility into budgets, agencies, and likely buying events.</p></article>
-      <article class="panel"><h3>Capture or proposal support</h3><p>Use this when a likely opportunity is already forming or a formal procurement is already live.</p></article>
+      <article class="panel"><h3>Seeing work earlier</h3><p>You want a better read on what may be coming before the bid is posted.</p></article>
+      <article class="panel"><h3>Choosing a target</h3><p>You have a market or account in mind and want help deciding where to focus.</p></article>
+      <article class="panel"><h3>Help on a live bid</h3><p>You have a real pursuit or proposal and need cleaner structure fast.</p></article>
     </div>
   </section>
 
   <section>
-    <h2>Private intake</h2>
+    <h2>Inquiry form</h2>
     <form id="intakeForm">
       <label for="name">Name<input id="name" name="name" type="text" autocomplete="name" required></label>
       <label for="email">Email<input id="email" name="email" type="email" autocomplete="email" required></label>
@@ -70,55 +70,63 @@
       <label for="offering">What do you want to discuss?
         <select id="offering" name="offering" required>
           <option value="">Select one</option>
-          <option value="opportunity-briefing">Opportunity briefing</option>
-          <option value="facilities-pursuit-diagnostic">Facilities Pursuit Diagnostic</option>
-          <option value="opportunity-foresight-sprint">Opportunity Foresight Sprint</option>
-          <option value="procurement-intelligence-retainer">Procurement intelligence retainer</option>
-          <option value="capture-strategy-engagement">Capture strategy engagement</option>
-          <option value="proposal-execution-support">Proposal execution support</option>
+          <option value="opportunity-briefing">Quick briefing</option>
+          <option value="facilities-diagnostic">Facilities diagnostic</option>
+          <option value="focused-market-sprint">Focused market sprint</option>
+          <option value="market-watch">Recurring market watch</option>
+          <option value="pursuit-support">Pursuit support</option>
+          <option value="proposal-support">Proposal support</option>
           <option value="general-inquiry">General inquiry</option>
         </select>
       </label>
       <label for="timeline">Timeline or urgency<input id="timeline" name="timeline" type="text" placeholder="Example: want a forecast this quarter / active procurement in 30 days"></label>
       <label for="question">What are you trying to understand, improve, or pursue?<textarea id="question" name="question" required></textarea></label>
-      <button class="btn btn-secondary" type="submit">Send private intake</button>
+      <button class="btn btn-secondary" type="submit">Send inquiry</button>
     </form>
     <p class="small">Submitting opens your email client with the intake details prefilled.</p>
   </section>
 </main>
-<footer><div class="wrap">Boss Key LLC | Opportunity briefing intake | Procurement intelligence | Capture and proposal inquiries</div></footer>
+<footer><div class="wrap">Boss Key LLC | Quick briefings | Market watch | Pursuit and proposal support</div></footer>
 <script>
 (function(){
   const inboxAlias='timmy@bosskeyops.com';
   const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';
   const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;
   const offeringField=document.getElementById('offering');
+  const offeringAliases={
+    'facilities-pursuit-diagnostic':'facilities-diagnostic',
+    'opportunity-foresight-sprint':'focused-market-sprint',
+    'procurement-intelligence-retainer':'market-watch',
+    'capture-strategy-engagement':'pursuit-support',
+    'proposal-execution-support':'proposal-support'
+  };
   const params=new URLSearchParams(window.location.search);
   const presetOffering=params.get('offering');
-  if(presetOffering&&offeringField){offeringField.value=presetOffering;}
+  if(presetOffering&&offeringField){offeringField.value=offeringAliases[presetOffering]||presetOffering;}
   document.querySelectorAll('.schedule-cta').forEach(function(l){l.href=calendarScheduleUrl;l.target='_blank';l.rel='noopener noreferrer';});
   const form=document.getElementById('intakeForm');
   if(form){
     form.addEventListener('submit',function(e){
       e.preventDefault();
       const d=new FormData(form);
-      const offering=d.get('offering')||'general-inquiry';
+      const rawOffering=d.get('offering')||'general-inquiry';
+      const offering=offeringAliases[rawOffering]||rawOffering;
       const subjectMap={
-        'opportunity-briefing':'[Boss Key] Opportunity Briefing Request',
-        'facilities-pursuit-diagnostic':'[Boss Key] Facilities Pursuit Diagnostic Request',
-        'opportunity-foresight-sprint':'[Boss Key] Opportunity Foresight Sprint Inquiry',
-        'procurement-intelligence-retainer':'[Boss Key] Procurement Intelligence Retainer Inquiry',
-        'capture-strategy-engagement':'[Boss Key] Capture Strategy Inquiry',
-        'proposal-execution-support':'[Boss Key] Proposal Execution Support Inquiry',
+        'opportunity-briefing':'[Boss Key] Quick Briefing Request',
+        'facilities-diagnostic':'[Boss Key] Facilities Diagnostic Request',
+        'focused-market-sprint':'[Boss Key] Focused Market Sprint Inquiry',
+        'market-watch':'[Boss Key] Recurring Market Watch Inquiry',
+        'pursuit-support':'[Boss Key] Pursuit Support Inquiry',
+        'proposal-support':'[Boss Key] Proposal Support Inquiry',
         'general-inquiry':'[Boss Key] General Inquiry'
       };
       const labelMap={
-        'opportunity-briefing':'Opportunity briefing',
-        'facilities-pursuit-diagnostic':'Facilities Pursuit Diagnostic',
-        'opportunity-foresight-sprint':'Opportunity Foresight Sprint',
-        'procurement-intelligence-retainer':'Procurement intelligence retainer',
-        'capture-strategy-engagement':'Capture strategy engagement',
-        'proposal-execution-support':'Proposal execution support',
+        'opportunity-briefing':'Quick briefing',
+        'facilities-diagnostic':'Facilities diagnostic',
+        'focused-market-sprint':'Focused market sprint',
+        'market-watch':'Recurring market watch',
+        'pursuit-support':'Pursuit support',
+        'proposal-support':'Proposal support',
         'general-inquiry':'General inquiry'
       };
       const subject=subjectMap[offering]||subjectMap['general-inquiry'];

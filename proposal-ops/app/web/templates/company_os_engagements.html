@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <div class="hero-grid">
+    <div>
+      <p class="eyebrow">Company OS</p>
+      <h2>Engagement Register</h2>
+      <p>Review engagements, workflow state, seeded actions, and provenance without leaving the proposal-ops source of truth.</p>
+    </div>
+    <aside class="operator-card">
+      <h3>Wave 1 Principles</h3>
+      <ul class="activity-list compact">
+        {% for item in guardrails %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section class="stack">
+  {% if engagements %}
+  {% for engagement in engagements %}
+  <details class="relationship-details" {% if loop.first %}open{% endif %}>
+    <summary class="relationship-summary">
+      <div>
+        <strong>{{ engagement.client_name }}</strong>
+        <span class="muted">{{ engagement.engagement_name }}</span>
+      </div>
+      <div class="chip-row">
+        <span class="status-chip">{{ engagement.workflow_stage }}</span>
+        <span class="status-chip neutral">{{ engagement.engagement_type }}</span>
+        <span class="status-chip warn">{{ engagement.risk_level }}</span>
+      </div>
+    </summary>
+    <div class="detail-card-grid">
+      <article class="data-card">
+        <h4>Core State</h4>
+        <dl class="data-points">
+          <div><dt>Status</dt><dd>{{ engagement.status }}</dd></div>
+          <div><dt>Owner</dt><dd>{{ engagement.owner }}</dd></div>
+          <div><dt>Complexity</dt><dd>{{ engagement.complexity_level }}</dd></div>
+          <div><dt>Deadline</dt><dd>{{ engagement.deadline or "-" }}</dd></div>
+        </dl>
+        <p><strong>Next action:</strong> {{ engagement.next_action }}</p>
+        <p><strong>Provenance:</strong> <code>{{ engagement.provenance_ref }}</code></p>
+        <p><strong>Agent / Run:</strong> {{ engagement.agent_id }} | {{ engagement.run_id }}</p>
+      </article>
+
+      <article class="data-card">
+        <h4>Timeline</h4>
+        <ul class="activity-list compact">
+          {% for row in engagement.milestones %}
+          <li>{{ row.milestone_label }} | {{ row.target_date or "-" }} | {{ row.status }}</li>
+          {% endfor %}
+        </ul>
+      </article>
+
+      <article class="data-card">
+        <h4>Actions And Stakeholders</h4>
+        <p><strong>Actions</strong></p>
+        <ul class="activity-list compact">
+          {% for row in engagement.action_items %}
+          <li>{{ row.task_or_artifact }} | {{ row.status }} | due {{ row.due_date or "-" }}</li>
+          {% endfor %}
+        </ul>
+        <p><strong>Stakeholders</strong></p>
+        <ul class="activity-list compact">
+          {% for row in engagement.stakeholders %}
+          <li>{{ row.role_label }}: {{ row.stakeholder_name }}{% if row.organization %} | {{ row.organization }}{% endif %}</li>
+          {% endfor %}
+        </ul>
+      </article>
+    </div>
+  </details>
+  {% endfor %}
+  {% else %}
+  <p class="muted">No engagements are in the register yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

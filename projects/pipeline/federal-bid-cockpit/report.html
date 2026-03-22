@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Federal Bid Decision Report</title>
+  <link rel="icon" type="image/svg+xml" href="../../../boss-key-website/assets/logos/brand/boss-key-logo-refined.svg">
+  <style>
+    :root { --ink:#16221d; --muted:#51635b; --line:#d6e2dc; --bg:#f7fbf9; }
+    body { margin:0; font-family:"Avenir Next","Gill Sans","Trebuchet MS",sans-serif; color:var(--ink); background:var(--bg); }
+    .wrap { max-width:1020px; margin:0 auto; padding:24px; }
+    .head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    h1 { margin:0; }
+    .muted { color:var(--muted); margin:6px 0 0; }
+    .actions { display:flex; gap:8px; }
+    button { border:1px solid var(--line); background:#fff; border-radius:8px; padding:8px 12px; cursor:pointer; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:16px 0; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px; }
+    .card p { margin:0; color:var(--muted); font-size:12px; }
+    .card h3 { margin:6px 0 0; font-size:24px; }
+    table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+    th,td { text-align:left; padding:10px 8px; border-bottom:1px solid #edf3f0; font-size:13px; }
+    th { background:#f1f7f4; }
+    .badge { border-radius:999px; padding:2px 8px; font-size:12px; font-weight:700; }
+    .bid { background:#ddf7eb; color:#136446; }
+    .conditional { background:#fff3da; color:#855300; }
+    .no-bid { background:#ffe1e1; color:#8f2020; }
+    .reason { color:var(--muted); max-width:260px; }
+
+    @media (max-width:900px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media print {
+      .actions { display:none; }
+      body { background:#fff; }
+      .wrap { padding:0; max-width:none; }
+      table { border:1px solid #ccc; }
+      th,td { font-size:11px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>Weekly Federal Bid Decision Report</h1>
+        <p class="muted" id="stamp"></p>
+      </div>
+      <div class="actions">
+        <button id="backBtn">Back to Cockpit</button>
+        <button id="printBtn">Print / Save PDF</button>
+      </div>
+    </div>
+
+    <div class="grid" id="metrics"></div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Source</th>
+          <th>Agency</th>
+          <th>NAICS</th>
+          <th>Set-Aside</th>
+          <th>POP</th>
+          <th>Due</th>
+          <th>Stage</th>
+          <th>Gate</th>
+          <th>Score</th>
+          <th>Recommendation</th>
+          <th>Teaming</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "federal-bid-cockpit-v1";
+    const CRITERIA = [
+      { id: "capabilityFit", weight: 6 }, { id: "pastPerformance", weight: 5 }, { id: "naicsAlignment", weight: 4 },
+      { id: "timeline", weight: 4 }, { id: "winPath", weight: 4 }, { id: "risk", weight: 3 },
+      { id: "margin", weight: 2 }, { id: "strategic", weight: 2 }
+    ];
+    const GATE_PROFILES = {
+      SAM: ["sowMatch", "setAsideFit", "clearanceFit", "pastPerformanceFit", "capacity", "complianceWindow"],
+      NJSTART: ["sowMatch", "njCompliance", "nigpMatch", "setAsideFit", "capacity"]
+    };
+
+    const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{\"opportunities\":[]}");
+    const ops = state.opportunities || [];
+
+    document.getElementById("stamp").textContent = `Generated ${new Date().toLocaleString()}`;
+    document.getElementById("backBtn").addEventListener("click", () => window.location.href = "./index.html");
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+    const metrics = [
+      ["Total Opportunities", ops.length],
+      ["Pursuits", ops.filter(o => ["Pursue","Submitted"].includes(o.stage)).length],
+      ["Wins", ops.filter(o => o.stage === "Won").length],
+      ["Avg Score", avg(ops.map(weightedScore)).toFixed(1)]
+    ];
+
+    const metricEl = document.getElementById("metrics");
+    metrics.forEach(([label, value]) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `<p>${label}</p><h3>${value}</h3>`;
+      metricEl.appendChild(card);
+    });
+
+    const tbody = document.getElementById("rows");
+    ops
+      .slice()
+      .sort((a,b) => String(a.dueDate).localeCompare(String(b.dueDate)))
+      .forEach((o) => {
+        const rec = recommendation(o);
+        const gate = gateStatus(o);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${esc(o.title)}</td>
+          <td>${esc(o.source || "SAM")}</td>
+          <td>${esc(o.agency)}</td>
+          <td>${esc(o.naics)}</td>
+          <td>${esc(o.setAsideType || o.setAside || "")}</td>
+          <td>${esc(o.placeOfPerformance || "")}</td>
+          <td>${esc(o.dueDate)}</td>
+          <td>${esc(o.stage)}</td>
+          <td>${gate.label}</td>
+          <td>${weightedScore(o).toFixed(1)}</td>
+          <td><span class="badge ${rec.className}">${rec.label}</span></td>
+          <td class="reason">${esc(o.subcontractPath || "")}</td>
+          <td class="reason">${esc(rec.reason)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+    function weightedScore(o) {
+      const total = CRITERIA.reduce((s,c) => s + c.weight, 0);
+      const weighted = CRITERIA.reduce((s,c) => s + (Number((o.scores||{})[c.id] || 0) * c.weight), 0);
+      return (weighted / (total * 5)) * 100;
+    }
+
+    function gateStatus(o) {
+      const gate = o.gate || {};
+      const required = GATE_PROFILES[o.source || "SAM"] || GATE_PROFILES.SAM;
+      const vals = required.map(k => gate[k] || "pending");
+      if (vals.includes("fail")) return { passed: false, label: "FAIL" };
+      if (vals.includes("pending")) return { passed: false, label: "PENDING" };
+      return { passed: true, label: "PASS" };
+    }
+
+    function recommendation(o) {
+      const gate = gateStatus(o);
+      if (!gate.passed) {
+        return {
+          label: "No-bid",
+          className: "no-bid",
+          reason: gate.label === "FAIL"
+            ? gateFailureReason(o)
+            : pendingGateReason(o)
+        };
+      }
+      const score = weightedScore(o);
+      const autoNoBid =
+        Number((o.scores || {}).capabilityFit || 0) <= 1 ||
+        Number((o.scores || {}).pastPerformance || 0) <= 1 ||
+        Number((o.scores || {}).timeline || 0) <= 1;
+      if (autoNoBid) {
+        return {
+          label: "No-bid",
+          className: "no-bid",
+          reason: "Automatic no-bid triggered because capability, past performance, or timeline is critically low."
+        };
+      }
+      if (score >= 80) return { label: "Bid", className: "bid", reason: "Strong fit, manageable barriers, and a credible execution path." };
+      if (score >= 65) return { label: "Conditional", className: "conditional", reason: "Pursue only if the win path, teaming path, or differentiation is clear." };
+      return { label: "No-bid", className: "no-bid", reason: "Score is below threshold for disciplined pursuit." };
+    }
+
+    function gateFailureReason(o) {
+      const required = GATE_PROFILES[o.source || "SAM"] || GATE_PROFILES.SAM;
+      const labels = {
+        sowMatch: "Scope aligns directly to your offered services",
+        setAsideFit: "Set-aside or competition path fits your current small-business status",
+        clearanceFit: "Security clearance or access requirements fit current posture",
+        pastPerformanceFit: "Past-performance barrier is manageable for prime or subcontract entry",
+        capacity: "You have delivery capacity for the period",
+        complianceWindow: "You can submit a compliant response on time",
+        njCompliance: "NJ compliance forms/certifications can be met on time",
+        nigpMatch: "NIGP/commodity classification matches your profile"
+      };
+      const failed = required.find((key) => ((o.gate || {})[key] || "pending") === "fail");
+      return failed ? `Gate check failed: ${labels[failed] || failed}.` : "Gate check failed. Resolve scope, certification, capacity, or compliance blockers.";
+    }
+
+    function pendingGateReason(o) {
+      const required = GATE_PROFILES[o.source || "SAM"] || GATE_PROFILES.SAM;
+      const labels = {
+        sowMatch: "scope aligns directly to your offered services",
+        setAsideFit: "the set-aside or competition path fits your current small-business status",
+        clearanceFit: "security clearance or access requirements fit current posture",
+        pastPerformanceFit: "the past-performance barrier is manageable for prime or subcontract entry",
+        capacity: "you have delivery capacity for the period",
+        complianceWindow: "you can submit a compliant response on time",
+        njCompliance: "NJ compliance forms/certifications can be met on time",
+        nigpMatch: "NIGP/commodity classification matches your profile"
+      };
+      const pending = required.find((key) => ((o.gate || {})[key] || "pending") === "pending");
+      return pending ? `Gate checks are incomplete. Confirm ${labels[pending] || pending}.` : "Gate checks are incomplete. Complete all required checks before scoring.";
+    }
+
+    function avg(values) {
+      if (!values.length) return 0;
+      return values.reduce((a,b) => a+b, 0) / values.length;
+    }
+
+    function esc(v) {
+      return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    }
+  </script>
+</body>
+</html>

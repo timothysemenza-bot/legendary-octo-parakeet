@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <div class="hero-grid">
+    <div>
+      <p class="eyebrow">Company OS</p>
+      <h2>Approval Queue</h2>
+      <p>Internal gates stay visible and explicit. Nothing external goes out from this system without a human decision.</p>
+    </div>
+    <aside class="operator-card">
+      <h3>Guardrails</h3>
+      <ul class="activity-list compact">
+        {% for item in guardrails %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section>
+  <div class="section-heading">
+    <div>
+      <h3>Pending Approvals</h3>
+      <p class="muted">Update the queue here when the operator has made a review decision.</p>
+    </div>
+  </div>
+  {% if approvals %}
+  <table>
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Approval</th>
+        <th>Due</th>
+        <th>Status</th>
+        <th>Provenance</th>
+        <th>Control</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for approval in approvals %}
+      <tr>
+        <td>{{ approval.engagement.client_name if approval.engagement else approval.engagement_id }}</td>
+        <td>{{ approval.approval_type }}<br /><span class="muted">{{ approval.requested_role }}</span></td>
+        <td>{{ approval.due_date or "-" }}</td>
+        <td><span class="status-chip">{{ approval.status }}</span></td>
+        <td><code>{{ approval.provenance_ref }}</code></td>
+        <td>
+          <form method="post" action="/company-os/approvals/{{ approval.id }}/status" class="inline-form">
+            <input type="hidden" name="next_url" value="/company-os/approvals" />
+            <select name="status">
+              <option value="pending" {% if approval.status == "pending" %}selected{% endif %}>pending</option>
+              <option value="approved">approved</option>
+              <option value="rework-required">rework-required</option>
+              <option value="rejected">rejected</option>
+            </select>
+            <button type="submit">Update</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No approval requests are queued yet.</p>
+  {% endif %}
+</section>
+
+<section>
+  <div class="section-heading">
+    <div>
+      <h3>Meeting Follow-Through</h3>
+      <p class="muted">Operator-owned commitments captured from calls and interactions.</p>
+    </div>
+  </div>
+  {% if commitments %}
+  <table>
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Commitment</th>
+        <th>Due</th>
+        <th>Status</th>
+        <th>Control</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for commitment in commitments %}
+      <tr>
+        <td>{{ commitment.account_or_client }}</td>
+        <td>{{ commitment.commitment }}<br /><span class="muted">{{ commitment.meeting_title }}</span></td>
+        <td>{{ commitment.due_date or "-" }}</td>
+        <td><span class="status-chip neutral">{{ commitment.status }}</span></td>
+        <td>
+          <form method="post" action="/company-os/commitments/{{ commitment.id }}/status" class="inline-form">
+            <input type="hidden" name="next_url" value="/company-os/approvals" />
+            <select name="status">
+              <option value="open" {% if commitment.status == "open" %}selected{% endif %}>open</option>
+              <option value="in-progress">in-progress</option>
+              <option value="done">done</option>
+            </select>
+            <button type="submit">Update</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No commitments have been captured yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

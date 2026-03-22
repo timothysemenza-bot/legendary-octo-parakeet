@@ -1,4 +1,4 @@
-name: Deploy package
+﻿name: Deploy package
 
 on:
   push:
@@ -20,11 +20,13 @@ jobs:
             -x "data/*" \
             -x ".git/*" \
             -x ".github/workflows/*" \
+            -x "archive/*" \
+            -x "archive/**/*" \
             -x ".env*" \
             -x "**/server.out.log" \
             -x "**/server.err.log" \
             -x "*.docx" \
-            -x "__docx_probe/*"
+            -x "outputs/scratch/docx-probe/*"
 
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4

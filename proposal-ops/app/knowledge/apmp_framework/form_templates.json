@@ -1,0 +1,25 @@
+{
+  "templates": [
+    {
+      "id": "default-pricing-workbook",
+      "title": "Default Pricing Workbook",
+      "template_type": "xlsx",
+      "editable": true,
+      "required_fields": ["opportunity_name", "client_name", "labor_categories", "pricing_summary"]
+    },
+    {
+      "id": "transmittal-letter",
+      "title": "Transmittal Letter",
+      "template_type": "docx",
+      "editable": true,
+      "required_fields": ["client_name", "opportunity_name", "proposal_due_date"]
+    },
+    {
+      "id": "addenda-acknowledgement",
+      "title": "Addenda Acknowledgement",
+      "template_type": "docx",
+      "editable": true,
+      "required_fields": ["opportunity_name", "solicitation_number"]
+    }
+  ]
+}

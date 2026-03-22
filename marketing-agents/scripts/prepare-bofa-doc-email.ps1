@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $PSScriptRoot
 $workspace = Split-Path -Parent $root
-$submissionDir = Join-Path $workspace "boss-key-llc-admin\bank-of-america-submission"
+$submissionDir = Join-Path $workspace "workspace\admin\boss-key-llc-admin\bank-of-america-submission"
 $emailDraft = Join-Path $submissionDir "email-to-bofa.txt"
 
 if (-not (Test-Path $submissionDir)) {

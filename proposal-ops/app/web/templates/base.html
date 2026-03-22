@@ -15,6 +15,20 @@
   </head>
   <body data-page-key="{{ page_key or request.url.path }}">
     {% set current_path = request.url.path %}
+    {% set is_minimal_shell = minimal_shell|default(false) %}
+    {% if is_minimal_shell %}
+    <header class="minimal-app-header">
+      <div class="minimal-header-shell">
+        <a class="brand-lockup" href="/proposal-builder" aria-label="Boss Key proposal builder">
+          <img class="brand-logo" src="/static/brand/boss-key-logo-refined.svg" alt="" />
+          <div>
+            <span class="brand-name">Boss Key Proposal Builder</span>
+            <span class="brand-domain">upload -> requirements -> skeleton -> draft -> export</span>
+          </div>
+        </a>
+      </div>
+    </header>
+    {% else %}
     <header class="app-header">
       <div class="header-shell">
         <div class="brand-bar">
@@ -65,6 +79,11 @@
         <div class="nav-group nav-group-operate">
           <span class="nav-group-label">Operate</span>
           <div class="nav-links">
+            <a href="/company-os/inbox" class="{% if current_path.startswith('/company-os/inbox') %}active{% endif %}">Engagement Inbox</a>
+            <a href="/company-os/engagements" class="{% if current_path.startswith('/company-os/engagements') %}active{% endif %}">Engagements</a>
+            <a href="/company-os/approvals" class="{% if current_path.startswith('/company-os/approvals') %}active{% endif %}">Approval Queue</a>
+            <a href="/company-os/founder-brief" class="{% if current_path.startswith('/company-os/founder-brief') %}active{% endif %}">Founder Brief</a>
+            <a href="/company-os/scoreboard" class="{% if current_path.startswith('/company-os/scoreboard') %}active{% endif %}">Exec Scoreboard</a>
             <a href="/bosskey/growth-os" class="{% if current_path.startswith('/bosskey/growth-os') %}active{% endif %}">Boss Key Growth</a>
             <a href="/ux/friction" class="{% if current_path.startswith('/ux/friction') %}active{% endif %}">Friction</a>
             <a href="/notifications/digest" class="{% if current_path.startswith('/notifications') %}active{% endif %}">Notifications</a>
@@ -78,9 +97,11 @@
       </nav>
       </div>
     </header>
-    <main>
+    {% endif %}
+    <main class="{% if is_minimal_shell %}minimal-main{% endif %}">
       {% block content %}{% endblock %}
     </main>
+    {% if not is_minimal_shell %}
     <aside id="ux-feedback-panel">
       <details>
         <summary>Share workflow friction</summary>
@@ -110,6 +131,7 @@
         </form>
       </details>
     </aside>
+    {% endif %}
     <script>
       (() => {
         const examplePresets = {{ example_presets|default({})|tojson }};

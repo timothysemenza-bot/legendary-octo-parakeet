@@ -144,6 +144,13 @@ Use this layer when you need internal operating coverage beyond outbound and pro
 - structured engagement intake, routing, reverse timelines, and stakeholder coordination
 - one internal OS that can run every client engagement instead of separate systems by client
 
+## Wave 1 Source-of-Truth
+
+For Wave 1 (engagement + founder operations), `proposal-ops` is the authoritative system of record.
+- `proposal-ops` stores canonical engagement state, approvals, founder-facing briefs, and operational commitments.
+- `marketing-agents/data/*.csv` engagement/founder artifacts are projection outputs synced from `proposal-ops`.
+- `marketing-agents/briefs/*` founder/intake outputs are generated compatibility snapshots, not the primary CRM.
+
 The old operator console has been retired. Maintain and review the company OS through:
 - the blueprint and prompt specs
 - the OS data files in `marketing-agents/data/`
@@ -166,3 +173,11 @@ It writes directly into:
 - `marketing-agents/data/action_workbench.csv`
 - `marketing-agents/data/approval_router_queue.csv`
 - `marketing-agents/data/meeting_follow_through.csv`
+
+### Company OS Principles (Wave 1)
+
+- Manual-first ingress: process approved exports and controlled file-drop items first; avoid autonomous feed ingestion by default.
+- AI as assistant: use AI for summarization, extraction, and drafting, then keep human operators in charge of all external actions.
+- Tight operational scope: keep automation bounded to engagement/founder workflows until they are consistently auditable.
+- Human approval gates: no outbound email, calls, posts, proposals, or collections actions without explicit approval flow.
+- Provenance by default: every intake-derived artifact should include source links, decisions, and run metadata so operators can trace outputs.

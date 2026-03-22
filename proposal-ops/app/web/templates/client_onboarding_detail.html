@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block content %}
+{% set asset_roles = ["brand_asset", "proposal_template", "pricing_artifact", "form_template", "sample_proposal", "resume", "reference", "insurance", "certification", "service_offering", "approved_content", "operational_guidance", "playbook_doc", "unknown"] %}
+<section class="proposal-builder-shell">
+  <div class="proposal-builder-toolbar">
+    <div>
+      <p class="eyebrow">Client Onboarding Pack</p>
+      <h1>{{ pack.pack_name }}</h1>
+      <p class="lead">{{ pack.client_profile_name }} | Version {{ pack.version }} | {{ pack.status }}</p>
+    </div>
+    <div class="builder-link-row">
+      <a href="/client-onboarding">Back to Client Onboarding</a>
+      <a href="/client-profiles/{{ pack.client_profile_id }}">Open Client Profile</a>
+    </div>
+  </div>
+
+  {% if success_message %}
+  <div class="builder-alert builder-alert-success">{{ success_message }}</div>
+  {% endif %}
+
+  {% if error_message %}
+  <div class="builder-alert builder-alert-error">{{ error_message }}</div>
+  {% endif %}
+
+  <div class="builder-grid">
+    <div class="builder-card">
+      <h2>Pack Summary</h2>
+      <dl class="builder-keyfacts">
+        <div><dt>Client profile</dt><dd>{{ pack.client_profile_name }}</dd></div>
+        <div><dt>Status</dt><dd>{{ pack.status }}</dd></div>
+        <div><dt>Source mode</dt><dd>{{ pack.source_mode }}</dd></div>
+        <div><dt>Original file</dt><dd>{{ pack.source_filename or "Multi-file upload" }}</dd></div>
+        <div><dt>Approved at</dt><dd>{{ pack.approved_at or "-" }}</dd></div>
+        <div><dt>Activated at</dt><dd>{{ pack.activated_at or "-" }}</dd></div>
+      </dl>
+    </div>
+
+    <div class="builder-card">
+      <h2>Next Step</h2>
+      {% if pack.status == "APPROVED" %}
+      <p>The pack is approved. Activate it to make it the live client environment for this deployment.</p>
+      <form method="post" action="/client-onboarding/{{ pack.id }}/activate" class="builder-form builder-form-compact">
+        <input type="hidden" name="actor" value="admin" />
+        <button type="submit">Activate Client Environment</button>
+      </form>
+      {% elif pack.validation_report and pack.validation_report.status == "VALID" %}
+      <p>The pack has been parsed cleanly. Review the generated playbook below, then approve it and import defaults.</p>
+      <form method="post" action="/client-onboarding/{{ pack.id }}/approve" class="builder-form builder-form-compact">
+        <input type="hidden" name="actor" value="admin" />
+        <button type="submit">Approve Playbook and Defaults</button>
+      </form>
+      {% else %}
+      <p>The pack needs review. Re-run classification after you upload a clearer pack or add a manifest.</p>
+      <form method="post" action="/client-onboarding/{{ pack.id }}/classify" class="builder-form builder-form-compact">
+        <input type="hidden" name="actor" value="admin" />
+        <button type="submit">Reclassify Pack</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if pack.setup_gaps %}
+  <div class="builder-card">
+    <h2>Setup Gaps</h2>
+    <ul class="builder-checklist">
+      {% for item in pack.setup_gaps %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="builder-grid builder-grid-wide">
+    <div class="builder-card">
+      <h2>Validation</h2>
+      {% if pack.validation_report %}
+      <dl class="builder-keyfacts">
+        <div><dt>Status</dt><dd>{{ pack.validation_report.status }}</dd></div>
+        <div><dt>Warnings</dt><dd>{{ pack.validation_report.warnings|length }}</dd></div>
+        <div><dt>Errors</dt><dd>{{ pack.validation_report.errors|length }}</dd></div>
+      </dl>
+      {% endif %}
+      {% if pack.classification_report and pack.classification_report.errors %}
+      <h3>Classification issues</h3>
+      <ul class="builder-checklist">
+        {% for item in pack.classification_report.errors %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if pack.validation_report and pack.validation_report.errors %}
+      <h3>Validation issues</h3>
+      <ul class="builder-checklist">
+        {% for item in pack.validation_report.errors %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if pack.validation_report and pack.validation_report.warnings %}
+      <h3>Warnings</h3>
+      <ul class="builder-checklist">
+        {% for item in pack.validation_report.warnings %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+    <div class="builder-card">
+      <h2>Generated Playbook</h2>
+      {% if pack.playbook %}
+      <p class="builder-helper">This becomes the client-specific README for runtime behavior once approved and activated. Saving changes after approval creates a new draft version that can be re-approved.</p>
+      <form method="post" action="/client-onboarding/{{ pack.id }}/playbook" class="builder-form builder-form-compact">
+        <input type="hidden" name="actor" value="admin" />
+        <label>Playbook title
+          <input type="text" name="title" value="{{ pack.playbook.title }}" />
+        </label>
+        <label>Playbook guidance
+          <textarea name="narrative_guidance_md" rows="14">{{ pack.playbook.narrative_guidance_md }}</textarea>
+        </label>
+        <button type="submit">Save Playbook Draft</button>
+      </form>
+      {% else %}
+      <p>No playbook has been generated yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if pack.behavior_profile %}
+  <div class="builder-card">
+    <h2>Behavior Profile</h2>
+    <div class="builder-grid builder-grid-wide">
+      <div>
+        <h3>Proposal Sections</h3>
+        <ul class="builder-checklist builder-compact-list">
+          {% for item in pack.behavior_profile.proposal_sections %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h3>Required Attachments</h3>
+        <ul class="builder-checklist builder-compact-list">
+          {% for item in pack.behavior_profile.required_attachments %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h3>Preferred Terminology</h3>
+        <ul class="builder-checklist builder-compact-list">
+          {% for item in pack.behavior_profile.preferred_terminology %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h3>Avoid</h3>
+        <ul class="builder-checklist builder-compact-list">
+          {% for item in pack.behavior_profile.avoid_terminology %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="builder-card">
+    <h2>Parsed Assets</h2>
+    {% if pack.assets %}
+    <table class="builder-table">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Validation</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for asset in pack.assets %}
+        <tr>
+          <td>
+            <strong>{{ asset.source_filename }}</strong>
+            <div class="muted">{{ asset.media_type }}</div>
+          </td>
+          <td>{{ asset.asset_role }}</td>
+          <td>{{ asset.asset_status }}</td>
+          <td>
+            {% if asset.validation_report and asset.validation_report.errors %}
+            <div class="builder-inline-errors">
+              {% for item in asset.validation_report.errors %}
+              <div>{{ item }}</div>
+              {% endfor %}
+            </div>
+            {% elif asset.validation_report %}
+            <div>{{ asset.validation_report.status }}</div>
+            {% else %}
+            <div>-</div>
+            {% endif %}
+          </td>
+          <td>
+            {% if pack.status != "APPROVED" %}
+            <form method="post" action="/client-onboarding/{{ pack.id }}/assets/{{ asset.id }}" class="builder-form builder-form-compact">
+              <input type="hidden" name="actor" value="admin" />
+              <label>Role
+                <select name="asset_role">
+                  {% for role in asset_roles %}
+                  <option value="{{ role }}" {% if asset.asset_role == role %}selected{% endif %}>{{ role }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <label>Status
+                <select name="asset_status">
+                  <option value="CANDIDATE" {% if asset.asset_status == "CANDIDATE" %}selected{% endif %}>CANDIDATE</option>
+                  <option value="REVIEW_REQUIRED" {% if asset.asset_status == "REVIEW_REQUIRED" %}selected{% endif %}>REVIEW_REQUIRED</option>
+                  <option value="APPROVED" {% if asset.asset_status == "APPROVED" %}selected{% endif %}>APPROVED</option>
+                </select>
+              </label>
+              <button type="submit">Update</button>
+            </form>
+            {% else %}
+            <span class="muted">Locked after approval</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No assets were parsed from this pack.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,3 @@
+display_name: Repo Audit
+short_description: Audit structure, ownership, and Codex readiness before changing the workspace.
+default_prompt: Use $repo-audit to assess this workspace, classify what belongs where, and recommend safe Codex-first cleanup moves.

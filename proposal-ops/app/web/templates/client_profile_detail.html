@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="proposal-builder-shell">
+  <div class="proposal-builder-toolbar">
+    <div>
+      <p class="eyebrow">Client Profile</p>
+      <h1>{{ profile.display_name }}</h1>
+      <p class="lead">Manage approved pricing models, proposal templates, and default selections for this client.</p>
+    </div>
+    <div class="builder-link-row">
+      <a href="/client-profiles">Back to Client Profiles</a>
+      <a href="/client-onboarding">Client Onboarding</a>
+      <a href="/proposal-builder">Open Proposal Builder</a>
+    </div>
+  </div>
+
+  {% if success_message %}
+  <div class="builder-alert builder-alert-success">{{ success_message }}</div>
+  {% endif %}
+
+  {% if error_message %}
+  <div class="builder-alert builder-alert-error">{{ error_message }}</div>
+  {% endif %}
+
+  <div class="builder-grid">
+    <div class="builder-card">
+      <h2>Profile Summary</h2>
+      <dl class="builder-keyfacts">
+        <div><dt>Status</dt><dd>{{ profile.status }}</dd></div>
+        <div><dt>Environment</dt><dd>{{ profile.client_environment_status }}</dd></div>
+        <div><dt>Aliases</dt><dd>{{ profile.aliases|join(", ") if profile.aliases else "None" }}</dd></div>
+        <div><dt>Approved Content Tags</dt><dd>{{ profile.approved_content_tags|join(", ") if profile.approved_content_tags else "None" }}</dd></div>
+        <div><dt>Region Tags</dt><dd>{{ profile.region_tags|join(", ") if profile.region_tags else "None" }}</dd></div>
+        <div><dt>Service Tags</dt><dd>{{ profile.service_tags|join(", ") if profile.service_tags else "None" }}</dd></div>
+        <div><dt>Active Onboarding Pack</dt><dd>{{ profile.active_onboarding_pack_id or "Not activated" }}</dd></div>
+        <div><dt>Active Playbook Version</dt><dd>{{ profile.active_playbook_version or "Not set" }}</dd></div>
+        <div><dt>Default Pricing Model</dt><dd>{{ profile.default_pricing_model_name or "Not set" }}</dd></div>
+        <div><dt>Default Proposal Template</dt><dd>{{ profile.default_proposal_template_name or "Not set" }}</dd></div>
+      </dl>
+    </div>
+
+    <div class="builder-card">
+      <h2>Set Client Defaults</h2>
+      <form method="post" action="/client-profiles/{{ profile.id }}/defaults" class="builder-form builder-form-compact">
+        <label>Default Pricing Model
+          <select name="default_pricing_model_id">
+            <option value="">None</option>
+            {% for item in profile.pricing_models %}
+            <option value="{{ item.id }}" {% if profile.default_pricing_model_id == item.id %}selected{% endif %}>
+              {{ item.name }} ({{ item.status }})
+            </option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Default Proposal Template
+          <select name="default_proposal_template_id">
+            <option value="">None</option>
+            {% for item in profile.proposal_templates %}
+            <option value="{{ item.id }}" {% if profile.default_proposal_template_id == item.id %}selected{% endif %}>
+              {{ item.name }} ({{ item.status }})
+            </option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="submit">Save Defaults</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="builder-grid">
+    <div class="builder-card">
+      <h2>Import Existing Pricing Model</h2>
+      <form method="post" action="/client-profiles/{{ profile.id }}/pricing-models/import" enctype="multipart/form-data" class="builder-form builder-form-compact">
+        <label>Display Name
+          <input type="text" name="name" placeholder="Airport Janitorial Pricing Model" />
+        </label>
+        <label>Workbook, CSV, or JSON
+          <input type="file" name="file" accept=".xlsx,.csv,.json" required />
+        </label>
+        <button type="submit">Import Pricing Model</button>
+      </form>
+      <p class="muted">Use this when the client already has an approved workbook or structured rate-card file.</p>
+    </div>
+
+    <div class="builder-card">
+      <h2>Build Pricing Model from Scratch</h2>
+      <form method="post" action="/client-profiles/{{ profile.id }}/pricing-models" class="builder-form builder-form-compact">
+        <label>Model Name
+          <input type="text" name="name" value="{{ profile.display_name }} Default Pricing Model" required />
+        </label>
+        <label>Assumptions
+          <input type="text" name="assumptions" placeholder="airport-ready staffing, finance approval required" />
+        </label>
+        <label>Service Tags
+          <input type="text" name="service_tags" value="{{ profile.service_tags|join(', ') if profile.service_tags else '' }}" />
+        </label>
+        <label>Region Tags
+          <input type="text" name="region_tags" value="{{ profile.region_tags|join(', ') if profile.region_tags else '' }}" />
+        </label>
+        <div class="builder-grid builder-grid-tight">
+          <label>Site Multiplier
+            <input type="number" step="0.01" name="site_multiplier" value="1.0" />
+          </label>
+          <label>Continuous Coverage Multiplier
+            <input type="number" step="0.01" name="continuous_coverage_multiplier" value="1.35" />
+          </label>
+        </div>
+        <table class="builder-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Label</th>
+              <th>Rate</th>
+              <th>Burden</th>
+              <th>Markup</th>
+              <th>Hours/Week</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for labor in [
+              ("janitor", "Janitor", "20.50", "1.27", "1.18", "160"),
+              ("day_porter", "Day Porter", "22.00", "1.24", "1.16", "80"),
+              ("supervisor", "Supervisor", "28.50", "1.25", "1.15", "20"),
+              ("project_manager", "Project Manager", "42.00", "1.18", "1.12", "6"),
+            ] %}
+            <tr>
+              <td><input type="text" name="labor_code" value="{{ labor[0] }}" /></td>
+              <td><input type="text" name="labor_label" value="{{ labor[1] }}" /></td>
+              <td><input type="number" step="0.01" name="labor_hourly_rate" value="{{ labor[2] }}" /></td>
+              <td><input type="number" step="0.01" name="labor_burden_factor" value="{{ labor[3] }}" /></td>
+              <td><input type="number" step="0.01" name="labor_markup_factor" value="{{ labor[4] }}" /></td>
+              <td><input type="number" step="0.01" name="labor_default_hours" value="{{ labor[5] }}" /></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <button type="submit">Create Pricing Model</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="builder-grid">
+    <div class="builder-card">
+      <h2>Upload Proposal Template</h2>
+      <form method="post" action="/client-profiles/{{ profile.id }}/proposal-templates" enctype="multipart/form-data" class="builder-form builder-form-compact">
+        <label>Template Name
+          <input type="text" name="name" placeholder="Authority Proposal Template" />
+        </label>
+        <label>Word Template (.docx)
+          <input type="file" name="file" accept=".docx" required />
+        </label>
+        <button type="submit">Upload Proposal Template</button>
+      </form>
+      <p class="muted">Required anchors: transmittal letter, executive summary, technical approach, management/staffing, transition/mobilization, past performance, pricing, and compliance.</p>
+    </div>
+
+    <div class="builder-card">
+      <h2>Proposal Templates</h2>
+      {% if profile.proposal_templates %}
+      <table class="builder-table">
+        <thead>
+          <tr>
+            <th>Template</th>
+            <th>Validation</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in profile.proposal_templates %}
+          <tr>
+            <td>
+              <strong>{{ item.name }}</strong>
+              <div class="muted">{{ item.source_filename }}</div>
+            </td>
+            <td>
+              {% if item.validation_report and item.validation_report.errors %}
+              <div class="builder-inline-errors">
+                {% for message in item.validation_report.errors %}
+                <div>{{ message }}</div>
+                {% endfor %}
+              </div>
+              {% elif item.validation_report %}
+              <div>Valid</div>
+              {% endif %}
+              {% if item.validation_report and item.validation_report.warnings %}
+              <div class="muted">{{ item.validation_report.warnings|join("; ") }}</div>
+              {% endif %}
+            </td>
+            <td>{{ item.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No proposal templates uploaded yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="builder-card">
+    <h2>Pricing Models</h2>
+    {% if profile.pricing_models %}
+    <table class="builder-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Source</th>
+          <th>Validation</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in profile.pricing_models %}
+        <tr>
+          <td>
+            <strong>{{ item.name }}</strong>
+            <div class="muted">{{ item.onboarding_mode }}{% if item.workbook_template_filename %} | Workbook: {{ item.workbook_template_filename }}{% endif %}</div>
+          </td>
+          <td>{{ item.source_filename or item.source_format or "Scratch built" }}</td>
+          <td>
+            {% if item.validation_report and item.validation_report.errors %}
+            <div class="builder-inline-errors">
+              {% for message in item.validation_report.errors %}
+              <div>{{ message }}</div>
+              {% endfor %}
+            </div>
+            {% elif item.validation_report %}
+            <div>Ready</div>
+            {% endif %}
+            {% if item.validation_report and item.validation_report.warnings %}
+            <div class="muted">{{ item.validation_report.warnings|join("; ") }}</div>
+            {% endif %}
+          </td>
+          <td>{{ item.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No pricing models have been added yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

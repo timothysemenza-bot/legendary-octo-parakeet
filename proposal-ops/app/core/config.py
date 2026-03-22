@@ -5,6 +5,43 @@ import json
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 APP_DIR = BASE_DIR / "app"
+ENV_FILE_OVERRIDE_KEYS = {
+    "OPENAI_API_KEY",
+    "BOSSKEY_OPENAI_MODEL",
+    "BOSSKEY_OPENAI_TIMEOUT_SECONDS",
+    "BOSSKEY_OPENAI_EXTRACT_TIMEOUT_SECONDS",
+    "BOSSKEY_OPENAI_SKELETON_TIMEOUT_SECONDS",
+    "BOSSKEY_OPENAI_DRAFT_TIMEOUT_SECONDS",
+    "BOSSKEY_OPENAI_MAX_TIMEOUT_SECONDS",
+    "BOSSKEY_OPENAI_ENABLE_TOKEN_GUARDS",
+    "BOSSKEY_OPENAI_ESTIMATED_CHARS_PER_TOKEN",
+    "BOSSKEY_OPENAI_GLOBAL_MAX_ESTIMATED_INPUT_TOKENS",
+    "BOSSKEY_OPENAI_GLOBAL_MAX_OUTPUT_TOKENS",
+    "BOSSKEY_PROPOSAL_BUILDER_ALLOW_CACHED_DEMO_FALLBACK",
+    "BOSSKEY_PROPOSAL_BUILDER_ALLOW_LIVE_STAGE_FALLBACK",
+    "BOSSKEY_ENABLE_COLOR_TEAM_REVIEWS",
+}
+
+
+def _load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if not key:
+            continue
+        if key in os.environ and key not in ENV_FILE_OVERRIDE_KEYS:
+            continue
+        cleaned = value.strip().strip("'").strip('"')
+        os.environ[key] = cleaned
+
+
+for _env_path in (BASE_DIR / ".env", BASE_DIR.parent / ".env"):
+    _load_env_file(_env_path)
 
 
 def _path_from_env(env_var: str, default: Path) -> Path:
@@ -15,6 +52,16 @@ def _path_from_env(env_var: str, default: Path) -> Path:
     if candidate.is_absolute():
         return candidate
     return BASE_DIR / candidate
+
+
+def _int_from_env(env_var: str, default: int) -> int:
+    raw = os.getenv(env_var, "").strip()
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        return default
 
 
 ARTIFACTS_DIR = _path_from_env("BOSSKEY_ARTIFACTS_DIR", BASE_DIR / ".artifacts")
@@ -42,6 +89,38 @@ SMTP_USERNAME = os.getenv("BOSSKEY_SMTP_USERNAME", "")
 SMTP_PASSWORD = os.getenv("BOSSKEY_SMTP_PASSWORD", "")
 SMTP_SENDER = os.getenv("BOSSKEY_SMTP_SENDER", "bosskey@localhost")
 WEBHOOK_TIMEOUT_SECONDS = int(os.getenv("BOSSKEY_WEBHOOK_TIMEOUT_SECONDS", "10"))
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+BOSSKEY_OPENAI_MODEL = os.getenv("BOSSKEY_OPENAI_MODEL", "gpt-5.4").strip() or "gpt-5.4"
+BOSSKEY_OPENAI_TIMEOUT_SECONDS = _int_from_env("BOSSKEY_OPENAI_TIMEOUT_SECONDS", 45)
+BOSSKEY_OPENAI_EXTRACT_TIMEOUT_SECONDS = _int_from_env(
+    "BOSSKEY_OPENAI_EXTRACT_TIMEOUT_SECONDS", max(BOSSKEY_OPENAI_TIMEOUT_SECONDS, 120)
+)
+BOSSKEY_OPENAI_SKELETON_TIMEOUT_SECONDS = _int_from_env(
+    "BOSSKEY_OPENAI_SKELETON_TIMEOUT_SECONDS", max(BOSSKEY_OPENAI_TIMEOUT_SECONDS, 180)
+)
+BOSSKEY_OPENAI_DRAFT_TIMEOUT_SECONDS = _int_from_env(
+    "BOSSKEY_OPENAI_DRAFT_TIMEOUT_SECONDS", max(BOSSKEY_OPENAI_TIMEOUT_SECONDS, 300)
+)
+BOSSKEY_OPENAI_MAX_TIMEOUT_SECONDS = _int_from_env(
+    "BOSSKEY_OPENAI_MAX_TIMEOUT_SECONDS", max(BOSSKEY_OPENAI_DRAFT_TIMEOUT_SECONDS, 600)
+)
+BOSSKEY_OPENAI_ENABLE_TOKEN_GUARDS = os.getenv("BOSSKEY_OPENAI_ENABLE_TOKEN_GUARDS", "true").lower() == "true"
+BOSSKEY_OPENAI_ESTIMATED_CHARS_PER_TOKEN = max(_int_from_env("BOSSKEY_OPENAI_ESTIMATED_CHARS_PER_TOKEN", 4), 1)
+BOSSKEY_OPENAI_GLOBAL_MAX_ESTIMATED_INPUT_TOKENS = _int_from_env(
+    "BOSSKEY_OPENAI_GLOBAL_MAX_ESTIMATED_INPUT_TOKENS", 20_000
+)
+BOSSKEY_OPENAI_GLOBAL_MAX_OUTPUT_TOKENS = _int_from_env(
+    "BOSSKEY_OPENAI_GLOBAL_MAX_OUTPUT_TOKENS", 8_000
+)
+BOSSKEY_PROPOSAL_BUILDER_ALLOW_CACHED_DEMO_FALLBACK = (
+    os.getenv("BOSSKEY_PROPOSAL_BUILDER_ALLOW_CACHED_DEMO_FALLBACK", "true").lower() == "true"
+)
+BOSSKEY_PROPOSAL_BUILDER_ALLOW_LIVE_STAGE_FALLBACK = (
+    os.getenv("BOSSKEY_PROPOSAL_BUILDER_ALLOW_LIVE_STAGE_FALLBACK", "false").lower() == "true"
+)
+BOSSKEY_ENABLE_COLOR_TEAM_REVIEWS = os.getenv("BOSSKEY_ENABLE_COLOR_TEAM_REVIEWS", "false").lower() == "true"
+EXPORTS_DIR = _path_from_env("BOSSKEY_EXPORTS_DIR", ARTIFACTS_DIR / "exports")
+EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 DEFAULT_NOTIFICATION_POLICY = {
     "global_thresholds": {

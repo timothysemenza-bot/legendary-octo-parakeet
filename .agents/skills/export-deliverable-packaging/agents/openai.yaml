@@ -1,0 +1,3 @@
+display_name: Export Deliverable Packaging
+short_description: Create clean deliverable bundles with source and export separation.
+default_prompt: Use $export-deliverable-packaging to package these outputs into a dated deliverable bundle with clear handoff notes.

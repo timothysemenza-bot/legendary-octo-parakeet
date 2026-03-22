@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="280" viewBox="0 0 1280 280" fill="none">
+  <rect width="1280" height="280" rx="34" fill="#FFF8F0"/>
+  <rect x="12" y="12" width="1256" height="256" rx="26" stroke="#D7C7B5" stroke-width="2"/>
+  <g transform="translate(44 44)">
+    <rect width="356" height="192" rx="28" fill="#8F1932"/>
+    <rect x="16" y="16" width="324" height="160" rx="20" fill="#77152A" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="34" y="72" fill="#FDE7D2" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="700">UConn Writing</text>
+    <text x="34" y="118" fill="#FFF7EB" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="700">Center</text>
+    <text x="34" y="152" fill="#F6D8C0" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="0.18em">ALUMNI TRIBUTE PILOT</text>
+    <rect x="34" y="164" width="120" height="4" rx="2" fill="#D6A359"/>
+  </g>
+  <g transform="translate(440 80)">
+    <circle cx="54" cy="54" r="54" fill="#F3E2CD"/>
+    <path d="M39 39L69 69" stroke="#8F1932" stroke-width="8" stroke-linecap="round"/>
+    <path d="M69 39L39 69" stroke="#8F1932" stroke-width="8" stroke-linecap="round"/>
+    <text x="108" y="50" fill="#675446" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800" letter-spacing="0.2em">PARTNERSHIP</text>
+    <text x="108" y="80" fill="#172230" font-family="Fraunces, Georgia, serif" font-size="28" font-weight="700">Writing Center x Boss Key</text>
+  </g>
+  <g transform="translate(664 30)">
+    <rect x="0" y="0" width="182" height="182" rx="28" fill="#121D33"/>
+    <path d="M48 19H134L153 38V134L134 153H48L29 134V38L48 19Z" stroke="#F5F7FB" stroke-width="9" stroke-linejoin="miter"/>
+    <path d="M91 53L125 87L91 121L57 87L91 53Z" stroke="#F5F7FB" stroke-width="9" stroke-linejoin="miter"/>
+    <path d="M91 19V53" stroke="#F5F7FB" stroke-width="9" stroke-linecap="square"/>
+    <circle cx="116" cy="87" r="5.2" fill="#C5162E"/>
+    <text x="218" y="94" fill="#0B1222" font-family="Fraunces, Georgia, serif" font-size="74" font-weight="700" letter-spacing="0.3">Boss Key</text>
+    <text x="220" y="139" fill="#5F6F83" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="0.12em">BUSINESS DEVELOPMENT ACCELERATION</text>
+    <rect x="220" y="160" width="352" height="4" rx="2" fill="#C5162E"/>
+    <text x="220" y="192" fill="#6D5B4B" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Strategic support for outreach, review, and reception display</text>
+  </g>
+</svg>

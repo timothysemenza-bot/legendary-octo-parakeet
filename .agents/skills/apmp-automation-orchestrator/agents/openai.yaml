@@ -1,0 +1,3 @@
+display_name: APMP Automation Orchestrator
+short_description: Dispatch a recurring APMP run to the right proposal workflow and leave an operator-ready brief.
+default_prompt: Use $apmp-automation-orchestrator to inspect this pursuit, identify the current APMP stage, run the next justified workflow, and leave a short operator brief with actions and blockers.

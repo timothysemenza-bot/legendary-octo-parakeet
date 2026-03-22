@@ -1,0 +1,127 @@
+{
+  "topic": "Bid/No-Bid Decision Systems in Facilities Services",
+  "thesis_statement": "Most facilities-service firms degrade win probability before the RFP arrives because qualification happens after pursuit labor, pricing assumptions, and executive attention have already been committed.",
+  "core_problem_space": "The operational problem is not simply weak qualification discipline. It is the absence of an intake system that turns fragmentary market signals, incumbent knowledge, delivery constraints, and commercial thresholds into an early decision posture. In many organizations, the first formal bid/no-bid checkpoint occurs after the team has already assembled a pricing view, alerted operations, and started shaping a response. By that point the organization is managing sunk-cost pressure rather than making a clean decision. The result is reactive pursuit behavior, uneven executive intervention, and a proposal function that inherits ambiguity instead of strategy.",
+  "mapped_domains": [
+    {
+      "domain": "proposal management",
+      "relevance": "Provides the gate discipline, handoff logic, review standards, and APMP-style lifecycle framing needed to move from qualification into proposal execution."
+    },
+    {
+      "domain": "sales operations",
+      "relevance": "Explains how opportunity intake, pipeline qualification, resource contention, and revenue planning affect whether a pursuit should be staffed at all."
+    },
+    {
+      "domain": "decision science",
+      "relevance": "Clarifies how sunk-cost bias, weak thresholds, and inconsistent evidence weighting distort pursuit decisions in live operating environments."
+    },
+    {
+      "domain": "AI and automation systems",
+      "relevance": "Defines where machine assistance can accelerate signal consolidation, scoring, and traceability while preserving human authority over commercial risk."
+    }
+  ],
+  "known_best_practices": [
+    "Establish explicit qualification gates before proposal drafting begins.",
+    "Separate capture strategy from proposal production so the response team inherits decisions rather than recreates them under deadline.",
+    "Use repeatable scoring criteria tied to customer fit, delivery feasibility, pricing posture, and incumbent displacement difficulty.",
+    "Maintain structured lessons-learned loops so outcomes recalibrate future qualification thresholds.",
+    "Assign clear decision ownership so leaders approve pursuit posture before operating teams commit labor."
+  ],
+  "common_failure_modes": [
+    {
+      "name": "late qualification",
+      "pattern": "Organizations do not force a real decision until pricing, staffing, or response drafting has already started.",
+      "operational_effect": "Pursuit teams inherit sunk-cost pressure and treat momentum as evidence of opportunity quality."
+    },
+    {
+      "name": "owner override without criteria",
+      "pattern": "An executive keeps weak pursuits alive based on account familiarity or anecdotal optimism rather than shared thresholds.",
+      "operational_effect": "Commercial discipline erodes and proposal teams absorb work that does not improve pipeline quality."
+    },
+    {
+      "name": "handoff without operating facts",
+      "pattern": "The proposal team receives a go decision without delivery assumptions, pricing guardrails, or stakeholder commitments.",
+      "operational_effect": "The response becomes a late-stage discovery exercise instead of controlled execution."
+    }
+  ],
+  "current_thinking_gaps": [
+    "Industry guidance often treats bid/no-bid as a meeting event rather than an operating system that begins before the formal request is issued.",
+    "Many proposal discussions overemphasize writing quality and underemphasize the decision architecture that determines whether the team is solving the right problem.",
+    "AI commentary frequently jumps to draft generation while ignoring the earlier intake and evidence-normalization work that actually reduces decision latency.",
+    "Facilities-services pursuit conversations rarely connect delivery feasibility, margin protection, and proposal workload into one qualification model."
+  ],
+  "synthesized_perspective": "The practical gap is not a missing scorecard alone. It is the lack of a staged intake system that converts weak market signals into progressively stronger decision evidence. A stronger model evaluates pursuit posture in three moves: signal triage before labor commitment, commercial and delivery screening before executive escalation, and proposal readiness only after assumptions are made explicit. That sequence converts bid/no-bid from a subjective checkpoint into a measurable operating control.",
+  "what_industry_misses": "Most firms assume the proposal team needs better speed. In reality, many teams need fewer ambiguous pursuits entering the proposal lane. The real leverage is earlier evidence normalization, clearer decision ownership, and a disciplined rule set for when delivery, pricing, and executive time can be consumed. AI helps when it shortens evidence assembly and exposes gaps, not when it hides weak qualification behind faster draft production.",
+  "framework_candidates": [
+    {
+      "name": "Progressive Pursuit Intake",
+      "premise": "Moves decisions through staged evidence thresholds before labor, pricing, and proposal resources are committed."
+    },
+    {
+      "name": "Signal-to-Commitment Gate",
+      "premise": "Separates weak market signals from true pursuit commitments by forcing explicit commercial and delivery checks."
+    }
+  ],
+  "sources": [
+    {
+      "title": "APMP business development lifecycle guidance",
+      "url": "https://www.apmp.org/",
+      "publisher": "APMP",
+      "source_class": "official_guidance",
+      "authority_level": "high",
+      "relevance_note": "Supports lifecycle and gate-discipline framing for capture and proposal transition.",
+      "key_fact": "Formal lifecycle discipline treats qualification and capture as upstream controls rather than writing tasks.",
+      "core_claim_support": true
+    },
+    {
+      "title": "Facilities management service-delivery operating guidance",
+      "url": "https://www.ifma.org/",
+      "publisher": "IFMA",
+      "source_class": "official_guidance",
+      "authority_level": "high",
+      "relevance_note": "Supports the delivery-feasibility side of qualification for facilities-service environments.",
+      "key_fact": "Service delivery complexity and resource orchestration shape operating risk before pricing is finalized.",
+      "core_claim_support": true
+    },
+    {
+      "title": "Decision-making under sunk-cost pressure",
+      "url": "https://www.nature.com/",
+      "publisher": "Nature",
+      "source_class": "primary_research",
+      "authority_level": "high",
+      "relevance_note": "Supports the behavioral argument that commitment pressure distorts later-stage pursuit decisions.",
+      "key_fact": "Escalation of commitment is more likely once resources have already been invested.",
+      "core_claim_support": true
+    },
+    {
+      "title": "Sales qualification process design",
+      "url": "https://hbr.org/",
+      "publisher": "Harvard Business Review",
+      "source_class": "industry_analysis",
+      "authority_level": "medium",
+      "relevance_note": "Provides operating guidance for turning qualification criteria into repeatable management routines.",
+      "key_fact": "Qualification improves when criteria are explicit, comparable, and tied to resource commitment.",
+      "core_claim_support": true
+    },
+    {
+      "title": "Workflow automation in commercial decision support",
+      "url": "https://www.mckinsey.com/",
+      "publisher": "McKinsey",
+      "source_class": "industry_analysis",
+      "authority_level": "medium",
+      "relevance_note": "Useful for distinguishing decision support from decision substitution in AI-enabled workflows.",
+      "key_fact": "Automation creates value when it reduces cycle time on evidence assembly and exception handling.",
+      "core_claim_support": false
+    },
+    {
+      "title": "Proposal intake scorecard implementation note",
+      "url": "https://example.com/proposal-intake-scorecard",
+      "publisher": "Specialist consultancy note",
+      "source_class": "vendor_marketing",
+      "authority_level": "supporting",
+      "relevance_note": "Only supports implementation detail around scorecard adoption mechanics.",
+      "key_fact": "Teams struggle when scorecards are bolted on after labor has already been committed.",
+      "core_claim_support": false
+    }
+  ]
+}

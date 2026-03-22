@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crawford Proposal Operations Modernization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    @page { size: Letter; margin: 0; }
+    :root {
+      --craw-blue: #204486;
+      --craw-bright: #0071b8;
+      --craw-magenta: #df195c;
+      --ink: #18303d;
+      --muted: #556670;
+      --paper: #ffffff;
+      --panel: #f3f7fb;
+      --panel-2: #edf3fb;
+      --line: #d6e0ea;
+      --boss: #8f123e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #dfe6ee;
+      font-family: "Roboto", "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    h1, h2, h3, h4 {
+      margin: 0;
+      line-height: 1.08;
+      font-family: "Roboto Slab", Georgia, serif;
+    }
+    p { margin: 0 0 9px; }
+    .sheet {
+      position: relative;
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      padding: 0.55in 0.62in 0.55in;
+      background: var(--paper);
+      page-break-after: always;
+      overflow: hidden;
+    }
+    .sheet:last-child { page-break-after: auto; }
+    .top-rule {
+      height: 10px;
+      margin: -0.55in -0.62in 28px;
+      background: linear-gradient(90deg, var(--craw-blue) 0%, var(--craw-bright) 72%, var(--craw-magenta) 100%);
+    }
+    .brand-row,
+    .meta-row,
+    .card-grid,
+    .grid-2,
+    .layer-grid,
+    .phase-grid,
+    .score-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .brand-row {
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+    .meta-row { grid-template-columns: repeat(3, 1fr); margin-top: 18px; }
+    .card-grid,
+    .layer-grid { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: 1.05fr 0.95fr; }
+    .phase-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-grid { grid-template-columns: repeat(5, 1fr); margin-top: 16px; }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(32, 68, 134, 0.08);
+      color: var(--craw-blue);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .craw-logo { width: 250px; max-width: 100%; }
+    .boss-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--boss);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .boss-mark img { width: 24px; height: 24px; }
+    .cover-title {
+      font-size: 34px;
+      color: var(--craw-blue);
+      margin-bottom: 14px;
+      max-width: none;
+      line-height: 1.02;
+    }
+    .cover-subtitle {
+      font-size: 14.2px;
+      color: #203846;
+      max-width: 6.85in;
+    }
+    .summary-box,
+    .meta-box,
+    .note-box,
+    .card,
+    .phase,
+    .table-wrap,
+    .pilot-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .summary-box {
+      margin-top: 30px;
+      padding: 22px 24px;
+      background: linear-gradient(135deg, rgba(32, 68, 134, 0.06) 0%, rgba(0, 113, 184, 0.02) 60%, rgba(223, 25, 92, 0.05) 100%);
+    }
+    .summary-box strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--craw-magenta);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .summary-box p {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.34;
+      color: var(--ink);
+    }
+    .meta-box,
+    .note-box,
+    .card,
+    .phase,
+    .pilot-box { padding: 16px 18px; }
+    .meta-box strong,
+    .note-box strong,
+    .phase strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--craw-blue);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .section-title {
+      font-size: 24px;
+      color: var(--craw-blue);
+      margin-bottom: 10px;
+    }
+    .section-intro {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+    .card h3,
+    .phase h3,
+    .pilot-box h3 { color: var(--craw-blue); font-size: 15px; margin-bottom: 8px; }
+    .card p,
+    .phase p,
+    .pilot-box p,
+    .note-box p,
+    .meta-box p { font-size: 11.4px; color: var(--muted); }
+    ul { margin: 8px 0 0; padding-left: 18px; }
+    li { margin: 4px 0; font-size: 11.2px; color: var(--ink); }
+    .table-wrap { overflow: hidden; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.2px;
+    }
+    th, td {
+      padding: 9px 10px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    th {
+      background: var(--panel);
+      color: var(--craw-blue);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    tr:last-child td { border-bottom: none; }
+    .page-footer {
+      position: absolute;
+      left: 0.62in;
+      right: 0.62in;
+      bottom: 0.32in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #6c7d88;
+      font-size: 10px;
+    }
+    .page-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--craw-blue);
+      font-weight: 700;
+    }
+    .icon-watermark {
+      position: absolute;
+      right: -26px;
+      bottom: 28px;
+      width: 170px;
+      opacity: 0.05;
+    }
+  </style>
+</head>
+<body>
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <div class="brand-row">
+      <div>
+        <img class="craw-logo" src="./assets/crawford-logo-blue.png" alt="Crawford & Company logo">
+        <div class="boss-mark">
+          <img src="./assets/boss-key-logo-refined.svg" alt="Boss Key logo">
+          <span>Prepared by Boss Key LLC</span>
+        </div>
+      </div>
+      <div class="meta-box">
+        <strong>Prepared For</strong>
+        <p>Marc Cunningham and Crawford &amp; Company growth, proposal, and operational stakeholders</p>
+        <strong style="margin-top: 12px;">Prepared On</strong>
+        <p>March 20, 2026</p>
+      </div>
+    </div>
+
+    <span class="eyebrow">Proposal Operations Modernization Framework</span>
+    <h1 class="cover-title">A practical path to stronger<br>proposal operations at Crawford.</h1>
+    <p class="cover-subtitle">For Marc Cunningham's team, the question is not whether automation matters. It is whether the operating chain feeding proposal work is strong enough to support it. Boss Key helps tighten qualification, capture thinking, pricing support, handoffs, review discipline, and knowledge governance so stronger drafts can be built from stronger inputs.</p>
+
+    <div class="summary-box">
+      <strong>Core argument</strong>
+      <p>Most proposal organizations try to automate weak inputs. Boss Key helps teams strengthen the full growth-to-proposal chain so reusable content becomes more trustworthy, executive reviews become less reactive, and automation can be applied with greater confidence.</p>
+    </div>
+
+    <div class="meta-row">
+      <div class="meta-box">
+        <strong>Where Pressure Usually Shows Up</strong>
+        <p>Qualification drift, compressed handoffs, reactive pricing support, executive review thrash, and content libraries that are technically reusable but not consistently trustworthy.</p>
+      </div>
+      <div class="meta-box">
+        <strong>What This Effort Would Change</strong>
+        <p>A clearer operating model, more trustworthy reusable knowledge objects, and a safer basis for selective automation where the inputs are strong enough to hold up.</p>
+      </div>
+      <div class="meta-box">
+        <strong>Why Boss Key Is Relevant</strong>
+        <p>Grounded operating perspective shaped by Broadspire-era content-system work and later cross-functional proposal operations design across growth, proposal, pricing, and review environments.</p>
+      </div>
+    </div>
+
+    <img class="icon-watermark" src="./assets/crawford-icon.svg" alt="">
+    <div class="page-footer">
+      <span>Branding references sourced from crawco.com official assets and stylesheet.</span>
+      <span class="page-number">1</span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <span class="eyebrow">Executive Summary</span>
+    <h2 class="section-title">Why this matters to Marc Cunningham's team</h2>
+    <p class="section-intro">This framework is written around a common operating problem in complex proposal organizations: proposal work becomes compressed and harder to trust when the upstream chain is weak. The issue is rarely a shortage of text. It is a shortage of structured decisions, accountable source content, and repeatable cross-functional rhythm.</p>
+
+    <div class="card-grid">
+      <article class="card">
+        <h3>Reduce operating drag</h3>
+        <p>Proposal teams perform better when qualification happens earlier, intake is cleaner, pricing enters with enough time, and review checkpoints are defined before drafting gets urgent.</p>
+      </article>
+      <article class="card">
+        <h3>Improve content trustworthiness</h3>
+        <p>Automation-readiness starts when source content is current, owner-backed, and organized as reusable knowledge objects rather than loosely managed document fragments.</p>
+      </article>
+      <article class="card">
+        <h3>Make automation safer to use</h3>
+        <p>The value is not just faster drafting. It is better drafts, less rework, less executive thrash, and more confidence in what the team is reusing.</p>
+      </article>
+    </div>
+
+    <div class="grid-2" style="margin-top: 16px;">
+      <div class="note-box">
+        <strong>What Boss Key is proposing</strong>
+        <p>A practical proposal operations modernization effort that helps strengthen the full chain between qualification, capture thinking, pricing support, sales-to-proposal handoff, review discipline, content governance, and execution.</p>
+      </div>
+      <div class="note-box">
+        <strong>Why the Broadspire connection matters</strong>
+        <p>It matters as restrained proof of long-standing proposal-system experience, including more than 1,600 proposal library entries built in that environment and a later expansion into proposal operations and cross-functional operating design.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Crawford proposal operations modernization framework</span>
+      <span class="page-number">2</span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <div class="grid-2">
+      <div>
+        <span class="eyebrow">Where It Breaks</span>
+        <h2 class="section-title">Where proposal automation usually breaks</h2>
+        <div class="card" style="margin-bottom: 12px;">
+          <h3>Common pressure points in comparable organizations</h3>
+          <ul>
+            <li>opportunities enter without enough strategy already defined</li>
+            <li>proposal joins after the schedule is already compressed</li>
+            <li>pricing support arrives late and turns reactive</li>
+            <li>executive reviews become fire drills rather than checkpoints</li>
+            <li>content is technically reusable but not fully trustworthy</li>
+            <li>teams keep rebuilding because source content is not governed tightly enough</li>
+          </ul>
+        </div>
+        <div class="note-box">
+          <strong>Measured contrast</strong>
+          <p>Qvidian-style reuse often centers on document-fragment reuse. Boss Key is proposing operating-model-driven reuse: a content environment where current, buyer-relevant material can be assembled from governed reusable knowledge objects.</p>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow">Boss Key Model</span>
+        <h2 class="section-title">Three linked layers</h2>
+        <div class="layer-grid" style="grid-template-columns: 1fr;">
+          <article class="card" style="background: var(--panel-2);">
+            <h3>Operating Layer</h3>
+            <p>Qualification criteria, structured intake, role clarity, kickoff discipline, review cadence, and escalation paths.</p>
+          </article>
+          <article class="card" style="background: #f8f5ee;">
+            <h3>Knowledge Layer</h3>
+            <p>Content inventory, repository architecture, taxonomy, source-of-truth mapping, proof-point governance, and stale-content controls.</p>
+          </article>
+          <article class="card" style="background: #f1f8f8;">
+            <h3>Automation Layer</h3>
+            <p>Retrieval-ready modules, governed repository approach, structured prompts and templates, and human-in-the-loop review.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Automation is the result of stronger inputs, not the first move.</span>
+      <span class="page-number">3</span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <span class="eyebrow">How We'd Work</span>
+    <h2 class="section-title">A low-disruption way to work with Crawford</h2>
+    <p class="section-intro">The recommended path is to start narrow, prove value, and give leadership a clearer fact base for what should be standardized, governed, and selectively automated next.</p>
+
+    <div class="phase-grid">
+      <article class="phase">
+        <strong>Phase 1</strong>
+        <h3>Diagnostic</h3>
+        <p>Baseline proposal operations, knowledge governance, and automation-readiness within a bounded scope.</p>
+      </article>
+      <article class="phase">
+        <strong>Phase 2</strong>
+        <h3>Operating-Model Design</h3>
+        <p>Define qualification, intake, role clarity, kickoff standards, review cadence, and escalation paths.</p>
+      </article>
+      <article class="phase">
+        <strong>Phase 3</strong>
+        <h3>Repository and Governance Build</h3>
+        <p>Design the content-object model, taxonomy, ownership structure, and stale-content controls.</p>
+      </article>
+      <article class="phase">
+        <strong>Phase 4</strong>
+        <h3>Automation Enablement Pilot</h3>
+        <p>Test selective automation where content and workflow inputs are already strong enough to support it.</p>
+      </article>
+      <article class="phase" style="grid-column: 1 / -1;">
+        <strong>Phase 5</strong>
+        <h3>Stabilization / O&amp;M</h3>
+        <p>Launch the governance cadence, track KPIs, capture lessons learned, and sustain the model so it does not slide back into older habits.</p>
+      </article>
+    </div>
+
+    <div class="note-box" style="margin-top: 16px;">
+      <strong>Client participation</strong>
+      <p>Boss Key would need access to a bounded cross-functional stakeholder group, sample materials, and a practical level of working-session participation. The value of the model depends on real owners being visible, not just template creation in isolation.</p>
+    </div>
+
+    <div class="page-footer">
+      <span>Start narrow, prove value, then decide what should scale.</span>
+      <span class="page-number">4</span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <span class="eyebrow">Working Outputs</span>
+    <h2 class="section-title">What Crawford would receive and what would improve</h2>
+
+    <div class="table-wrap" style="margin-bottom: 16px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Workstream</th>
+            <th>Deliverable</th>
+            <th>Why It Matters</th>
+            <th>Boss Key Role</th>
+            <th>Client Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Operating</td><td>Qualification and go/no-go framework</td><td>Protects proposal capacity and screens weak work earlier.</td><td>Design the framework.</td><td>Adopt decision gates.</td></tr>
+          <tr><td>Operating</td><td>Structured intake and kickoff package</td><td>Improves handoffs into proposal planning.</td><td>Design the intake model.</td><td>Provide inputs and owners.</td></tr>
+          <tr><td>Knowledge</td><td>Content inventory and trustworthiness assessment</td><td>Shows what is reusable, stale, or ownerless.</td><td>Classify assets and gaps.</td><td>Name business owners.</td></tr>
+          <tr><td>Knowledge</td><td>Repository architecture and taxonomy</td><td>Makes retrieval practical and governable.</td><td>Design the content-object model.</td><td>Approve taxonomy and stewardship.</td></tr>
+          <tr><td>Automation</td><td>Retrieval-ready modules and pilot workflow</td><td>Tests automation under governed conditions.</td><td>Configure and measure pilot use cases.</td><td>Review outputs and scenarios.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Current-state pattern</th>
+            <th>Future-state pattern</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Boilerplate reuse from static libraries</td><td>Governed reusable content objects tied to owners and recency</td></tr>
+          <tr><td>Reactive bid response</td><td>Earlier qualification and capture discipline before proposal launch</td></tr>
+          <tr><td>Ad hoc SME outreach</td><td>Structured intake, assigned ownership, and planned content requests</td></tr>
+          <tr><td>Last-minute executive reviews</td><td>Predefined checkpoints with clear escalation paths</td></tr>
+          <tr><td>Automation on bad inputs</td><td>Automation on governed inputs with human review</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="page-footer">
+      <span>Proposal modernization should change behavior, not just document assembly.</span>
+      <span class="page-number">5</span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="top-rule"></div>
+    <span class="eyebrow">Recommended Start</span>
+    <h2 class="section-title">A focused pilot for one business line or pursuit segment</h2>
+    <p class="section-intro">The cleanest starting point for Crawford is a focused proposal-ops diagnostic and automation-readiness pilot in one bounded area. The point is to create practical evidence before any broader rollout.</p>
+
+    <div class="pilot-box">
+      <h3>What the pilot would answer for Marc and team</h3>
+      <p>A good pilot answers five concrete questions at once: can the content be trusted, can the repository be structured for retrieval, are intake and handoffs usable, which automation use cases are feasible now, and do cycle time and quality improve under tighter operating discipline?</p>
+      <div class="score-grid">
+        <div class="card"><h3>Trustworthiness</h3><p>Which assets are current enough to reuse</p></div>
+        <div class="card"><h3>Repository</h3><p>Whether content can become governed knowledge objects</p></div>
+        <div class="card"><h3>Intake</h3><p>Whether strategy, pricing, and solution input are usable early enough</p></div>
+        <div class="card"><h3>Automation</h3><p>Which tasks are ready now and which should wait</p></div>
+        <div class="card"><h3>Measured Delta</h3><p>Cycle-time, quality, and review-burden improvement</p></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 16px;">
+      <div class="note-box">
+        <strong>Recommended next conversation</strong>
+        <p>The best next step is a working session around one bounded area of Crawford's world: a business line, a pursuit segment, or a recurring handoff pattern leadership wants to understand more clearly.</p>
+      </div>
+      <div class="note-box">
+        <strong>Discussion stance</strong>
+        <p>This proposal is intended as a practical framework, not a hard sell. If the fit is real, the output should be a narrow pilot with measurable outcomes rather than a broad transformation discussion.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Prepared by Boss Key LLC for Marc Cunningham and Crawford &amp; Company leadership review.</span>
+      <span class="page-number">6</span>
+    </div>
+  </section>
+</body>
+</html>

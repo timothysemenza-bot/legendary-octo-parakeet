@@ -14,12 +14,14 @@ os.environ["BOSSKEY_ARTIFACTS_DIR"] = TEST_ARTIFACTS_DIR.as_posix()
 from app.core.config import DB_PATH, RFP_SOURCE_STORAGE_DIR, SECRET_STORE_PATH
 from app.core.db import Base, engine
 from app.main import app
+from app.modules.company_os import models as company_os_models  # noqa: F401
 from app.modules.identity import models as identity_models  # noqa: F401
 from app.modules.janitorial_os import models as janitorial_models  # noqa: F401
 from app.modules.opportunity_intelligence import models as intelligence_models  # noqa: F401
 from app.modules.opportunity_intake import models  # noqa: F401
 from app.modules.knowledge import models as knowledge_models  # noqa: F401
 from app.modules.notifications import models as notification_models  # noqa: F401
+from app.modules.proposal_builder import models as proposal_builder_models  # noqa: F401
 from app.modules.proposal_outline import models as proposal_outline_models  # noqa: F401
 from app.modules.rfp_parser import models as rfp_models  # noqa: F401
 from app.modules.review_manager import models as review_models  # noqa: F401
@@ -46,7 +48,7 @@ def reset_db() -> None:
     with engine.begin() as conn:
         conn.execute(text("CREATE TABLE IF NOT EXISTS alembic_version (version_num VARCHAR(32) NOT NULL)"))
         conn.execute(text("DELETE FROM alembic_version"))
-        conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('0031_pilot_hardening_release')"))
+        conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('0037_client_onboarding_packs')"))
     yield
 
 

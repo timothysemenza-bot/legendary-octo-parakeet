@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Key LLC | Federal Capability Statement</title>
+  <style>
+    @page {
+      size: Letter;
+      margin: 0.38in;
+    }
+
+    :root {
+      --ink: #182431;
+      --soft: #53606d;
+      --paper: #f6f2eb;
+      --panel: #fffdfa;
+      --line: #d8cec0;
+      --navy: #22364a;
+      --navy-soft: #eef3f8;
+      --accent: #b36d2b;
+      --accent-soft: #f8e4cf;
+      --accent-deep: #8d531f;
+      --good: #21525e;
+      --good-soft: #e7f2f4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.34;
+    }
+
+    body {
+      font-size: 10.5pt;
+    }
+
+    .page {
+      display: grid;
+      gap: 14px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      align-items: start;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .brand {
+      display: grid;
+      gap: 10px;
+    }
+
+    .brand img {
+      width: 230px;
+      max-width: 100%;
+      display: block;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #cdb295;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      font-size: 8.3pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20pt;
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      margin-top: 2px;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--soft);
+      font-size: 10pt;
+      font-weight: 600;
+    }
+
+    .contact-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fffefc, #f8f4ed);
+      padding: 14px;
+    }
+
+    .contact-card h2,
+    .section-title {
+      font-size: 9pt;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .contact-list,
+    .profile-list,
+    .reason-list,
+    .lane-list,
+    .naics-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .contact-row,
+    .profile-row {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .label {
+      color: var(--soft);
+      font-size: 8.9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .value {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .body-grid {
+      display: grid;
+      grid-template-columns: 1.22fr 0.78fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      padding: 14px;
+    }
+
+    .summary-panel {
+      background:
+        radial-gradient(circle at 100% 0%, rgba(179, 109, 43, 0.12), transparent 28%),
+        linear-gradient(180deg, #fffefc, #fcf8f2);
+    }
+
+    .summary-copy {
+      color: var(--ink);
+      font-size: 10.5pt;
+      line-height: 1.45;
+    }
+
+    .chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #c7d4e0;
+      background: var(--navy-soft);
+      color: var(--navy);
+      font-size: 8.9pt;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .note {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e6ddd0;
+      color: var(--soft);
+      font-size: 9.4pt;
+      line-height: 1.45;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fffdfa;
+      padding: 11px 12px;
+      min-height: 76px;
+    }
+
+    .mini-card h3 {
+      font-size: 10pt;
+      margin-bottom: 5px;
+      color: var(--navy);
+    }
+
+    .mini-card p {
+      color: var(--soft);
+      font-size: 9.3pt;
+      line-height: 1.35;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .reason-list {
+      margin-top: 6px;
+    }
+
+    .reason {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      gap: 9px;
+      align-items: start;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 3px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(179, 109, 43, 0.12);
+    }
+
+    .reason strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--ink);
+      font-size: 9.7pt;
+    }
+
+    .reason span {
+      color: var(--soft);
+      font-size: 9.2pt;
+      line-height: 1.35;
+    }
+
+    .status-card {
+      border: 1px solid #cfe0e4;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f5fbfc, var(--good-soft));
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .status-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--good);
+      font-size: 9.8pt;
+    }
+
+    .status-card p {
+      color: #36535b;
+      font-size: 9.1pt;
+      line-height: 1.38;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .lane-list,
+    .naics-list {
+      margin-top: 8px;
+    }
+
+    .lane-row,
+    .naics-row {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      gap: 9px;
+      align-items: start;
+    }
+
+    .lane-row .dot,
+    .naics-row .dot {
+      width: 8px;
+      height: 8px;
+      margin-top: 5px;
+    }
+
+    .lane-row strong,
+    .naics-row strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--navy);
+      font-size: 9.8pt;
+    }
+
+    .lane-row span,
+    .naics-row span {
+      color: var(--soft);
+      font-size: 9.2pt;
+      line-height: 1.34;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--soft);
+      font-size: 8.7pt;
+    }
+
+    .footer strong {
+      color: var(--navy);
+    }
+
+    @media screen and (max-width: 900px) {
+      .topbar,
+      .body-grid,
+      .bottom-grid,
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-row,
+      .profile-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <section class="brand">
+          <img src="../../../../../../boss-key-website/assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key LLC">
+        <div class="eyebrow">Federal Capability Statement</div>
+        <div>
+          <h1>Consulting-first support for primes, program teams, and modernization work that needs structure.</h1>
+          <p class="subtitle">Management consulting | Proposal support | PMO and program support | Process improvement | Service-led digital support</p>
+        </div>
+      </section>
+      <aside class="contact-card">
+        <h2>Company Snapshot</h2>
+        <div class="contact-list">
+          <div class="contact-row">
+            <div class="label">Legal Name</div>
+            <div class="value">Boss Key LLC</div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Location</div>
+            <div class="value">Cinnaminson, New Jersey</div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Entity Type</div>
+            <div class="value">Single-member LLC</div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Website</div>
+            <div class="value">bosskeyops.com</div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Email</div>
+            <div class="value">timmy@bosskeyops.com</div>
+          </div>
+          <div class="contact-row">
+            <div class="label">State Status</div>
+            <div class="value">New Jersey SBE active</div>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <section class="body-grid">
+      <article class="panel summary-panel">
+        <div class="section-title">Positioning</div>
+        <p class="summary-copy">
+          Boss Key LLC helps public-sector and procurement-facing teams tighten execution where structure, clarity, and responsiveness matter.
+          The firm is best suited for management consulting, proposal support, PMO support, process improvement, requirements translation,
+          and service-led portal or application work. Boss Key is strongest where a prime or program team needs a smaller operator who can
+          improve workflows, steady live pursuits, and turn messy requirements into usable execution.
+        </p>
+        <div class="chip-wrap" aria-label="Best-fit keywords">
+          <span class="chip">Founder-led execution</span>
+          <span class="chip">Strong written work</span>
+          <span class="chip">Compliance discipline</span>
+          <span class="chip">Workflow cleanup</span>
+          <span class="chip">Requirements translation</span>
+          <span class="chip">Prime teaming support</span>
+        </div>
+        <p class="note">
+          Operating foundation: built on real experience in proposals, pursuits, and service environments where timing, review discipline,
+          and clean handoffs mattered.
+        </p>
+
+        <div class="section-title" style="margin-top: 14px;">Core Capabilities</div>
+        <div class="card-grid">
+          <article class="mini-card">
+            <h3>Management Consulting</h3>
+            <p>Administrative and general management support for improvement-oriented delivery environments.</p>
+          </article>
+          <article class="mini-card">
+            <h3>Proposal Support</h3>
+            <p>Proposal operations, bid support, and capture support for structured live-pursuit execution.</p>
+          </article>
+          <article class="mini-card">
+            <h3>PMO / Program Support</h3>
+            <p>Coordination-heavy execution support, delivery rhythm, tracking, and stakeholder follow-through.</p>
+          </article>
+          <article class="mini-card">
+            <h3>Process Improvement</h3>
+            <p>Workflow design, operating-model cleanup, and clearer handoffs across growth and delivery functions.</p>
+          </article>
+          <article class="mini-card">
+            <h3>Solutions Architecture Support</h3>
+            <p>Requirements translation, systems-design support, and practical framing for service-led modernization work.</p>
+          </article>
+          <article class="mini-card">
+            <h3>Digital-Service Support</h3>
+            <p>Portal, website, and application support when the engagement is execution-focused rather than product-bench heavy.</p>
+          </article>
+        </div>
+      </article>
+
+      <aside class="stack">
+        <section class="panel">
+          <div class="section-title">Why Boss Key Fits</div>
+          <div class="reason-list">
+            <div class="reason">
+              <div class="dot" aria-hidden="true"></div>
+              <div>
+                <strong>Direct accountability</strong>
+                <span>Founder-led execution keeps ownership clear and communication short.</span>
+              </div>
+            </div>
+            <div class="reason">
+              <div class="dot" aria-hidden="true"></div>
+              <div>
+                <strong>Strong written-work discipline</strong>
+                <span>Useful where compliance, structure, and organized deliverables matter.</span>
+              </div>
+            </div>
+            <div class="reason">
+              <div class="dot" aria-hidden="true"></div>
+              <div>
+                <strong>Good in under-structured environments</strong>
+                <span>Works well when a team needs cleaner workflows without adding unnecessary process weight.</span>
+              </div>
+            </div>
+            <div class="reason">
+              <div class="dot" aria-hidden="true"></div>
+              <div>
+                <strong>Flexible teaming posture</strong>
+                <span>Positioned for both direct support roles and subcontract support under larger primes.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">Federal Registration Note</div>
+          <div class="status-card">
+            <strong>SAM entity validation in progress</strong>
+            <p>As of 2026-03-18, Boss Key's SAM entity-validation package is under review and the UEI is pending assignment. Updated registration details can be shared as soon as SAM advances the record.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">Company Data</div>
+          <div class="profile-list">
+            <div class="profile-row">
+              <div class="label">Primary NAICS</div>
+              <div class="value">541611</div>
+            </div>
+            <div class="profile-row">
+              <div class="label">Secondary NAICS</div>
+              <div class="value">541618, 541512, 541511, 541519</div>
+            </div>
+            <div class="profile-row">
+              <div class="label">Positioning</div>
+              <div class="value">Consulting-first, proposal-support-first, digitally capable</div>
+            </div>
+            <div class="profile-row">
+              <div class="label">Best Role</div>
+              <div class="value">Responsive support partner for structured delivery and modernization-adjacent work</div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel">
+        <div class="section-title">Best-Fit Federal Lanes</div>
+        <div class="lane-list">
+          <div class="lane-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div>
+              <strong>Consulting and advisory support</strong>
+              <span>Administrative management, general management, and improvement-oriented advisory work.</span>
+            </div>
+          </div>
+          <div class="lane-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div>
+              <strong>Proposal and capture support</strong>
+              <span>Structured pursuit execution, review discipline, and coordination support during live opportunities.</span>
+            </div>
+          </div>
+          <div class="lane-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div>
+              <strong>PMO and program support</strong>
+              <span>Coordination-heavy delivery support where responsiveness and organization matter more than headcount.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-title">Expanded Support Scope</div>
+        <div class="naics-list">
+          <div class="naics-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div>
+              <strong>Process and workflow improvement</strong>
+              <span>Cleanup of handoffs, ownership, and operating rhythm inside active delivery or pursuit environments.</span>
+            </div>
+          </div>
+          <div class="naics-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div>
+              <strong>Requirements translation and solutions support</strong>
+              <span>Practical support for modernization, systems design, and service-led digital work.</span>
+            </div>
+          </div>
+          <div class="naics-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div>
+              <strong>Portal and application support</strong>
+              <span>Secondary lane for execution-focused web and application efforts tied to a live delivery need.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <div><strong>Boss Key LLC</strong> | Cinnaminson, NJ | bosskeyops.com | timmy@bosskeyops.com</div>
+      <div>Version dated 2026-03-18</div>
+    </footer>
+  </main>
+</body>
+</html>

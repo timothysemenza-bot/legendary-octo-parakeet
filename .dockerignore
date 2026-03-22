@@ -7,3 +7,4 @@ proposal-data
 .env
 server.out.log
 server.err.log
+archive

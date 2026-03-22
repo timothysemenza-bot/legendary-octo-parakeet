@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="proposal-builder-shell">
+  <div class="proposal-builder-toolbar">
+    <div>
+      <p class="eyebrow">Admin Setup</p>
+      <h1>Client Profiles</h1>
+      <p class="lead">Create reusable client configuration packs for pricing models, proposal templates, and approved content defaults.</p>
+    </div>
+    <div class="builder-link-row">
+      <a href="/proposal-builder">Back to Proposal Builder</a>
+      <a href="/client-onboarding">Client Onboarding</a>
+    </div>
+  </div>
+
+  {% if success_message %}
+  <div class="builder-alert builder-alert-success">{{ success_message }}</div>
+  {% endif %}
+
+  {% if error_message %}
+  <div class="builder-alert builder-alert-error">{{ error_message }}</div>
+  {% endif %}
+
+  <div class="builder-grid">
+    <div class="builder-card">
+      <h2>Create Client Profile</h2>
+      <form method="post" action="/client-profiles" class="builder-form">
+        <label>Display Name
+          <input type="text" name="display_name" placeholder="St. Moritz Security Services" required />
+        </label>
+        <label>Aliases
+          <input type="text" name="aliases" placeholder="St Moritz, St. Moritz" />
+        </label>
+        <label>Approved Content Tags
+          <input type="text" name="approved_content_tags" placeholder="janitorial, airport, public-sector" />
+        </label>
+        <label>Region Tags
+          <input type="text" name="region_tags" placeholder="northeast, ny-nj" />
+        </label>
+        <label>Service Tags
+          <input type="text" name="service_tags" placeholder="janitorial, day-porter" />
+        </label>
+        <button type="submit">Create Client Profile</button>
+      </form>
+    </div>
+
+    <div class="builder-card">
+      <h2>Existing Profiles</h2>
+      {% if profiles %}
+      <table class="builder-table">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Defaults</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for profile in profiles %}
+          <tr>
+            <td>
+              <a href="/client-profiles/{{ profile.id }}"><strong>{{ profile.display_name }}</strong></a>
+              {% if profile.aliases %}
+              <div class="muted">{{ profile.aliases|join(", ") }}</div>
+              {% endif %}
+            </td>
+            <td>
+              <div>Pricing: {{ profile.default_pricing_model_name or "Not set" }}</div>
+              <div>Template: {{ profile.default_proposal_template_name or "Not set" }}</div>
+            </td>
+            <td>{{ profile.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No client profiles have been created yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

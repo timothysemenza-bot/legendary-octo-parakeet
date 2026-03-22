@@ -1,0 +1,945 @@
+{% extends "base.html" %}
+{% block content %}
+{% set due_text = workspace.extracted_deadline if workspace.extracted_deadline else "Due date not found yet" %}
+{% set step_one_complete = workspace.opportunity_summary is not none %}
+{% set step_two_complete = workspace.draft_package is not none or (package_run and package_run.status in ["IN_PROGRESS", "AWAITING_PRICING_APPROVAL", "AWAITING_EXPORT_APPROVAL", "COMPLETED", "BLOCKED"]) %}
+{% set step_three_complete = (package_run and package_run.export_manifest) or workspace.export_manifest %}
+{% set primary_follow_up = workspace.follow_up_actions[0] if workspace.follow_up_actions else none %}
+{% set secondary_follow_ups = workspace.follow_up_actions[1:] if workspace.follow_up_actions|length > 1 else [] %}
+{% set package_has_gaps = package_run and package_run.blocking_issues %}
+{% if package_run and package_run.export_manifest and package_has_gaps %}
+  {% set package_ready = true %}
+  {% set status_title = "Package ready with open gaps" %}
+  {% set status_note = "The app built the files it could. Use the missing-items list below to finish the package." %}
+{% elif package_run and package_run.export_manifest %}
+  {% set package_ready = true %}
+  {% set status_title = "Proposal package ready" %}
+  {% set status_note = "The package is complete and ready to download." %}
+{% elif workspace.export_manifest %}
+  {% set package_ready = true %}
+  {% set status_title = "Presentable Word draft ready" %}
+  {% set status_note = "The fastest demo artifact is ready. Open the DOCX, make any light polish edits you want, and share it." %}
+{% elif package_run and package_run.status == "AWAITING_EXPORT_APPROVAL" %}
+  {% set package_ready = false %}
+  {% set status_title = "Final approval needed" %}
+  {% set status_note = "Everything is built. Approve the final export to create the package." if not package_has_gaps else "The package kept moving and built what it could. Approve export when you are ready to generate the current best version." %}
+{% elif package_run and package_run.status == "AWAITING_PRICING_APPROVAL" %}
+  {% set package_ready = false %}
+  {% set status_title = "Pricing approval needed" %}
+  {% set status_note = "The proposal is built. Approve pricing so the package can continue." if not package_has_gaps else "The package kept moving, but pricing still has open items. Approve the current pricing pass when you want the rest of the package to continue." %}
+{% elif package_run and package_run.status == "BLOCKED" %}
+  {% set package_ready = false %}
+  {% set status_title = "Ready for another pass" %}
+  {% set status_note = "The current package surfaced missing inputs. Add more material below and run an updated package when you are ready." %}
+{% elif package_run and package_run.status in ["QUEUED", "IN_PROGRESS"] %}
+  {% set package_ready = false %}
+  {% set status_title = "Working on your package" %}
+  {% set status_note = "Leave this tab open. The app is extracting, drafting, pricing, and packaging in the background." %}
+{% elif workspace.draft_package %}
+  {% set package_ready = false %}
+  {% set status_title = "Draft ready for Word export" %}
+  {% set status_note = "The core sections are drafted. One more click will turn them into a presentable Word file." %}
+{% elif workspace.opportunity_summary %}
+  {% set package_ready = false %}
+  {% set status_title = "Ready to build the draft" %}
+  {% set status_note = "The RFP has been read. The fastest next step is to build the presentable Word draft." %}
+{% else %}
+  {% set package_ready = false %}
+  {% set status_title = "Ready to start" %}
+  {% set status_note = "Start the package run and the app will do the heavy lifting." %}
+{% endif %}
+
+<section class="proposal-builder-shell">
+  <div class="proposal-builder-toolbar proposal-builder-toolbar-simple">
+    <div>
+      <p class="eyebrow">Proposal Package</p>
+      <h1>{{ workspace.opportunity_name }}</h1>
+      <p class="lead">{{ workspace.client_name }} | {{ due_text }}</p>
+    </div>
+    <div class="builder-status-banner">
+      <strong>{{ status_title }}</strong>
+      <span>{{ status_note }}</span>
+    </div>
+  </div>
+
+  {% if success_message %}
+  <div class="builder-alert builder-alert-success">{{ success_message }}</div>
+  {% endif %}
+
+  {% if error_message %}
+  <div class="builder-alert builder-alert-error">{{ error_message }}</div>
+  {% endif %}
+
+  {% if package_has_gaps and package_run.status != "BLOCKED" %}
+  <div class="builder-alert builder-alert-warning">
+    The app kept building with partial information. This package is usable, but it still needs {{ package_run.blocking_issues|length }} item{{ "" if package_run.blocking_issues|length == 1 else "s" }} from you before it is submission-ready.
+  </div>
+  {% endif %}
+
+  <div id="builder-dynamic-alerts"></div>
+
+  <div class="builder-stage-rail builder-stage-rail-simple">
+    <div class="builder-stage {% if step_one_complete %}complete{% endif %}">
+      <span class="builder-stage-label">1. Read the RFP</span>
+      <span class="builder-stage-description">Capture dates, requirements, and submission instructions.</span>
+    </div>
+    <div class="builder-stage {% if step_two_complete %}complete{% endif %}">
+      <span class="builder-stage-label">2. Build the package</span>
+      <span class="builder-stage-description">Draft the proposal, prepare pricing/forms, and assemble the package.</span>
+    </div>
+    <div class="builder-stage {% if step_three_complete %}complete{% endif %}">
+      <span class="builder-stage-label">3. Download and finish</span>
+      <span class="builder-stage-description">Review the files, make final edits, and submit.</span>
+    </div>
+  </div>
+
+  <div class="builder-card builder-card-emphasis builder-primary-action">
+    <p class="eyebrow">Fastest demo path</p>
+    {% if workspace.export_manifest %}
+      <div class="builder-card-header">
+        <h2>Your presentable Word draft is ready</h2>
+      </div>
+      <p>This is the fastest artifact to show in the demo. It already includes complete proposal sections inside the Word document.</p>
+      <div class="builder-link-row builder-link-row-primary">
+        <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/docx">Download Presentable Word Draft</a>
+        <a href="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/preview">Open HTML Preview</a>
+        <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/markdown">Open Draft Markdown</a>
+        <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/bundle">Download Support Bundle</a>
+      </div>
+      <div class="builder-actions-secondary">
+        <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/best-draft" class="builder-stage-form" data-stage-label="Refresh Presentable Word Draft" data-timeout-seconds="{{ workspace.workflow_summary.stage_runtime_guidance.extract_seconds + workspace.workflow_summary.stage_runtime_guidance.skeleton_seconds + workspace.workflow_summary.stage_runtime_guidance.draft_seconds + 45 }}">
+          <input type="hidden" name="actor" value="operator" />
+          <button type="submit">Refresh This Word Draft</button>
+        </form>
+      </div>
+    {% elif workspace.draft_package %}
+      <div class="builder-card-header">
+        <h2>One click from a shareable Word file</h2>
+      </div>
+      <p>The proposal sections are already drafted. Export them now to create the demo-ready Word artifact.</p>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export" class="builder-stage-form" data-stage-label="Create Presentable Word Draft" data-timeout-seconds="45">
+        <input type="hidden" name="actor" value="operator" />
+        <button type="submit">Create Presentable Word Draft</button>
+      </form>
+    {% else %}
+      <div class="builder-card-header">
+        <h2>Create the Word draft first</h2>
+      </div>
+      <p>This is the fastest route to something impressive on screen. The app will structure the response, draft the core sections, and export the current best Word file in one pass.</p>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/best-draft" class="builder-stage-form" data-stage-label="Create Presentable Word Draft Fast" data-timeout-seconds="{{ workspace.workflow_summary.stage_runtime_guidance.extract_seconds + workspace.workflow_summary.stage_runtime_guidance.skeleton_seconds + workspace.workflow_summary.stage_runtime_guidance.draft_seconds + 45 }}">
+        <input type="hidden" name="actor" value="operator" />
+        <button type="submit">Create Presentable Word Draft Fast</button>
+      </form>
+      <p class="builder-helper">Need pricing, forms, and a fuller submission package too? The optional full-package path is just below.</p>
+    {% endif %}
+  </div>
+
+  <div class="builder-card builder-engine-trail-card">
+    <div class="builder-card-header">
+      <h2>Package engine trail</h2>
+      {% if package_run and package_run.status in ["QUEUED", "IN_PROGRESS"] %}
+      <span class="status-chip subtle builder-engine-live-chip">Still working</span>
+      {% endif %}
+    </div>
+    {% if package_stage_trail_current %}
+    <p class="builder-helper builder-engine-current">{{ package_stage_trail_current }}. This page refreshes itself while the package runs.</p>
+    {% else %}
+    <p class="builder-helper builder-engine-current">Follow the trail below. The current step lights up while the package works in the background.</p>
+    {% endif %}
+    <div class="builder-engine-trail" role="list" aria-label="Package engine progress">
+      {% for item in package_stage_trail %}
+      <div class="builder-engine-step builder-engine-step-{{ item.color }} builder-engine-step-{{ item.state }} {% if item.is_current %}builder-engine-step-current{% endif %}" role="listitem">
+        <span class="builder-engine-step-number">{{ loop.index }}</span>
+        <div class="builder-engine-step-copy">
+          <span class="builder-engine-step-label">{{ item.label }}</span>
+          <span class="builder-engine-step-description">{{ item.description }}</span>
+          <span class="builder-engine-step-status">{{ item.detail }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="builder-card builder-card-emphasis builder-primary-action">
+    <p class="eyebrow">Optional full package path</p>
+    {% if not package_run %}
+      <div class="builder-card-header">
+        <h2>Build pricing, forms, and final submission files</h2>
+      </div>
+      <p>Use this when you want more than the Word draft. The app will keep going into pricing, forms, and the broader package structure.</p>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/start" class="builder-package-form" data-stage-label="Start Full Package Run" data-timeout-seconds="15">
+        <input type="hidden" name="actor" value="operator" />
+        <input type="hidden" name="demo_mode" value="true" />
+        <button type="submit">Start Full Package Run</button>
+      </form>
+      <p class="builder-helper">Allow draft pricing and template assets for testing only.</p>
+      <p class="builder-helper">The package can take a few minutes. You do not need to step through each technical stage manually.</p>
+    {% elif package_run.status == "AWAITING_PRICING_APPROVAL" %}
+      <div class="builder-card-header">
+        <h2>One thing needed from you</h2>
+      </div>
+      <p>The draft package is ready. Approve pricing to let the app finish the package.</p>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/{{ package_run.id }}/approve-stage" class="builder-package-form" data-stage-label="Approve Pricing" data-timeout-seconds="10">
+        <input type="hidden" name="actor" value="operator" />
+        <input type="hidden" name="stage_name" value="pricing" />
+        <button type="submit">Approve Pricing and Continue</button>
+      </form>
+    {% elif package_run.status == "AWAITING_EXPORT_APPROVAL" %}
+      <div class="builder-card-header">
+        <h2>Final click</h2>
+      </div>
+      <p>The package is built. Approve the export to generate the final download files.</p>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/{{ package_run.id }}/approve-stage" class="builder-package-form" data-stage-label="Approve Final Export" data-timeout-seconds="10">
+        <input type="hidden" name="actor" value="operator" />
+        <input type="hidden" name="stage_name" value="export_package" />
+        <button type="submit">Approve Final Export</button>
+      </form>
+    {% elif package_run.status == "BLOCKED" and blocked_review_stage %}
+      <div class="builder-card-header">
+        <h2>Blocked at {{ package_run.current_stage.replace("_", " ")|title }}</h2>
+      </div>
+      <p>The package stopped at a review gate. You can continue with the current findings or re-run that review step.</p>
+      <div class="builder-actions-secondary">
+        <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/{{ package_run.id }}/approve-stage" class="builder-package-form" data-stage-label="Acknowledge Review Findings" data-timeout-seconds="10">
+          <input type="hidden" name="actor" value="operator" />
+          <input type="hidden" name="stage_name" value="{{ package_run.current_stage }}" />
+          <button type="submit">Acknowledge Findings and Continue</button>
+        </form>
+        <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/{{ package_run.id }}/rerun-stage" class="builder-package-form" data-stage-label="Re-run Current Review Stage" data-timeout-seconds="10">
+          <input type="hidden" name="actor" value="operator" />
+          <input type="hidden" name="stage_name" value="{{ package_run.current_stage }}" />
+          {% if package_run.current_stage in ["pricing", "export_package"] %}
+          <input type="hidden" name="demo_mode" value="true" />
+          {% endif %}
+          <button type="submit">Re-run Blocked Stage</button>
+        </form>
+      </div>
+    {% elif package_run.status == "BLOCKED" %}
+      <div class="builder-card-header">
+        <h2>We need a quick fix</h2>
+      </div>
+      <p>The package stopped because it is missing something required. Use the best next step below, or re-run the package once you have enough context.</p>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/{{ package_run.id }}/rerun-stage" class="builder-package-form" data-stage-label="Re-run Blocked Stage" data-timeout-seconds="10">
+        <input type="hidden" name="actor" value="operator" />
+        <input type="hidden" name="stage_name" value="{{ package_run.current_stage or 'content_plan' }}" />
+        {% if package_run.current_stage in ["pricing", "export_package"] %}
+        <input type="hidden" name="demo_mode" value="true" />
+        {% endif %}
+        <button type="submit">Re-run Blocked Step</button>
+      </form>
+    {% elif package_run.status in ["QUEUED", "IN_PROGRESS"] %}
+      <div class="builder-card-header">
+        <h2>Package is running</h2>
+      </div>
+      <p>The app is working through the package in the background. This page will refresh automatically while it runs.</p>
+      <p class="builder-helper">
+        Current step:
+        <strong>{{ package_run.current_stage.replace("_", " ")|title if package_run.current_stage else "Starting up" }}</strong>
+      </p>
+    {% elif package_run.export_manifest %}
+      <div class="builder-card-header">
+        <h2>Your files are ready</h2>
+      </div>
+      <div class="builder-link-row builder-link-row-primary">
+        <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-package/runs/{{ package_run.id }}/artifacts/proposal_docx">Download Final Proposal DOCX</a>
+        <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-package/runs/{{ package_run.id }}/artifacts/support_bundle">Download Support Bundle</a>
+      </div>
+      <p class="builder-helper">You can also download the pricing workbook and forms bundle from the advanced details section below.</p>
+    {% else %}
+      <div class="builder-card-header">
+        <h2>Package in progress</h2>
+      </div>
+      <p>The package engine is active. Check the sections below for draft output and any missing inputs.</p>
+    {% endif %}
+  </div>
+
+  <div class="builder-grid builder-grid-wide">
+    <div class="builder-card">
+      <div class="builder-card-header">
+        <h2>What we found</h2>
+      </div>
+      {% if workspace.opportunity_summary %}
+      <dl class="builder-keyfacts">
+        <div><dt>Overall fit</dt><dd>{{ workspace.opportunity_summary.strategic_fit }}</dd></div>
+        <div><dt>Complexity</dt><dd>{{ workspace.opportunity_summary.complexity_level }}</dd></div>
+        <div><dt>Risk</dt><dd>{{ workspace.opportunity_summary.risk_level }}</dd></div>
+        <div><dt>Recommended next step</dt><dd>{{ workspace.opportunity_summary.recommended_next_action }}</dd></div>
+        <div><dt>Questions due</dt><dd>{{ workspace.structured_fields.questions_due_date or "-" if workspace.structured_fields else "-" }}</dd></div>
+        <div><dt>Proposal due</dt><dd>{% if workspace.structured_fields %}{{ workspace.structured_fields.proposal_due_date or "-" }} {{ workspace.structured_fields.proposal_due_time or "" }}{% else %}-{% endif %}</dd></div>
+        <div><dt>Submission method</dt><dd>{{ workspace.structured_fields.submission_method or "-" if workspace.structured_fields else "-" }}</dd></div>
+      </dl>
+      {% else %}
+      <p>Run the package to read the RFP and pull out the key facts.</p>
+      {% endif %}
+
+      <div class="builder-summary-strip">
+        <div class="builder-summary-pill">
+          <strong>{{ workspace.requirements_list | length }}</strong>
+          <span>requirements found</span>
+        </div>
+        <div class="builder-summary-pill">
+          <strong>{{ workspace.evaluation_criteria | length }}</strong>
+          <span>evaluation factors</span>
+        </div>
+        <div class="builder-summary-pill">
+          <strong>{{ workspace.compliance_matrix | length }}</strong>
+          <span>checklist items</span>
+        </div>
+      </div>
+
+      <h3>Evaluation focus</h3>
+      {% if workspace.evaluation_criteria %}
+      <ul class="builder-checklist">
+        {% for item in workspace.evaluation_criteria %}
+        <li><strong>{{ item.criterion }}</strong>: {{ item.description }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No evaluation criteria extracted yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="builder-card">
+      <div class="builder-card-header">
+        <h2>What we still need from you</h2>
+      </div>
+      <p class="builder-helper">Think of these as recommended inputs for the next pass, not a one-time gate. You can add them as they become available.</p>
+      {% if package_run and package_run.blocking_issues %}
+      <ul class="builder-checklist">
+        {% for item in package_run.blocking_issues %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% elif workspace.document_gaps or (workspace.draft_package and workspace.draft_package.unresolved_items) %}
+      <ul class="builder-checklist">
+        {% for item in workspace.document_gaps %}
+        <li>{{ item }}</li>
+        {% endfor %}
+        {% if workspace.draft_package %}
+          {% for item in workspace.draft_package.unresolved_items %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+      {% else %}
+      <p>No major missing inputs are being flagged right now.</p>
+      {% endif %}
+
+      {% if workspace.assumption_flags %}
+      <h3>Watchouts</h3>
+      <ul class="builder-checklist">
+        {% for item in workspace.assumption_flags %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if workspace.follow_up_actions %}
+      <div class="builder-best-next-step">
+        <p class="eyebrow">Best next step</p>
+        <h3>{{ primary_follow_up.title }}</h3>
+        <p>{{ primary_follow_up.description }}</p>
+        <button
+          type="button"
+          class="builder-prefill-action builder-next-step-button"
+          data-material-kind="{{ primary_follow_up.material_kind }}"
+          data-input-mode="{{ primary_follow_up.input_mode }}"
+          data-filename="{{ primary_follow_up.suggested_filename or '' }}"
+          data-placeholder="{{ primary_follow_up.placeholder_text or '' }}"
+        >
+          {{ primary_follow_up.action_label }}
+        </button>
+        <p class="builder-helper">This opens the right input below. You can still build a package any time with the context you already have.</p>
+        {% if secondary_follow_ups %}
+        <details class="builder-mini-drawer">
+          <summary>Other things you can add</summary>
+          <div class="builder-action-grid">
+            {% for action in secondary_follow_ups %}
+            <button
+              type="button"
+              class="ghost-button builder-prefill-action"
+              data-material-kind="{{ action.material_kind }}"
+              data-input-mode="{{ action.input_mode }}"
+              data-filename="{{ action.suggested_filename or '' }}"
+              data-placeholder="{{ action.placeholder_text or '' }}"
+            >
+              {{ action.action_label }}
+            </button>
+            {% endfor %}
+          </div>
+        </details>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="builder-grid builder-grid-wide">
+    <div class="builder-card builder-card-highlight">
+      <div class="builder-card-header">
+        <h2>Keep shaping the response</h2>
+      </div>
+      <p>Add addenda, buyer discovery notes, capture notes, meeting transcripts, pricing assumptions, or other support documents at any time. The app will refresh the summary and use the newest version on the next package pass.</p>
+      <div class="builder-summary-strip builder-summary-strip-compact">
+        <div class="builder-summary-pill">
+          <strong>v{{ workspace.solicitation_version or 1 }}</strong>
+          <span>current version</span>
+        </div>
+        <div class="builder-summary-pill">
+          <strong>{{ workspace.source_documents | length }}</strong>
+          <span>source files</span>
+        </div>
+        <div class="builder-summary-pill">
+          <strong>{{ workspace.recommended_materials | length }}</strong>
+          <span>suggested next inputs</span>
+        </div>
+      </div>
+      <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/materials" enctype="multipart/form-data" class="builder-form builder-package-form" data-stage-label="Add Supporting Material" data-timeout-seconds="120">
+        <input type="hidden" name="actor" value="operator" />
+        <div class="builder-grid builder-grid-tight">
+          <label>What are you adding?
+            <select id="builder-material-kind" name="material_kind">
+              <option value="addendum">Addendum or amendment</option>
+              <option value="buyer discovery notes">Buyer discovery notes</option>
+              <option value="capture notes">Capture notes</option>
+              <option value="meeting transcript">Meeting transcript</option>
+              <option value="pricing input">Pricing input</option>
+              <option value="staffing plan">Staffing plan</option>
+              <option value="other supporting material">Other supporting material</option>
+            </select>
+          </label>
+          <label>Name for pasted notes
+            <input id="builder-material-filename" type="text" name="raw_text_filename" value="supporting-notes.txt" />
+          </label>
+        </div>
+        <label>Upload one or more files
+          <input id="builder-material-files" type="file" name="files" multiple />
+        </label>
+        <label>Or paste notes, transcript text, or buyer updates
+          <textarea id="builder-material-text" name="raw_text" rows="7" placeholder="Example: Buyer wants stronger reporting language, local supervision, and a tighter transition narrative after the walkthrough."></textarea>
+        </label>
+        <button type="submit">Add Material and Refresh</button>
+      </form>
+      {% if not package_run or package_run.status in ["BLOCKED", "COMPLETED", "AWAITING_PRICING_APPROVAL", "AWAITING_EXPORT_APPROVAL"] %}
+      <div class="builder-actions-secondary">
+        <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-package/start" class="builder-package-form" data-stage-label="Build Updated Proposal Package" data-timeout-seconds="15">
+          <input type="hidden" name="actor" value="operator" />
+          <input type="hidden" name="demo_mode" value="true" />
+          <button type="submit">Build Updated Package</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="builder-card">
+      <div class="builder-card-header">
+        <h2>Suggested next inputs</h2>
+      </div>
+      {% if workspace.recommended_materials %}
+      <ul class="builder-checklist">
+        {% for item in workspace.recommended_materials %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>The current source set is in good shape. Add more material only if the pursuit has changed.</p>
+      {% endif %}
+      {% if workspace.solicitation_versions %}
+      <h3>Version history</h3>
+      <ul class="builder-checklist builder-compact-list">
+        {% for version in workspace.solicitation_versions[:4] %}
+        <li>
+          <strong>Version {{ version.version }}</strong>:
+          {{ version.requirement_count }} requirements from {{ version.source_documents | length }} file{{ "" if version.source_documents|length == 1 else "s" }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if workspace.source_documents %}
+      <h3>Current source set</h3>
+      <ul class="builder-checklist builder-compact-list">
+        {% for document in workspace.source_documents[:6] %}
+        <li>{{ document.source_filename }}{% if document.parse_status != "PARSED" %} ({{ document.parse_status|lower }}){% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="builder-card builder-card-draft">
+      <div class="builder-card-header">
+        <h2>Draft preview</h2>
+      {% if workspace.draft_package %}
+      <a href="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/preview">Open HTML Preview & Edit</a>
+      {% endif %}
+      {% if workspace.export_manifest %}
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/docx">Download draft DOCX</a>
+      {% endif %}
+    </div>
+    {% if workspace.draft_package %}
+      {% for section in workspace.client_sections %}
+      <article class="builder-draft-section">
+        <h3>{{ section.section_title }}</h3>
+        <pre class="builder-draft-body">{{ section.body_markdown }}</pre>
+      </article>
+      {% endfor %}
+    {% else %}
+      <p>The draft preview will appear here after the package builds the proposal narrative.</p>
+    {% endif %}
+  </div>
+
+  {% if package_run and package_run.export_manifest %}
+  <div class="builder-card">
+    <div class="builder-card-header">
+      <h2>Downloads</h2>
+    </div>
+    <div class="builder-link-row builder-link-row-primary">
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-package/runs/{{ package_run.id }}/artifacts/proposal_docx">Final Proposal DOCX</a>
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-package/runs/{{ package_run.id }}/artifacts/pricing_workbook">Pricing Workbook</a>
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-package/runs/{{ package_run.id }}/artifacts/forms_bundle">Forms Bundle</a>
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-package/runs/{{ package_run.id }}/artifacts/support_bundle">Support Bundle</a>
+    </div>
+  </div>
+  {% elif workspace.export_manifest %}
+  <div class="builder-card">
+    <div class="builder-card-header">
+      <h2>Downloads</h2>
+    </div>
+    <div class="builder-link-row builder-link-row-primary">
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/docx">Draft Proposal DOCX</a>
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/bundle">Support Bundle</a>
+      <a href="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export/markdown">Open Markdown Draft</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <details class="builder-accordion">
+    <summary>Advanced details</summary>
+    <div class="builder-accordion-body">
+      {% if workspace.warnings %}
+      <div class="builder-alert builder-alert-warn">
+        <strong>System notes</strong>
+        <ul>
+          {% for warning in workspace.warnings %}
+          <li>{{ warning }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="builder-alert builder-alert-info">
+        <strong>System timing</strong>
+        <span>
+          Extract up to {{ workspace.workflow_summary.stage_runtime_guidance.extract_seconds }}s,
+          skeleton up to {{ workspace.workflow_summary.stage_runtime_guidance.skeleton_seconds }}s,
+          draft up to {{ workspace.workflow_summary.stage_runtime_guidance.draft_seconds }}s.
+        </span>
+        {% if workspace.workflow_summary.stage_token_guardrails %}
+        <span>
+          Token safeguards:
+          extract caps about {{ workspace.workflow_summary.stage_token_guardrails.extract.max_estimated_input_tokens }} estimated input tokens and {{ workspace.workflow_summary.stage_token_guardrails.extract.max_output_tokens }} output tokens;
+          skeleton caps about {{ workspace.workflow_summary.stage_token_guardrails.skeleton.max_estimated_input_tokens }} estimated input tokens and {{ workspace.workflow_summary.stage_token_guardrails.skeleton.max_output_tokens }} output tokens;
+          draft caps about {{ workspace.workflow_summary.stage_token_guardrails.draft.max_estimated_input_tokens }} estimated input tokens and {{ workspace.workflow_summary.stage_token_guardrails.draft.max_output_tokens }} output tokens.
+        </span>
+        {% endif %}
+      </div>
+
+      <div class="builder-grid builder-grid-wide">
+        <div class="builder-card">
+          <div class="builder-card-header">
+            <h2>Client setup</h2>
+            <div class="builder-link-row">
+              <a href="/client-profiles">Manage Client Profiles</a>
+              <a href="/client-onboarding">Client Onboarding</a>
+            </div>
+          </div>
+          {% if workspace.proposal_config %}
+          <dl class="builder-keyfacts">
+            <div>
+              <dt>Client profile</dt>
+              <dd>{{ workspace.proposal_config.client_profile_name or "Not selected" }}</dd>
+            </div>
+            <div>
+              <dt>Pricing model</dt>
+              <dd>{{ workspace.proposal_config.pricing_model_name or "Not selected" }}</dd>
+            </div>
+            <div>
+              <dt>Proposal template</dt>
+              <dd>{{ workspace.proposal_config.proposal_template_name or "Not selected" }}</dd>
+            </div>
+            <div>
+              <dt>Client environment</dt>
+              <dd>{{ workspace.client_environment_status or "Not configured" }}</dd>
+            </div>
+            <div>
+              <dt>Active onboarding pack</dt>
+              <dd>{{ workspace.proposal_config.active_onboarding_pack_name or "None" }}</dd>
+            </div>
+            <div>
+              <dt>Playbook version</dt>
+              <dd>{{ workspace.active_playbook_version or "-" }}</dd>
+            </div>
+          </dl>
+
+          {% if workspace.setup_gaps %}
+          <div class="builder-alert builder-alert-warn">
+            <strong>Client setup gaps</strong>
+            <ul>
+              {% for item in workspace.setup_gaps %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          {% if workspace.active_onboarding_pack_id %}
+          <p class="builder-helper">This deployment is running in single-client mode. The active client environment is applied automatically; manual profile, pricing, and template overrides are mainly for admin setup and testing.</p>
+          {% endif %}
+
+          <div class="builder-config-stack">
+            <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-config/select-profile" class="builder-form builder-form-compact">
+              <input type="hidden" name="actor" value="operator" />
+              <label>Client profile
+                <select name="target_id">
+                  <option value="">Use standard internal fallback</option>
+                  {% for option in workspace.available_client_profiles %}
+                  <option value="{{ option.id }}" {% if workspace.proposal_config.client_profile_id == option.id %}selected{% endif %}>{{ option.display_name }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <button type="submit">Apply Client Profile</button>
+            </form>
+
+            <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-config/select-pricing-model" class="builder-form builder-form-compact">
+              <input type="hidden" name="actor" value="operator" />
+              <label>Pricing model
+                <select name="target_id" {% if not workspace.proposal_config.client_profile_id %}disabled{% endif %}>
+                  <option value="">Use profile default</option>
+                  {% for option in workspace.available_pricing_models %}
+                  <option value="{{ option.id }}" {% if workspace.proposal_config.pricing_model_id == option.id %}selected{% endif %}>{{ option.name }} ({{ option.status }})</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <button type="submit" {% if not workspace.proposal_config.client_profile_id %}disabled{% endif %}>Apply Pricing Model</button>
+            </form>
+
+            <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-config/select-template" class="builder-form builder-form-compact">
+              <input type="hidden" name="actor" value="operator" />
+              <label>Proposal template
+                <select name="target_id" {% if not workspace.proposal_config.client_profile_id %}disabled{% endif %}>
+                  <option value="">Use profile default</option>
+                  {% for option in workspace.available_proposal_templates %}
+                  <option value="{{ option.id }}" {% if workspace.proposal_config.proposal_template_id == option.id %}selected{% endif %}>{{ option.name }}{% if not option.valid %} (needs validation){% endif %}</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <button type="submit" {% if not workspace.proposal_config.client_profile_id %}disabled{% endif %}>Apply Proposal Template</button>
+            </form>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="builder-card">
+          <h2>Package run details</h2>
+          <div class="builder-status-stack">
+            <span class="status-chip">{{ package_run.status if package_run else (workspace.generation_mode or "PENDING") }}</span>
+            {% if package_run and package_run.current_stage %}
+            <span class="status-chip subtle">{{ package_run.current_stage }}</span>
+            {% elif workspace.generation_reason %}
+            <span class="status-chip subtle">{{ workspace.generation_reason }}</span>
+            {% endif %}
+            {% if workspace.model_name %}
+            <span class="status-chip subtle">{{ workspace.model_name }}</span>
+            {% endif %}
+          </div>
+          {% if package_run %}
+          <table class="builder-table">
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Status</th>
+                <th>Approval</th>
+                <th>Runtime</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for stage in package_run.stages %}
+              <tr>
+                <td>{{ stage.stage_name.replace("_", " ")|title }}</td>
+                <td>{{ stage.status }}</td>
+                <td>{{ stage.approval_status or stage.approval_required or "-" }}</td>
+                <td>{{ stage.runtime_seconds ~ "s" if stage.runtime_seconds else "-" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="builder-card builder-card-emphasis">
+        <div class="builder-card-header">
+          <h2>Requirements and checklist</h2>
+          <div class="builder-link-row">
+            <a href="{{ workspace.detail_links.compliance_matrix }}">Open Detailed Matrix</a>
+            <a href="{{ workspace.detail_links.rfp_upload }}">Source Documents</a>
+          </div>
+        </div>
+        {% if workspace.compliance_matrix %}
+        <table class="builder-table">
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>Type</th>
+              <th>Proposal Section</th>
+              <th>Owner</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in workspace.compliance_matrix %}
+            <tr>
+              <td><strong>{{ row.requirement_code }}</strong><br />{{ row.requirement_text }}</td>
+              <td>{{ row.requirement_type }}</td>
+              <td>{{ row.proposal_section }}</td>
+              <td>{{ row.owner }}</td>
+              <td>{{ row.status }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No checklist items are available yet.</p>
+        {% endif %}
+      </div>
+
+      <div class="builder-grid builder-grid-wide">
+        <div class="builder-card">
+          <div class="builder-card-header">
+            <h2>Proposal structure</h2>
+            <a href="{{ workspace.detail_links.proposal_outline }}">Outline Details</a>
+          </div>
+          {% if workspace.proposal_outline %}
+          <ol class="builder-outline">
+            {% for section in workspace.proposal_outline.sections %}
+            <li>
+              <strong>{{ section.proposal_section }}</strong>
+              <span>{{ section.owner }}</span>
+              <small>{{ section.requirement_count }} mapped requirements</small>
+            </li>
+            {% endfor %}
+          </ol>
+          {% else %}
+          <p>No outline yet.</p>
+          {% endif %}
+        </div>
+
+        <div class="builder-card">
+          <h2>Win themes and plan</h2>
+          {% if workspace.win_themes %}
+          <ul class="builder-checklist">
+            {% for theme in workspace.win_themes %}
+            <li><strong>{{ theme.title }}</strong>: {{ theme.rationale }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>No win themes yet.</p>
+          {% endif %}
+          {% if workspace.section_drafting_plan %}
+          <h3>Section plan</h3>
+          <ul class="builder-checklist">
+            {% for item in workspace.section_drafting_plan %}
+            <li><strong>{{ item.proposal_section }}</strong>: {{ item.objective }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if workspace.internal_notes %}
+      <div class="builder-card">
+        <h2>Internal notes</h2>
+        <ul class="builder-checklist">
+          {% for item in workspace.internal_notes %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="builder-card">
+        <h2>Manual controls</h2>
+        <div class="builder-actions">
+          <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/extract" class="builder-stage-form" data-api="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/extract" data-stage-label="Extract Requirements" data-timeout-seconds="{{ workspace.workflow_summary.stage_runtime_guidance.extract_seconds }}">
+            <input type="hidden" name="actor" value="operator" />
+            <button type="submit">Extract Requirements</button>
+          </form>
+          <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/skeleton" class="builder-stage-form" data-api="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/skeleton" data-stage-label="Build Proposal Skeleton" data-timeout-seconds="{{ workspace.workflow_summary.stage_runtime_guidance.skeleton_seconds }}">
+            <input type="hidden" name="actor" value="operator" />
+            <button type="submit">Build Proposal Skeleton</button>
+          </form>
+          <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/draft" class="builder-stage-form" data-api="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/draft" data-stage-label="Generate Draft" data-timeout-seconds="{{ workspace.workflow_summary.stage_runtime_guidance.draft_seconds }}">
+            <input type="hidden" name="actor" value="operator" />
+            <button type="submit">Generate Draft</button>
+          </form>
+          <form method="post" action="/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export" class="builder-stage-form" data-api="/api/opportunities/{{ workspace.opportunity_id }}/proposal-builder/export" data-stage-label="Export Package" data-timeout-seconds="45">
+            <input type="hidden" name="actor" value="operator" />
+            <button type="submit">Export Package</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </details>
+</section>
+
+<div id="builder-processing-overlay" class="builder-processing-overlay" hidden>
+  <div class="builder-processing-card">
+    <p class="eyebrow">Working</p>
+    <h2 id="builder-processing-title">Building your proposal package</h2>
+    <p id="builder-processing-note" class="lead">This can take a few minutes on larger RFPs.</p>
+    <div class="builder-progress-track">
+      <div id="builder-progress-fill" class="builder-progress-fill"></div>
+    </div>
+    <p id="builder-processing-elapsed" class="muted">Elapsed: 0s</p>
+    <p class="muted">You do not need to do anything while this step runs.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const stageForms = Array.from(document.querySelectorAll(".builder-stage-form[data-api]"));
+  const packageForms = Array.from(document.querySelectorAll(".builder-package-form"));
+  if (!stageForms.length && !packageForms.length) {
+    return;
+  }
+
+  const overlay = document.getElementById("builder-processing-overlay");
+  const title = document.getElementById("builder-processing-title");
+  const note = document.getElementById("builder-processing-note");
+  const elapsed = document.getElementById("builder-processing-elapsed");
+  const fill = document.getElementById("builder-progress-fill");
+  const alerts = document.getElementById("builder-dynamic-alerts");
+  const prefillActions = Array.from(document.querySelectorAll(".builder-prefill-action"));
+  const materialKind = document.getElementById("builder-material-kind");
+  const materialFilename = document.getElementById("builder-material-filename");
+  const materialFiles = document.getElementById("builder-material-files");
+  const materialText = document.getElementById("builder-material-text");
+  let timerId = null;
+  let startTime = 0;
+  let maxSeconds = 60;
+
+  function showAlert(message) {
+    if (!alerts) {
+      window.alert(message);
+      return;
+    }
+    alerts.innerHTML = `<div class="builder-alert builder-alert-error">${message}</div>`;
+  }
+
+  function startOverlay(stageLabel, timeoutSeconds) {
+    if (!overlay || !title || !note || !elapsed || !fill) {
+      return;
+    }
+    startTime = Date.now();
+    maxSeconds = Math.max(timeoutSeconds || 60, 30);
+    title.textContent = stageLabel;
+    note.textContent = `This step can take up to ${maxSeconds} seconds, and larger jobs may take longer.`;
+    fill.style.width = "6%";
+    overlay.hidden = false;
+    timerId = window.setInterval(() => {
+      const seconds = Math.floor((Date.now() - startTime) / 1000);
+      const progress = Math.min(92, 6 + Math.floor((seconds / maxSeconds) * 86));
+      fill.style.width = `${progress}%`;
+      elapsed.textContent = `Elapsed: ${seconds}s`;
+    }, 1000);
+  }
+
+  function stopOverlay() {
+    if (timerId) {
+      window.clearInterval(timerId);
+      timerId = null;
+    }
+    if (overlay) {
+      overlay.hidden = true;
+    }
+  }
+
+  stageForms.forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const actor = form.querySelector('input[name="actor"]')?.value || "operator";
+      const endpoint = form.dataset.api;
+      const stageLabel = form.dataset.stageLabel || "Processing";
+      const timeoutSeconds = Number.parseInt(form.dataset.timeoutSeconds || "60", 10);
+      if (alerts) {
+        alerts.innerHTML = "";
+      }
+      startOverlay(stageLabel, timeoutSeconds);
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ actor }),
+        });
+        if (!response.ok) {
+          const payload = await response.json().catch(() => ({}));
+          throw new Error(payload.detail || `${stageLabel} did not complete successfully.`);
+        }
+        window.location.reload();
+      } catch (error) {
+        stopOverlay();
+        showAlert(error.message || `${stageLabel} did not complete successfully.`);
+      }
+    });
+  });
+
+  packageForms.forEach((form) => {
+    form.addEventListener("submit", () => {
+      const stageLabel = form.dataset.stageLabel || "Building proposal package";
+      const timeoutSeconds = Number.parseInt(form.dataset.timeoutSeconds || "30", 10);
+      if (alerts) {
+        alerts.innerHTML = "";
+      }
+      startOverlay(stageLabel, timeoutSeconds);
+    });
+  });
+
+  prefillActions.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (materialKind) {
+        materialKind.value = button.dataset.materialKind || materialKind.value;
+      }
+      if (materialFilename && button.dataset.filename) {
+        materialFilename.value = button.dataset.filename;
+      }
+      if (materialText && button.dataset.placeholder) {
+        materialText.placeholder = button.dataset.placeholder;
+      }
+      const inputMode = button.dataset.inputMode || "either";
+      const formTop = materialKind?.closest("form")?.getBoundingClientRect().top;
+      if (typeof formTop === "number") {
+        window.scrollTo({ top: window.scrollY + formTop - 80, behavior: "smooth" });
+      }
+      window.setTimeout(() => {
+        if (inputMode === "files" && materialFiles) {
+          materialFiles.focus();
+          materialFiles.click();
+          return;
+        }
+        if (materialText) {
+          materialText.focus();
+        }
+      }, 120);
+    });
+  });
+
+  const packageStatus = {{ package_run.status|tojson if package_run else 'null' }};
+  if (packageStatus === "QUEUED" || packageStatus === "IN_PROGRESS") {
+    window.setTimeout(() => window.location.reload(), 5000);
+  }
+})();
+</script>
+{% endblock %}

@@ -1,26 +1,49 @@
 # Contributing
 
-## Workflow goal
+## Repo focus
 
-All production changes must flow through GitHub with pull requests into `main`.
+This repository is centered on `proposal-ops` as the flagship product.
 
-## Process
+Supporting surfaces:
+- `boss-key-website/`
+- `marketing-agents/`
+- `projects/`
+- `templates/`
+- `outputs/`
+
+Archived legacy code now lives under `archive/` and should stay out of normal product work unless you are intentionally revisiting it.
+
+## Workflow
 
 1. Create a branch from `main`.
-2. Push your branch to GitHub.
-3. Open a PR and fill in the checklist.
-4. Wait for `CI` to pass.
-5. Merge only after approval.
+2. Keep the change scoped to one active lane when possible.
+3. Update docs when the product story, folder ownership, or workflow changes.
+4. Merge only after review and verification.
 
-## Branch rules
+## Placement rules
 
-- Never push directly to `main`.
-- Use descriptive branch names such as `feat/short-description` or `fix/short-description`.
+- Put flagship product work in `proposal-ops/`.
+- Put market-facing packaging and offer presentation in `boss-key-website/` or `marketing-agents/`.
+- Put client, internal, pipeline, and shared working material in `projects/`.
+- Put generated deliverables, reports, and scratch captures in `outputs/`.
+- Put reusable starting points in `templates/`.
+- Move non-core experiments or retired systems into `archive/`.
+
+## Verification
+
+Run the checks that match the area you touched.
+
+- Website/server work: `npm start`
+- Writing center tribute flow: `npm run test:writing-center-tribute`
+- ProposalOps work: run targeted tests and verification inside `proposal-ops/`
 
 ## Local conventions
 
-- Keep generated files out of version control (`.docx`, `.doc`, logs, `data/`).
-- Update content library and branding files with valid JSON.
+- Keep generated files out of version control.
+- Update `.gitignore` when a new local-only output folder appears.
+- Do not leave loose experiments in the repo root.
+- Prefer repo-local skills in `.agents/skills/` and repo-local custom agents in `.codex/agents/`.
+- When using Codex app worktrees, keep changes scoped to one project root whenever possible.
 
 ## Optional local safety
 
@@ -28,11 +51,4 @@ Install the repo hooks to catch accidental pushes to `main`:
 
 ```bash
 git config core.hooksPath .githooks
-```
-
-Then run `npm start` and the smoke endpoint before opening a PR:
-
-```bash
-npm start
-curl http://localhost:3000/api/proposals
 ```

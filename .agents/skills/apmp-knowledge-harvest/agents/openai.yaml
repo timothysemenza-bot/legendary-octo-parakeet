@@ -1,0 +1,3 @@
+display_name: APMP Knowledge Harvest
+short_description: Capture lessons, harvest reusable proposal assets, and feed them back into the workspace.
+default_prompt: Use $apmp-knowledge-harvest to convert the latest proposal work into lessons learned, reusable assets, and concrete process improvements for future runs.
