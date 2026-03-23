@@ -3,5 +3,4 @@ dist/
 coverage/
 .env
 .env.local
-working/script-build/
-working/*.log
+working/
