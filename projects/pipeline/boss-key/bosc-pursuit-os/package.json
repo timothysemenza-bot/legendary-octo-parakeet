@@ -1,0 +1,45 @@
+{
+  "name": "bosc-pursuit-os",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Boss Key AI-native pursuit and proposal operating system prototype for private-sector service bids.",
+  "scripts": {
+    "dev": "vite",
+    "dev:client": "vite",
+    "dev:server": "tsx server/server.ts",
+    "dev:full": "concurrently -k -n client,server \"npm:dev:client\" \"npm:dev:server\"",
+    "build": "tsc --noEmit && vite build",
+    "build:scripts": "tsc -p tsconfig.scripts.json",
+    "package:concept-sheet": "npm run build:scripts && tsx scripts/package-promoted-concept-sheet.ts",
+    "preview": "vite preview",
+    "start:server": "tsx server/server.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/formidable": "^3.5.0",
+    "@types/node": "24.5.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tsx": "4.20.5",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.1",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "dotenv": "^17.3.1",
+    "formidable": "^3.5.4",
+    "mammoth": "^1.12.0",
+    "openai": "^6.32.0",
+    "pdfjs-dist": "^5.5.207",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "4.3.6"
+  }
+}

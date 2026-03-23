@@ -1,0 +1,58 @@
+{
+  "id": "traverse-area-district-library-east-bay-custodial-services-2026",
+  "opportunityName": "Custodial Services at East Bay Branch",
+  "buyerName": "Traverse Area District Library",
+  "sector": "Mixed Commercial",
+  "geography": {
+    "region": "Northern Michigan",
+    "city": "Traverse City",
+    "state": "MI",
+    "inPreferredRegion": false
+  },
+  "siteProfile": {
+    "siteCount": 1,
+    "totalSquareFeet": 1200,
+    "occupiedHours": "Monday and Thursday service window while the library is closed, plus 24/7 emergency response availability",
+    "weekendCoverageRequired": false,
+    "dayPorterRequired": false,
+    "unionEnvironment": false
+  },
+  "contract": {
+    "annualValueEstimate": 25000,
+    "termMonths": 36,
+    "targetGrossMarginPercent": 15,
+    "transitionDays": 14,
+    "startDate": "Anticipated award April 30, 2026"
+  },
+  "requirements": {
+    "requiredServices": [
+      "nightly-cleaning",
+      "floor-care",
+      "consumables-management",
+      "window-touchpoint"
+    ],
+    "reportingCadence": "Weekly inspection and Facilities Manager check-ins",
+    "sustainabilityExpectation": true,
+    "selfPerformedPreference": true,
+    "referencesRequired": 3
+  },
+  "pursuitContext": {
+    "incumbentPresent": true,
+    "relationshipStrength": "low",
+    "strategicFit": "low",
+    "pricingPressure": "high",
+    "proofPriority": [
+      "emergency response discipline",
+      "supply continuity",
+      "after-hours reliability"
+    ],
+    "notes": [
+      "The official source is the Traverse Area District Library East Bay Branch custodial-services RFP issued February 26, 2026 with bids due March 31, 2026.",
+      "The East Bay branch is a small-footprint library site at 1989 Three Mile Road with an estimated 1,200 square feet and a closed-building service window on Monday and Thursday.",
+      "The buyer wants trained and supervised staff, 24/7 emergency call-in availability, proof of insurance, a thirty-day out clause, and 3 to 5 references.",
+      "The scope includes restroom cleaning, trash and recycling removal, break-area cleaning, wipe-down of public tables and computers, glass touchpoints, and reporting repair issues to the Facilities Manager.",
+      "The bidder is expected to furnish chemicals, paper products, soap, sanitizer, trash liners, and equipment while maintaining enough stock to avoid service interruption.",
+      "This is a good Boss Key contrast case because it is a smaller public-sector branch location where reliability and completeness matter more than a large multi-site launch story."
+    ]
+  }
+}

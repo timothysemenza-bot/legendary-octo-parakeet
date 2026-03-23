@@ -3,13 +3,19 @@ param(
     [string]$Slug,
 
     [string]$Date = "",
-    [string]$Title = ""
+    [string]$Title = "",
+    [string]$DeliverablesRoot = ""
 )
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $bundleDate = if ($Date) { $Date } else { Get-Date -Format "yyyy-MM-dd" }
 $safeSlug = ($Slug.ToLowerInvariant() -replace '[^a-z0-9]+', '-').Trim('-')
-$bundleRoot = Join-Path $repoRoot ("outputs/deliverables/{0}-{1}" -f $safeSlug, $bundleDate)
+$deliverablesPath = if ($DeliverablesRoot) {
+    $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($DeliverablesRoot)
+} else {
+    Join-Path $repoRoot "outputs/deliverables"
+}
+$bundleRoot = Join-Path $deliverablesPath ("{0}-{1}" -f $safeSlug, $bundleDate)
 
 New-Item -ItemType Directory -Force -Path $bundleRoot | Out-Null
 New-Item -ItemType Directory -Force -Path (Join-Path $bundleRoot "source") | Out-Null

@@ -1,0 +1,60 @@
+{
+  "id": "lasd-region-4-custodial-services-2026",
+  "opportunityName": "LASD Region 4 Custodial Services",
+  "buyerName": "Los Angeles County Sheriff's Department",
+  "sector": "Industrial Support",
+  "geography": {
+    "region": "Southern California",
+    "city": "Los Angeles",
+    "state": "CA",
+    "inPreferredRegion": true
+  },
+  "siteProfile": {
+    "siteCount": 28,
+    "totalSquareFeet": 564199,
+    "occupiedHours": "24/7 operations across stations and substations",
+    "weekendCoverageRequired": true,
+    "dayPorterRequired": true,
+    "unionEnvironment": false
+  },
+  "contract": {
+    "annualValueEstimate": 1600000,
+    "termMonths": 48,
+    "targetGrossMarginPercent": 15,
+    "transitionDays": 30,
+    "startDate": "TBD after Board execution"
+  },
+  "requirements": {
+    "requiredServices": [
+      "nightly-cleaning",
+      "day-porter",
+      "floor-care",
+      "daytime-support",
+      "consumables-management",
+      "window-touchpoint"
+    ],
+    "reportingCadence": "Monthly County performance meetings with PRS-backed issue tracking",
+    "sustainabilityExpectation": true,
+    "selfPerformedPreference": true,
+    "referencesRequired": 3
+  },
+  "pursuitContext": {
+    "incumbentPresent": true,
+    "relationshipStrength": "low",
+    "strategicFit": "medium",
+    "pricingPressure": "high",
+    "proofPriority": [
+      "quality visibility",
+      "labor stability",
+      "transition speed"
+    ],
+    "notes": [
+      "Region 4 covers 28 stations and substations with contractor-furnished supplies, public-lobby responsibility, and mixed day and evening staffing windows.",
+      "The buyer risk is visible inconsistency across scattered sites: empty dispensers, weak public-lobby condition, slow callbacks, and unmanaged supply shortages.",
+      "Living wage, ACA Gold healthcare coverage, payroll controls, background clearance, and no-phone security rules make labor discipline part of the service story.",
+      "County emergency and callback expectations are concrete: return calls within 30 minutes when voicemail answers and written estimates within four hours of request.",
+      "Cost is 40 percent of the evaluation, but the County can still choose the best overall qualified proposal, so the rate story has to stay tied to control, compliance, and fewer repeat issues.",
+      "This Boss Key run is using the live LASD packet as a Region 4 document pilot even though the mandatory conference and site-visit gate has already passed."
+    ]
+  }
+}
