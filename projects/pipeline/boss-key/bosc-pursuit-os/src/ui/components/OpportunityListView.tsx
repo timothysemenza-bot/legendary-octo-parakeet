@@ -1,4 +1,5 @@
 import type { OpportunityRecord } from "../../domain/opportunityLibrary";
+import { applyQualificationDecision } from "../../domain/qualification";
 import { qualifyOpportunity } from "../../engine/qualificationEngine";
 import { formatCurrency, formatRecommendation } from "../formatters";
 
@@ -55,7 +56,10 @@ export function OpportunityListView({
       <div className="opportunity-record-list">
         {records.map((record) => {
           const opportunity = record.workspaceState.activeDraft.opportunity;
-          const qualification = qualifyOpportunity(opportunity);
+          const qualification = applyQualificationDecision(
+            qualifyOpportunity(opportunity),
+            record.workspaceState.activeDraft.qualificationDecision,
+          );
           const active = record.id === activeRecordId;
 
           return (

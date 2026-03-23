@@ -1,5 +1,9 @@
 import type { ProposalExperience } from "../domain/proposalExperience";
-import type { QualificationResult } from "../domain/qualification";
+import {
+  applyQualificationDecision,
+  hasRecordedQualificationDecision,
+  type QualificationResult,
+} from "../domain/qualification";
 import type { SolutionPlan } from "../domain/solution";
 import type {
   ApprovalStage,
@@ -12,6 +16,7 @@ import type {
   ScenarioSummary,
 } from "../domain/operatorWorkspace";
 import { buildProposalExperience } from "./proposalComposer";
+import { qualifyOpportunity } from "./qualificationEngine";
 import { assembleSolution } from "./solutionAssembler";
 
 function dedupeAssumptions(values: string[]): string[] {
@@ -92,7 +97,13 @@ function buildBlockingItems(
   draft: PursuitDraft,
   qualification: QualificationResult,
 ): string[] {
+  const currentGate = findCurrentGate(draft.approvals);
+
   return [
+    ...(!hasRecordedQualificationDecision(draft.qualificationDecision) &&
+    currentGate === "qualification"
+      ? ["Qualification decision is not recorded."]
+      : []),
     ...qualification.riskFlags
       .filter((flag) => flag.severity === "high")
       .map((flag) => flag.title),
@@ -179,7 +190,9 @@ function buildGateStatus(
   const currentGate = findCurrentGate(draft.approvals);
   const decisionRequired =
     currentGate === "qualification"
-      ? "Confirm strategic fit, margin floor, and pursue posture."
+      ? hasRecordedQualificationDecision(draft.qualificationDecision)
+        ? "Qualification decision is recorded. Confirm the gate can advance on fit, margin, and pursue posture."
+        : "Record a pursue, review, or no-bid decision before advancing the qualification gate."
       : currentGate === "solution"
         ? "Confirm staffing, proof alignment, and service module fit."
         : "Confirm the buyer-facing experience and export fallback are decision-ready.";
@@ -270,6 +283,25 @@ function buildSystemActions(
   draft: PursuitDraft,
   qualification: QualificationResult,
 ): OperatorWorkspaceSnapshot["openActions"] {
+  const currentGate = findCurrentGate(draft.approvals);
+  const qualificationDecisionActions =
+    !hasRecordedQualificationDecision(draft.qualificationDecision) &&
+    currentGate === "qualification"
+      ? [
+          {
+            id: "qualification-decision",
+            title: "Record qualification decision",
+            owner: "Operator",
+            dueLabel: "Before qualification approval",
+            closeCondition:
+              "A pursue, review, or no-bid decision is captured with written rationale.",
+            stageType: "approval" as const,
+            linkedStage: "qualification",
+            source: "system" as const,
+            status: "open" as const,
+          },
+        ]
+      : [];
   const systemRiskActions = qualification.riskFlags.map((flag) => ({
     id: `risk-${flag.code}`,
     title: `Mitigate ${flag.title.toLowerCase()}`,
@@ -277,7 +309,7 @@ function buildSystemActions(
     dueLabel: "Before next gate",
     closeCondition: "Risk is mitigated or an explicit disposition is recorded.",
     stageType: "approval" as const,
-    linkedStage: findCurrentGate(draft.approvals),
+    linkedStage: currentGate,
     source: "system" as const,
     status: "open" as const,
   }));
@@ -290,7 +322,7 @@ function buildSystemActions(
       dueLabel: "Before next gate",
       closeCondition: "Recommendation is resolved or accepted with written rationale.",
       stageType: "approval" as const,
-      linkedStage: findCurrentGate(draft.approvals),
+      linkedStage: currentGate,
       source: "system" as const,
       status: "open" as const,
     }),
@@ -343,6 +375,7 @@ function buildSystemActions(
     }));
 
   return [
+    ...qualificationDecisionActions,
     ...systemRiskActions,
     ...systemRecommendationActions,
     ...assumptionActions,
@@ -364,7 +397,12 @@ export function buildOperatorWorkspaceSnapshot(
 ): OperatorWorkspaceSnapshot {
   const baseSolution = assembleSolution(draft.opportunity);
   const filteredSolution = filterSolution(baseSolution, draft);
+  const effectiveQualification = applyQualificationDecision(
+    qualifyOpportunity(draft.opportunity),
+    draft.qualificationDecision,
+  );
   const baseExperience = buildProposalExperience(draft.opportunity, undefined, {
+    qualificationOverride: effectiveQualification,
     solutionOverride: filteredSolution,
   });
   const experience = applyDraftToExperience(baseExperience, draft);

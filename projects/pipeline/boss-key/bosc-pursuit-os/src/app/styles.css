@@ -904,6 +904,49 @@ button:disabled {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.score-breakdown-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.score-breakdown-card {
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.score-breakdown-card p {
+  margin: 10px 0 0;
+}
+
+.score-breakdown-delta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.score-breakdown-delta.positive {
+  background: rgba(121, 208, 169, 0.16);
+  color: #d8ffec;
+}
+
+.score-breakdown-delta.neutral {
+  background: rgba(87, 200, 211, 0.14);
+  color: #dff9fb;
+}
+
+.score-breakdown-delta.negative {
+  background: rgba(255, 143, 128, 0.16);
+  color: #ffe1dc;
+}
+
 .content-stack {
   display: grid;
   gap: 18px;
@@ -1095,6 +1138,10 @@ button:disabled {
   min-height: 88px;
   margin-top: 12px;
   resize: vertical;
+}
+
+.qualification-note {
+  min-height: 110px;
 }
 
 .assumption-list,

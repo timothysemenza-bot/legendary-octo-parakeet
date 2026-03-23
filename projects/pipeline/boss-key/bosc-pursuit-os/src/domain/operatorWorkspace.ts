@@ -1,7 +1,13 @@
 import { z } from "zod";
 import { opportunitySchema, type Opportunity } from "./opportunity";
 import type { ProposalExperience } from "./proposalExperience";
-import type { PursuitRecommendation } from "./qualification";
+import {
+  createDefaultQualificationDecision,
+  PURSUIT_RECOMMENDATIONS,
+  QUALIFICATION_DECISION_MODES,
+  type PursuitRecommendation,
+  type QualificationDecision,
+} from "./qualification";
 import type { SolutionModule } from "./solution";
 
 export const APPROVAL_STAGES = [
@@ -103,6 +109,7 @@ export interface BuyerStoryVariant {
 export interface PursuitDraft {
   opportunity: Opportunity;
   excludedModuleIds: string[];
+  qualificationDecision: QualificationDecision;
   operatorAssumptions: OperatorAssumption[];
   approvals: ApprovalCheckpoint[];
   reviewCheckpoints: ReviewCheckpoint[];
@@ -208,6 +215,8 @@ const assumptionStatusSchema = z.enum(ASSUMPTION_STATUSES);
 const assumptionImpactAreaSchema = z.enum(ASSUMPTION_IMPACT_AREAS);
 const actionStatusSchema = z.enum(ACTION_STATUSES);
 const actionStageTypeSchema = z.enum(ACTION_STAGE_TYPES);
+const pursuitRecommendationSchema = z.enum(PURSUIT_RECOMMENDATIONS);
+const qualificationDecisionModeSchema = z.enum(QUALIFICATION_DECISION_MODES);
 
 function readOptionalString(value: unknown): string | null {
   return typeof value === "string" && value.length > 0 ? value : null;
@@ -302,9 +311,19 @@ export const buyerStoryVariantSchema = z.object({
   selection: workingStorySelectionSchema,
 });
 
+export const qualificationDecisionSchema = z.object({
+  mode: qualificationDecisionModeSchema.default("pending"),
+  selectedStatus: pursuitRecommendationSchema.nullable().default(null),
+  note: z.string().default(""),
+  decidedAt: z.string().nullable().default(null),
+});
+
 export const pursuitDraftSchema = z.object({
   opportunity: opportunitySchema,
   excludedModuleIds: z.array(z.string()),
+  qualificationDecision: qualificationDecisionSchema.default(
+    createDefaultQualificationDecision(),
+  ),
   operatorAssumptions: z.array(operatorAssumptionSchema),
   approvals: z.array(approvalCheckpointSchema),
   reviewCheckpoints: z.array(reviewCheckpointSchema),
@@ -323,7 +342,7 @@ export const pursuitDraftSchema = z.object({
 
 export const scenarioSummarySchema = z.object({
   score: z.number().min(0).max(100),
-  status: z.enum(["pursue", "review", "no-bid"]),
+  status: pursuitRecommendationSchema,
   moduleCount: z.number().int().min(0),
   assumptionCount: z.number().int().min(0),
   openAssumptionCount: z.number().int().min(0),
@@ -417,6 +436,7 @@ export function createPursuitDraft(opportunity: Opportunity): PursuitDraft {
   return {
     opportunity,
     excludedModuleIds: [],
+    qualificationDecision: createDefaultQualificationDecision(),
     operatorAssumptions: [],
     approvals: createDefaultApprovals(),
     reviewCheckpoints: createDefaultReviewCheckpoints(),

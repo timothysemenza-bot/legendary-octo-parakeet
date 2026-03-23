@@ -24,6 +24,10 @@ import {
   type ReviewStatus,
 } from "../domain/operatorWorkspace";
 import {
+  createDefaultQualificationDecision,
+  type PursuitRecommendation,
+} from "../domain/qualification";
+import {
   buildOperatorWorkspaceSnapshot,
   createScenarioSnapshot,
 } from "../engine/operatorWorkspace";
@@ -386,8 +390,50 @@ export default function App() {
     updateDraft((draft) => ({
       ...draft,
       opportunity: nextOpportunity,
+      qualificationDecision: createDefaultQualificationDecision(),
       approvals: resetApprovals(draft.approvals),
       reviewCheckpoints: resetReviewCheckpoints(draft.reviewCheckpoints),
+    }));
+  }
+
+  function handleQualificationDecisionNoteChange(note: string) {
+    updateDraft((draft) => ({
+      ...draft,
+      qualificationDecision: {
+        ...draft.qualificationDecision,
+        note,
+      },
+    }));
+  }
+
+  function handleUseEngineQualificationDecision() {
+    updateDraft((draft) => ({
+      ...draft,
+      qualificationDecision: {
+        mode: "follow-engine",
+        selectedStatus: null,
+        note: draft.qualificationDecision.note,
+        decidedAt: new Date().toISOString(),
+      },
+    }));
+  }
+
+  function handleOverrideQualificationDecision(status: PursuitRecommendation) {
+    updateDraft((draft) => ({
+      ...draft,
+      qualificationDecision: {
+        mode: "override",
+        selectedStatus: status,
+        note: draft.qualificationDecision.note,
+        decidedAt: new Date().toISOString(),
+      },
+    }));
+  }
+
+  function handleClearQualificationDecision() {
+    updateDraft((draft) => ({
+      ...draft,
+      qualificationDecision: createDefaultQualificationDecision(),
     }));
   }
 
@@ -951,6 +997,11 @@ export default function App() {
                     <QualificationPanel
                       opportunity={activeDraft.opportunity}
                       qualification={experience.qualification}
+                      decision={activeDraft.qualificationDecision}
+                      onDecisionNoteChange={handleQualificationDecisionNoteChange}
+                      onUseEngineRecommendation={handleUseEngineQualificationDecision}
+                      onOverrideStatus={handleOverrideQualificationDecision}
+                      onClearDecision={handleClearQualificationDecision}
                     />
                     <NextCheckpointPanel checkpoint={workspaceSnapshot.nextCheckpoint} />
                   </div>
@@ -991,6 +1042,19 @@ export default function App() {
                   <QualificationPanel
                     opportunity={pendingImport?.opportunity ?? activeDraft.opportunity}
                     qualification={pendingImportQualification ?? experience.qualification}
+                    decision={pendingImport ? undefined : activeDraft.qualificationDecision}
+                    onDecisionNoteChange={
+                      pendingImport ? undefined : handleQualificationDecisionNoteChange
+                    }
+                    onUseEngineRecommendation={
+                      pendingImport ? undefined : handleUseEngineQualificationDecision
+                    }
+                    onOverrideStatus={
+                      pendingImport ? undefined : handleOverrideQualificationDecision
+                    }
+                    onClearDecision={
+                      pendingImport ? undefined : handleClearQualificationDecision
+                    }
                   />
                   {pendingImport ? (
                     <section className="panel">

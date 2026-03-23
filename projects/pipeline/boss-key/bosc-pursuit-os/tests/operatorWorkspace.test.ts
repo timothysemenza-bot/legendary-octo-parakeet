@@ -9,6 +9,7 @@ import {
   buildOperatorWorkspaceSnapshot,
   createScenarioSnapshot,
 } from "../src/engine/operatorWorkspace";
+import { qualifyOpportunity } from "../src/engine/qualificationEngine";
 import {
   loadWorkspaceState,
   saveWorkspaceState,
@@ -208,6 +209,49 @@ describe("operator workspace composition", () => {
       "The service mix and staffing plan fit the site profile.",
     );
   });
+
+  it("treats an unrecorded qualification call as a blocker at the qualification gate", () => {
+    const draft = createPursuitDraft(demoOpportunity);
+
+    const snapshot = buildOperatorWorkspaceSnapshot(draft);
+
+    expect(snapshot.gateStatus.blockingItems).toContain(
+      "Qualification decision is not recorded.",
+    );
+    expect(snapshot.openActions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "qualification-decision",
+          title: "Record qualification decision",
+          source: "system",
+        }),
+      ]),
+    );
+    expect(snapshot.nextCheckpoint.type).toBe("gate");
+    expect(snapshot.nextCheckpoint.title).toBe("Qualification Decision");
+  });
+
+  it("lets the operator override the engine recommendation while preserving the underlying score", () => {
+    const draft = createPursuitDraft(demoOpportunity);
+    const engineResult = qualifyOpportunity(demoOpportunity);
+    draft.qualificationDecision = {
+      mode: "override",
+      selectedStatus: "no-bid",
+      note: "Do not advance until the bid economics improve.",
+      decidedAt: "2026-03-23T16:00:00.000Z",
+    };
+
+    const snapshot = buildOperatorWorkspaceSnapshot(draft);
+
+    expect(snapshot.experience.qualification.recommendedStatus).toBe(
+      engineResult.recommendedStatus,
+    );
+    expect(snapshot.experience.qualification.status).toBe("no-bid");
+    expect(snapshot.summary.status).toBe("no-bid");
+    expect(snapshot.gateStatus.blockingItems).not.toContain(
+      "Qualification decision is not recorded.",
+    );
+  });
 });
 
 describe("operator workspace persistence", () => {
@@ -373,6 +417,45 @@ describe("operator workspace persistence", () => {
     expect(loaded.activeDraft.promotedBuyerStoryVariantId).toBe("variant-1");
   });
 
+  it("persists qualification decisions through storage round-trip", () => {
+    const storage: Record<string, string> = {};
+    const state = createWorkspaceState(demoOpportunity);
+    state.activeDraft.qualificationDecision = {
+      mode: "override",
+      selectedStatus: "review",
+      note: "Need pricing clarification before we commit to pursue.",
+      decidedAt: "2026-03-23T18:00:00.000Z",
+    };
+
+    saveWorkspaceState(
+      {
+        getItem(key) {
+          return storage[key] ?? null;
+        },
+        setItem(key, value) {
+          storage[key] = value;
+        },
+      },
+      state,
+    );
+
+    const loaded = loadWorkspaceState(
+      {
+        getItem(key) {
+          return storage[key] ?? null;
+        },
+        setItem() {
+          return undefined;
+        },
+      },
+      demoOpportunity,
+    );
+
+    expect(loaded.activeDraft.qualificationDecision).toEqual(
+      state.activeDraft.qualificationDecision,
+    );
+  });
+
   it("persists review checkpoints and operator actions with APMP metadata", () => {
     const storage: Record<string, string> = {};
     const state = createWorkspaceState(demoOpportunity);
@@ -474,6 +557,38 @@ describe("operator workspace persistence", () => {
     });
     expect(loaded.activeDraft.buyerStoryVariants).toEqual([]);
     expect(loaded.activeDraft.promotedBuyerStoryVariantId).toBeNull();
+  });
+
+  it("fills qualification decision defaults when older stored payloads omit them", () => {
+    const state = createWorkspaceState(demoOpportunity);
+    const legacyPayload = {
+      ...state,
+      activeDraft: {
+        ...state.activeDraft,
+      },
+    };
+
+    delete (legacyPayload.activeDraft as { qualificationDecision?: unknown })
+      .qualificationDecision;
+
+    const loaded = loadWorkspaceState(
+      {
+        getItem() {
+          return JSON.stringify(legacyPayload);
+        },
+        setItem() {
+          return undefined;
+        },
+      },
+      demoOpportunity,
+    );
+
+    expect(loaded.activeDraft.qualificationDecision).toEqual({
+      mode: "pending",
+      selectedStatus: null,
+      note: "",
+      decidedAt: null,
+    });
   });
 
   it("maps legacy title-based working story payloads into the new ref fields", () => {
