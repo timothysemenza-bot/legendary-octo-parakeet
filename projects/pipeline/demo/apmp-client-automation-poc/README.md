@@ -37,3 +37,30 @@ Start the demo from this project root so the thread stays isolated:
 
 Generated packages belong in `outputs/`, not inside this project folder.
 
+## Parallel Lane Workspace
+
+The active multi-thread run scaffold for this project is:
+
+`outputs/runs/2026-03-21/`
+
+Use that run folder for live lane execution.
+
+- `00-operator-brief/`: coordinator brief, launch order, and dependency rules
+- `01-intake/`: source normalization and intake handoff
+- `02-compliance/`: requirements baseline and compliance package
+- `03-kickoff/`: kickoff packet, schedule, and role planning
+- `04-content/`: writer-ready content planning package
+- `05-qa/`: review readiness and issue-log package
+- `06-final/`: final merge and operator delivery note
+
+## Read-Only Shared References
+
+Treat these as preserved references during lane execution:
+
+- `inputs/`
+- `docs/`
+- `working/poc-output-map.md`
+- `working/sample-artifacts/`
+
+Do not place live lane outputs in `working/`. The `working/sample-artifacts/` files remain in place as demo references and should be preserved.
+

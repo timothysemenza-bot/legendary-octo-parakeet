@@ -14,6 +14,27 @@
   - `apmp-review-cycle`
   - `apmp-knowledge-harvest`
 
+## Multi-Thread Workspace
+
+- The active run root is `outputs/runs/2026-03-22/`.
+- Read `outputs/runs/2026-03-22/00-operator-brief/README.md` before launching a lane thread.
+- Use one Codex thread per lane.
+- Lane threads may create or update files only inside their assigned lane folder.
+- Lane `README.md` files are instructions and should stay read-only during execution.
+- Use each lane's `handoff.md` to report status, assumptions, blockers, and manual-review needs.
+- `06-final/` is the only lane allowed to assemble a merged package for this run.
+- Use `docs/orchestration-kit/` for coordinator runbooks, reusable prompts, and current-pursuit orchestration notes.
+
+## Protected References During Lane Execution
+
+- `inputs/**/*`
+- `docs/**/*`
+- `working/poc-output-map.md`
+- `working/sample-artifacts/**/*`
+- `README.md`
+- `AGENTS.md`
+- `outputs/runs/2026-03-22/00-operator-brief/**/*`
+
 ## Verification
 
 - Run the smallest check that proves the change.

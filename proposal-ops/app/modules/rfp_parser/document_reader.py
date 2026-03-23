@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from io import BytesIO
 
 
-SUPPORTED_UPLOAD_EXTENSIONS = (".txt", ".md", ".pdf", ".docx")
+SUPPORTED_UPLOAD_EXTENSIONS = (".txt", ".md", ".pdf", ".docx", ".xlsx", ".pptx")
 
 
 @dataclass
@@ -34,6 +34,98 @@ class SourceDocumentExtractionRecord:
 def _guess_content_type(filename: str) -> str:
     guessed, _encoding = mimetypes.guess_type(filename)
     return guessed or "application/octet-stream"
+
+
+def _normalize_text_value(value: object) -> str:
+    text = str(value).replace("\r\n", "\n").replace("\r", "\n").strip()
+    lines = [" ".join(line.split()) for line in text.split("\n")]
+    return "\n".join(line for line in lines if line)
+
+
+def _extract_text_from_xlsx_payload(payload: bytes) -> str:
+    try:
+        from openpyxl import load_workbook
+        from openpyxl.utils import get_column_letter
+    except ImportError as exc:
+        raise RuntimeError("XLSX parsing requires openpyxl. Install openpyxl to parse XLSX files.") from exc
+
+    try:
+        workbook = load_workbook(filename=BytesIO(payload), data_only=False, read_only=True)
+    except Exception as exc:  # pragma: no cover - exercised via failure behavior, exact library exception varies
+        raise RuntimeError("XLSX parsing failed. Ensure the workbook is a valid XLSX file.") from exc
+
+    sheet_sections: list[str] = []
+    for sheet in workbook.worksheets:
+        row_lines: list[str] = []
+        for row_index, row in enumerate(sheet.iter_rows(values_only=True), start=1):
+            populated_cells: list[str] = []
+            for column_index, value in enumerate(row, start=1):
+                if value is None:
+                    continue
+                normalized = _normalize_text_value(value)
+                if not normalized:
+                    continue
+                populated_cells.append(f"{get_column_letter(column_index)}{row_index}={normalized}")
+            if populated_cells:
+                row_lines.append(" | ".join(populated_cells))
+        if row_lines:
+            sheet_sections.append(f"Sheet: {sheet.title}\n" + "\n".join(row_lines))
+        else:
+            sheet_sections.append(f"Sheet: {sheet.title}\n[blank sheet]")
+
+    workbook.close()
+    return "\n\n".join(sheet_sections)
+
+
+def _extract_pptx_notes(slide) -> str:
+    if not getattr(slide, "has_notes_slide", False):
+        return ""
+
+    notes: list[str] = []
+    for shape in slide.notes_slide.shapes:
+        text = _normalize_text_value(getattr(shape, "text", ""))
+        if not text:
+            continue
+        if text.lower() == "click to add notes":
+            continue
+        if text in notes:
+            continue
+        notes.append(text)
+    return "\n".join(notes)
+
+
+def _extract_text_from_pptx_payload(payload: bytes) -> str:
+    try:
+        from pptx import Presentation
+    except ImportError as exc:
+        raise RuntimeError("PPTX parsing requires python-pptx. Install python-pptx to parse PPTX files.") from exc
+
+    try:
+        presentation = Presentation(BytesIO(payload))
+    except Exception as exc:  # pragma: no cover - exercised via failure behavior, exact library exception varies
+        raise RuntimeError("PPTX parsing failed. Ensure the slide deck is a valid PPTX file.") from exc
+
+    slide_sections: list[str] = []
+    for slide_index, slide in enumerate(presentation.slides, start=1):
+        content_lines: list[str] = []
+        for shape in slide.shapes:
+            text = _normalize_text_value(getattr(shape, "text", ""))
+            if not text:
+                continue
+            if text in content_lines:
+                continue
+            content_lines.append(text)
+
+        notes = _extract_pptx_notes(slide)
+        section_lines = [f"Slide {slide_index}"]
+        if content_lines:
+            section_lines.extend(content_lines)
+        if notes:
+            section_lines.append("Speaker notes:")
+            section_lines.append(notes)
+        slide_sections.append("\n".join(section_lines))
+
+    return "\n\n".join(slide_sections)
 
 
 def _build_batch_result(documents: list["SourceDocumentExtractionRecord"]) -> BatchDocumentExtractionResult:
@@ -196,7 +288,13 @@ def extract_text_from_upload(filename: str, payload: bytes) -> str:
         document = docx.Document(BytesIO(payload))
         return "\n".join(paragraph.text for paragraph in document.paragraphs)
 
-    raise RuntimeError("Unsupported file type. Use TXT, MD, PDF, or DOCX.")
+    if lowered.endswith(".xlsx"):
+        return _extract_text_from_xlsx_payload(payload)
+
+    if lowered.endswith(".pptx"):
+        return _extract_text_from_pptx_payload(payload)
+
+    raise RuntimeError("Unsupported file type. Use TXT, MD, PDF, DOCX, XLSX, or PPTX.")
 
 
 def extract_text_from_upload_batch(files: list[tuple[str, bytes]]) -> BatchDocumentExtractionResult:

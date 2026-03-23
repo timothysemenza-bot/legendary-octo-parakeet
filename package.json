@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "test:writing-center-tribute": "node scripts/writing-center-tribute-smoke-test.mjs",
+    "bosskey:invoice": "powershell -ExecutionPolicy Bypass -File .\\scripts\\new-boss-key-invoice.ps1",
     "os:intake": "powershell -ExecutionPolicy Bypass -File .\\marketing-agents\\scripts\\run-engagement-intake.ps1",
     "bosskey:growth:proposalops:bootstrap": "powershell -ExecutionPolicy Bypass -File .\\marketing-agents\\scripts\\sync-boss-key-proposal-ops.ps1 -Mode Bootstrap",
     "bosskey:growth:proposalops:hydrate": "powershell -ExecutionPolicy Bypass -File .\\marketing-agents\\scripts\\sync-boss-key-proposal-ops.ps1 -Mode HydrateQueues",

@@ -30,17 +30,24 @@ const PAGE_CONFIGS = [
           about workplace culture, business halacha, travel, yichud, dress, and values-based decision making.
           JWBLNG was built so those women do not have to navigate that alone.
         </p>
+        <p style="margin:0 0 16px 0;line-height:1.75;">
+          Our mission is to provide support, education, and community so Jewish women can bring G-d, Torah,
+          and Jewish values with them into the workplace, with the courage, protection, and confidence that comes
+          from knowing they are not alone.
+        </p>
         <h2 style="margin:0 0 10px 0;">What members find here</h2>
         <ul style="margin:0 0 18px 20px;line-height:1.8;">
           <li>Speaker Series conversations with founders, executives, and expert operators.</li>
           <li>Book Club, business halacha, and learning rooted in Torah values and real business application.</li>
           <li>A supportive peer network for women growing businesses, careers, and communal impact.</li>
           <li>Professional development and practical guidance for real workplace challenges.</li>
+          <li>Support, input, and encouragement to stay strong and balanced in environments that can challenge Torah beliefs and values.</li>
         </ul>
         <p style="margin:0 0 18px 0;line-height:1.75;">
-          Our mission is to provide support, education, and community so Jewish women can go to work with confidence
-          and return home with the same Torah values they brought in.
+          Together we are building a community where like-minded Jewish women can take their full selves to work
+          and return each day with the same Torah values and lifestyle they brought in.
         </p>
+        <p style="margin:0 0 18px 0;line-height:1.75;"><strong>Connect - Grow - Succeed!</strong></p>
         <p style="margin:0;">
           <a href="/events" style="display:inline-block;padding:10px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:700;">View Upcoming Events</a>
           <a href="${joinBridgeUrl}" style="display:inline-block;margin-left:10px;padding:10px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:700;">Join JWBLNG</a>
@@ -57,11 +64,16 @@ const PAGE_CONFIGS = [
         <p style="margin:0 0 16px 0;line-height:1.75;font-size:17px;">
           Questions about membership, programming, speaking, partnerships, support, or business halacha? We would love to hear from you.
         </p>
+        <p style="margin:0 0 16px 0;line-height:1.75;">
+          We are here to answer questions of business halacha, provide support in difficult work situations,
+          learn together, and help women get connected to the right JWBLNG next step.
+        </p>
         <ul style="margin:0 0 18px 20px;line-height:1.8;">
           <li>Email us at <a href="mailto:info@jwblng.org" style="font-weight:700;">info@jwblng.org</a>.</li>
           <li>Call or text us at <strong>347.335.9599</strong>.</li>
           <li>Use this page for community access questions, speaker ideas, collaboration requests, workplace support, and partnership conversations.</li>
           <li>Registered charity number: <strong>92-2391852</strong>.</li>
+          <li>If you are waiting on approval or unsure whether to join again or log in, contact us before submitting a second request.</li>
         </ul>
         <p style="margin:0;">
           <a href="mailto:info@jwblng.org" style="display:inline-block;padding:10px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:700;">Email JWBLNG</a>
@@ -80,20 +92,27 @@ const PAGE_CONFIGS = [
         <p style="margin:0 0 16px 0;line-height:1.75;font-size:17px;">
           Explore JWBLNG programs, choose the format that fits where you are right now, and use the join path to request community access for registration details and follow-up.
         </p>
+        <p style="margin:0 0 16px 0;line-height:1.75;">
+          JWBLNG programming is designed to strengthen Orthodox Jewish women in business through professional development,
+          Torah perspective, practical support, and live community connection.
+        </p>
         <div style="display:grid;gap:12px;margin:0 0 18px 0;">
           <a href="/speaker-series" style="display:block;padding:14px 16px;border-radius:14px;border:1px solid currentColor;text-decoration:none;color:inherit;">
             <strong style="display:block;font-size:18px;">Speaker Series</strong>
-            <span style="display:block;margin-top:6px;line-height:1.7;">Conversations with founders, executives, and experts who lead with purpose.</span>
+            <span style="display:block;margin-top:6px;line-height:1.7;">Conversations with founders, executives, and expert operators focused on values-aligned leadership and professional growth.</span>
           </a>
           <a href="/book-club" style="display:block;padding:14px 16px;border-radius:14px;border:1px solid currentColor;text-decoration:none;color:inherit;">
             <strong style="display:block;font-size:18px;">Book Club</strong>
-            <span style="display:block;margin-top:6px;line-height:1.7;">Practical learning rooted in Torah values and real business application.</span>
+            <span style="display:block;margin-top:6px;line-height:1.7;">Practical learning rooted in Torah values and real business application, with guided discussion and implementation prompts.</span>
           </a>
           <a href="/halacha-circle" style="display:block;padding:14px 16px;border-radius:14px;border:1px solid currentColor;text-decoration:none;color:inherit;">
             <strong style="display:block;font-size:18px;">Halacha Circle</strong>
-            <span style="display:block;margin-top:6px;line-height:1.7;">Live Q&amp;A for business questions through a halachic and values-driven lens.</span>
+            <span style="display:block;margin-top:6px;line-height:1.7;">Live Q&amp;A for business questions through a halachic and values-driven lens, with member questions shaping the conversation.</span>
           </a>
         </div>
+        <p style="margin:0 0 18px 0;line-height:1.75;">
+          New here? Join JWBLNG first. Approved members can log in for access details, follow-up, and member-only logistics.
+        </p>
         <p style="margin:0;">
           <a href="${joinBridgeUrl}" style="display:inline-block;padding:10px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:700;">Join JWBLNG</a>
           <a href="/support-jwblng" style="display:inline-block;margin-left:10px;padding:10px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:700;">Support JWBLNG</a>
@@ -147,7 +166,10 @@ const PAGE_CONFIGS = [
           Membership requests begin on the JWBLNG homepage form. Use the button below to go straight to the Phase 1 join form and request free community access there.
         </p>
         <p style="margin:0 0 18px 0;line-height:1.75;">
-          This page is only a bridge so there is one consistent public join path. After approval, returning members can use the site-wide Log In control.
+          This page is only a bridge so there is one consistent public join path. After approval, returning members should use the site-wide Log In control instead of submitting a second request.
+        </p>
+        <p style="margin:0 0 18px 0;line-height:1.75;">
+          Waiting on approval or not sure whether you should join again or log in? Contact JWBLNG at <a href="mailto:info@jwblng.org" style="font-weight:700;">info@jwblng.org</a> or <strong>347.335.9599</strong> for help.
         </p>
         <p style="margin:0;">
           <a href="${joinFormUrl}" style="display:inline-block;padding:10px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:700;">Go to the Join Form</a>

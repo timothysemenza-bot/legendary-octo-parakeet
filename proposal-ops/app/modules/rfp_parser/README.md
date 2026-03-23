@@ -1,6 +1,6 @@
 # RFP Parser Module
 
-Parses solicitation text from manual input, direct upload, or intake-time batch uploads using TXT/MD/PDF/DOCX files.
+Parses solicitation text from manual input, direct upload, or intake-time batch uploads using TXT/MD/PDF/DOCX/XLSX/PPTX files.
 
 ## Responsibilities
 - Extract deadlines, evaluation criteria, and submission instructions
