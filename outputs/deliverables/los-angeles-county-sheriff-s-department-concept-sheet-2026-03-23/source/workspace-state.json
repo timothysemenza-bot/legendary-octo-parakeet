@@ -1,0 +1,238 @@
+{
+  "activeDraft": {
+    "opportunity": {
+      "id": "lasd-region-4-custodial-services-2026",
+      "opportunityName": "LASD Region 4 Custodial Services",
+      "buyerName": "Los Angeles County Sheriff's Department",
+      "sector": "Industrial Support",
+      "geography": {
+        "region": "Southern California",
+        "city": "Los Angeles",
+        "state": "CA",
+        "inPreferredRegion": true
+      },
+      "siteProfile": {
+        "siteCount": 28,
+        "totalSquareFeet": 564199,
+        "occupiedHours": "24/7 operations across stations and substations",
+        "weekendCoverageRequired": true,
+        "dayPorterRequired": true,
+        "unionEnvironment": false
+      },
+      "contract": {
+        "annualValueEstimate": 1600000,
+        "termMonths": 48,
+        "targetGrossMarginPercent": 15,
+        "transitionDays": 30,
+        "startDate": "TBD after Board execution"
+      },
+      "requirements": {
+        "requiredServices": [
+          "nightly-cleaning",
+          "day-porter",
+          "floor-care",
+          "daytime-support",
+          "consumables-management",
+          "window-touchpoint"
+        ],
+        "reportingCadence": "Monthly County performance meetings with PRS-backed issue tracking",
+        "sustainabilityExpectation": true,
+        "selfPerformedPreference": true,
+        "referencesRequired": 3
+      },
+      "pursuitContext": {
+        "incumbentPresent": true,
+        "relationshipStrength": "low",
+        "strategicFit": "medium",
+        "pricingPressure": "high",
+        "proofPriority": [
+          "quality visibility",
+          "labor stability",
+          "transition speed"
+        ],
+        "notes": [
+          "Region 4 covers 28 stations and substations with contractor-furnished supplies, public-lobby responsibility, and mixed day and evening staffing windows.",
+          "The buyer risk is visible inconsistency across scattered sites: empty dispensers, weak public-lobby condition, slow callbacks, and unmanaged supply shortages.",
+          "Living wage, ACA Gold healthcare coverage, payroll controls, background clearance, and no-phone security rules make labor discipline part of the service story.",
+          "County emergency and callback expectations are concrete: return calls within 30 minutes when voicemail answers and written estimates within four hours of request.",
+          "Cost is 40 percent of the evaluation, but the County can still choose the best overall qualified proposal, so the rate story has to stay tied to control, compliance, and fewer repeat issues.",
+          "This Boss Key run is using the live LASD packet as a Region 4 document pilot even though the mandatory conference and site-visit gate has already passed."
+        ]
+      }
+    },
+    "excludedModuleIds": [],
+    "operatorAssumptions": [
+      {
+        "id": "assumption-mandatory-attendance",
+        "text": "Actual bid eligibility depends on prior attendance at the March 2-4, 2026 mandatory conference and site visits, so this run is being treated as a live-document pilot until attendance is confirmed.",
+        "status": "watch",
+        "owner": "Operator",
+        "impactArea": "qualification"
+      },
+      {
+        "id": "assumption-region-4-value",
+        "text": "The annual value estimate is a Boss Key placeholder for Region 4 until the staffing schedule and pricing forms are modeled in detail.",
+        "status": "open",
+        "owner": "Operator",
+        "impactArea": "pricing"
+      },
+      {
+        "id": "assumption-region-selection",
+        "text": "Boss Key is using Region 4 as the first live public-sector pilot lane instead of flattening all four LASD regions into one story.",
+        "status": "validated",
+        "owner": "Operator",
+        "impactArea": "solution"
+      },
+      {
+        "id": "assumption-direct-control",
+        "text": "Direct-control staffing and supervision are being treated as a selling thesis for this security-heavy environment even though the RFP does not explicitly mandate self-performance.",
+        "status": "watch",
+        "owner": "Operator",
+        "impactArea": "solution"
+      }
+    ],
+    "approvals": [
+      {
+        "stage": "qualification",
+        "status": "approved",
+        "approvedAt": "2026-03-23T16:10:00.000Z"
+      },
+      {
+        "stage": "solution",
+        "status": "pending",
+        "approvedAt": null
+      },
+      {
+        "stage": "experience",
+        "status": "pending",
+        "approvedAt": null
+      }
+    ],
+    "reviewCheckpoints": [
+      {
+        "id": "content-plan-review",
+        "apmpLabel": "Pink Review",
+        "title": "Content Plan Review",
+        "objective": "Validate story structure, proof plan, and section intent before evaluator-style drafting.",
+        "exitCriteria": [
+          "Outline and section intent are stable.",
+          "Evaluation factors are mapped to sections and proof.",
+          "Major content gaps have owners and due dates.",
+          "Win themes and discriminators are explicit."
+        ],
+        "status": "ready",
+        "dueLabel": "Before solution approval",
+        "completedAt": null
+      },
+      {
+        "id": "evaluator-review",
+        "apmpLabel": "Red Review",
+        "title": "Red Review (Evaluator View)",
+        "objective": "Assess the proposal experience as a buyer would and identify rework before final polish.",
+        "exitCriteria": [
+          "Buyer questions are answered from an evaluator view.",
+          "Strengths and proof are visible in the experience.",
+          "Pricing narrative aligns with the delivery approach.",
+          "Major evaluator-facing defects have disposition owners."
+        ],
+        "status": "pending",
+        "dueLabel": "Before experience approval",
+        "completedAt": null
+      },
+      {
+        "id": "gold-readiness-review",
+        "apmpLabel": "Gold Review",
+        "title": "Gold Readiness Review",
+        "objective": "Confirm production readiness, export fallback, and final decision controls before release.",
+        "exitCriteria": [
+          "Final files and forms are present in the controlled package.",
+          "Executive, pricing, and contract approvals are captured.",
+          "Naming, attachments, and export packaging are locked.",
+          "Submission and contingency paths are confirmed."
+        ],
+        "status": "pending",
+        "dueLabel": "Before final delivery",
+        "completedAt": null
+      }
+    ],
+    "operatorActions": [
+      {
+        "id": "action-confirm-attendance",
+        "title": "Confirm mandatory attendance history or lock this as a document-only pilot",
+        "owner": "Operator",
+        "dueLabel": "Before next qualification reset",
+        "closeCondition": "Attendance status is confirmed or the pursuit is explicitly labeled as a document-quality test only.",
+        "stageType": "approval",
+        "linkedStage": "qualification",
+        "status": "open"
+      },
+      {
+        "id": "action-region-4-proof-pack",
+        "title": "Build Region 4 proof pack for supply continuity, callbacks, and payroll control",
+        "owner": "Operator",
+        "dueLabel": "Before Pink Review",
+        "closeCondition": "The content plan has proof hooks for Region 4 supply continuity, emergency response, and labor-compliance discipline.",
+        "stageType": "review",
+        "linkedStage": "content-plan-review",
+        "status": "open"
+      },
+      {
+        "id": "action-pricing-stress-test",
+        "title": "Stress-test annual value and margin assumptions against the Region 4 staffing schedule",
+        "owner": "Operator",
+        "dueLabel": "Before solution approval",
+        "closeCondition": "The pricing placeholder is replaced or accepted with written rationale.",
+        "stageType": "approval",
+        "linkedStage": "solution",
+        "status": "open"
+      }
+    ],
+    "workingStory": {
+      "summaryVariantId": "One accountable operating chain",
+      "winThemeIds": [
+        "Keep accountability in one chain",
+        "Keep basics stocked without chasing",
+        "Protect value before talking rate"
+      ],
+      "proofIds": [
+        "Consumables reliability playbook",
+        "Self-performed staffing continuity",
+        "Budget rebaseline without visible slippage"
+      ],
+      "ghostAngleIds": [
+        "Ghost brokered-labor distance",
+        "Ghost low-rate instability"
+      ],
+      "transitionAngleId": "Launch control sprint",
+      "operatorNotes": "Keep the story on distributed operating control: public lobbies stay ready, supplies do not run short, callbacks do not sit, and payroll discipline protects service stability as much as compliance."
+    },
+    "buyerStoryVariants": [
+      {
+        "id": "variant-region-4-control",
+        "name": "Region 4 operating control",
+        "savedAt": "2026-03-23T16:35:00.000Z",
+        "selection": {
+          "summaryVariantId": "One accountable operating chain",
+          "winThemeIds": [
+            "Keep accountability in one chain",
+            "Keep basics stocked without chasing",
+            "Protect value before talking rate"
+          ],
+          "proofIds": [
+            "Consumables reliability playbook",
+            "Self-performed staffing continuity",
+            "Budget rebaseline without visible slippage"
+          ],
+          "ghostAngleIds": [
+            "Ghost brokered-labor distance",
+            "Ghost low-rate instability"
+          ],
+          "transitionAngleId": "Launch control sprint",
+          "operatorNotes": "Make the evaluator feel that Region 4 will be calmer to manage because one operating rhythm owns replenishment, staffing follow-through, and rapid correction when a site slips."
+        }
+      }
+    ],
+    "promotedBuyerStoryVariantId": "variant-region-4-control"
+  },
+  "savedScenarios": []
+}

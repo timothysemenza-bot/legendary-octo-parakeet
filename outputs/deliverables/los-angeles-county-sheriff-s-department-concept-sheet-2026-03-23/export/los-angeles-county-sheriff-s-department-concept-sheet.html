@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Region 4 operating control | Boss Key Pursuit OS</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #13202b;
+        --muted: #5c6b78;
+        --line: #d6dde3;
+        --surface: #f5f7f8;
+        --card: #ffffff;
+        --accent: #0d6d68;
+        --accent-soft: #d7f2ef;
+        --signal: #0e7490;
+        --confidence: #166534;
+        --proof: #7c3aed;
+        --transition: #b45309;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, #eef5f7 0%, #ffffff 28%);
+      }
+
+      main {
+        width: min(1120px, calc(100vw - 48px));
+        margin: 0 auto;
+        padding: 40px 0 56px;
+      }
+
+      .hero {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: 32px;
+        box-shadow: 0 24px 70px rgba(19, 32, 43, 0.08);
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.45fr 0.95fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3.3rem);
+        line-height: 1.02;
+        margin-bottom: 14px;
+      }
+
+      .hero-copy > p:last-child,
+      .hero-copy > h1 + p {
+        font-size: 1.05rem;
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .hero-proof {
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .meta-card,
+      .brief-panel,
+      .support-card,
+      .feed-card,
+      .timeline-step {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+      }
+
+      .meta-card {
+        padding: 20px;
+        background: var(--surface);
+      }
+
+      .meta-card strong,
+      .support-card strong {
+        display: block;
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .meta-card p,
+      .support-card p,
+      .timeline-step p,
+      .feed-card p {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .stack {
+        display: grid;
+        gap: 18px;
+      }
+
+      .brief-panel {
+        margin-top: 28px;
+        padding: 26px;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .brief-summary {
+        font-size: 1.02rem;
+        line-height: 1.65;
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 18px 0 20px;
+      }
+
+      .chip {
+        border-radius: 999px;
+        padding: 9px 14px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      .decision-points,
+      .support-card ul,
+      .feed-card ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .decision-points li,
+      .support-card li,
+      .feed-card li {
+        margin: 0 0 10px;
+        line-height: 1.55;
+      }
+
+      .section {
+        margin-top: 28px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+        align-items: end;
+      }
+
+      .section-header p {
+        color: var(--muted);
+        max-width: 54ch;
+        margin-bottom: 0;
+      }
+
+      .feed-grid,
+      .support-grid,
+      .timeline {
+        display: grid;
+        gap: 16px;
+      }
+
+      .feed-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .support-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .timeline {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .feed-card,
+      .support-card,
+      .timeline-step {
+        padding: 20px;
+      }
+
+      .card-label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .tone-signal .card-label {
+        color: var(--signal);
+      }
+
+      .tone-confidence .card-label {
+        color: var(--confidence);
+      }
+
+      .tone-proof .card-label {
+        color: var(--proof);
+      }
+
+      .tone-transition .card-label {
+        color: var(--transition);
+      }
+
+      .card-summary,
+      .card-proof {
+        margin-bottom: 14px;
+      }
+
+      .card-proof {
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .timeline-phase {
+        margin-bottom: 6px;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      footer {
+        margin-top: 28px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 900px) {
+        main {
+          width: min(100vw - 24px, 1120px);
+          padding-top: 24px;
+        }
+
+        .hero,
+        .brief-panel,
+        .feed-card,
+        .support-card,
+        .timeline-step,
+        .meta-card {
+          border-radius: 18px;
+        }
+
+        .hero-grid,
+        .feed-grid,
+        .support-grid,
+        .timeline {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media print {
+        body {
+          background: #ffffff;
+        }
+
+        main {
+          width: 100%;
+          padding: 0;
+        }
+
+        .hero,
+        .brief-panel,
+        .feed-card,
+        .support-card,
+        .timeline-step,
+        .meta-card {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Boss Key concept sheet</p>
+            <h1>Region 4 operating control</h1>
+            <p>Los Angeles County Sheriff&#39;s Department gets an easier provider to trust when staffing, supervision, and service recovery sit inside one accountable chain instead of being brokered across multiple hands.</p>
+            <p class="hero-proof">Prove it with 89% frontline retention through the first 90 days in Self-performed staffing continuity and 9% annual operating-cost reduction with no increase in service complaints in Budget rebaseline without visible slippage.</p>
+          </div>
+          <div class="stack">
+            <article class="meta-card">
+              <strong>Prepared for Los Angeles County Sheriff&#39;s Department</strong>
+              <p>LASD Region 4 Custodial Services</p>
+            </article>
+            <article class="meta-card">
+              <strong>Service footprint</strong>
+              <p>28 sites across Southern California | 564,199 square feet | 30-day transition plan | $1,600,000 annual program</p>
+            </article>
+            <article class="meta-card">
+              <strong>Offer shape</strong>
+              <p>26.0 nightly cleaner FTE, 14.0 day porter FTE, and 1.0 supervisor FTE to stabilize a 28-site portfolio.</p>
+            </article>
+          </div>
+        </div>
+
+        
+    <section class="brief-panel">
+      <div class="panel-header">
+        <p class="eyebrow">Buyer-ready brief</p>
+        <h2>Region 4 operating control</h2>
+      </div>
+      <p class="brief-summary">Expect one accountable chain behind staffing, supervision, and fixes, stocked restrooms and public areas without buyer follow-up, and a rate story built on fewer callbacks and less supervisory chase, backed by 99.1% stocked restroom compliance.</p>
+      <div class="chip-row">
+        <span class="chip">28 sites</span><span class="chip">30-day transition</span><span class="chip">Keep accountability in one chain</span><span class="chip">99.1% stocked restroom compliance</span>
+      </div>
+      <ul class="decision-points">
+        <li>Los Angeles County Sheriff&#39;s Department gets an easier provider to trust when staffing, supervision, and service recovery sit inside one accountable chain instead of being brokered across multiple hands.</li><li>What Los Angeles County Sheriff&#39;s Department should notice first: one accountable chain behind staffing, supervision, and fixes.</li><li>First-month control: Launch planning: Confirm scope assumptions, site access, incumbent handoff items, and buyer communication cadence.</li><li>Why the rate holds: Show the buyer where the labor and supervision sit: staffed daytime response, floor-care recovery, and a launch plan that does not dump work back on the buyer team. Tie the number to less avoidable escalations and follow-up work.</li><li>Proof to repeat: Consumables reliability playbook - 99.1% stocked restroom compliance.</li>
+      </ul>
+    </section>
+  
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Decision feed</p>
+            <h2>What Los Angeles County Sheriff&#39;s Department Should Believe Fast</h2>
+          </div>
+          <p>This handoff is built to survive a skim, a forwarded email, or a quick buyer meeting without losing the operating story behind it.</p>
+        </div>
+        <div class="feed-grid">
+          
+        <article class="feed-card tone-signal">
+          <p class="card-label">Story direction</p>
+          <h3>One accountable operating chain</h3>
+          <p class="card-summary">Los Angeles County Sheriff&#39;s Department gets an easier provider to trust when staffing, supervision, and service recovery sit inside one accountable chain instead of being brokered across multiple hands.</p>
+          <ul><li>28-site portfolio</li><li>30-day transition window</li><li>Named supervision stays visible</li><li>Lead with direct staffing ownership, named site supervision, and the relief plan that keeps service from wobbling under pressure.</li></ul>
+          <p class="card-proof">Prove it with 89% frontline retention through the first 90 days in Self-performed staffing continuity and 9% annual operating-cost reduction with no increase in service complaints in Budget rebaseline without visible slippage.</p>
+        </article>
+      
+        <article class="feed-card tone-confidence">
+          <p class="card-label">What the buyer gets</p>
+          <h3>Keep accountability in one chain</h3>
+          <p class="card-summary">Lead with the day-to-day outcomes the buyer team should feel quickly: steadier public-facing areas, fewer visible misses, and clearer ownership when something slips.</p>
+          <ul><li>When coverage slips or a complaint hits, Los Angeles County Sheriff&#39;s Department should know exactly who owns the fix. Boss Key keeps recruiting, day-to-day supervision, and service recovery inside one operating chain, backed by 89% frontline retention through the first 90 days, demonstrated in Self-performed staffing continuity.</li><li>Los Angeles County Sheriff&#39;s Department should not have to chase empty dispensers or public-area basics. Boss Key turns restocking into a route, trigger, and verification rhythm, backed by 99.1% stocked restroom compliance, demonstrated in Consumables reliability playbook.</li><li>If Los Angeles County Sheriff&#39;s Department presses on rate, Boss Key can defend the number in operating terms: fewer daytime misses, a cleaner launch, and less avoidable escalations and follow-up work. That value story is backed by 9% annual operating-cost reduction with no increase in service complaints, demonstrated in Budget rebaseline without visible slippage.</li></ul>
+          
+        </article>
+      
+        <article class="feed-card tone-proof">
+          <p class="card-label">Proof that travels</p>
+          <h3>Proof a buyer can repeat</h3>
+          <p class="card-summary">The strongest concept sheet keeps proof portable enough for a skim, a meeting, or a forwarded screenshot.</p>
+          <ul><li>Consumables reliability playbook: 99.1% stocked restroom compliance</li><li>Self-performed staffing continuity: 89% frontline retention through the first 90 days</li><li>Budget rebaseline without visible slippage: 9% annual operating-cost reduction with no increase in service complaints</li></ul>
+          <p class="card-proof">Consumables reliability playbook: 99.1% stocked restroom compliance</p>
+        </article>
+      
+        <article class="feed-card tone-transition">
+          <p class="card-label">What changes first</p>
+          <h3>Launch control sprint</h3>
+          <p class="card-summary">Best when the buyer needs a clean switch from the incumbent with visible first-month control.</p>
+          <ul><li>Launch planning: Confirm scope assumptions, site access, incumbent handoff items, and buyer communication cadence.</li><li>Staffing and site readiness: Finalize staffing roster, shift assignments, equipment staging, and checklist-driven startup controls.</li><li>Go-live and stabilization: Run launch huddles, supervisor sweeps, and issue closure tracking until the account is operating on a steady state rhythm.</li></ul>
+          
+        </article>
+      
+        <article class="feed-card tone-confidence">
+          <p class="card-label">Why this wins</p>
+          <h3>If your price is not the lowest, what am I really buying?</h3>
+          <p class="card-summary">The contrast is simple: Boss Key shows who owns the work, how misses surface, and why the rate is safer than it first appears.</p>
+          <ul><li>Without naming anyone, contrast one accountable operating chain against models where the buyer ends up chasing multiple parties for coverage, call-outs, and correction.</li><li>A thin rate is not a savings story if it creates more avoidable escalations and follow-up work, service noise, and launch friction.</li><li>Show the buyer where the labor and supervision sit: staffed daytime response, floor-care recovery, and a launch plan that does not dump work back on the buyer team. Tie the number to less avoidable escalations and follow-up work.</li></ul>
+          
+        </article>
+      
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Support</p>
+            <h2>Why The Story Holds Up</h2>
+          </div>
+          <p>The concept sheet stays concise, but it still points back to the operating proof, service controls, and objection bridges that make the story believable.</p>
+        </div>
+        <div class="support-grid">
+          <article class="support-card">
+            <strong>Service lines</strong>
+            <ul><li>Nightly Cleaning</li><li>Day Porter</li><li>Floor Care</li><li>Daytime Support</li><li>Consumables Management</li><li>Window and Touchpoint Care</li></ul>
+          </article>
+          <article class="support-card">
+            <strong>Theme emphasis</strong>
+            <ul><li>Keep accountability in one chain</li><li>Keep basics stocked without chasing</li><li>Protect value before talking rate</li></ul>
+          </article>
+          <article class="support-card">
+            <strong>Proof signals</strong>
+            <ul><li>Consumables reliability playbook</li><li>Self-performed staffing continuity</li><li>Budget rebaseline without visible slippage</li></ul>
+          </article>
+          <article class="support-card">
+            <strong>Objection bridge</strong>
+            <ul><li>Show the buyer where the labor and supervision sit: staffed daytime response, floor-care recovery, and a launch plan that does not dump work back on the buyer team. Tie the number to less avoidable escalations and follow-up work.</li><li>Make the bench, relief plan, and named site supervision explicit so the buyer never pictures a subcontractor scramble.</li></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Transition</p>
+            <h2>What The First Month Looks Like</h2>
+          </div>
+          <p>Best when the buyer needs a clean switch from the incumbent with visible first-month control.</p>
+        </div>
+        <div class="timeline">
+          
+        <article class="timeline-step">
+          <p class="timeline-phase">Launch planning</p>
+          <strong>Days 1-7</strong>
+          <p>Launch planning: Confirm scope assumptions, site access, incumbent handoff items, and buyer communication cadence.</p>
+        </article>
+      
+        <article class="timeline-step">
+          <p class="timeline-phase">Staffing and site readiness</p>
+          <strong>Days 8-14</strong>
+          <p>Staffing and site readiness: Finalize staffing roster, shift assignments, equipment staging, and checklist-driven startup controls.</p>
+        </article>
+      
+        <article class="timeline-step">
+          <p class="timeline-phase">Go-live and stabilization</p>
+          <strong>Days 15-30</strong>
+          <p>Go-live and stabilization: Run launch huddles, supervisor sweeps, and issue closure tracking until the account is operating on a steady state rhythm.</p>
+        </article>
+      
+        </div>
+      </section>
+
+      <footer>
+        Generated from Boss Key Pursuit OS on 2026-03-23T20:51:33.385Z. HTML is the shareable primary artifact; PDF is the portable fallback.
+      </footer>
+    </main>
+  </body>
+</html>
