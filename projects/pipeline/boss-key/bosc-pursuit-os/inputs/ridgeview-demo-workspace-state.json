@@ -1,0 +1,235 @@
+{
+  "activeDraft": {
+    "opportunity": {
+      "id": "ridgeview-portfolio-janitorial-2026",
+      "opportunityName": "Ridgeview Portfolio Janitorial Services",
+      "buyerName": "Ridgeview Property Group",
+      "sector": "Mixed Commercial",
+      "geography": {
+        "region": "Research Triangle",
+        "city": "Durham",
+        "state": "NC",
+        "inPreferredRegion": true
+      },
+      "siteProfile": {
+        "siteCount": 4,
+        "totalSquareFeet": 312000,
+        "occupiedHours": "6:00 AM - 9:00 PM",
+        "weekendCoverageRequired": true,
+        "dayPorterRequired": true,
+        "unionEnvironment": false
+      },
+      "contract": {
+        "annualValueEstimate": 780000,
+        "termMonths": 36,
+        "targetGrossMarginPercent": 18,
+        "transitionDays": 28,
+        "startDate": "2026-05-01"
+      },
+      "requirements": {
+        "requiredServices": [
+          "nightly-cleaning",
+          "day-porter",
+          "floor-care",
+          "daytime-support",
+          "consumables-management"
+        ],
+        "reportingCadence": "Monthly KPI review with weekly launch huddles",
+        "sustainabilityExpectation": true,
+        "selfPerformedPreference": true,
+        "referencesRequired": 3
+      },
+      "pursuitContext": {
+        "incumbentPresent": true,
+        "relationshipStrength": "medium",
+        "strategicFit": "high",
+        "pricingPressure": "medium",
+        "proofPriority": [
+          "transition speed",
+          "quality visibility",
+          "labor stability"
+        ],
+        "notes": [
+          "Asset manager said executive floors, lobby glass, and restroom supplies are what trigger tenant emails first.",
+          "Buyer wants a self-performed day team with a named supervisor rather than a subcontractor carousel.",
+          "The incumbent has had recurring inspection misses on floor care and consumable restocking.",
+          "Ridgeview is rate-sensitive, but they will pay to avoid another ugly first 30 days and repeated floor-care callbacks."
+        ]
+      }
+    },
+    "excludedModuleIds": [],
+    "operatorAssumptions": [
+      {
+        "id": "assumption-weekend-coverage",
+        "text": "Weekend event cleanup volume will stay inside the proposed staffing envelope during the first contract quarter.",
+        "status": "watch",
+        "owner": "Operator",
+        "impactArea": "solution"
+      },
+      {
+        "id": "assumption-launch-dashboard",
+        "text": "Ridgeview will accept a buyer-visible launch dashboard during the first 30 days.",
+        "status": "validated",
+        "owner": "Operator",
+        "impactArea": "experience"
+      }
+    ],
+    "approvals": [
+      {
+        "stage": "qualification",
+        "status": "approved",
+        "approvedAt": "2026-03-23T13:05:00.000Z"
+      },
+      {
+        "stage": "solution",
+        "status": "approved",
+        "approvedAt": "2026-03-23T14:10:00.000Z"
+      },
+      {
+        "stage": "experience",
+        "status": "pending",
+        "approvedAt": null
+      }
+    ],
+    "reviewCheckpoints": [
+      {
+        "id": "content-plan-review",
+        "apmpLabel": "Pink Review",
+        "title": "Content Plan Review",
+        "objective": "Validate story structure, proof plan, and section intent before evaluator-style drafting.",
+        "exitCriteria": [
+          "Outline and section intent are stable.",
+          "Evaluation factors are mapped to sections and proof.",
+          "Major content gaps have owners and due dates.",
+          "Win themes and discriminators are explicit."
+        ],
+        "status": "complete",
+        "dueLabel": "Before solution approval",
+        "completedAt": "2026-03-23T14:30:00.000Z"
+      },
+      {
+        "id": "evaluator-review",
+        "apmpLabel": "Red Review",
+        "title": "Red Review (Evaluator View)",
+        "objective": "Assess the proposal experience as a buyer would and identify rework before final polish.",
+        "exitCriteria": [
+          "Buyer questions are answered from an evaluator view.",
+          "Strengths and proof are visible in the experience.",
+          "Pricing narrative aligns with the delivery approach.",
+          "Major evaluator-facing defects have disposition owners."
+        ],
+        "status": "ready",
+        "dueLabel": "Before experience approval",
+        "completedAt": null
+      },
+      {
+        "id": "gold-readiness-review",
+        "apmpLabel": "Gold Review",
+        "title": "Gold Readiness Review",
+        "objective": "Confirm production readiness, export fallback, and final decision controls before release.",
+        "exitCriteria": [
+          "Final files and forms are present in the controlled package.",
+          "Executive, pricing, and contract approvals are captured.",
+          "Naming, attachments, and export packaging are locked.",
+          "Submission and contingency paths are confirmed."
+        ],
+        "status": "pending",
+        "dueLabel": "Before final delivery",
+        "completedAt": null
+      }
+    ],
+    "operatorActions": [
+      {
+        "id": "action-prepare-red",
+        "title": "Prepare evaluator review packet",
+        "owner": "Operator",
+        "dueLabel": "Before Red Review",
+        "closeCondition": "Promoted concept, export summary, and issue log are ready for evaluator walkthrough.",
+        "stageType": "review",
+        "linkedStage": "evaluator-review",
+        "status": "open"
+      },
+      {
+        "id": "action-price-bridge",
+        "title": "Draft value bridge for rate-sensitive buyer questions",
+        "owner": "Operator",
+        "dueLabel": "Before experience approval",
+        "closeCondition": "Value bridge shows what Ridgeview gets for the rate: staffed daytime response, launch control, and fewer floor-care callbacks.",
+        "stageType": "approval",
+        "linkedStage": "experience",
+        "status": "open"
+      }
+    ],
+    "workingStory": {
+      "summaryVariantId": "Make the building easier to manage",
+      "winThemeIds": [
+        "Keep occupied spaces inspection-ready",
+        "Switch cleanly, improve quickly",
+        "Protect value before talking rate"
+      ],
+      "proofIds": [
+        "Executive-floor response program",
+        "Corporate campus mobilization",
+        "Budget rebaseline without visible slippage"
+      ],
+      "ghostAngleIds": [
+        "Ghost generic daytime coverage",
+        "Ghost low-rate instability"
+      ],
+      "transitionAngleId": "Occupied-hours assurance",
+      "operatorNotes": "Open with what Ridgeview sees at 2 PM: executive space reset, restroom supplies full, and one supervisor owning the noise. Then defend rate with the cleaner launch and fewer callbacks."
+    },
+    "buyerStoryVariants": [
+      {
+        "id": "variant-visible-control",
+        "name": "Visible control launch",
+        "savedAt": "2026-03-23T14:40:00.000Z",
+        "selection": {
+          "summaryVariantId": "Make the building easier to manage",
+          "winThemeIds": [
+            "Keep occupied spaces inspection-ready",
+            "Switch cleanly, improve quickly",
+            "Protect value before talking rate"
+          ],
+          "proofIds": [
+            "Executive-floor response program",
+            "Corporate campus mobilization",
+            "Budget rebaseline without visible slippage"
+          ],
+          "ghostAngleIds": [
+            "Ghost generic daytime coverage",
+            "Ghost low-rate instability"
+          ],
+          "transitionAngleId": "Occupied-hours assurance",
+          "operatorNotes": "Make the buyer picture a calmer property team by day three: executive areas reset, restrooms stocked, launch questions answered, and no one debating who owns the issue."
+        }
+      },
+      {
+        "id": "variant-one-chain",
+        "name": "One chain of accountability",
+        "savedAt": "2026-03-23T14:48:00.000Z",
+        "selection": {
+          "summaryVariantId": "One accountable operating chain",
+          "winThemeIds": [
+            "Keep accountability in one chain",
+            "Switch cleanly, improve quickly",
+            "Keep basics stocked without chasing"
+          ],
+          "proofIds": [
+            "Self-performed staffing continuity",
+            "Corporate campus mobilization",
+            "Consumables reliability playbook"
+          ],
+          "ghostAngleIds": [
+            "Ghost brokered-labor distance",
+            "Ghost the seamless-start claim"
+          ],
+          "transitionAngleId": "Launch control sprint",
+          "operatorNotes": "Use this when the buyer wants one name behind staffing, launch follow-through, and service recovery instead of another vendor stack to chase."
+        }
+      }
+    ],
+    "promotedBuyerStoryVariantId": "variant-visible-control"
+  },
+  "savedScenarios": []
+}

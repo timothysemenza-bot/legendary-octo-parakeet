@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./working/script-build",
+    "rootDir": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "src/domain/**/*.ts",
+    "src/engine/**/*.ts",
+    "src/services/**/*.ts",
+    "src/deliverables/**/*.ts",
+    "src/ui/formatters.ts"
+  ],
+  "exclude": [
+    "src/**/*.tsx",
+    "tests",
+    "working",
+    "dist",
+    "node_modules"
+  ]
+}
