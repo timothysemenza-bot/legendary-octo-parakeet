@@ -1,0 +1,57 @@
+{
+  "id": "ridgeview-portfolio-janitorial-2026",
+  "opportunityName": "Ridgeview Portfolio Janitorial Services",
+  "buyerName": "Ridgeview Property Group",
+  "sector": "Mixed Commercial",
+  "geography": {
+    "region": "Research Triangle",
+    "city": "Durham",
+    "state": "NC",
+    "inPreferredRegion": true
+  },
+  "siteProfile": {
+    "siteCount": 4,
+    "totalSquareFeet": 312000,
+    "occupiedHours": "6:00 AM - 9:00 PM",
+    "weekendCoverageRequired": true,
+    "dayPorterRequired": true,
+    "unionEnvironment": false
+  },
+  "contract": {
+    "annualValueEstimate": 780000,
+    "termMonths": 36,
+    "targetGrossMarginPercent": 18,
+    "transitionDays": 28,
+    "startDate": "2026-05-01"
+  },
+  "requirements": {
+    "requiredServices": [
+      "nightly-cleaning",
+      "day-porter",
+      "floor-care",
+      "daytime-support",
+      "consumables-management"
+    ],
+    "reportingCadence": "Monthly KPI review with weekly launch huddles",
+    "sustainabilityExpectation": true,
+    "selfPerformedPreference": true,
+    "referencesRequired": 3
+  },
+  "pursuitContext": {
+    "incumbentPresent": true,
+    "relationshipStrength": "medium",
+    "strategicFit": "high",
+    "pricingPressure": "medium",
+    "proofPriority": [
+      "transition speed",
+      "quality visibility",
+      "labor stability"
+    ],
+    "notes": [
+      "Asset manager said executive floors, lobby glass, and restroom supplies are what trigger tenant emails first.",
+      "Buyer wants a self-performed day team with a named supervisor rather than a subcontractor carousel.",
+      "The incumbent has had recurring inspection misses on floor care and consumable restocking.",
+      "Ridgeview is rate-sensitive, but they will pay to avoid another ugly first 30 days and repeated floor-care callbacks."
+    ]
+  }
+}
