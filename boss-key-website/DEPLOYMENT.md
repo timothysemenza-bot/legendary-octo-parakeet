@@ -43,9 +43,26 @@ This site is static, so all three work well.
 
 ## 4) Files to Deploy
 
-Upload or publish:
+Publish the full static site directory, not just the homepage:
 
 - `boss-key-website/index.html`
+- `boss-key-website/janitorial-intelligence.html` (legacy redirect to homepage)
+- `boss-key-website/dungeon-crawler.html`
+- `boss-key-website/insights/`
+- `boss-key-website/about.html`
+- `boss-key-website/services.html`
+- `boss-key-website/coaching.html`
+- `boss-key-website/engagements.html`
+- `boss-key-website/proof.html`
+- `boss-key-website/faq.html`
+- `boss-key-website/contact.html`
+- `boss-key-website/assets/`
+- `boss-key-website/client/`
+- `boss-key-website/trust/`
+
+The primary published experience is now the single anchored homepage at `index.html`. Legacy subpages may remain in the folder, but the homepage no longer depends on multi-page navigation. Longform microsites under `boss-key-website/insights/` are part of the live site surface and should deploy with the RSS feed.
+
+Shared brand assets now live under `boss-key-website/assets/css/` and `boss-key-website/assets/js/`, so do not deploy HTML files without the updated assets folder.
 
 ## 5) DNS Records
 
@@ -53,7 +70,7 @@ Use one platform only for hosting. Apply records for your chosen platform.
 
 ### Cloudflare Pages
 
-1. Connect repo or drag/drop `index.html`.
+1. Connect repo or deploy the full `boss-key-website` folder as the site root.
 2. Add custom domain.
 3. DNS records:
    - `CNAME` `www` -> `<your-pages-subdomain>.pages.dev`
@@ -61,7 +78,7 @@ Use one platform only for hosting. Apply records for your chosen platform.
 
 ### Netlify
 
-1. Deploy static site.
+1. Deploy the full `boss-key-website` folder as the publish directory.
 2. Add custom domain.
 3. DNS records:
    - `CNAME` `www` -> `<your-site>.netlify.app`
@@ -70,7 +87,7 @@ Use one platform only for hosting. Apply records for your chosen platform.
 
 ### Vercel
 
-1. Import project or drag/drop deploy.
+1. Import project or deploy the full `boss-key-website` folder.
 2. Add custom domain.
 3. DNS records:
    - `A` `@` -> `76.76.21.21`
@@ -90,5 +107,8 @@ Suggested sender addresses:
 1. Domain purchased and auto-renew enabled.
 2. Site live on both `yourdomain` and `www.yourdomain`.
 3. HTTPS active.
-4. Contact email in `index.html` updated to your real domain email.
-5. Test on phone and desktop.
+4. Homepage anchor links work for `Who`, `Problems`, `How`, `Sprint`, `Insights`, `Ethics`, `Play`, and `Contact`.
+5. Contact email flow is updated to your real domain email.
+6. Insights routes and `insights/feed.xml` load correctly.
+7. The public dungeon crawler route loads from `dungeon-crawler.html`.
+8. Test on phone and desktop.

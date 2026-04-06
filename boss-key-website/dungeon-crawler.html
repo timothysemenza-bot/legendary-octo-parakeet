@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Boss Key Dungeon Crawler</title>
+  <meta name="description" content="Play the Boss Key 8-bit dungeon crawler.">
+  <style>
+    :root {
+      --bg: #121116;
+      --panel: rgba(15, 14, 20, 0.82);
+      --text: #f5f5f7;
+      --accent: #f4b649;
+      --danger: #f46666;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #201a2e 0%, #111018 60%, #09090d 100%);
+      color: var(--text);
+      font-family: "Trebuchet MS", "Avenir Next", system-ui, sans-serif;
+      touch-action: none;
+    }
+
+    #game {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      image-rendering: pixelated;
+    }
+
+    .hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: max(10px, env(safe-area-inset-top)) 12px 8px;
+      pointer-events: none;
+      font-size: 14px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+    }
+
+    .hud-block {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      backdrop-filter: blur(4px);
+    }
+
+    .heart { color: var(--danger); }
+    .coin { color: var(--accent); }
+
+    #message {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(max(12px, env(safe-area-inset-top)) + 48px);
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 200ms ease;
+      pointer-events: none;
+    }
+
+    #message.show { opacity: 1; }
+
+    .controls-label {
+      position: fixed;
+      bottom: max(8px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 999px;
+      padding: 5px 10px;
+      pointer-events: none;
+    }
+
+    .home-link {
+      position: fixed;
+      top: calc(max(10px, env(safe-area-inset-top)) + 92px);
+      left: 12px;
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(15, 14, 20, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body>
+  <a class="home-link" href="./index.html#play">Back to Boss Key</a>
+  <canvas id="game"></canvas>
+
+  <div class="hud">
+    <div class="hud-block" id="leftHud"></div>
+    <div class="hud-block" id="rightHud"></div>
+  </div>
+  <div id="message">Swipe left stick to move, right stick to fire.</div>
+  <div class="controls-label">Left thumb: move • Right thumb: shoot</div>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const leftHud = document.getElementById("leftHud");
+    const rightHud = document.getElementById("rightHud");
+    const message = document.getElementById("message");
+
+    const STATE = {
+      roomCols: 5,
+      roomRows: 5,
+      roomSize: 900,
+      roomPadding: 55,
+      seed: Math.random() * 1e9,
+      rng() {
+        STATE.seed = (STATE.seed * 1664525 + 1013904223) % 4294967296;
+        return STATE.seed / 4294967296;
+      },
+      player: null,
+      rooms: new Map(),
+      currentRoom: "2,2",
+      fireCooldown: 0,
+      score: 0,
+      floor: 1,
+      gameOver: false,
+      cameraShake: 0,
+      lastTime: performance.now(),
+      sticks: {
+        move: { activeId: null, startX: 0, startY: 0, x: 0, y: 0, dx: 0, dy: 0 },
+        fire: { activeId: null, startX: 0, startY: 0, x: 0, y: 0, dx: 0, dy: 0 },
+      },
+      bullets: [],
+      enemyBullets: [],
+      particles: [],
+    };
+
+    function makePlayer() {
+      return {
+        x: STATE.roomSize / 2,
+        y: STATE.roomSize / 2,
+        radius: 23,
+        speed: 265,
+        hp: 6,
+        maxHp: 6,
+        iFrames: 0,
+        coins: 0,
+      };
+    }
+
+    function roomKey(x, y) { return `${x},${y}`; }
+
+    function createRoom(gridX, gridY) {
+      const key = roomKey(gridX, gridY);
+      if (STATE.rooms.has(key)) return STATE.rooms.get(key);
+
+      const centerX = Math.floor(STATE.roomCols / 2);
+      const centerY = Math.floor(STATE.roomRows / 2);
+      const dist = Math.abs(gridX - centerX) + Math.abs(gridY - centerY);
+      const enemyCount = Math.max(2, Math.min(7, Math.floor(2 + dist + STATE.rng() * 3)));
+      const enemies = [];
+
+      for (let i = 0; i < enemyCount; i++) {
+        const typeRoll = STATE.rng();
+        const type = typeRoll < 0.62 ? "crawler" : (typeRoll < 0.88 ? "spitter" : "charger");
+        enemies.push({
+          type,
+          x: STATE.roomPadding + 80 + STATE.rng() * (STATE.roomSize - STATE.roomPadding * 2 - 160),
+          y: STATE.roomPadding + 80 + STATE.rng() * (STATE.roomSize - STATE.roomPadding * 2 - 160),
+          radius: type === "charger" ? 26 : 22,
+          hp: type === "charger" ? 5 : type === "spitter" ? 3 : 2,
+          speed: type === "charger" ? 165 : type === "spitter" ? 118 : 138,
+          cooldown: 0,
+          chargeTimer: 0,
+          vx: 0,
+          vy: 0,
+        });
+      }
+
+      const room = {
+        gridX,
+        gridY,
+        cleared: false,
+        visited: false,
+        enemies,
+        rewardDropped: false,
+        walls: buildRoomWalls(),
+      };
+
+      STATE.rooms.set(key, room);
+      return room;
+    }
+
+    function buildRoomWalls() {
+      const rocks = [];
+      const rockCount = 5 + Math.floor(STATE.rng() * 6);
+      for (let i = 0; i < rockCount; i++) {
+        const w = 50 + STATE.rng() * 70;
+        const h = 50 + STATE.rng() * 70;
+        rocks.push({
+          x: STATE.roomPadding + 50 + STATE.rng() * (STATE.roomSize - STATE.roomPadding * 2 - w - 100),
+          y: STATE.roomPadding + 50 + STATE.rng() * (STATE.roomSize - STATE.roomPadding * 2 - h - 100),
+          w,
+          h,
+        });
+      }
+      return rocks;
+    }
+
+    function getCurrentRoom() {
+      const [gx, gy] = STATE.currentRoom.split(",").map(Number);
+      return createRoom(gx, gy);
+    }
+
+    function resetGame() {
+      STATE.player = makePlayer();
+      STATE.rooms.clear();
+      STATE.currentRoom = roomKey(2, 2);
+      STATE.bullets = [];
+      STATE.enemyBullets = [];
+      STATE.particles = [];
+      STATE.score = 0;
+      STATE.floor = 1;
+      STATE.fireCooldown = 0;
+      STATE.gameOver = false;
+      createRoom(2, 2).enemies = [];
+      createRoom(2, 2).cleared = true;
+      showMessage("Clear rooms and secure the Boss Key.");
+    }
+
+    function showMessage(text) {
+      message.textContent = text;
+      message.classList.add("show");
+      clearTimeout(showMessage._timer);
+      showMessage._timer = setTimeout(() => message.classList.remove("show"), 2200);
+    }
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function norm(x, y, fallbackX = 0, fallbackY = 0) {
+      const len = Math.hypot(x, y);
+      if (len < 0.0001) return { x: fallbackX, y: fallbackY };
+      return { x: x / len, y: y / len };
+    }
+
+    function circleRectCollision(cx, cy, r, rect) {
+      const nearestX = Math.max(rect.x, Math.min(cx, rect.x + rect.w));
+      const nearestY = Math.max(rect.y, Math.min(cy, rect.y + rect.h));
+      const dx = cx - nearestX;
+      const dy = cy - nearestY;
+      return dx * dx + dy * dy < r * r;
+    }
+
+    function keepInsideRoom(entity) {
+      entity.x = Math.max(STATE.roomPadding + entity.radius, Math.min(STATE.roomSize - STATE.roomPadding - entity.radius, entity.x));
+      entity.y = Math.max(STATE.roomPadding + entity.radius, Math.min(STATE.roomSize - STATE.roomPadding - entity.radius, entity.y));
+    }
+
+    function handleRoomTransition() {
+      const room = getCurrentRoom();
+      if (!room.cleared || STATE.gameOver) return;
+
+      const p = STATE.player;
+      const margin = STATE.roomPadding + 6;
+      let gx = room.gridX;
+      let gy = room.gridY;
+      let moved = false;
+
+      if (p.x < margin && gx > 0) {
+        gx--; p.x = STATE.roomSize - STATE.roomPadding - p.radius - 8; moved = true;
+      } else if (p.x > STATE.roomSize - margin && gx < STATE.roomCols - 1) {
+        gx++; p.x = STATE.roomPadding + p.radius + 8; moved = true;
+      } else if (p.y < margin && gy > 0) {
+        gy--; p.y = STATE.roomSize - STATE.roomPadding - p.radius - 8; moved = true;
+      } else if (p.y > STATE.roomSize - margin && gy < STATE.roomRows - 1) {
+        gy++; p.y = STATE.roomPadding + p.radius + 8; moved = true;
+      }
+
+      if (moved) {
+        STATE.currentRoom = roomKey(gx, gy);
+        STATE.bullets = [];
+        STATE.enemyBullets = [];
+        const next = getCurrentRoom();
+        next.visited = true;
+        if (!next.cleared) showMessage("Room locked! Eliminate all monsters.");
+      }
+    }
+
+    function spawnImpact(x, y, color, count = 8) {
+      for (let i = 0; i < count; i++) {
+        const a = STATE.rng() * Math.PI * 2;
+        const speed = 30 + STATE.rng() * 220;
+        STATE.particles.push({ x, y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, life: 0.35 + STATE.rng() * 0.35, color });
+      }
+    }
+
+    function update(dt) {
+      const room = getCurrentRoom();
+      const p = STATE.player;
+      if (!room.visited) room.visited = true;
+
+      STATE.fireCooldown = Math.max(0, STATE.fireCooldown - dt);
+      STATE.cameraShake = Math.max(0, STATE.cameraShake - dt * 4);
+
+      for (const key of ["move", "fire"]) {
+        const s = STATE.sticks[key];
+        const maxLen = 70;
+        const len = Math.hypot(s.dx, s.dy);
+        if (len > maxLen) {
+          s.dx = (s.dx / len) * maxLen;
+          s.dy = (s.dy / len) * maxLen;
+        }
+      }
+
+      const moveDir = norm(STATE.sticks.move.dx, STATE.sticks.move.dy);
+      const movePower = Math.min(1, Math.hypot(STATE.sticks.move.dx, STATE.sticks.move.dy) / 70);
+      const targetVx = moveDir.x * p.speed * movePower;
+      const targetVy = moveDir.y * p.speed * movePower;
+      p.x += targetVx * dt;
+      p.y += targetVy * dt;
+
+      keepInsideRoom(p);
+      for (const rock of room.walls) {
+        if (circleRectCollision(p.x, p.y, p.radius, rock)) {
+          const cx = rock.x + rock.w / 2;
+          const cy = rock.y + rock.h / 2;
+          const away = norm(p.x - cx, p.y - cy, 1, 0);
+          p.x += away.x * 4;
+          p.y += away.y * 4;
+        }
+      }
+
+      if (!STATE.gameOver) {
+        const fireVec = norm(STATE.sticks.fire.dx, STATE.sticks.fire.dy);
+        if (Math.hypot(STATE.sticks.fire.dx, STATE.sticks.fire.dy) > 26 && STATE.fireCooldown <= 0) {
+          STATE.fireCooldown = 0.22;
+          const speed = 510;
+          STATE.bullets.push({
+            x: p.x + fireVec.x * (p.radius + 4),
+            y: p.y + fireVec.y * (p.radius + 4),
+            vx: fireVec.x * speed,
+            vy: fireVec.y * speed,
+            life: 1.5,
+            r: 8,
+          });
+        }
+      }
+
+      for (const bullet of STATE.bullets) {
+        bullet.x += bullet.vx * dt;
+        bullet.y += bullet.vy * dt;
+        bullet.life -= dt;
+      }
+      STATE.bullets = STATE.bullets.filter((b) => b.life > 0 && b.x > 0 && b.y > 0 && b.x < STATE.roomSize && b.y < STATE.roomSize);
+
+      for (const enemy of room.enemies) {
+        const toPlayer = norm(p.x - enemy.x, p.y - enemy.y, 1, 0);
+        enemy.cooldown = Math.max(0, enemy.cooldown - dt);
+
+        if (enemy.type === "charger") {
+          enemy.chargeTimer -= dt;
+          if (enemy.chargeTimer <= 0) {
+            enemy.vx = toPlayer.x * 320;
+            enemy.vy = toPlayer.y * 320;
+            enemy.chargeTimer = 1.2 + STATE.rng() * 0.8;
+          }
+          enemy.x += enemy.vx * dt;
+          enemy.y += enemy.vy * dt;
+          enemy.vx *= 0.96;
+          enemy.vy *= 0.96;
+        } else {
+          enemy.x += toPlayer.x * enemy.speed * dt;
+          enemy.y += toPlayer.y * enemy.speed * dt;
+          if (enemy.type === "spitter" && enemy.cooldown <= 0) {
+            enemy.cooldown = 1.1 + STATE.rng() * 0.7;
+            const shotDir = norm(p.x - enemy.x, p.y - enemy.y);
+            STATE.enemyBullets.push({ x: enemy.x, y: enemy.y, vx: shotDir.x * 300, vy: shotDir.y * 300, r: 9, life: 3 });
+          }
+        }
+
+        keepInsideRoom(enemy);
+      }
+
+      for (const shot of STATE.enemyBullets) {
+        shot.x += shot.vx * dt;
+        shot.y += shot.vy * dt;
+        shot.life -= dt;
+      }
+      STATE.enemyBullets = STATE.enemyBullets.filter((s) => s.life > 0 && s.x > 0 && s.y > 0 && s.x < STATE.roomSize && s.y < STATE.roomSize);
+
+      // bullet->enemy
+      for (const bullet of STATE.bullets) {
+        for (const enemy of room.enemies) {
+          const d = Math.hypot(enemy.x - bullet.x, enemy.y - bullet.y);
+          if (d < enemy.radius + bullet.r) {
+            enemy.hp -= 1;
+            bullet.life = -1;
+            spawnImpact(bullet.x, bullet.y, "#7dc6ff", 5);
+            if (enemy.hp <= 0) {
+              STATE.score += enemy.type === "charger" ? 30 : enemy.type === "spitter" ? 25 : 18;
+              if (STATE.rng() < 0.25) STATE.player.coins += 1;
+              spawnImpact(enemy.x, enemy.y, "#f15e5e", 16);
+            }
+            break;
+          }
+        }
+      }
+
+      room.enemies = room.enemies.filter((e) => e.hp > 0);
+
+      // player hit by enemies
+      if (p.iFrames > 0) p.iFrames -= dt;
+      if (p.iFrames <= 0 && !STATE.gameOver) {
+        for (const enemy of room.enemies) {
+          const d = Math.hypot(enemy.x - p.x, enemy.y - p.y);
+          if (d < enemy.radius + p.radius) {
+            p.hp -= 1;
+            p.iFrames = 1.0;
+            STATE.cameraShake = 1;
+            spawnImpact(p.x, p.y, "#ffe29b", 10);
+            break;
+          }
+        }
+        for (const shot of STATE.enemyBullets) {
+          const d = Math.hypot(shot.x - p.x, shot.y - p.y);
+          if (d < shot.r + p.radius) {
+            p.hp -= 1;
+            p.iFrames = 1.0;
+            shot.life = -1;
+            STATE.cameraShake = 1;
+            spawnImpact(p.x, p.y, "#ffe29b", 10);
+            break;
+          }
+        }
+      }
+
+      if (p.hp <= 0 && !STATE.gameOver) {
+        STATE.gameOver = true;
+        showMessage("You fell in the cellar. Tap with 3 fingers to restart.");
+      }
+
+      if (room.enemies.length === 0 && !room.cleared) {
+        room.cleared = true;
+        STATE.score += 50;
+        showMessage("Room clear! Doors opened.");
+      }
+
+      for (const part of STATE.particles) {
+        part.x += part.vx * dt;
+        part.y += part.vy * dt;
+        part.vx *= 0.94;
+        part.vy *= 0.94;
+        part.life -= dt;
+      }
+      STATE.particles = STATE.particles.filter((p) => p.life > 0);
+
+      handleRoomTransition();
+    }
+
+    function drawRoom(room, view) {
+      ctx.save();
+      ctx.translate(view.x, view.y);
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, STATE.roomSize);
+      gradient.addColorStop(0, "#4b3a2f");
+      gradient.addColorStop(1, "#2e241e");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, STATE.roomSize, STATE.roomSize);
+
+      ctx.strokeStyle = "rgba(0,0,0,0.32)";
+      ctx.lineWidth = 8;
+      for (let i = 0; i < 14; i++) {
+        const y = (i / 14) * STATE.roomSize;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(STATE.roomSize, y + 20);
+        ctx.stroke();
+      }
+
+      // doors
+      const doorOpen = room.cleared;
+      const doorColor = doorOpen ? "#93d977" : "#6d4434";
+      ctx.fillStyle = doorColor;
+      const dw = 110, dh = 24;
+      ctx.fillRect(STATE.roomSize / 2 - dw / 2, 0, dw, dh);
+      ctx.fillRect(STATE.roomSize / 2 - dw / 2, STATE.roomSize - dh, dw, dh);
+      ctx.fillRect(0, STATE.roomSize / 2 - dw / 2, dh, dw);
+      ctx.fillRect(STATE.roomSize - dh, STATE.roomSize / 2 - dw / 2, dh, dw);
+
+      for (const rock of room.walls) {
+        ctx.fillStyle = "#59524a";
+        ctx.fillRect(rock.x, rock.y, rock.w, rock.h);
+        ctx.strokeStyle = "#3a332f";
+        ctx.strokeRect(rock.x, rock.y, rock.w, rock.h);
+      }
+
+      ctx.restore();
+    }
+
+    function drawEntityCircle(entity, color, eyeColor = "#fff") {
+      ctx.beginPath();
+      ctx.fillStyle = color;
+      ctx.arc(entity.x, entity.y, entity.radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = eyeColor;
+      ctx.beginPath();
+      ctx.arc(entity.x - entity.radius * 0.32, entity.y - entity.radius * 0.18, entity.radius * 0.16, 0, Math.PI * 2);
+      ctx.arc(entity.x + entity.radius * 0.32, entity.y - entity.radius * 0.18, entity.radius * 0.16, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function render() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      const zoom = Math.min(w, h) / 470;
+      const view = {
+        x: w / 2 - STATE.player.x * zoom,
+        y: h / 2 - STATE.player.y * zoom,
+      };
+
+      if (STATE.cameraShake > 0) {
+        view.x += (STATE.rng() - 0.5) * 14 * STATE.cameraShake;
+        view.y += (STATE.rng() - 0.5) * 14 * STATE.cameraShake;
+      }
+
+      ctx.save();
+      ctx.scale(zoom, zoom);
+
+      const room = getCurrentRoom();
+      drawRoom(room, { x: view.x / zoom, y: view.y / zoom });
+
+      ctx.translate(view.x / zoom, view.y / zoom);
+
+      for (const bullet of STATE.bullets) {
+        ctx.fillStyle = "#8ccaff";
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (const shot of STATE.enemyBullets) {
+        ctx.fillStyle = "#9bff9b";
+        ctx.beginPath();
+        ctx.arc(shot.x, shot.y, shot.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (const enemy of room.enemies) {
+        const color = enemy.type === "spitter" ? "#8db45f" : enemy.type === "charger" ? "#8c5674" : "#b98272";
+        drawEntityCircle(enemy, color);
+      }
+
+      const blink = STATE.player.iFrames > 0 && Math.floor(STATE.player.iFrames * 16) % 2 === 0;
+      if (!blink) drawEntityCircle(STATE.player, "#f1d2b0", "#292929");
+
+      for (const part of STATE.particles) {
+        ctx.globalAlpha = Math.max(0, Math.min(1, part.life * 2));
+        ctx.fillStyle = part.color;
+        ctx.fillRect(part.x - 2, part.y - 2, 4, 4);
+      }
+      ctx.globalAlpha = 1;
+
+      ctx.restore();
+
+      drawVirtualStick(STATE.sticks.move, "rgba(140,200,255,0.35)");
+      drawVirtualStick(STATE.sticks.fire, "rgba(255,170,140,0.35)");
+
+      leftHud.innerHTML = `<span class="heart">❤ ${STATE.player.hp}/${STATE.player.maxHp}</span> <span class="coin">◉ ${STATE.player.coins}</span>`;
+      rightHud.textContent = `Score ${STATE.score} · Floor ${STATE.floor}`;
+
+      if (STATE.gameOver) {
+        ctx.fillStyle = "rgba(0,0,0,0.58)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 32px Trebuchet MS";
+        ctx.textAlign = "center";
+        ctx.fillText("YOU DIED", w / 2, h / 2 - 15);
+        ctx.font = "16px Trebuchet MS";
+        ctx.fillText("Use a 3-finger tap to restart", w / 2, h / 2 + 20);
+      }
+    }
+
+    function drawVirtualStick(stick, color) {
+      if (stick.activeId === null) return;
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(stick.startX, stick.startY, 36, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(stick.startX + stick.dx, stick.startY + stick.dy, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function getStickForTouch(x) {
+      return x < window.innerWidth / 2 ? STATE.sticks.move : STATE.sticks.fire;
+    }
+
+    function onTouchStart(event) {
+      if (event.touches.length >= 3 && STATE.gameOver) {
+        resetGame();
+        return;
+      }
+
+      for (const touch of event.changedTouches) {
+        const stick = getStickForTouch(touch.clientX);
+        if (stick.activeId !== null) continue;
+        stick.activeId = touch.identifier;
+        stick.startX = touch.clientX;
+        stick.startY = touch.clientY;
+        stick.x = touch.clientX;
+        stick.y = touch.clientY;
+        stick.dx = 0;
+        stick.dy = 0;
+      }
+    }
+
+    function onTouchMove(event) {
+      for (const touch of event.changedTouches) {
+        for (const stick of [STATE.sticks.move, STATE.sticks.fire]) {
+          if (stick.activeId !== touch.identifier) continue;
+          stick.x = touch.clientX;
+          stick.y = touch.clientY;
+          stick.dx = touch.clientX - stick.startX;
+          stick.dy = touch.clientY - stick.startY;
+        }
+      }
+    }
+
+    function onTouchEnd(event) {
+      for (const touch of event.changedTouches) {
+        for (const stick of [STATE.sticks.move, STATE.sticks.fire]) {
+          if (stick.activeId !== touch.identifier) continue;
+          stick.activeId = null;
+          stick.dx = 0;
+          stick.dy = 0;
+        }
+      }
+    }
+
+    // keyboard fallback for desktop testing
+    const keys = new Set();
+    window.addEventListener("keydown", (e) => {
+      keys.add(e.key.toLowerCase());
+      if (e.key.toLowerCase() === "r" && STATE.gameOver) resetGame();
+    });
+    window.addEventListener("keyup", (e) => keys.delete(e.key.toLowerCase()));
+
+    function injectKeyboardToSticks() {
+      const mx = (keys.has("d") || keys.has("arrowright") ? 1 : 0) - (keys.has("a") || keys.has("arrowleft") ? 1 : 0);
+      const my = (keys.has("s") || keys.has("arrowdown") ? 1 : 0) - (keys.has("w") || keys.has("arrowup") ? 1 : 0);
+      if (mx || my) {
+        STATE.sticks.move.activeId = -1;
+        STATE.sticks.move.startX = 80;
+        STATE.sticks.move.startY = window.innerHeight - 90;
+        STATE.sticks.move.dx = mx * 60;
+        STATE.sticks.move.dy = my * 60;
+      } else if (STATE.sticks.move.activeId === -1) {
+        STATE.sticks.move.activeId = null;
+        STATE.sticks.move.dx = 0;
+        STATE.sticks.move.dy = 0;
+      }
+
+      const fx = (keys.has("l") ? 1 : 0) - (keys.has("j") ? 1 : 0);
+      const fy = (keys.has("k") ? 1 : 0) - (keys.has("i") ? 1 : 0);
+      if (fx || fy) {
+        STATE.sticks.fire.activeId = -2;
+        STATE.sticks.fire.startX = window.innerWidth - 90;
+        STATE.sticks.fire.startY = window.innerHeight - 90;
+        STATE.sticks.fire.dx = fx * 60;
+        STATE.sticks.fire.dy = fy * 60;
+      } else if (STATE.sticks.fire.activeId === -2) {
+        STATE.sticks.fire.activeId = null;
+        STATE.sticks.fire.dx = 0;
+        STATE.sticks.fire.dy = 0;
+      }
+    }
+
+    function loop(now) {
+      const dt = Math.min(0.033, (now - STATE.lastTime) / 1000);
+      STATE.lastTime = now;
+      injectKeyboardToSticks();
+      update(dt);
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("resize", resize);
+    window.addEventListener("touchstart", onTouchStart, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: false });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: false });
+    window.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    ["touchstart", "touchmove", "touchend", "touchcancel"].forEach((type) => {
+      window.addEventListener(type, (e) => e.preventDefault(), { passive: false });
+    });
+
+    resize();
+    resetGame();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

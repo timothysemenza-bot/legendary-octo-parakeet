@@ -1,1526 +1,981 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boss Key | Business Development Acceleration And Seller Coaching</title>
-  <meta name="description" content="Boss Key helps businesses and individual sellers increase win rates through stronger pursuit systems, faster proposal execution, and reduced admin drag.">
+  <title>Boss Key | Business Development Acceleration for Janitorial Growth Teams</title>
+  <meta name="description" content="Boss Key helps janitorial and commercial cleaning companies find better opportunities earlier, understand competitor patterns, and build capture discipline using ethical, public-source, and client-authorized intelligence.">
   <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #f3f5f8;
-      --paper: #0a0a0b;
+      --ink: #f5f7fb;
+      --soft: #c9d4e8;
+      --muted: #98a8c0;
+      --paper: #0b1222;
+      --panel: #121d33;
+      --panel-2: #0f172b;
+      --line: #2b3a56;
       --accent: #c5162e;
-      --accent-dark: #f2a8b3;
-      --steel: #3a3a40;
-      --card: #16171a;
-      --line: #2d2f35;
-      --soft: #c3c8d3;
-      --max: 1100px;
-      --radius: 18px;
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+      --accent-deep: #951123;
+      --accent-soft: #ffd8de;
+      --steel: #4f6389;
+      --steel-soft: #dce8ff;
+      --max: 1160px;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     html, body {
       margin: 0;
       padding: 0;
       color: var(--ink);
-      background: radial-gradient(circle at 14% 8%, #23252b 0%, var(--paper) 42%), linear-gradient(145deg, #121316 0%, #09090a 100%);
+      background:
+        radial-gradient(circle at 14% 0%, rgba(79, 99, 137, 0.28) 0%, transparent 30%),
+        radial-gradient(circle at 86% 12%, rgba(197, 22, 46, 0.16) 0%, transparent 22%),
+        linear-gradient(158deg, #121b2f 0%, #0a101d 100%);
       font-family: "Manrope", "Segoe UI", sans-serif;
-      line-height: 1.55;
+      line-height: 1.58;
       scroll-behavior: smooth;
     }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .wrap {
-      width: min(var(--max), 92vw);
-      margin: 0 auto;
-    }
-
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
     header {
-      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 16px 0;
+      border-bottom: 1px solid #23314d;
+      background: rgba(11, 18, 34, 0.88);
+      backdrop-filter: blur(12px);
     }
-
     .nav {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
+      flex-wrap: wrap;
     }
-
     .brand {
       display: inline-flex;
-      gap: 10px;
       align-items: center;
-      font-weight: 700;
-      letter-spacing: 0.02em;
     }
-
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      display: inline-grid;
-      place-items: center;
+    .brand img {
+      width: min(280px, 58vw);
+      height: auto;
     }
-
-    .brand-mark img {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .cta-top {
-      border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--ink);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
-
-    .mobile-menu-toggle {
-      display: none;
-      border: 1px solid var(--line);
-      background: #17191f;
-      color: var(--ink);
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .quick-contact {
-      margin: 8px auto 16px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #141518;
-      padding: 10px 14px;
+    .links {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: flex-start;
-      color: var(--soft);
-      font-size: 0.95rem;
-    }
-
-    .quick-contact a {
-      color: #ffd7dc;
-      font-weight: 700;
-      text-decoration: none;
-      border: 1px solid #5a2a31;
-      background: #241518;
-      border-radius: 999px;
-      padding: 6px 10px;
-    }
-
-    .quick-contact a.quick-linkedin {
-      padding: 4px 9px;
-      font-size: 0.82rem;
-      background: #1a2d46;
-      border-color: #2f4d72;
-      color: #d7e9ff;
-    }
-
-    .founder-photo-link {
-      display: inline-block;
-      line-height: 0;
-      border-radius: 10px;
-    }
-
-    .toc-nav {
-      margin: 0 auto 18px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(17, 18, 23, 0.94);
-      padding: 8px;
-      display: flex;
-      flex-wrap: wrap;
       gap: 8px;
-      position: sticky;
-      top: 10px;
-      z-index: 20;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
-    }
-
-    .toc-nav a {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid #343740;
-      border-radius: 999px;
-      background: #1b1d22;
-      color: var(--soft);
-      padding: 6px 11px;
-      font-size: 0.88rem;
-      font-weight: 700;
-    }
-
-    .toc-nav a:hover {
-      color: #ffffff;
-      border-color: #4a4e58;
-      background: #21242b;
-    }
-
-    main section[id] {
-      scroll-margin-top: 88px;
-    }
-
-    .hero {
-      padding: 24px 0 56px;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 26px;
-      align-items: stretch;
-    }
-
-    .hero-main h1 {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      line-height: 1.08;
-      margin: 14px 0;
-      letter-spacing: -0.02em;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #2b1619;
-      color: var(--accent-dark);
-      font-weight: 700;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .hero-main p {
-      color: var(--soft);
-      max-width: 56ch;
-      margin: 0 0 24px;
-    }
-
-    .btn-row {
-      display: flex;
       flex-wrap: wrap;
-      gap: 12px;
     }
-
+    .links a {
+      border: 1px solid #334669;
+      border-radius: 999px;
+      padding: 6px 11px;
+      background: rgba(18, 29, 51, 0.92);
+      color: var(--soft);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 18px;
       border-radius: 12px;
+      border: 1px solid transparent;
+      padding: 11px 15px;
       font-weight: 700;
-      line-height: 1.15;
+      line-height: 1.1;
       white-space: nowrap;
-      text-align: center;
-      transition: transform 120ms ease, box-shadow 120ms ease;
+      cursor: pointer;
     }
-
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(145deg, var(--accent), var(--accent-deep));
       color: #fff;
-      box-shadow: 0 10px 22px rgba(197, 22, 46, 0.3);
+      box-shadow: 0 14px 30px rgba(197, 22, 46, 0.26);
     }
-
     .btn-secondary {
-      border: 1px solid var(--line);
-      background: #1c1d21;
-      color: #f3f5f8;
+      background: #17233d;
+      color: #eef4ff;
+      border-color: #39517b;
     }
-
-    .btn:hover {
-      transform: translateY(-2px);
+    .btn-tertiary {
+      background: rgba(79, 99, 137, 0.16);
+      color: var(--steel-soft);
+      border-color: rgba(79, 99, 137, 0.34);
     }
-
-    .hero-card {
+    main { padding: 24px 0 42px; }
+    section {
+      margin: 14px 0;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(155deg, #1a1c21 0%, #121317 100%);
-      padding: 20px;
-      box-shadow: var(--shadow);
+      border-radius: 22px;
+      background: linear-gradient(165deg, rgba(18, 29, 51, 0.98), rgba(12, 18, 33, 0.98));
+      padding: 24px;
+      scroll-margin-top: 104px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+    h1, h2 {
+      margin: 0 0 12px;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.6rem, 5.2vw, 4.7rem); }
+    h2 { font-size: clamp(1.45rem, 2.8vw, 2.25rem); }
+    h3 { margin: 0 0 8px; font-size: 1.04rem; }
+    p { margin: 0 0 10px; color: var(--soft); }
+    ul { margin: 0; padding-left: 18px; color: #dbe5f7; }
+    li { margin: 7px 0; }
+    .eyebrow,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .eyebrow {
+      margin-bottom: 12px;
+      border: 1px solid rgba(197, 22, 46, 0.32);
+      background: rgba(197, 22, 46, 0.1);
+      color: var(--accent-soft);
+    }
+    .tag {
+      margin-bottom: 10px;
+      border: 1px solid rgba(79, 99, 137, 0.3);
+      background: rgba(79, 99, 137, 0.12);
+      color: var(--steel-soft);
+    }
+    .tag-alert {
+      border-color: rgba(197, 22, 46, 0.28);
+      background: rgba(197, 22, 46, 0.12);
+      color: var(--accent-soft);
+    }
+    .hero,
+    .grid-2,
+    .grid-3,
+    .fit-grid,
+    .offer-grid,
+    .contact-grid,
+    .ethics-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .hero { grid-template-columns: 1.08fr 0.92fr; }
+    .grid-2,
+    .contact-grid,
+    .ethics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3,
+    .fit-grid,
+    .offer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel,
+    .card,
+    .fit-card,
+    .offer-card,
+    .ethics-panel,
+    .step-card,
+    .note,
+    .contact-card {
+      border: 1px solid #314566;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(18, 30, 53, 0.96), rgba(13, 20, 36, 0.96));
+      padding: 16px;
+    }
+    .hero-copy {
+      display: grid;
+      align-content: start;
+    }
+    .hero-copy p.lead {
+      max-width: 58ch;
+      font-size: 1.08rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .point {
+      border: 1px solid #314766;
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(12, 19, 35, 0.78);
+    }
+    .point strong,
+    .fit-card strong,
+    .offer-card strong,
+    .step-card strong,
+    .note strong,
+    .contact-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .hero-visual {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 85% 12%, rgba(197, 22, 46, 0.15), transparent 28%),
+        radial-gradient(circle at 14% 92%, rgba(79, 99, 137, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(18, 30, 53, 0.98), rgba(10, 16, 29, 0.98));
+    }
+    .hero-photo {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 250px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(79, 99, 137, 0.3);
+      background: #0d1a1d;
+    }
+    .hero-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(7, 14, 29, 0.06), rgba(7, 14, 29, 0.64)),
+        linear-gradient(120deg, rgba(197, 22, 46, 0.12), transparent 36%);
+      pointer-events: none;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .chip-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid #395178;
+      padding: 8px 10px;
+      background: rgba(16, 26, 45, 0.92);
+      color: #dce8ff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      animation: drift 7s ease-in-out infinite;
+    }
+    .chip:nth-child(2n) { animation-delay: -2s; }
+    .chip:nth-child(3n) { animation-delay: -4s; }
+    .note-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .card,
+    .offer-card {
       position: relative;
       overflow: hidden;
     }
-
-    .founder {
-      display: grid;
-      grid-template-columns: 84px 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #141518;
-      margin-bottom: 14px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .founder-photo {
-      width: 84px;
-      height: 84px;
-      border-radius: 10px;
-      object-fit: cover;
-      border: 1px solid var(--steel);
-      display: block;
-    }
-
-    .founder-meta strong {
-      display: block;
-      font-size: 0.98rem;
-      line-height: 1.2;
-    }
-
-    .founder-meta span {
-      color: var(--soft);
-      font-size: 0.9rem;
-    }
-
-    .hero-card::before {
+    .card::after,
+    .offer-card::after {
       content: "";
       position: absolute;
-      width: 180px;
-      height: 180px;
-      right: -60px;
-      top: -70px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 22, 46, 0.2) 0%, rgba(197, 22, 46, 0) 72%);
+      right: -26px;
+      bottom: -26px;
+      width: 92px;
+      height: 92px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(197, 22, 46, 0.16), transparent 68%);
+      pointer-events: none;
     }
-
-    .metric {
-      margin: 12px 0;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed #3a3a40;
+    .card p,
+    .offer-card p,
+    .fit-card p,
+    .note p,
+    .ethics-panel p,
+    .contact-card p { margin-bottom: 0; }
+    .offer-card {
+      min-height: 208px;
     }
-
-    .metric strong {
-      font-size: 1.75rem;
-      font-family: "Fraunces", Georgia, serif;
-      line-height: 1;
-      display: block;
+    .offer-card.primary {
+      background:
+        radial-gradient(circle at 88% 14%, rgba(197, 22, 46, 0.16), transparent 28%),
+        linear-gradient(180deg, rgba(23, 33, 56, 0.98), rgba(12, 19, 33, 0.98));
+      border-color: rgba(197, 22, 46, 0.34);
     }
-
-    section {
-      padding: 18px 0 40px;
+    .offer-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
     }
-
-    .grid-3 {
+    .timing {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: rgba(197, 22, 46, 0.12);
+      border: 1px solid rgba(197, 22, 46, 0.24);
+      color: var(--accent-soft);
+    }
+    .signal-list,
+    .step-stack {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 10px;
+      margin-top: 12px;
     }
-
-    .insights-grid {
+    .signal-row,
+    .step-card {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
+      grid-template-columns: 10px 1fr;
+      gap: 10px;
+      align-items: start;
     }
-
-    .insight-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    .step-card { grid-template-columns: 42px 1fr; }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 6px;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(197, 22, 46, 0.42);
     }
-
-    .insight-card h3 {
-      margin: 6px 0 10px;
-      font-size: 1.08rem;
-      line-height: 1.35;
+    .dot-steel {
+      background: var(--steel);
+      box-shadow: 0 0 16px rgba(79, 99, 137, 0.36);
     }
-
-    .insight-card p {
-      margin: 0 0 12px;
-      color: var(--soft);
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(145deg, var(--accent), var(--accent-deep));
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+    form {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #d6e1ef;
+    }
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #3a5077;
+      border-radius: 10px;
+      background: #10192d;
+      color: #f4f2ed;
+      padding: 10px 12px;
+      font-family: inherit;
       font-size: 0.95rem;
     }
-
+    textarea {
+      min-height: 126px;
+      resize: vertical;
+    }
+    .small-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .section-head p {
+      max-width: 62ch;
+      margin-bottom: 0;
+    }
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .insight-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #314566;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(18, 30, 53, 0.96), rgba(13, 20, 36, 0.96));
+      padding: 18px;
+    }
+    .insight-card::after {
+      content: "";
+      position: absolute;
+      right: -24px;
+      top: -24px;
+      width: 88px;
+      height: 88px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(197, 22, 46, 0.16), transparent 68%);
+      pointer-events: none;
+    }
     .insight-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 10px;
-      color: #ffd7dc;
-      font-size: 0.8rem;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
+      color: var(--accent-soft);
+      font-size: 0.78rem;
       font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
-
+    .insight-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+    .insight-card p {
+      margin-bottom: 0;
+      color: var(--soft);
+    }
     .insight-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #ffd7dc;
-      font-weight: 700;
-      font-size: 0.92rem;
-      text-decoration: none;
-    }
-
-    .insight-link:hover {
-      text-decoration: underline;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .pricing-intro {
-      color: var(--soft);
-      max-width: 76ch;
-      margin: 6px 0 16px;
-    }
-
-    .pricing-tracks {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .track-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-    }
-
-    .track-card h3 {
-      margin: 0 0 8px;
-      font-size: 1.1rem;
-    }
-
-    .track-sub {
-      color: var(--soft);
-      margin: 0 0 12px;
-      font-size: 0.94rem;
-    }
-
-    .price-block {
-      border: 1px solid #2d313a;
-      background: #101115;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-
-    .price-block b {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .price-block p {
-      margin: 0;
-      color: var(--soft);
-      font-size: 0.92rem;
-    }
-
-    .comparison {
-      border: 1px solid var(--line);
-      background: var(--card);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .comparison table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.93rem;
-    }
-
-    .comparison th,
-    .comparison td {
-      border-bottom: 1px solid var(--line);
-      padding: 10px 12px;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    .comparison th {
+      margin-top: 14px;
       color: #fff;
-      background: #15171d;
       font-weight: 700;
     }
-
-    .comparison td {
-      color: var(--soft);
-    }
-
-    .price-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(155deg, #17181c 0%, #121316 100%);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .price-card::before {
-      content: "";
-      position: absolute;
-      right: -35px;
-      top: -35px;
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 22, 46, 0.26) 0%, rgba(197, 22, 46, 0) 75%);
-    }
-
-    .price-tag {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid #5a2a31;
-      background: #241518;
-      color: #ffd7dc;
-      font-weight: 700;
-      font-size: 0.78rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .price-amount {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: 2rem;
-      line-height: 1;
-      margin: 0 0 8px;
-      color: #ffffff;
-    }
-
-    .price-note {
-      color: var(--soft);
-      font-size: 0.92rem;
-      margin: 0 0 12px;
-    }
-
-    .price-list {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--soft);
-      font-size: 0.94rem;
-    }
-
-    .price-list li {
-      margin-bottom: 6px;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(31, 36, 48, 0.07);
-    }
-
-    .card h3 {
-      margin: 8px 0;
-      font-size: 1.05rem;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--soft);
-      font-size: 0.97rem;
-    }
-
-    .kicker {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(1.35rem, 2.3vw, 2rem);
-      margin: 0 0 16px;
-    }
-
-    .process {
+    .play-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .about-story {
-      display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 16px;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 12px;
       align-items: start;
     }
-
-    .about-card {
-      border: 1px solid var(--line);
-      background: #0f172b;
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: 0 10px 24px rgba(31, 36, 48, 0.06);
-    }
-
-    .about-card p {
-      margin: 0 0 12px;
-      color: var(--soft);
-    }
-
-    .about-card p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-points {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #0f172b;
-      padding: 16px;
-    }
-
-    .about-points b {
-      color: var(--accent-dark);
+    .pixel-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 208, 79, 0.26);
+      background: rgba(255, 208, 79, 0.12);
+      color: #ffe8a3;
+      font-family: "Courier New", Consolas, monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
       letter-spacing: 0.04em;
-      font-size: 0.8rem;
       text-transform: uppercase;
     }
-
-    .about-points ul {
-      margin: 10px 0 0;
-      padding-left: 18px;
-      color: var(--soft);
+    .play-panel {
+      display: grid;
+      gap: 12px;
     }
-
-    .step {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #0f172b;
-      padding: 16px;
-    }
-
-    .step b {
-      color: var(--accent-dark);
-      letter-spacing: 0.04em;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-    }
-
-    .cred-strip {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #111217;
-      padding: 16px;
+    .play-frame {
       overflow: hidden;
+      border: 1px solid rgba(197, 22, 46, 0.28);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 16% 14%, rgba(255, 208, 79, 0.1), transparent 24%),
+        linear-gradient(180deg, rgba(9, 10, 14, 0.98), rgba(5, 6, 10, 0.98));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     }
-
-    .cred-strip p {
-      margin: 0 0 12px;
-      color: var(--soft);
-      font-size: 0.92rem;
-    }
-
-    .logo-carousel {
-      position: relative;
-      overflow: hidden;
+    .play-frame iframe {
+      display: block;
       width: 100%;
-      border-top: 1px solid #2a2c31;
-      border-bottom: 1px solid #2a2c31;
-      padding: 12px 0;
-      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+      height: 560px;
+      border: 0;
+      background: #08090d;
     }
-
-    .logo-track {
-      display: flex;
-      width: max-content;
-      gap: 14px;
-      animation: scrollLogos 26s linear infinite;
-    }
-
-    .logo-card {
-      flex: 0 0 auto;
-      width: 230px;
-      height: 76px;
-      border: 1px solid #2d3036;
-      border-radius: 12px;
-      background: #16181e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 12px;
-    }
-
-    .logo-card img {
-      max-width: 180px;
-      max-height: 40px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      filter: grayscale(1) brightness(1.05);
-      opacity: 0.95;
-    }
-
-    @keyframes scrollLogos {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .cta-block {
-      margin: 16px 0 40px;
-      background: linear-gradient(132deg, #101113 0%, #1b1c22 62%, #5a1f2a 100%);
-      color: #eef3ff;
-      border-radius: var(--radius);
-      padding: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-block::after {
-      content: "";
-      position: absolute;
-      right: -20px;
-      top: -18px;
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 22, 46, 0.45) 0%, rgba(197, 22, 46, 0) 72%);
-    }
-
-    .cta-block p {
-      margin-top: 8px;
-      color: #e4ecff;
-      max-width: 70ch;
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .cta-block .btn-secondary {
-      background: #fff7f1;
-      color: #0a1021;
-      border-color: #f1b7c0;
-      box-shadow: 0 8px 18px rgba(7, 12, 28, 0.22);
-    }
-
-    .cta-block .btn-secondary:hover {
-      background: #ffffff;
-      color: #0b1020;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 22px 0 34px;
-      color: var(--soft);
+    .play-note {
+      color: var(--muted);
       font-size: 0.9rem;
     }
-
-    .bosskey-game-widget {
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 35;
-      width: 220px;
-      border: 1px solid #4e1d24;
-      border-radius: 14px;
-      background: linear-gradient(160deg, #141519 0%, #0f1012 100%);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
-      overflow: hidden;
-      font-family: "Courier New", Consolas, monospace;
+    footer {
+      border-top: 1px solid var(--line);
+      color: #aab8cf;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
     }
-
-    .bosskey-game-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 10px;
-      border-bottom: 1px solid #3b1b22;
-      background: #1b0f12;
-      color: #ffd6dc;
-      font-size: 0.74rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-weight: 700;
+    @keyframes drift {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
-
-    .bosskey-game-head button {
-      border: 1px solid #5f2a32;
-      background: #261518;
-      color: #ffd6dc;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.72rem;
-      padding: 4px 8px;
-      cursor: pointer;
-    }
-
-    .bosskey-game-body {
-      padding: 8px;
-    }
-
-    .bosskey-game-canvas-wrap {
-      border: 1px solid #3a1a21;
-      border-radius: 10px;
-      padding: 6px;
-      background: #0b0c0e;
-    }
-
-    #bossKeyCanvas {
-      width: 100%;
-      height: auto;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-      display: block;
-      border-radius: 6px;
-      background: #070709;
-    }
-
-    .bosskey-game-status {
-      margin-top: 7px;
-      color: #eab8c0;
-      font-size: 0.72rem;
-      min-height: 18px;
-    }
-
-    .bosskey-game-controls {
-      margin-top: 6px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .bosskey-game-controls .spacer {
-      visibility: hidden;
-    }
-
-    .bosskey-game-controls button {
-      border: 1px solid #4d2028;
-      background: #1c1114;
-      color: #ffdbe1;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      padding: 7px 0;
-      font-weight: 700;
-      touch-action: none;
-      cursor: pointer;
-    }
-
-    .bosskey-game-controls button:active {
-      background: #31171d;
-    }
-
-    .bosskey-game-widget.collapsed .bosskey-game-body {
-      display: none;
-    }
-
-    .fade {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: rise 700ms ease forwards;
-    }
-
-    .fade.d2 { animation-delay: 110ms; }
-    .fade.d3 { animation-delay: 200ms; }
-    .fade.d4 { animation-delay: 280ms; }
-
-    @keyframes rise {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 880px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
-
-      .process {
-        grid-template-columns: 1fr;
-      }
-
-      .about-story {
-        grid-template-columns: 1fr;
-      }
-
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .pricing-tracks {
-        grid-template-columns: 1fr;
-      }
-
-      .comparison {
-        overflow-x: auto;
-      }
-
-      .quick-contact {
-        justify-content: flex-start;
-        font-size: 0.92rem;
-      }
-
-      .toc-nav {
-        padding: 10px;
-        top: 8px;
-      }
-
-      .toc-nav a {
-        font-size: 0.84rem;
-      }
-
-      .mobile-menu-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .cta-top {
-        display: none;
-      }
-
-      .quick-contact,
-      .toc-nav {
-        display: none;
-      }
-
-      body.menu-open .quick-contact,
-      body.menu-open .toc-nav {
-        display: flex;
-      }
-
-      body.menu-open .quick-contact {
-        margin-bottom: 10px;
-      }
-
-      body.menu-open .toc-nav {
-        position: static;
-        top: auto;
-        z-index: auto;
-        backdrop-filter: none;
-        box-shadow: none;
-      }
-
-      .bosskey-game-widget {
-        width: 188px;
-        right: 8px;
-        bottom: 8px;
-      }
-
-      .bosskey-game-head {
-        font-size: 0.66rem;
-      }
-
-      .bosskey-game-controls button {
-        padding: 6px 0;
-      }
-    }
-
-    @media (max-width: 460px) {
-      .contact-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .contact-actions .btn {
-        width: 100%;
-      }
+    @media (max-width: 980px) {
+      .hero,
+      .grid-2,
+      .grid-3,
+      .fit-grid,
+      .offer-grid,
+      .contact-grid,
+      .ethics-grid,
+      .play-grid,
+      .hero-points,
+      .note-grid { grid-template-columns: 1fr; }
+      .buttons .btn { width: 100%; }
+      .play-frame iframe { height: 480px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <a class="brand" href="#">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
-        </span>
-        <span>Boss Key</span>
-      </a>
-      <a class="cta-top schedule-cta track-contact" data-channel="schedule" data-context="Top Nav Schedule Button" href="#">Book a Discovery Call</a>
-      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileHeaderSections">Menu</button>
-    </div>
-    <div class="wrap quick-contact" id="mobileHeaderSections" aria-label="Direct contact options">
-      <span>Schedule time with Timmy:</span>
-      <a class="schedule-cta track-contact" data-channel="schedule" data-context="Header Schedule Button" href="#">Open Scheduling Calendar</a>
-      <a class="email-cta" data-context="Header Quick Contact" href="#">timmy@bosskeyops.com</a>
-      <a class="quick-linkedin" href="https://www.linkedin.com/company/boss-key-llc" target="_blank" rel="noopener noreferrer">Boss Key on LinkedIn</a>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <nav class="toc-nav" aria-label="Jump to section">
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Boss Key homepage">
+      <img src="./assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key">
+    </a>
+    <nav class="links" aria-label="Page sections">
+      <a href="#who">Who</a>
+      <a href="#problems">Problems</a>
+      <a href="#how">How</a>
+      <a href="#sprint">Sprint</a>
       <a href="#insights">Insights</a>
-      <a href="#services">Services</a>
-      <a href="#credentials">Background</a>
-      <a href="#pricing">Service Packages</a>
-      <a href="#about">About Timmy</a>
+      <a href="#ethics">Ethics</a>
+      <a href="#play">Play</a>
       <a href="#contact">Contact</a>
     </nav>
-    <section class="hero">
-      <div class="hero-main fade">
-        <span class="eyebrow">Business Development Acceleration Partner</span>
-        <h1>Win more business without getting buried in admin work.</h1>
-        <p>Boss Key helps businesses strengthen pipeline execution, improve pursuit discipline, and speed proposal output. I also coach individual sellers who want better deal control and higher close rates.</p>
-        <div class="btn-row">
-          <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Hero Schedule Button" href="#">Schedule Intro Call</a>
-          <a class="btn btn-secondary email-cta" data-context="Hero Email Button" href="#">Email Timmy</a>
-          <a class="btn btn-secondary" href="#services">See Services</a>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <section class="hero">
+    <article class="hero-copy">
+      <span class="eyebrow">Business development acceleration for janitorial growth teams</span>
+      <h1>Find better janitorial opportunities earlier, and pursue them with more clarity.</h1>
+      <p class="lead">Boss Key helps janitorial and commercial cleaning companies spot real market movement, understand competitor patterns, and focus pursuit effort before the bid timeline takes over. The work is especially built for teams pursuing public-sector, education, municipal, and institutional contracts.</p>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+        <a class="btn btn-secondary contact-jump" href="#contact" data-offering="opportunity-foresight-sprint">Ask about the foresight sprint</a>
+      </div>
+      <div class="hero-points">
+        <div class="point">
+          <strong>Earlier visibility</strong>
+          <span>See likely buying movement before the posted bid becomes the first real signal.</span>
+        </div>
+        <div class="point">
+          <strong>Sharper competitor context</strong>
+          <span>Get a cleaner read on public positioning, proof points, and repeat rival patterns.</span>
+        </div>
+        <div class="point">
+          <strong>Better pursuit choices</strong>
+          <span>Focus business development effort on the accounts and territories that deserve it.</span>
+        </div>
+        <div class="point">
+          <strong>Capture discipline</strong>
+          <span>Translate early signals into real next steps instead of scrambling after the bid drops.</span>
         </div>
       </div>
-      <aside class="hero-card fade d2">
-        <h2 class="kicker">Built for teams that need momentum</h2>
-        <div class="founder">
-          <a class="founder-photo-link" href="https://www.linkedin.com/in/timothy-semenza-82b35656/" target="_blank" rel="noopener noreferrer" aria-label="View Timmy Semenza on LinkedIn">
-            <img class="founder-photo" src="./assets/headshots/timothy-semenza-headshot.jpg" alt="Timmy Semenza, founder of Boss Key">
-          </a>
-          <div class="founder-meta">
-            <strong>Timmy Semenza</strong>
-            <span>Founder, Boss Key LLC</span>
-          </div>
-        </div>
-        <div class="metric">
-          <strong>Stronger pipeline flow</strong>
-          <span>Keep opportunities moving with clear stages, ownership, and follow-through.</span>
-        </div>
-        <div class="metric">
-          <strong>Faster pursuit output</strong>
-          <span>Turn around proposals and pursuit actions faster with repeatable systems.</span>
-        </div>
-        <div class="metric">
-          <strong>Less admin drag</strong>
-          <span>Reduce coordination overhead so leaders can focus on revenue activity.</span>
-        </div>
-      </aside>
-    </section>
-
-    <section id="services">
-      <h2 class="kicker fade d2">How Boss Key accelerates wins</h2>
-      <div class="grid-3">
-        <article class="card fade d2">
-          <h3>Pipeline And Pursuit System Review</h3>
-          <p>Find where opportunities stall and where follow-up breaks down, then implement a practical rhythm your team or individual seller can run.</p>
+    </article>
+    <aside class="panel hero-visual">
+      <div class="hero-photo">
+        <img src="./assets/stock/janitor-corridor.jpg" alt="Janitorial worker moving down a corridor with cleaning equipment">
+      </div>
+      <div class="chip-cloud" aria-label="Boss Key focus areas">
+        <span class="chip">Opportunity forecasting</span>
+        <span class="chip">Rebid visibility</span>
+        <span class="chip">Competitor intelligence</span>
+        <span class="chip">Capture strategy</span>
+        <span class="chip">Proposal support</span>
+        <span class="chip">Not lobbying</span>
+      </div>
+      <div class="note-grid">
+        <article class="note">
+          <strong>Boss Key positioning</strong>
+          <p>An early-lifecycle advisory partner for janitorial teams that need to act before the procurement calendar becomes obvious.</p>
         </article>
-        <article class="card fade d3">
-          <h3>Pursuit And Proposal Engine</h3>
-          <p>Build a repeatable pursuit and proposal process that improves quality, speed, and win readiness.</p>
-        </article>
-        <article class="card fade d4">
-          <h3>Seller Executive Coaching</h3>
-          <p>Coach individual sellers on deal strategy, opportunity qualification, and pursuit discipline to improve conversion and consistency.</p>
+        <article class="note">
+          <strong>Brand boundary</strong>
+          <p>Not a generic bid-writing vendor, not a lobbying shop, and not a service built on shady collection tactics.</p>
         </article>
       </div>
-    </section>
+    </aside>
+  </section>
 
-    <section id="insights">
-      <h2 class="kicker fade d2">Insights And Think Pieces</h2>
-      <p class="pricing-intro fade d2">Field notes, long-form perspectives, and practical essays on proposals, pursuit work, and business development execution.</p>
-      <div class="insights-grid">
-        <article class="insight-card fade d2">
-          <div class="insight-meta">
-            <span>Long-Form Article</span>
-            <span>Feb 26, 2026</span>
-          </div>
-          <h3>Inception, Limbo, and the AI Trap</h3>
-          <p>A practical reflection on AI ideation loops, time-boxed experimentation, and why ideas only matter once they become real deliverables.</p>
-          <a class="insight-link" href="./insights/inception-limbo-and-the-ai-trap.html">Read the full article -></a>
-        </article>
-        <article class="insight-card fade d3">
-          <div class="insight-meta">
-            <span>Long-Form Article</span>
-            <span>Feb 25, 2026</span>
-          </div>
-          <h3>What 10+ Years in Proposals Teaches You (That Most Organizations Still Miss)</h3>
-          <p>A perspective on bid management, organizational chaos, AI pressure, and why frontline proximity still determines proposal credibility.</p>
-          <a class="insight-link" href="./insights/what-10-years-in-proposals-teaches-you.html">Read the full article -></a>
-        </article>
-      </div>
-    </section>
-
-    <section id="credentials">
-      <h2 class="kicker fade d2">Selected Career Background</h2>
-      <div class="cred-strip fade d3">
-
-        <div class="logo-carousel" aria-label="Previous companies">
-          <div class="logo-track">
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGDn9gqgHN8Ng/company-logo_100_100/B4EZT33OFKGgAQ-/0/1739325236262/the_facilities_group_logo?e=2147483647&v=beta&t=teQXyp3i5kxoGpwEnNRUdWIIJFydBry60TxNZmWOeuU" alt="The Facilities Group logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D560BAQGeOKUDsaOYCw/company-logo_100_100/company-logo_100_100/0/1719801179620/sbm_site_services_llc_logo?e=2147483647&v=beta&t=jWOgiVWjPgHu0asyC0LUgdkhKp5amJUayp2eZVMyZ90" alt="SBM Site Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFNfbEd1buK4w/company-logo_100_100/company-logo_100_100/0/1630553862696/kellermeyer_bergensons_services_llc_logo?e=2147483647&v=beta&t=Py37dMcS-OsXX28erRrGjmSAgR2-WhE-4xQGk7owEsU" alt="Kellermeyer Bergensons Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGDn9gqgHN8Ng/company-logo_100_100/B4EZT33OFKGgAQ-/0/1739325236262/the_facilities_group_logo?e=2147483647&v=beta&t=teQXyp3i5kxoGpwEnNRUdWIIJFydBry60TxNZmWOeuU" alt="The Facilities Group logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/D560BAQGeOKUDsaOYCw/company-logo_100_100/company-logo_100_100/0/1719801179620/sbm_site_services_llc_logo?e=2147483647&v=beta&t=jWOgiVWjPgHu0asyC0LUgdkhKp5amJUayp2eZVMyZ90" alt="SBM Site Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFNfbEd1buK4w/company-logo_100_100/company-logo_100_100/0/1630553862696/kellermeyer_bergensons_services_llc_logo?e=2147483647&v=beta&t=Py37dMcS-OsXX28erRrGjmSAgR2-WhE-4xQGk7owEsU" alt="Kellermeyer Bergensons Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/broadspire-wordmark.svg" alt="Broadspire Services logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/blackstone-federal-wordmark.svg" alt="Blackstone Federal logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/aetna-wordmark.svg" alt="Aetna logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/cvs-health-wordmark.svg" alt="CVS Health logo" loading="lazy">
-            </div>
-            <div class="logo-card">
-              <img src="./assets/logos/client-wordmarks/deloitte-wordmark.svg" alt="Deloitte logo" loading="lazy">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing">
-      <h2 class="kicker fade d2">Service Packages By Client Type</h2>
-      <p class="pricing-intro fade d2">Choose the track that fits your situation. Every engagement starts with a diagnostic, then moves to a monthly retainer with clear scope and cadence. Final investment is tailored to scope, timeline, and support depth.</p>
-      <div class="pricing-tracks">
-        <article class="track-card fade d2">
-          <span class="price-tag">For Businesses</span>
-          <h3>Owner And Team Track</h3>
-          <p class="track-sub">Best for businesses that need stronger pursuit execution and less admin drag on leadership.</p>
-          <div class="price-block">
-            <b>Business Diagnostic</b>
-            <p>2 weeks | fixed fee | workflow map + top bottlenecks + 30/60/90-day plan.</p>
-          </div>
-          <div class="price-block">
-            <b>Business Acceleration Retainer</b>
-            <p>6-month minimum | pipeline rhythm, proposal support, accountability cadence.</p>
-          </div>
-        </article>
-        <article class="track-card fade d3">
-          <span class="price-tag">For Individual Sellers</span>
-          <h3>Executive Coaching Track</h3>
-          <p class="track-sub">Best for high-performing sellers who want better control of live deals and stronger close discipline.</p>
-          <div class="price-block">
-            <b>Seller Win Diagnostic</b>
-            <p>1-2 weeks | fixed fee | stage audit + qualification reset + target deal plan.</p>
-          </div>
-          <div class="price-block">
-            <b>Seller Coaching Retainer</b>
-            <p>3- or 6-month options | weekly coaching, deal strategy, follow-up discipline.</p>
-          </div>
-        </article>
-      </div>
-      <div class="btn-row fade d4">
-        <a class="btn btn-primary schedule-cta track-contact" data-channel="schedule" data-context="Pricing Fit Call Button" href="#">Book A Fit Call</a>
-      </div>
-    </section>
-
-    <section id="about">
-      <h2 class="kicker fade d2">About Timmy</h2>
-      <div class="about-story">
-        <article class="about-card fade d2">
-          <p>Before Boss Key, I spent over 10 years leading proposal and pursuit work in complex environments. The job taught me how to drive revenue workflows with clarity when stakes and pressure are high.</p>
-          <p>Today I help business owners and individual sellers fix the business development process gaps that waste time and delay growth. We focus on pipeline control, pursuit execution, proposal speed, and cleaner handoffs.</p>
-          <p>Boss Key is designed for companies and top sellers who need high-leverage business development support without adding full-time headcount.</p>
-        </article>
-        <aside class="about-points fade d3">
-          <b>What You Can Expect</b>
-          <ul>
-            <li>Practical advice you can use right away.</li>
-            <li>Clear steps tied to pipeline movement, speed, and conversion quality.</li>
-            <li>A business development execution and coaching partner when resources are limited.</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="kicker fade d2">Simple business development engagement model</h2>
-      <div class="process">
-        <article class="step fade d2">
-          <b>Step 1</b>
-          <h3>Pipeline And Goal Setup</h3>
-          <p>Set target accounts, pursuit priorities, and key timelines.</p>
-        </article>
-        <article class="step fade d3">
-          <b>Step 2</b>
-          <h3>Pursuit System Buildout</h3>
-          <p>Build practical systems for opportunity management and proposal output.</p>
-        </article>
-        <article class="step fade d3">
-          <b>Step 3</b>
-          <h3>Submission And Handoff QA</h3>
-          <p>Run final checks and hand opportunities into delivery cleanly.</p>
-        </article>
-        <article class="step fade d4">
-          <b>Step 4</b>
-          <h3>Debrief And Scale</h3>
-          <p>Review what worked and improve the next pursuit cycle.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="contact" class="cta-block fade d3">
-      <h2 class="kicker">Need help accelerating business development?</h2>
-      <p>Use the scheduling calendar to book time directly with Timmy, or email <a class="email-cta" data-context="Contact Section Link" href="#" style="text-decoration: underline;">timmy@bosskeyops.com</a>. If your team or individual seller needs stronger pipeline, pursuit, and proposal execution, you will get practical help you can use right away.</p>
-      <p class="contact-actions">
-        <a class="btn btn-secondary schedule-cta track-contact" data-channel="schedule" data-context="Contact Section Schedule Button" href="#">Schedule With Timmy</a>
-        <a class="btn btn-secondary email-cta" data-context="Contact Section Button" href="#">Email Timmy</a>
-      </p>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      Boss Key LLC | Timmy Semenza | Business development acceleration and executive coaching for sellers
+  <section id="who">
+    <h2>Boss Key is built for janitorial teams that want more deliberate growth.</h2>
+    <div class="fit-grid">
+      <article class="fit-card">
+        <strong>Owners and presidents</strong>
+        <p>You want a stronger pipeline without building a full internal intelligence function too early.</p>
+      </article>
+      <article class="fit-card">
+        <strong>Business development leaders</strong>
+        <p>You need better opportunity prioritization, cleaner competitor context, and earlier visibility into what may be coming.</p>
+      </article>
+      <article class="fit-card">
+        <strong>Estimators and operations leaders</strong>
+        <p>You get pulled into pursuits too late and want stronger context before pricing and proposal work start colliding.</p>
+      </article>
     </div>
-  </footer>
+  </section>
 
-  <aside class="bosskey-game-widget" id="bossKeyGame" aria-label="Boss Key mini game">
-    <div class="bosskey-game-head">
-      <span>Boss Key Mini</span>
-      <button type="button" id="bossKeyGameToggle" aria-expanded="true">Hide</button>
+  <section id="problems">
+    <h2>If any of this sounds familiar, Boss Key can help.</h2>
+    <div class="grid-3">
+      <article class="card">
+        <span class="tag">Problem 1</span>
+        <h3>We hear about opportunities too late.</h3>
+        <p>Too many accounts only become visible once the bid is already shaping the timeline and the team is reacting instead of positioning.</p>
+      </article>
+      <article class="card">
+        <span class="tag tag-alert">Problem 2</span>
+        <h3>We keep seeing the same competitors, but we do not have a clear read on them.</h3>
+        <p>You know the names, but not their public positioning, proof points, or likely strengths in the segments you care about.</p>
+      </article>
+      <article class="card">
+        <span class="tag">Problem 3</span>
+        <h3>We chase too much and sound too similar.</h3>
+        <p>Business development effort gets spread thin, and proposals collapse back into price and responsiveness instead of a sharper story.</p>
+      </article>
     </div>
-    <div class="bosskey-game-body">
-      <div class="bosskey-game-canvas-wrap">
-        <canvas id="bossKeyCanvas" width="168" height="168" aria-label="Find the boss key"></canvas>
+  </section>
+
+  <section id="how" class="grid-2">
+    <article>
+      <h2>How Boss Key works</h2>
+      <div class="step-stack">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <strong>Signal intelligence</strong>
+            <span>Track budgets, board activity, contract timing, public job posts, and other lawful signals that suggest where demand may be moving.</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <strong>Opportunity forecasting</strong>
+            <span>Turn scattered signals into likely buying events, target accounts, and timing hypotheses worth leadership attention.</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <strong>Capture strategy</strong>
+            <span>Translate the signal into positioning choices, priority targets, and practical next actions instead of passive monitoring.</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div>
+            <strong>Proposal support when needed</strong>
+            <span>When a live solicitation lands, Boss Key can support architecture, compliance framing, pricing coordination, and proposal operations.</span>
+          </div>
+        </div>
       </div>
-      <div class="bosskey-game-status" id="bossKeyStatus">Find the key.</div>
-      <div class="bosskey-game-controls" aria-label="Game controls">
-        <span class="spacer">.</span>
-        <button type="button" data-dir="up" aria-label="Move up">Up</button>
-        <span class="spacer">.</span>
-        <button type="button" data-dir="left" aria-label="Move left">Left</button>
-        <button type="button" data-dir="down" aria-label="Move down">Down</button>
-        <button type="button" data-dir="right" aria-label="Move right">Right</button>
+      <p class="small-note">The goal is not a giant report that sits on a shared drive. The goal is earlier visibility and a better next decision.</p>
+    </article>
+    <aside class="panel">
+      <span class="tag">What changes</span>
+      <div class="signal-list">
+        <div class="signal-row">
+          <div class="dot" aria-hidden="true"></div>
+          <div><strong>Less guessing</strong><span>Your team gets a cleaner read on what may be coming and what deserves attention now.</span></div>
+        </div>
+        <div class="signal-row">
+          <div class="dot dot-steel" aria-hidden="true"></div>
+          <div><strong>Less waste</strong><span>More effort goes to better-fit targets instead of every plausible account that surfaces late.</span></div>
+        </div>
+        <div class="signal-row">
+          <div class="dot" aria-hidden="true"></div>
+          <div><strong>More control</strong><span>Competitor context and earlier positioning lead to calmer pursuit choices before proposals get noisy.</span></div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section id="sprint">
+    <h2>Start with the Opportunity Foresight Sprint.</h2>
+    <div class="grid-2">
+      <article class="offer-card primary">
+        <div class="offer-head">
+          <div>
+            <span class="tag">Primary offer</span>
+            <h3>Opportunity Foresight Sprint</h3>
+          </div>
+          <span class="timing">Best first step</span>
+        </div>
+        <p>The easiest way to work with Boss Key is to start with a paid sprint. It gives you a focused view of one market, one buyer segment, one geography, or one competitor cluster that matters right now.</p>
+        <div class="signal-list">
+          <div class="signal-row">
+            <div class="dot" aria-hidden="true"></div>
+            <div><strong>What you get</strong><span>A signal scan, likely opportunity map, priority pursuit shortlist, competitor context where it matters, and recommended next actions.</span></div>
+          </div>
+          <div class="signal-row">
+            <div class="dot dot-steel" aria-hidden="true"></div>
+            <div><strong>Why it works</strong><span>It is easier to buy than an open-ended retainer and clear enough to prove whether the work is useful fast.</span></div>
+          </div>
+        </div>
+        <div class="buttons">
+          <a class="btn btn-primary contact-jump" href="#contact" data-offering="opportunity-foresight-sprint">Ask about the foresight sprint</a>
+        </div>
+      </article>
+      <article class="panel">
+        <span class="tag">Expand only if the first step proves useful</span>
+        <div class="offer-grid">
+          <article class="offer-card">
+            <div class="offer-head">
+              <div>
+                <h3>Competitor Positioning Brief</h3>
+              </div>
+              <span class="timing">Follow-on</span>
+            </div>
+            <p>Map how repeat competitors show up publicly and where your team can counter-position more effectively.</p>
+          </article>
+          <article class="offer-card">
+            <div class="offer-head">
+              <div>
+                <h3>Procurement Intelligence Watch</h3>
+              </div>
+              <span class="timing">Recurring</span>
+            </div>
+            <p>Maintain recurring visibility into likely opportunities, renewals, and market movement without hiring internally first.</p>
+          </article>
+          <article class="offer-card">
+            <div class="offer-head">
+              <div>
+                <h3>Capture and Proposal Support</h3>
+              </div>
+              <span class="timing">When live</span>
+            </div>
+            <p>Bring more discipline into qualification, handoffs, pricing coordination, and proposal execution once a real bid appears.</p>
+          </article>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="insights">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Recent Boss Key insights</span>
+        <h2>Practical reading for janitorial growth leaders.</h2>
+        <p>These guides and market notes are built to help janitorial teams think more clearly about rebid timing, competitor pressure, market signals, and early pursuit choices.</p>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-secondary" href="./insights/index.html">Open the insights hub</a>
       </div>
     </div>
-  </aside>
+    <div class="insights-grid">
+      <article class="insight-card">
+        <div class="insight-meta">
+          <span>Practical guide</span>
+          <span>April 6, 2026</span>
+        </div>
+        <h3>Ethical Opportunity Foresight for Janitorial Contractors</h3>
+        <p>A practical guide to building an ethical opportunity foresight system before the RFP drops.</p>
+        <a class="insight-link" href="./insights/ethical-opportunity-foresight-janitorial-contractors.html">Read the guide</a>
+      </article>
+      <article class="insight-card">
+        <div class="insight-meta">
+          <span>Market radar</span>
+          <span>March 1, 2026</span>
+        </div>
+        <h3>Mid-Atlantic Facilities Rebid Radar</h3>
+        <p>A field-note style briefing on expiring contracts, institutional renewal timing, and where attention should go first.</p>
+        <a class="insight-link" href="./insights/mid-atlantic-facilities-rebid-radar-2026-03.html">Read the radar</a>
+      </article>
+      <article class="insight-card">
+        <div class="insight-meta">
+          <span>Insight archive</span>
+          <span>Updated regularly</span>
+        </div>
+        <h3>Explore the full Boss Key insight archive</h3>
+        <p>Browse the full collection of articles, market notes, and practical guides for janitorial growth teams.</p>
+        <a class="insight-link" href="./insights/index.html">View all insights</a>
+      </article>
+    </div>
+  </section>
 
-  <script>
-    (function () {
-      const inboxAlias = "timmy@bosskeyops.com";
-      const calendarScheduleUrl = "https://calendar.app.google/XXQaukj4evMTLq4E7";
-      const trackingEndpoint = "/api/contact-events";
+  <section id="ethics">
+    <h2>Built to be useful, not shady.</h2>
+    <div class="ethics-grid">
+      <article class="ethics-panel">
+        <span class="tag">How Boss Key works</span>
+        <p>Boss Key is designed to help clients make better growth decisions using methods they would be comfortable defending publicly.</p>
+        <ul>
+          <li>Public bid portals, award notices, board packets, and capital plans</li>
+          <li>Company websites, public statements, job posts, and case studies</li>
+          <li>Client-authorized CRM history, proposal archives, and account notes</li>
+          <li>Clear separation of facts, inference, and uncertainty</li>
+        </ul>
+      </article>
+      <article class="ethics-panel">
+        <span class="tag tag-alert">What Boss Key does not do</span>
+        <p>The ethical boundary is part of the brand, not a legal footnote.</p>
+        <ul>
+          <li>No impersonation or deceptive outreach</li>
+          <li>No gray-area access or credential misuse</li>
+          <li>No confidential-information fishing or rumor laundering</li>
+          <li>No lobbying and no inflated claims that public information proves more than it does</li>
+        </ul>
+      </article>
+    </div>
+  </section>
 
-      function buildMailto(context) {
-        const subject = `[Boss Key Site] ${context}`;
-        const bodyLines = [
-          "Hi Timmy,",
-          "",
-          "I found Boss Key through your website and wanted to connect.",
-          "",
-          "Name:",
-          "Company:",
-          "Best phone number:",
-          "Best email address:",
-          "Location (town/county):",
-          "What I need help with:",
-          "Timeline:",
-          "",
-          `Inquiry context: ${context}`,
-          `Page URL: ${window.location.href}`,
-          `Sent from website on: ${new Date().toLocaleString()}`
-        ];
+  <section id="play" class="play-grid">
+    <article class="panel play-panel">
+      <div>
+        <span class="eyebrow">8-bit side quest</span>
+        <h2>Take a quick Boss Key side quest.</h2>
+      </div>
+      <p>A little personality belongs on the site too. If you feel like taking a short break, the Boss Key dungeon crawler is here to play without getting in the way of the main message.</p>
+      <div class="signal-list">
+        <div class="signal-row">
+          <div class="dot" aria-hidden="true"></div>
+          <div><strong>Desktop controls</strong><span>Click the game to focus it, then use arrow keys or WASD to move and fight.</span></div>
+        </div>
+        <div class="signal-row">
+          <div class="dot dot-steel" aria-hidden="true"></div>
+          <div><strong>Mobile controls</strong><span>The dual-thumb movement and firing controls are built into the game for phone play.</span></div>
+        </div>
+        <div class="signal-row">
+          <div class="dot" aria-hidden="true"></div>
+          <div><strong>Full-screen option</strong><span>Open the standalone version if you want the game without the rest of the homepage around it.</span></div>
+        </div>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-primary" href="./dungeon-crawler.html">Open full-screen crawler</a>
+        <a class="btn btn-tertiary" href="#insights">Back to insights</a>
+      </div>
+      <span class="pixel-tag">Boss Key Dungeon Crawler</span>
+      <p class="play-note">If the embed does not capture your keyboard right away, click once inside the game frame and then start moving.</p>
+    </article>
+    <article class="panel">
+      <div class="play-frame">
+        <iframe src="./dungeon-crawler.html" title="Boss Key Dungeon Crawler" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </article>
+  </section>
 
-        return `mailto:${inboxAlias}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+  <section id="contact">
+    <h2>Start with one market, one watchlist, or one real growth question.</h2>
+    <p>The Boss Key path is simple: opportunity briefing, paid foresight sprint, then recurring intelligence or capture support if the first step proves useful.</p>
+    <div class="contact-grid">
+      <article class="contact-card">
+        <strong>Fastest path</strong>
+        <p>Book an opportunity briefing if you want to talk through the situation live and decide on the smallest useful first step.</p>
+        <div class="buttons">
+          <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+        </div>
+      </article>
+      <article class="contact-card">
+        <strong>Prefer email first?</strong>
+        <p>Use the form below and Boss Key will open a prefilled email draft with your intake details.</p>
+      </article>
+    </div>
+    <form id="intakeForm">
+      <label for="name">Name<input id="name" name="name" type="text" autocomplete="name" required></label>
+      <label for="email">Email<input id="email" name="email" type="email" autocomplete="email" required></label>
+      <label for="company">Company<input id="company" name="company" type="text" autocomplete="organization"></label>
+      <label for="region">Primary region or market focus<input id="region" name="region" type="text" placeholder="Example: New Jersey schools, Mid-Atlantic municipal, regional office portfolio"></label>
+      <label for="offering">What do you want to discuss?
+        <select id="offering" name="offering" required>
+          <option value="">Select one</option>
+          <option value="opportunity-briefing">Opportunity briefing</option>
+          <option value="opportunity-foresight-sprint">Opportunity Foresight Sprint</option>
+          <option value="competitor-positioning-brief">Competitor positioning brief</option>
+          <option value="procurement-intelligence-retainer">Procurement intelligence watch</option>
+          <option value="capture-proposal-support">Capture and proposal support</option>
+          <option value="general-inquiry">General inquiry</option>
+        </select>
+      </label>
+      <label for="timeline">Timeline or urgency<input id="timeline" name="timeline" type="text" placeholder="Example: planning Q3 growth / live bid in 30 days"></label>
+      <label for="question">What are you trying to understand, improve, or pursue?<textarea id="question" name="question" required></textarea></label>
+      <button class="btn btn-secondary" type="submit">Create email draft</button>
+    </form>
+    <p class="small-note">Submitting opens your email client with the intake details prefilled.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">&copy; 2026 Boss Key</div>
+</footer>
+
+<script>
+(function () {
+  const inboxAlias = "timmy@bosskeyops.com";
+  const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  const offeringField = document.getElementById("offering");
+  const form = document.getElementById("intakeForm");
+  const offeringLabels = {
+    "opportunity-briefing": "Opportunity briefing",
+    "opportunity-foresight-sprint": "Opportunity Foresight Sprint",
+    "competitor-positioning-brief": "Competitor positioning brief",
+    "procurement-intelligence-retainer": "Procurement intelligence watch",
+    "capture-proposal-support": "Capture and proposal support",
+    "general-inquiry": "General inquiry"
+  };
+  const subjectMap = {
+    "opportunity-briefing": "[Boss Key] Opportunity Briefing Request",
+    "opportunity-foresight-sprint": "[Boss Key] Opportunity Foresight Sprint Inquiry",
+    "competitor-positioning-brief": "[Boss Key] Competitor Positioning Brief Inquiry",
+    "procurement-intelligence-retainer": "[Boss Key] Procurement Intelligence Watch Inquiry",
+    "capture-proposal-support": "[Boss Key] Capture And Proposal Support Inquiry",
+    "general-inquiry": "[Boss Key] General Inquiry"
+  };
+
+  document.querySelectorAll(".schedule-cta").forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+
+  document.querySelectorAll(".contact-jump").forEach(function (link) {
+    link.addEventListener("click", function () {
+      const desiredOffering = link.getAttribute("data-offering");
+      if (desiredOffering && offeringField) {
+        offeringField.value = desiredOffering;
       }
+    });
+  });
 
-      function trackContactEvent(channel, context) {
-        const payload = {
-          channel: (channel || "contact").toLowerCase(),
-          context: context || "Website Contact",
-          source_page: window.location.href,
-          referrer: document.referrer || "",
-          user_agent: navigator.userAgent || ""
-        };
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const data = new FormData(form);
+      const rawOffering = data.get("offering") || "general-inquiry";
+      const offering = String(rawOffering);
+      const subject = subjectMap[offering] || subjectMap["general-inquiry"];
+      const body = [
+        "Hi Boss Key team,",
+        "",
+        "I would like to start a conversation with Boss Key.",
+        "",
+        "Name: " + (data.get("name") || ""),
+        "Email: " + (data.get("email") || ""),
+        "Company: " + (data.get("company") || ""),
+        "Region / market focus: " + (data.get("region") || ""),
+        "Offering: " + (offeringLabels[offering] || offeringLabels["general-inquiry"]),
+        "Timeline: " + (data.get("timeline") || ""),
+        "What I am trying to understand, improve, or pursue: " + (data.get("question") || ""),
+        "",
+        "Page URL: " + window.location.href
+      ].join("\n");
 
-        try {
-          if (navigator.sendBeacon) {
-            const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-            navigator.sendBeacon(trackingEndpoint, blob);
-            return;
-          }
-        } catch (_e) {}
-
-        fetch(trackingEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          keepalive: true
-        }).catch(() => {});
-      }
-
-      document.querySelectorAll(".email-cta").forEach((link) => {
-        const context = link.dataset.context || "Website Inquiry";
-        link.href = buildMailto(context);
-        link.addEventListener("click", function () {
-          trackContactEvent("email", context);
-          this.href = buildMailto(context);
-        });
-      });
-
-      document.querySelectorAll(".schedule-cta").forEach((link) => {
-        link.href = calendarScheduleUrl;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-      });
-
-      document.querySelectorAll(".track-contact").forEach((link) => {
-        const context = link.dataset.context || "Website Contact";
-        const channel = link.dataset.channel || (link.href.startsWith("tel:") ? "call" : (link.href.startsWith("sms:") ? "sms" : "contact"));
-        link.addEventListener("click", function () {
-          trackContactEvent(channel, context);
-        });
-      });
-
-      const menuToggle = document.getElementById("mobileMenuToggle");
-      if (menuToggle) {
-        menuToggle.addEventListener("click", function () {
-          const open = document.body.classList.toggle("menu-open");
-          menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
-          menuToggle.textContent = open ? "Close" : "Menu";
-        });
-      }
-
-      document.querySelectorAll(".toc-nav a").forEach((link) => {
-        link.addEventListener("click", function () {
-          if (window.matchMedia("(max-width: 880px)").matches) {
-            document.body.classList.remove("menu-open");
-            if (menuToggle) {
-              menuToggle.setAttribute("aria-expanded", "false");
-              menuToggle.textContent = "Menu";
-            }
-          }
-        });
-      });
-
-      const gameRoot = document.getElementById("bossKeyGame");
-      const gameToggle = document.getElementById("bossKeyGameToggle");
-      const gameCanvas = document.getElementById("bossKeyCanvas");
-      const gameStatus = document.getElementById("bossKeyStatus");
-      if (gameRoot && gameToggle && gameCanvas && gameStatus) {
-        const ctx = gameCanvas.getContext("2d");
-        const size = 14;
-        const tile = 12;
-        let map = [];
-        let player = { x: 1, y: 1, facing: "down" };
-        let keySpot = { x: size - 2, y: size - 2 };
-        let won = false;
-        let wonAt = 0;
-        let moveAt = 0;
-        const keys = { up: false, down: false, left: false, right: false };
-
-        function makeMap() {
-          const next = [];
-          for (let y = 0; y < size; y += 1) {
-            const row = [];
-            for (let x = 0; x < size; x += 1) {
-              const edge = x === 0 || y === 0 || x === size - 1 || y === size - 1;
-              row.push(edge ? 1 : 0);
-            }
-            next.push(row);
-          }
-          for (let y = 2; y < size - 2; y += 2) {
-            for (let x = 2; x < size - 2; x += 2) {
-              if ((x + y) % 3 === 0) next[y][x] = 1;
-            }
-          }
-          map = next;
-        }
-
-        function pickOpenSpot() {
-          const open = [];
-          for (let y = 1; y < size - 1; y += 1) {
-            for (let x = 1; x < size - 1; x += 1) {
-              if (map[y][x] === 0 && !(x === player.x && y === player.y)) open.push({ x, y });
-            }
-          }
-          if (!open.length) return { x: size - 2, y: size - 2 };
-          return open[Math.floor(Math.random() * open.length)];
-        }
-
-        function resetGame() {
-          makeMap();
-          player = { x: 1, y: 1, facing: "down" };
-          keySpot = pickOpenSpot();
-          won = false;
-          wonAt = 0;
-          gameStatus.textContent = "Find the key.";
-        }
-
-        function walk(dir) {
-          if (won) return;
-          let dx = 0;
-          let dy = 0;
-          if (dir === "up") dy = -1;
-          if (dir === "down") dy = 1;
-          if (dir === "left") dx = -1;
-          if (dir === "right") dx = 1;
-          if (!dx && !dy) return;
-          const nx = player.x + dx;
-          const ny = player.y + dy;
-          player.facing = dir;
-          if (map[ny] && map[ny][nx] === 0) {
-            player.x = nx;
-            player.y = ny;
-            if (player.x === keySpot.x && player.y === keySpot.y) {
-              won = true;
-              wonAt = performance.now();
-              gameStatus.textContent = "Boss Key found.";
-            }
-          }
-        }
-
-        function drawTile(x, y, color) {
-          ctx.fillStyle = color;
-          ctx.fillRect(x * tile, y * tile, tile, tile);
-        }
-
-        function drawPlayer() {
-          const px = player.x * tile;
-          const py = player.y * tile;
-          ctx.fillStyle = "#f5f7fb";
-          ctx.fillRect(px + 4, py + 4, 4, 5);
-          ctx.fillStyle = "#e0a5b0";
-          ctx.fillRect(px + 3, py + 3, 6, 2);
-          ctx.fillStyle = "#121317";
-          ctx.fillRect(px + 4, py + 5, 1, 1);
-          ctx.fillRect(px + 7, py + 5, 1, 1);
-          if (won) {
-            ctx.fillStyle = "#ffd04f";
-            ctx.fillRect(px + 5, py - 2, 2, 3);
-            ctx.fillStyle = "#c5162e";
-            ctx.fillRect(px + 4, py - 1, 4, 2);
-          }
-        }
-
-        function drawKey() {
-          if (won) return;
-          const kx = keySpot.x * tile;
-          const ky = keySpot.y * tile;
-          ctx.fillStyle = "#ffd04f";
-          ctx.fillRect(kx + 5, ky + 3, 2, 6);
-          ctx.fillRect(kx + 4, ky + 2, 4, 2);
-          ctx.fillRect(kx + 7, ky + 6, 2, 1);
-        }
-
-        function render(ts) {
-          ctx.fillStyle = "#08090b";
-          ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-          for (let y = 0; y < size; y += 1) {
-            for (let x = 0; x < size; x += 1) {
-              if (map[y][x] === 1) {
-                drawTile(x, y, "#3d131a");
-                ctx.fillStyle = "#5b1b24";
-                ctx.fillRect(x * tile + 1, y * tile + 1, tile - 2, 2);
-              } else {
-                ctx.fillStyle = (x + y) % 2 === 0 ? "#0d0f12" : "#0a0c0f";
-                ctx.fillRect(x * tile, y * tile, tile, tile);
-              }
-            }
-          }
-
-          if (!won && ts - moveAt > 105) {
-            if (keys.up) { walk("up"); moveAt = ts; }
-            else if (keys.down) { walk("down"); moveAt = ts; }
-            else if (keys.left) { walk("left"); moveAt = ts; }
-            else if (keys.right) { walk("right"); moveAt = ts; }
-          }
-
-          drawKey();
-          drawPlayer();
-
-          if (won) {
-            ctx.fillStyle = "rgba(0,0,0,0.45)";
-            ctx.fillRect(12, 72, 144, 24);
-            ctx.fillStyle = "#ffdbe1";
-            ctx.font = 'bold 10px "Courier New", monospace';
-            ctx.fillText("BOSS KEY SECURED", 30, 87);
-            if (ts - wonAt > 1300) resetGame();
-          }
-
-          requestAnimationFrame(render);
-        }
-
-        function setDirectionFromKey(code, value) {
-          if (code === "ArrowUp" || code === "KeyW") keys.up = value;
-          if (code === "ArrowDown" || code === "KeyS") keys.down = value;
-          if (code === "ArrowLeft" || code === "KeyA") keys.left = value;
-          if (code === "ArrowRight" || code === "KeyD") keys.right = value;
-        }
-
-        window.addEventListener("keydown", function (e) {
-          setDirectionFromKey(e.code, true);
-        });
-        window.addEventListener("keyup", function (e) {
-          setDirectionFromKey(e.code, false);
-        });
-
-        gameRoot.querySelectorAll("[data-dir]").forEach((btn) => {
-          const d = btn.getAttribute("data-dir");
-          const on = function (ev) {
-            ev.preventDefault();
-            keys[d] = true;
-          };
-          const off = function (ev) {
-            ev.preventDefault();
-            keys[d] = false;
-          };
-          btn.addEventListener("pointerdown", on);
-          btn.addEventListener("pointerup", off);
-          btn.addEventListener("pointercancel", off);
-          btn.addEventListener("pointerleave", off);
-        });
-
-        gameToggle.addEventListener("click", function () {
-          const collapsed = gameRoot.classList.toggle("collapsed");
-          gameToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
-          gameToggle.textContent = collapsed ? "Play" : "Hide";
-        });
-
-        resetGame();
-        requestAnimationFrame(render);
-      }
-    })();
-  </script>
+      window.location.href = "mailto:" + inboxAlias + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    });
+  }
+})();
+</script>
 </body>
 </html>

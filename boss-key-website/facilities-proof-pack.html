@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facilities Proof Pack | Boss Key LLC</title>
+  <meta name="description" content="A simple Boss Key proof pack for facilities teams evaluating rebid visibility, pursuit control, and proposal support.">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2430;
+      --soft: #586774;
+      --line: #d4dbe1;
+      --paper: #fbfbf8;
+      --navy: #233244;
+      --signal: #2a8c79;
+      --signal-soft: #e4f7f1;
+      --accent: #b6763e;
+      --accent-soft: #f8ebde;
+      --max: 1100px;
+      --shadow: 0 20px 36px rgba(21, 33, 43, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(42, 140, 121, 0.12) 0%, rgba(42, 140, 121, 0) 28%),
+        linear-gradient(180deg, #eef2f4 0%, #f8f9f7 100%);
+      color: var(--ink);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    .wrap {
+      width: min(var(--max), 95vw);
+      margin: 0 auto;
+      padding: 22px 0 36px;
+    }
+    .sheet {
+      background: rgba(251, 251, 248, 0.98);
+      border: 1px solid rgba(26, 36, 48, 0.08);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero {
+      padding: 22px 24px 24px;
+      background:
+        linear-gradient(140deg, rgba(42, 140, 121, 0.12) 0%, rgba(42, 140, 121, 0) 35%),
+        linear-gradient(155deg, #29384a 0%, #1c2733 100%);
+      color: #ffffff;
+      border-bottom: 5px solid var(--accent);
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .brand img { width: 30px; height: 30px; display: block; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      line-height: 1.12;
+    }
+    h1 {
+      max-width: 780px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+    h2 {
+      color: var(--navy);
+      font-size: 1.06rem;
+      letter-spacing: 0.02em;
+    }
+    h3 {
+      color: var(--navy);
+      font-size: 0.98rem;
+    }
+    .hero p {
+      max-width: 820px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1rem;
+    }
+    .section {
+      padding: 18px 24px;
+    }
+    .section + .section {
+      border-top: 1px solid var(--line);
+    }
+    .intro {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .panel, .story, .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #ffffff;
+    }
+    .panel.signal { background: var(--signal-soft); border-color: rgba(42, 140, 121, 0.2); }
+    .story + .story { margin-top: 12px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(42, 140, 121, 0.1);
+      border: 1px solid rgba(42, 140, 121, 0.24);
+      color: var(--signal);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .story-grid, .summary-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 12px;
+    }
+    p { margin: 0 0 10px; color: var(--soft); }
+    .story-grid div strong,
+    .summary-grid div strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    ul { margin: 8px 0 0; padding-left: 18px; }
+    li { margin: 5px 0; }
+    .cta-band {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .cta {
+      border: 1px solid rgba(42, 140, 121, 0.2);
+      border-radius: 16px;
+      padding: 16px;
+      background:
+        linear-gradient(145deg, rgba(42, 140, 121, 0.1) 0%, rgba(42, 140, 121, 0.03) 100%),
+        #ffffff;
+    }
+    .links {
+      display: grid;
+      gap: 10px;
+    }
+    .link-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--navy);
+      font-weight: 700;
+    }
+    .small {
+      color: var(--soft);
+      font-size: 0.84rem;
+    }
+    @media (max-width: 920px) {
+      .intro, .story-grid, .summary-grid, .cta-band { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { width: 100%; padding: 0; }
+      .sheet { border: 0; border-radius: 0; box-shadow: none; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/boss-key-doc-shell.css">
+</head>
+<body>
+<header class="site-shell-header">
+  <div class="shell-wrap site-shell-nav">
+    <a class="site-shell-brand" href="./index.html" aria-label="Boss Key homepage"><img src="./assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="site-shell-links" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a class="current" href="./facilities.html">Facilities</a>
+      <a href="./insights/index.html">Insights</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="site-shell-btn schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+  <div class="wrap">
+    <article class="sheet">
+      <header class="hero">
+        <div class="hero-top">
+          <div class="brand">
+            <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
+            <span>Boss Key LLC</span>
+          </div>
+          <div class="chip">Facilities Proof Pack</div>
+        </div>
+        <h1>A simple proof pack for facilities teams considering Boss Key.</h1>
+        <p>This is the short version: real facilities proposal experience, real operating-model work, and practical discipline from service environments where timing and review control mattered.</p>
+      </header>
+
+      <section class="section intro">
+        <div>
+          <h2>What this is meant to show</h2>
+          <p>Boss Key is not promising magic, secret access, or invented win rates. The case for fit is simpler:</p>
+          <ul>
+            <li>real facilities proposal depth</li>
+            <li>real experience cleaning up how pursuit work is organized</li>
+            <li>useful discipline from regulated service environments</li>
+          </ul>
+        </div>
+        <div class="panel signal">
+          <h3>Best use</h3>
+          <p>Forward this after a referral, use it as pre-read for a call, or send it along with one target account or one live rebid problem.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <article class="story">
+          <span class="tag">Proof Story 01</span>
+          <h2>SBM Management Services</h2>
+          <p>Facilities proposal work gets hard when every submission needs to stay compliant and repeatable.</p>
+          <div class="story-grid">
+            <div>
+              <strong>Setting</strong>
+              <p>A high-volume facilities environment where proposal structure and review discipline had to hold up across repeated submissions.</p>
+            </div>
+            <div>
+              <strong>What the work looked like</strong>
+              <p>Support for more than 200 compliant proposal submissions inside a facilities-services setting.</p>
+            </div>
+            <div>
+              <strong>Why it matters now</strong>
+              <p>When the process still lives in one leader's head, growth usually breaks at control and handoff before it breaks at effort.</p>
+            </div>
+            <div>
+              <strong>Plain-language takeaway</strong>
+              <p>Boss Key understands what it takes to keep repeat proposal work organized under real pressure.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="story">
+          <span class="tag">Proof Story 02</span>
+          <h2>The Facilities Group</h2>
+          <p>Multi-brand facilities growth exposes whether the pursuit process is actually owned or just reconstructed every time.</p>
+          <div class="story-grid">
+            <div>
+              <strong>Setting</strong>
+              <p>A broader facilities portfolio with more moving parts, more handoffs, and more ways for ownership to get fuzzy.</p>
+            </div>
+            <div>
+              <strong>What the work looked like</strong>
+              <p>Operating-model and proposal-process work inside a facilities environment.</p>
+            </div>
+            <div>
+              <strong>Why it matters now</strong>
+              <p>Facilities bids tend to get messy when sales, ops, pricing, and review all move at different speeds.</p>
+            </div>
+            <div>
+              <strong>Plain-language takeaway</strong>
+              <p>Boss Key can help make the process clearer without pretending the field complexity is simple.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="story">
+          <span class="tag">Proof Story 03</span>
+          <h2>Adjacent regulated service environments</h2>
+          <p>Healthcare and regulated-service proposal work sharpened habits that transfer well into high-discipline facilities pursuits.</p>
+          <div class="story-grid">
+            <div>
+              <strong>Setting</strong>
+              <p>Service environments where weak documentation, late reviews, and unclear ownership created real risk.</p>
+            </div>
+            <div>
+              <strong>What the work looked like</strong>
+              <p>Proposal and coordination experience across environments including Aetna and Broadspire.</p>
+            </div>
+            <div>
+              <strong>Why it matters now</strong>
+              <p>Facilities bids often look straightforward until compliance, review, and site-level details start squeezing the timeline.</p>
+            </div>
+            <div>
+              <strong>Plain-language takeaway</strong>
+              <p>Boss Key brings calm, structured habits into work that can otherwise get rushed and fragmented.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section">
+        <h2>What facilities teams usually gain</h2>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <strong>Leadership time gets protected</strong>
+            <p>The process stops depending on one person to hold everything together manually.</p>
+          </div>
+          <div class="summary-card">
+            <strong>Account learning starts earlier</strong>
+            <p>Buyer context, incumbent picture, and service reality show up before the RFP dictates the pace.</p>
+          </div>
+          <div class="summary-card">
+            <strong>Go or no-go calls get cleaner</strong>
+            <p>Teams get a sharper read on what deserves effort and what should be screened out early.</p>
+          </div>
+          <div class="summary-card">
+            <strong>Live bids get calmer</strong>
+            <p>Proposal work stays connected to ops, pricing, compliance, and review instead of splitting apart under deadline pressure.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta-band">
+        <div class="cta">
+          <h2>Recommended next step</h2>
+          <p>Start with one real facilities problem, not a giant transformation pitch. A briefing or diagnostic is usually enough to decide whether the next move should be a focused sprint, a recurring watch, or help on a live bid.</p>
+        </div>
+        <div class="links">
+          <a class="link-pill" href="./facilities.html">Open the facilities page</a>
+          <a class="link-pill" href="./facilities-diagnostic.html">Run the diagnostic</a>
+          <a class="link-pill" href="./assets/downloads/facilities-proof-pack.pdf">Download the PDF</a>
+          <a class="link-pill" href="./contact.html?offering=facilities-diagnostic">Send an inquiry</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <p class="small">Prepared by Boss Key LLC. This pack uses real operating history and avoids invented performance claims.</p>
+      </section>
+    </article>
+  </div>
+<footer class="site-shell-footer"><div class="shell-wrap">&copy; 2026 Boss Key</div></footer>
+  <script src="./assets/js/boss-key-schedule.js"></script>
+</body>
+</html>
+
+

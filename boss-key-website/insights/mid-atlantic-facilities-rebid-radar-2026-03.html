@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mid-Atlantic Facilities Rebid Radar | March 2026 | Boss Key LLC</title>
+  <meta name="description" content="March 2026 issue of the Mid-Atlantic Facilities Rebid Radar covering facilities-service buying signals, likely buying-event implications, and recommended contractor actions.">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <style>
+    :root {
+      --ink: #e9eef2;
+      --soft: #c1ced7;
+      --muted: #95a8b5;
+      --line: #2d4252;
+      --paper: #0a131a;
+      --panel: #101c25;
+      --signal: #2fa68d;
+      --signal-soft: #d8fff4;
+      --accent: #d19c60;
+      --accent-soft: #ffe4c6;
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(47, 166, 141, 0.18) 0%, rgba(47, 166, 141, 0) 28%),
+        linear-gradient(160deg, #0f1820 0%, #071016 100%);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 94vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 16px 0;
+      background: rgba(10, 19, 26, 0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #18303b;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .brand img { width: 32px; height: 32px; display: block; }
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid #2d4252;
+      background: #12202a;
+      color: var(--soft);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 15px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--signal), #23816d);
+      color: #081411;
+    }
+    .btn-secondary {
+      background: rgba(209, 156, 96, 0.1);
+      color: var(--accent-soft);
+      border-color: rgba(209, 156, 96, 0.28);
+    }
+    main { padding: 24px 0 40px; }
+    section {
+      margin: 14px 0;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(165deg, rgba(16, 28, 37, 0.98), rgba(9, 15, 21, 0.98));
+    }
+    h1, h2, h3 {
+      margin: 0 0 10px;
+      line-height: 1.1;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.2rem, 4.6vw, 3.7rem);
+    }
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+      color: #ffffff;
+    }
+    h3 {
+      font-size: 1rem;
+      color: #ffffff;
+    }
+    p { margin: 0 0 10px; color: var(--soft); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(47, 166, 141, 0.3);
+      background: rgba(47, 166, 141, 0.1);
+      color: var(--signal-soft);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .panel, .signal-card {
+      border: 1px solid #2d4252;
+      border-radius: 16px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(16, 28, 37, 0.98), rgba(11, 18, 24, 0.98));
+    }
+    .meta {
+      display: grid;
+      gap: 10px;
+    }
+    .meta-item {
+      border: 1px solid #29424f;
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(8, 14, 19, 0.7);
+    }
+    .meta-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #ffffff;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .signal-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .signal-card strong {
+      color: #ffffff;
+    }
+    .label {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(209, 156, 96, 0.12);
+      border: 1px solid rgba(209, 156, 96, 0.26);
+      color: var(--accent-soft);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .three-up {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .small { color: var(--muted); font-size: 0.9rem; }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #9db0bc;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 960px) {
+      .hero, .three-up { grid-template-columns: 1fr; }
+      .buttons .btn { width: 100%; }
+    }
+    @media print {
+      header, footer { display: none; }
+      body { background: #081018; }
+      .wrap { width: 100%; }
+      section { border-radius: 0; margin: 0; }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/css/boss-key-brand.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../index.html" aria-label="Boss Key homepage"><img src="../assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="../index.html">Home</a>
+      <a href="../services.html">Services</a>
+      <a href="../facilities.html">Facilities</a>
+      <a class="current" href="./index.html">Insights</a>
+      <a href="../about.html">About</a>
+      <a href="../proof.html">Proof</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <article>
+      <span class="eyebrow">Issue 01 | March 2026</span>
+      <h1>Mid-Atlantic Facilities Rebid Radar</h1>
+      <p>This brief is designed for janitorial, EVS, day porter, and maintenance contractors that need a practical read on what to watch before the bid calendar is obvious. It is not a procurement notice list. It is a signal brief for earlier positioning.</p>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book a facilities opportunity briefing</a>
+        <a class="btn btn-secondary" href="../facilities-diagnostic.html">Run the diagnostic</a>
+        <a class="btn btn-secondary" href="../assets/downloads/mid-atlantic-facilities-rebid-radar-2026-03.pdf">Download the PDF version</a>
+      </div>
+    </article>
+    <aside class="meta">
+      <div class="meta-item">
+        <strong>Coverage</strong>
+        <span>Mid-Atlantic facilities-service buying patterns relevant to public, quasi-public, education, and healthcare-adjacent environments.</span>
+      </div>
+      <div class="meta-item">
+        <strong>How to use it</strong>
+        <span>Compare these signals against your target accounts, then decide whether the right move is watchlist coverage, one focused sprint, or live support.</span>
+      </div>
+      <div class="meta-item">
+        <strong>Reminder</strong>
+        <span>Timing overrules vanity. A smaller well-timed target is often more valuable than a larger posted bid reached too late.</span>
+      </div>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Five signals worth acting on this month</h2>
+    <div class="signal-grid">
+      <article class="signal-card">
+        <span class="label">Signal 01</span>
+        <h3>Spring budget hardening is clarifying outsourced facilities assumptions.</h3>
+        <p><strong>Likely buying-event implication:</strong> As operating budgets move from draft debate toward adopted numbers, custodial, EVS, and maintenance assumptions become easier to read before a formal notice is issued.</p>
+        <p><strong>Recommended contractor action:</strong> Map the accounts where board or budget hearings are converging now, then identify which ones could move into a defined rebid or scope-reset window later this year.</p>
+      </article>
+
+      <article class="signal-card">
+        <span class="label">Signal 02</span>
+        <h3>Summer reset planning is already shaping school and campus service scope.</h3>
+        <p><strong>Likely buying-event implication:</strong> K-12, higher-ed, and campus-like environments often reveal cleaning, floor care, event support, or staffing pressure before procurement publishes anything formal.</p>
+        <p><strong>Recommended contractor action:</strong> Review target districts and campus operators for committee agendas, summer planning language, and operating complaints that indicate service adjustments before the next term begins.</p>
+      </article>
+
+      <article class="signal-card">
+        <span class="label">Signal 03</span>
+        <h3>Board calendars and contract anniversaries still reveal more than most teams use.</h3>
+        <p><strong>Likely buying-event implication:</strong> Renewal approvals, amendments, and anniversary timing can expose when a buyer is stabilizing scope, stretching an incumbent, or quietly setting up the next buying event.</p>
+        <p><strong>Recommended contractor action:</strong> Build a simple account calendar around contract anniversaries, board meetings, and renewal patterns instead of waiting for the procurement portal to tell you what matters.</p>
+      </article>
+
+      <article class="signal-card">
+        <span class="label">Signal 04</span>
+        <h3>Labor volatility is increasing the odds of scope rebasing rather than straight renewals.</h3>
+        <p><strong>Likely buying-event implication:</strong> Accounts facing staffing pressure or service inconsistency may tighten SLAs, rewrite staffing assumptions, or ask for stronger transition logic in the next bid cycle.</p>
+        <p><strong>Recommended contractor action:</strong> Prepare operating-position notes now: staffing model, transition cadence, absentee coverage, reporting expectations, and what you can defend credibly when the buyer asks for resilience.</p>
+      </article>
+
+      <article class="signal-card">
+        <span class="label">Signal 05</span>
+        <h3>Cooperative purchasing and piggyback logic can compress response windows for regional operators.</h3>
+        <p><strong>Likely buying-event implication:</strong> A target may not issue a full open bid if an existing vehicle or neighboring contract can be used as a shortcut.</p>
+        <p><strong>Recommended contractor action:</strong> Track not only direct notices but also adjacent contract vehicles and public references that show how a buyer prefers to purchase when time or staffing is tight.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>What this issue says about March 2026</h2>
+    <div class="three-up">
+      <article class="panel">
+        <h3>Not every watchlist needs a retainer yet</h3>
+        <p>If you only have one likely target and weak internal discipline, a focused foresight sprint is usually the better first move.</p>
+      </article>
+      <article class="panel">
+        <h3>Timing plus control beats volume</h3>
+        <p>The strongest move is usually one where the account signal is real and the internal team can actually absorb action without late-stage confusion.</p>
+      </article>
+      <article class="panel">
+        <h3>Facilities proposals still fail in the handoff</h3>
+        <p>Pricing, staffing, compliance, and narrative logic need to converge earlier than most contractors expect.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Recommended next move</h2>
+    <p>If one of your accounts feels familiar in this issue, do not wait for more generic content. Run the facilities diagnostic, then use the briefing to decide whether the right move is one focused sprint, recurring intelligence, or live support.</p>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book a facilities opportunity briefing</a>
+      <a class="btn btn-secondary" href="../facilities.html">Open the facilities page</a>
+    </div>
+    <p class="small">This issue is a directional operating brief based on common Mid-Atlantic facilities buying patterns. It is not a legal opinion or a comprehensive list of all live bids.</p>
+  </section>
+</main>
+
+<footer><div class="wrap">&copy; 2026 Boss Key</div></footer>
+
+<script>
+(function () {
+  const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  document.querySelectorAll(".schedule-cta").forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+})();
+</script>
+</body>
+</html>
+

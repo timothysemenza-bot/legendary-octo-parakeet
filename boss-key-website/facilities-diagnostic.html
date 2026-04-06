@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facilities Diagnostic | Boss Key LLC</title>
+  <meta name="description" content="Use the Boss Key facilities diagnostic to decide whether you need a facilities briefing, a focused market sprint, a recurring market watch, or live bid support.">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #142028;
+      --soft: #475964;
+      --line: #cad6dc;
+      --paper: #f4f0e8;
+      --card: #fffdf9;
+      --navy: #152534;
+      --signal: #278c78;
+      --signal-soft: #def7ef;
+      --accent: #b67a42;
+      --accent-soft: #f8ebdf;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.36)),
+        linear-gradient(90deg, rgba(21, 37, 52, 0.03) 0, rgba(21, 37, 52, 0.03) 1px, transparent 1px, transparent 26px),
+        linear-gradient(rgba(21, 37, 52, 0.03) 0, rgba(21, 37, 52, 0.03) 1px, transparent 1px, transparent 26px),
+        linear-gradient(180deg, #efe7db 0%, #f6f3ec 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 94vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 16px 0;
+      background: rgba(244, 240, 232, 0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(21, 37, 52, 0.12);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 0.02em;
+    }
+    .brand img { width: 32px; height: 32px; display: block; }
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(21, 37, 52, 0.14);
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--soft);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .links a.current {
+      border-color: rgba(39, 140, 120, 0.28);
+      background: rgba(39, 140, 120, 0.12);
+      color: var(--signal);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 15px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      line-height: 1.1;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--signal), #1f6c5d);
+      color: #f7fffd;
+      box-shadow: 0 14px 24px rgba(39, 140, 120, 0.18);
+    }
+    .btn-secondary {
+      background: #fff;
+      color: var(--navy);
+      border-color: rgba(21, 37, 52, 0.14);
+    }
+    .btn-tertiary {
+      background: var(--accent-soft);
+      color: #7f5022;
+      border-color: rgba(182, 122, 66, 0.2);
+    }
+    main { padding: 24px 0 42px; }
+    section {
+      margin: 14px 0;
+      padding: 24px;
+      border: 1px solid rgba(21, 37, 52, 0.1);
+      border-radius: 22px;
+      background: rgba(255, 253, 249, 0.9);
+      box-shadow: 0 18px 32px rgba(21, 37, 52, 0.06);
+    }
+    h1, h2 {
+      margin: 0 0 12px;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+    }
+    h1 { font-size: clamp(2.2rem, 5vw, 4rem); }
+    h2 { font-size: clamp(1.4rem, 2.8vw, 2.1rem); }
+    h3 { margin: 0 0 8px; font-size: 1.02rem; color: var(--navy); }
+    p { margin: 0 0 10px; color: var(--soft); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(39, 140, 120, 0.22);
+      background: rgba(39, 140, 120, 0.08);
+      color: var(--signal);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .panel, .question, .result-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      padding: 16px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .list div {
+      border-left: 3px solid var(--signal);
+      padding-left: 12px;
+      color: var(--navy);
+    }
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    .question legend {
+      margin-bottom: 10px;
+      padding: 0;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+    .option {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .option input {
+      margin-right: 8px;
+      accent-color: var(--signal);
+    }
+    .option strong {
+      color: var(--navy);
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.92rem;
+      color: var(--navy);
+      font-weight: 700;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      font: inherit;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .result {
+      display: none;
+    }
+    .result.active {
+      display: block;
+    }
+    .route {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--signal-soft);
+      color: var(--signal);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .route.accent {
+      background: var(--accent-soft);
+      color: #8d5928;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-grid .panel strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+    }
+    .muted { color: #647681; font-size: 0.9rem; }
+    footer {
+      border-top: 1px solid rgba(21, 37, 52, 0.12);
+      color: #687983;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 960px) {
+      .hero, .grid-2, .meta-grid, .summary-grid { grid-template-columns: 1fr; }
+      .actions .btn { width: 100%; }
+    }
+  </style>
+  <link rel="stylesheet" href="./assets/css/boss-key-brand.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./index.html" aria-label="Boss Key homepage"><img src="./assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a class="current" href="./facilities.html">Facilities</a>
+      <a href="./insights/index.html">Insights</a>
+      <a href="./about.html">About</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <article>
+      <span class="eyebrow">Facilities Diagnostic</span>
+      <h1>Find the right next move before the bid gets away from you.</h1>
+      <p>This diagnostic is built for janitorial, EVS, day porter, and maintenance contractors that want a quick answer to one practical question: what should we do next?</p>
+      <div class="list">
+        <div><strong>Facilities briefing</strong> if the problem still needs definition.</div>
+        <div><strong>Focused market sprint</strong> if one likely rebid or one focused market needs a clear plan.</div>
+        <div><strong>Recurring market watch</strong> if several named accounts need ongoing visibility.</div>
+        <div><strong>Live bid support</strong> if the procurement is already moving.</div>
+      </div>
+      <div class="actions">
+        <a class="btn btn-secondary" href="./facilities-pursuit-diagnostic-scorecard.html">Open the one-page scorecard</a>
+        <a class="btn btn-tertiary" href="./assets/downloads/facilities-pursuit-diagnostic-scorecard.pdf">Download the scorecard PDF</a>
+      </div>
+    </article>
+    <aside class="panel">
+      <h3>What the scoring looks at</h3>
+      <p>The route logic is not based on ambition. It is based on timing and control.</p>
+      <div class="summary-grid">
+        <div class="panel"><strong>Timing</strong><span>Are you reacting to a live bid, a likely rebid, or a broad watchlist?</span></div>
+        <div class="panel"><strong>Control</strong><span>Do you actually know how bids are qualified, staffed, priced, reviewed, and owned?</span></div>
+        <div class="panel"><strong>Readiness</strong><span>Can the current team carry the next stage without collapsing into deadline-driven chaos?</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Run the diagnostic</h2>
+    <form id="diagnosticForm">
+      <div class="meta-grid">
+        <label for="name">Name
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </label>
+        <label for="email">Email
+          <input id="email" name="email" type="email" autocomplete="email" required>
+        </label>
+        <label for="company">Company
+          <input id="company" name="company" type="text" autocomplete="organization">
+        </label>
+        <label for="region">Primary geography
+          <input id="region" name="region" type="text" placeholder="Example: South Jersey, Eastern Pennsylvania, Mid-Atlantic">
+        </label>
+        <label for="services">Service mix
+          <input id="services" name="services" type="text" placeholder="Example: janitorial, EVS, day porter, maintenance">
+        </label>
+        <label for="notes">Context
+          <textarea id="notes" name="notes" placeholder="What changed recently, what is already in flight, or what feels stuck?"></textarea>
+        </label>
+      </div>
+
+      <fieldset class="question">
+        <legend>1. Which timing pattern is closest to your situation?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="stage" value="live" required><strong>A live procurement is already active.</strong> An RFP, site walk, or submission calendar is already in motion.</label>
+          <label class="option"><input type="radio" name="stage" value="rebid" required><strong>One likely rebid is visible inside the next 6 months.</strong> The problem is getting earlier and more disciplined before it formalizes.</label>
+          <label class="option"><input type="radio" name="stage" value="watchlist" required><strong>Several named accounts matter, but no single target is clearly ripe yet.</strong> The issue is recurring visibility.</label>
+          <label class="option"><input type="radio" name="stage" value="reactive" required><strong>We mostly react when bids post.</strong> The problem is still being defined and we do not have a reliable early-warning view.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question">
+        <legend>2. How strong is your incumbent and buyer knowledge?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="incumbent" value="4" required><strong>Strong.</strong> We know the account history, likely incumbent position, and operating realities well.</label>
+          <label class="option"><input type="radio" name="incumbent" value="3" required><strong>Usable but incomplete.</strong> We have some account context, but gaps still exist.</label>
+          <label class="option"><input type="radio" name="incumbent" value="2" required><strong>Weak.</strong> We know the target exists, but not enough about how the work is actually shaped.</label>
+          <label class="option"><input type="radio" name="incumbent" value="1" required><strong>Minimal.</strong> We are mostly guessing from the outside.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question">
+        <legend>3. How disciplined is your bid or no-bid decision process?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="discipline" value="4" required><strong>Structured.</strong> There is a real decision method and a clear owner.</label>
+          <label class="option"><input type="radio" name="discipline" value="3" required><strong>Mostly structured.</strong> We have some criteria, but it is not always applied consistently.</label>
+          <label class="option"><input type="radio" name="discipline" value="2" required><strong>Ad hoc.</strong> Decisions are usually made late and based on urgency.</label>
+          <label class="option"><input type="radio" name="discipline" value="1" required><strong>Reactive.</strong> We chase too much and clean it up later.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question">
+        <legend>4. How clean is the pricing, staffing, and ops handoff?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="handoff" value="4" required><strong>Clean.</strong> Inputs arrive in a usable format with enough time to work.</label>
+          <label class="option"><input type="radio" name="handoff" value="3" required><strong>Manageable.</strong> Some rework happens, but the team can still move.</label>
+          <label class="option"><input type="radio" name="handoff" value="2" required><strong>Messy.</strong> Key operating inputs arrive late or conflict with each other.</label>
+          <label class="option"><input type="radio" name="handoff" value="1" required><strong>Fragile.</strong> Too much critical information still lives in conversations instead of a usable structure.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question">
+        <legend>5. How clear is compliance ownership?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="compliance" value="4" required><strong>Clear.</strong> One person or one working model owns compliance framing and tracking.</label>
+          <label class="option"><input type="radio" name="compliance" value="3" required><strong>Mostly clear.</strong> Ownership exists, but some details still slip between people.</label>
+          <label class="option"><input type="radio" name="compliance" value="2" required><strong>Blurred.</strong> The work gets done, but responsibility is not cleanly held.</label>
+          <label class="option"><input type="radio" name="compliance" value="1" required><strong>Unclear.</strong> Compliance is largely reconstructed late in the cycle.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question">
+        <legend>6. What does your review cadence look like?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="review" value="4" required><strong>Planned.</strong> Reviews happen on a defined cadence with named decisions.</label>
+          <label class="option"><input type="radio" name="review" value="3" required><strong>Partly planned.</strong> Reviews happen, but not always early enough.</label>
+          <label class="option"><input type="radio" name="review" value="2" required><strong>Compressed.</strong> Review mostly happens once drafting is already stressed.</label>
+          <label class="option"><input type="radio" name="review" value="1" required><strong>Last-minute.</strong> The real review starts near submission.</label>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Show my route</button>
+        <a class="btn btn-secondary" href="./facilities.html">Back to facilities page</a>
+      </div>
+    </form>
+  </section>
+
+  <section id="resultSection" class="result">
+    <h2>Your recommended next move</h2>
+    <div class="result-card">
+      <div id="resultRoute" class="route">Recommended route</div>
+      <h3 id="resultTitle">Route title</h3>
+      <p id="resultSummary"></p>
+      <div class="summary-grid">
+        <div class="panel">
+          <strong>Why this route</strong>
+          <p id="resultWhy"></p>
+        </div>
+        <div class="panel">
+          <strong>Top weak points</strong>
+          <p id="resultWeaknesses"></p>
+        </div>
+        <div class="panel">
+          <strong>What to bring to the call</strong>
+          <p id="resultBring"></p>
+        </div>
+      </div>
+      <div class="actions">
+        <a id="scheduleLink" class="btn btn-primary schedule-cta" href="#">Book a facilities briefing</a>
+        <a id="emailLink" class="btn btn-tertiary" href="#">Email this diagnostic to Boss Key</a>
+        <a id="routeLink" class="btn btn-secondary" href="./contact.html">Open the intake form</a>
+      </div>
+      <p class="muted">The route is a conversation starter, not a locked scope. If the call changes the facts, the route changes too.</p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">&copy; 2026 Boss Key</div></footer>
+
+<script>
+(function () {
+  const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  document.querySelectorAll(".schedule-cta").forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+
+  const inboxAlias = "timmy@bosskeyops.com";
+  const weakestLabels = {
+    incumbent: "incumbent and buyer knowledge",
+    discipline: "bid or no-bid discipline",
+    handoff: "pricing and staffing handoff",
+    compliance: "compliance ownership",
+    review: "review cadence"
+  };
+  const routeMap = {
+    briefing: {
+      routeLabel: "Facilities briefing",
+      routeClass: "route",
+      title: "Start with a facilities briefing.",
+      summary: "Your answers suggest the first job is to define the buyer situation clearly before a larger scope is justified.",
+      why: "The timing picture is still broad or reactive, and the internal control points need to be clarified before a sprint or retainer is scoped.",
+      bring: "Bring one example of a recent pursuit, one target account you care about, and where the process started to break down.",
+      offering: "opportunity-briefing"
+    },
+    sprint: {
+      routeLabel: "Focused sprint",
+      routeClass: "route",
+      title: "Start with a focused market sprint.",
+      summary: "A likely rebid or focused facilities market is visible, but the pursuit needs structure before it becomes a late-stage scramble.",
+      why: "You have enough signal to act, but not enough control to trust the current process on its own.",
+      bring: "Bring the named account or likely rebid, any known contract timing, and the people who usually touch pricing, staffing, or reviews.",
+      offering: "focused-market-sprint"
+    },
+    retainer: {
+      routeLabel: "Market Watch",
+      routeClass: "route accent",
+      title: "Start with a recurring market watch.",
+      summary: "Your answers point to a recurring visibility problem across several accounts, not just one isolated pursuit.",
+      why: "The internal basics are usable enough, but the team needs a sharper watchlist and a more consistent read on what is coming next.",
+      bring: "Bring the regions, agencies, or account list you care about most and how often leadership wants signal updates.",
+      offering: "market-watch"
+    },
+    live: {
+      routeLabel: "Live bid support",
+      routeClass: "route accent",
+      title: "Start with live bid support.",
+      summary: "A procurement is already moving, so the immediate need is to tighten control inside the active bid rather than wait for a broader strategy phase.",
+      why: "The timing risk is already real. The work now is to stabilize handoffs, compliance ownership, and review control while the opportunity is live.",
+      bring: "Bring the RFP or timeline, the current owner list, pricing or staffing dependencies, and the next decision deadline.",
+      offering: "proposal-support"
+    }
+  };
+
+  const form = document.getElementById("diagnosticForm");
+  const resultSection = document.getElementById("resultSection");
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const data = new FormData(form);
+    const stage = data.get("stage");
+    const scores = {
+      incumbent: Number(data.get("incumbent")),
+      discipline: Number(data.get("discipline")),
+      handoff: Number(data.get("handoff")),
+      compliance: Number(data.get("compliance")),
+      review: Number(data.get("review"))
+    };
+    const avg = Object.values(scores).reduce(function (sum, value) { return sum + value; }, 0) / 5;
+    const weaknesses = Object.entries(scores)
+      .sort(function (a, b) { return a[1] - b[1]; })
+      .slice(0, 3)
+      .map(function (entry) { return weakestLabels[entry[0]]; });
+
+    let routeKey = "briefing";
+    if (stage === "live") {
+      routeKey = "live";
+    } else if (stage === "rebid") {
+      routeKey = avg <= 3.1 ? "sprint" : "briefing";
+    } else if (stage === "watchlist") {
+      routeKey = avg >= 2.8 ? "retainer" : "briefing";
+    } else if (stage === "reactive") {
+      routeKey = avg >= 2.4 ? "sprint" : "briefing";
+    }
+
+    const route = routeMap[routeKey];
+    document.getElementById("resultRoute").textContent = route.routeLabel;
+    document.getElementById("resultRoute").className = route.routeClass;
+    document.getElementById("resultTitle").textContent = route.title;
+    document.getElementById("resultSummary").textContent = route.summary;
+    document.getElementById("resultWhy").textContent = route.why;
+    document.getElementById("resultWeaknesses").textContent = weaknesses.join(", ") + ".";
+    document.getElementById("resultBring").textContent = route.bring;
+    document.getElementById("routeLink").href = "./contact.html?offering=" + encodeURIComponent(route.offering);
+
+    const company = data.get("company") || "";
+    const subject = "[Boss Key] Facilities Diagnostic - " + (company || "New Inquiry");
+    const body = [
+      "Hi Boss Key team,",
+      "",
+      "I ran the Facilities Diagnostic and would like to follow up.",
+      "",
+      "Recommended route: " + route.title,
+      "Name: " + (data.get("name") || ""),
+      "Email: " + (data.get("email") || ""),
+      "Company: " + company,
+      "Region: " + (data.get("region") || ""),
+      "Service mix: " + (data.get("services") || ""),
+      "Timing pattern: " + stage,
+      "Top weak points: " + weaknesses.join(", "),
+      "Context: " + (data.get("notes") || ""),
+      "",
+      "Diagnostic page: " + window.location.href
+    ].join("\n");
+    const emailLink = document.getElementById("emailLink");
+    emailLink.href = "mailto:" + inboxAlias + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+
+    resultSection.classList.add("active");
+    resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+})();
+</script>
+</body>
+</html>
+

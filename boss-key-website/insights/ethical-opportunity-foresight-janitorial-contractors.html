@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethical Opportunity Foresight For Janitorial Contractors | Boss Key</title>
+  <meta name="description" content="A practical Boss Key guide to building an ethical opportunity foresight system before the RFP drops.">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f5f7fb;
+      --soft: #c9d4e8;
+      --muted: #98a8c0;
+      --paper: #0b1222;
+      --panel: #121d33;
+      --panel-2: #0f172b;
+      --line: #2b3a56;
+      --accent: #c5162e;
+      --accent-deep: #951123;
+      --accent-soft: #ffd8de;
+      --steel: #4f6389;
+      --steel-soft: #dce8ff;
+      --glow: rgba(197, 22, 46, 0.18);
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 0%, rgba(79, 99, 137, 0.28) 0%, transparent 30%),
+        radial-gradient(circle at 84% 10%, rgba(197, 22, 46, 0.16) 0%, transparent 22%),
+        linear-gradient(158deg, #121b2f 0%, #0a101d 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 16px 0;
+      border-bottom: 1px solid #23314d;
+      background: rgba(11, 18, 34, 0.88);
+      backdrop-filter: blur(12px);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+    }
+    .brand img {
+      width: min(250px, 58vw);
+      height: auto;
+    }
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      border: 1px solid #334669;
+      border-radius: 999px;
+      padding: 6px 11px;
+      background: rgba(18, 29, 51, 0.92);
+      color: var(--soft);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      padding: 11px 15px;
+      font-weight: 700;
+      line-height: 1.1;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--accent), var(--accent-deep));
+      color: #fff;
+      box-shadow: 0 14px 30px rgba(197, 22, 46, 0.26);
+    }
+    .btn-secondary {
+      background: #17233d;
+      color: #eef4ff;
+      border-color: #39517b;
+    }
+    .btn-tertiary {
+      background: rgba(79, 99, 137, 0.14);
+      color: var(--steel-soft);
+      border-color: rgba(79, 99, 137, 0.34);
+    }
+    main { padding: 24px 0 42px; }
+    section {
+      margin: 14px 0;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(165deg, rgba(18, 29, 51, 0.98), rgba(12, 18, 33, 0.98));
+      padding: 24px;
+      scroll-margin-top: 104px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+    h1, h2, h3 {
+      margin: 0 0 12px;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.5rem, 5vw, 4.4rem); }
+    h2 { font-size: clamp(1.45rem, 2.8vw, 2.2rem); }
+    h3 { font-size: 1.02rem; }
+    p { margin: 0 0 12px; color: var(--soft); }
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #dbe5f7;
+    }
+    li { margin: 7px 0; }
+    .eyebrow,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .eyebrow {
+      margin-bottom: 12px;
+      border: 1px solid rgba(197, 22, 46, 0.32);
+      background: rgba(197, 22, 46, 0.1);
+      color: var(--accent-soft);
+    }
+    .tag {
+      margin-bottom: 10px;
+      border: 1px solid rgba(79, 99, 137, 0.3);
+      background: rgba(79, 99, 137, 0.12);
+      color: var(--steel-soft);
+    }
+    .tag-alert {
+      border-color: rgba(197, 22, 46, 0.28);
+      background: rgba(197, 22, 46, 0.12);
+      color: var(--accent-soft);
+    }
+    .hero,
+    .grid-2,
+    .grid-3,
+    .signal-framework,
+    .step-grid,
+    .cta-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .hero { grid-template-columns: 1.1fr 0.9fr; }
+    .grid-2,
+    .cta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3,
+    .step-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel,
+    .card,
+    .step-card,
+    .metric,
+    .timeline-step,
+    .summary-card,
+    .ethics-box,
+    .cta-card {
+      border: 1px solid #314566;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(18, 30, 53, 0.96), rgba(13, 20, 36, 0.96));
+      padding: 16px;
+    }
+    .hero-copy p.lead {
+      max-width: 60ch;
+      font-size: 1.08rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .metric strong,
+    .card strong,
+    .step-card strong,
+    .summary-card strong,
+    .cta-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .hero-visual {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(197, 22, 46, 0.15), transparent 28%),
+        radial-gradient(circle at 18% 88%, rgba(79, 99, 137, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(18, 30, 53, 0.98), rgba(10, 16, 29, 0.98));
+    }
+    .hero-photo {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 340px;
+      border: 1px solid rgba(79, 99, 137, 0.28);
+    }
+    .hero-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(7, 14, 29, 0.06), rgba(7, 14, 29, 0.64)),
+        linear-gradient(120deg, rgba(197, 22, 46, 0.16), transparent 40%);
+      pointer-events: none;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .caption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .micro-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .micro-nav a {
+      border-radius: 999px;
+      border: 1px solid rgba(79, 99, 137, 0.34);
+      background: rgba(79, 99, 137, 0.12);
+      color: var(--steel-soft);
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 7px 11px;
+    }
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      margin: 14px 0 0;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+    .signal-framework {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
+    .framework-hub {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at center, rgba(197, 22, 46, 0.14), transparent 55%),
+        linear-gradient(180deg, rgba(18, 30, 53, 0.96), rgba(13, 20, 36, 0.96));
+      min-height: 220px;
+      border: 1px solid rgba(197, 22, 46, 0.24);
+    }
+    .hub-inner {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 1px solid rgba(197, 22, 46, 0.32);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(9, 17, 31, 0.88);
+      box-shadow: 0 0 0 16px rgba(79, 99, 137, 0.08);
+    }
+    .hub-inner strong {
+      margin: 0;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+    .framework-wide {
+      grid-column: 1 / -1;
+    }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .timeline-step {
+      position: relative;
+      min-height: 180px;
+    }
+    .timeline-step::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: -12px;
+      width: 12px;
+      height: 2px;
+      background: rgba(79, 99, 137, 0.5);
+    }
+    .timeline-step:first-child::before { display: none; }
+    .timeline-step .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(197, 22, 46, 0.14);
+      color: var(--accent-soft);
+      border: 1px solid rgba(197, 22, 46, 0.28);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .ethics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .ethics-box ul { margin-top: 8px; }
+    .table-wrap {
+      margin-top: 14px;
+      overflow-x: auto;
+      border: 1px solid #314566;
+      border-radius: 18px;
+      background: rgba(12, 19, 35, 0.74);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(49, 69, 102, 0.9);
+      vertical-align: top;
+    }
+    th {
+      color: #fff;
+      font-size: 0.84rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      background: rgba(11, 18, 34, 0.72);
+    }
+    td { color: var(--soft); }
+    .score {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+    .score-high {
+      background: rgba(44, 154, 125, 0.12);
+      border-color: rgba(44, 154, 125, 0.28);
+      color: #dcfff5;
+    }
+    .score-med {
+      background: rgba(212, 163, 95, 0.12);
+      border-color: rgba(212, 163, 95, 0.26);
+      color: #ffe5c5;
+    }
+    .score-low {
+      background: rgba(197, 22, 46, 0.12);
+      border-color: rgba(197, 22, 46, 0.28);
+      color: var(--accent-soft);
+    }
+    .step-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 14px;
+    }
+    .step-card .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      background: rgba(79, 99, 137, 0.16);
+      color: var(--steel-soft);
+      border: 1px solid rgba(79, 99, 137, 0.34);
+      font-weight: 700;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .cta-visual {
+      position: relative;
+      min-height: 280px;
+      overflow: hidden;
+    }
+    .cta-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(79, 99, 137, 0.28);
+    }
+    .cta-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background:
+        linear-gradient(180deg, rgba(10, 16, 29, 0.08), rgba(10, 16, 29, 0.7)),
+        linear-gradient(120deg, rgba(197, 22, 46, 0.14), transparent 38%);
+      pointer-events: none;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #aab8cf;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 1040px) {
+      .hero,
+      .grid-2,
+      .grid-3,
+      .signal-framework,
+      .summary-grid,
+      .cta-grid,
+      .step-grid,
+      .timeline,
+      .ethics-grid,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+      .framework-wide { grid-column: auto; }
+      .timeline-step::before { display: none; }
+    }
+    @media (max-width: 760px) {
+      .buttons .btn { width: 100%; }
+      .links { width: 100%; }
+      .links a { flex: 1 1 auto; text-align: center; }
+      section { padding: 20px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/css/boss-key-brand.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../index.html" aria-label="Boss Key homepage"><img src="../assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="../index.html">Home</a>
+      <a href="../services.html">Services</a>
+      <a href="../facilities.html">Facilities</a>
+      <a class="current" href="./index.html">Insights</a>
+      <a href="../about.html">About</a>
+      <a href="../proof.html">Proof</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero" id="top">
+    <article class="hero-copy">
+      <span class="eyebrow">Boss Key Guide | April 2026</span>
+      <h1>How Janitorial Contractors Can Build An Ethical Opportunity Foresight System Before The RFP Drops</h1>
+      <p class="lead">Many janitorial and commercial cleaning companies do not lose because they lack service capability. They lose because they start too late. This guide lays out a practical approach you can scan, share, and use before the procurement calendar becomes obvious.</p>
+      <p>Boss Key's point of view is simple: earlier visibility beats reactive portal watching. Ethical methods beat rumor. A focused watchlist beats scattered pursuit effort.</p>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+        <a class="btn btn-secondary" href="../index.html">Back to Boss Key</a>
+        <a class="btn btn-tertiary" href="./index.html">Open insights hub</a>
+      </div>
+      <div class="meta-grid">
+        <div class="metric">
+          <strong>Who this is for</strong>
+          <span>Owners, presidents, and growth leaders at janitorial firms pursuing public-sector, education, healthcare, municipal, and institutional work.</span>
+        </div>
+        <div class="metric">
+          <strong>What you will get</strong>
+          <span>A clear ethical boundary, five signal categories, a watchlist model, and a 30-day starter system.</span>
+        </div>
+        <div class="metric">
+          <strong>How to use it</strong>
+          <span>Read the full flow once, then return to the signal and watchlist sections when you need a practical decision lens.</span>
+        </div>
+      </div>
+      <div class="micro-nav" aria-label="Quick links">
+        <a href="#timeline">Buying path timeline</a>
+        <a href="#signals">Signal framework</a>
+        <a href="#watchlist">Example scoring table</a>
+        <a href="#support">Start with a sprint</a>
+      </div>
+      <p class="pull-quote">The bid is only one point in a longer buying path. Teams that wait for the portal to tell them what matters are usually joining the story late.</p>
+    </article>
+    <aside class="hero-visual panel">
+      <div class="hero-photo">
+        <img src="../assets/stock/janitor-corridor.jpg" alt="Institutional corridor with polished floors and clean lines">
+      </div>
+      <span class="tag">Earlier visibility | Better pursuit choices</span>
+      <p>The goal here is practical decision support: clear logic, useful signal patterns, and a buying-path view growth teams can use with confidence.</p>
+      <p class="caption">Boss Key uses public, permissioned, and client-authorized sources only. The ethical boundary is part of the offer, not a footnote.</p>
+    </aside>
+  </section>
+
+  <section>
+    <span class="tag">Executive summary</span>
+    <h2>Opportunity foresight is not guesswork. It is disciplined early visibility.</h2>
+    <div class="grid-3">
+      <article class="summary-card">
+        <strong>Most teams notice movement too late</strong>
+        <p>By the time a formal solicitation appears, the buyer often has already shaped scope, reinforced expectations, and formed impressions about incumbents and challengers.</p>
+      </article>
+      <article class="summary-card">
+        <strong>Signals already exist upstream</strong>
+        <p>Contracts expire, boards discuss service issues, budgets harden, capital plans move, and competitors reveal priorities in public long before most firms react.</p>
+      </article>
+      <article class="summary-card">
+        <strong>The goal is focus, not information overload</strong>
+        <p>An ethical foresight system should help a leadership team notice earlier, qualify faster, and direct pursuit effort where it has a real chance to pay off.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="why-late">
+    <span class="tag">Section 01</span>
+    <h2>Why good janitorial firms still see opportunities too late</h2>
+    <div class="grid-2">
+      <article class="card">
+        <strong>Reactive bid monitoring</strong>
+        <p>Teams watch portals and inboxes, but portal monitoring only helps once the buying process is already formal. By then, the room to shape the account is smaller.</p>
+      </article>
+      <article class="card">
+        <strong>Fragmented signals</strong>
+        <p>Useful clues live across budgets, agendas, award notices, council minutes, hiring pages, and facility plans. Most firms do not have a repeatable way to connect them.</p>
+      </article>
+      <article class="card">
+        <strong>Incumbents shape the story earlier</strong>
+        <p>When a contract is nearing expiration, the incumbent is already influencing perceptions around performance, transition, and scope while challengers are still waiting for release.</p>
+      </article>
+      <article class="card">
+        <strong>Weak prioritization</strong>
+        <p>Even when an account looks interesting, teams often lack a simple method for judging fit, timing, pressure, and confidence. The pipeline feels busy, not especially intentional.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="ethics">
+    <span class="tag tag-alert">Section 02</span>
+    <h2>What ethical opportunity foresight means</h2>
+    <p>Ethical opportunity foresight is not covert competitive intelligence. Every method and finding should be something a firm would be comfortable defending publicly. That standard protects the firm and usually improves the quality of judgment.</p>
+    <div class="ethics-grid">
+      <article class="ethics-box">
+        <span class="tag">Appropriate sources</span>
+        <ul>
+          <li>Public bid portals, award notices, board agendas, budget documents, and capital plans</li>
+          <li>Public audits, planning materials, company websites, job posts, and official statements</li>
+          <li>Client-provided account context and historical records the firm is authorized to use</li>
+          <li>Market inputs reviewed on the client's behalf with authorization</li>
+        </ul>
+      </article>
+      <article class="ethics-box">
+        <span class="tag tag-alert">Off-limits tactics</span>
+        <ul>
+          <li>Impersonation or deceptive outreach</li>
+          <li>Stolen documents or confidential pricing</li>
+          <li>Privileged procurement information obtained improperly</li>
+          <li>Research that a client could not defend publicly if questioned</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="signals">
+    <span class="tag">Section 03</span>
+    <h2>The five signal categories that matter most</h2>
+    <p>The purpose of the framework is not to produce perfect predictions. It is to help growth teams see where movement is most likely, what deserves attention now, and how to build a lighter but more deliberate watchlist.</p>
+    <div class="signal-framework">
+      <article class="card">
+        <strong>Contract clock</strong>
+        <p>Expirations, renewals, term extensions, and amendment patterns reveal when an account may reopen or when a buyer might be stretching time with the incumbent.</p>
+      </article>
+      <article class="framework-hub">
+        <div class="hub-inner">
+          <strong>Opportunity<br>foresight</strong>
+        </div>
+      </article>
+      <article class="card">
+        <strong>Budget and board</strong>
+        <p>Custodial line items, public approvals, campus expansions, and spending plan shifts can all point to future service movement before procurement publishes anything formal.</p>
+      </article>
+      <article class="card">
+        <strong>Operating stress</strong>
+        <p>Staffing shortages, complaints, compliance findings, emergency spending, and service disruption often surface indirectly through public records and reporting.</p>
+      </article>
+      <article class="card">
+        <strong>Competitor movement</strong>
+        <p>Hiring, case studies, geographic expansion, public awards, and partnership signals reveal where competitors are leaning in and where incumbency may be stronger or weaker.</p>
+      </article>
+      <article class="card framework-wide">
+        <strong>Buying path</strong>
+        <p>Pre-solicitation notices, vendor events, consultant activity, draft scope discussion, public planning workshops, and capital milestones show how an account is moving toward a future purchase decision.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <span class="tag">Section 04</span>
+    <h2>The buying path starts before the bid</h2>
+    <p>One of the easiest mistakes to make is treating the posted solicitation as the start of the opportunity. In practice, the RFP is just one point inside a longer sequence of funding, discussion, pre-scope movement, and transition planning.</p>
+    <div class="timeline">
+      <article class="timeline-step">
+        <div class="step-num">1</div>
+        <strong>Budget planning</strong>
+        <p>Line items, operating assumptions, and deferred maintenance priorities start revealing direction.</p>
+      </article>
+      <article class="timeline-step">
+        <div class="step-num">2</div>
+        <strong>Board or agency discussion</strong>
+        <p>Service issues, complaints, campus plans, and contract approvals become easier to read in public materials.</p>
+      </article>
+      <article class="timeline-step">
+        <div class="step-num">3</div>
+        <strong>Pre-solicitation movement</strong>
+        <p>Consultants, vendor outreach, draft scope language, and planning activity suggest an account is beginning to move.</p>
+      </article>
+      <article class="timeline-step">
+        <div class="step-num">4</div>
+        <strong>Formal solicitation</strong>
+        <p>The process becomes visible to everyone, but this is usually too late to pretend it is the first meaningful signal.</p>
+      </article>
+      <article class="timeline-step">
+        <div class="step-num">5</div>
+        <strong>Award and transition</strong>
+        <p>Outcomes, implementation pressure, and contract timing feed the next watch cycle.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="watchlist">
+    <span class="tag">Section 05</span>
+    <h2>Turn signals into a real watchlist</h2>
+    <p>Signals only matter if they change what a leadership team does next. A useful watchlist should separate interesting accounts from actionable ones by ranking timing, fit, confidence, and the next move required.</p>
+    <p>Below is a simple example structure. The values are illustrative, but the logic is what matters: score lightly, decide clearly, and keep the next action explicit.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Illustrative target</th>
+            <th>Timing</th>
+            <th>Fit</th>
+            <th>Confidence</th>
+            <th>Next action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Regional K-12 district cluster</td>
+            <td><span class="score score-high">High</span></td>
+            <td><span class="score score-high">High</span></td>
+            <td><span class="score score-med">Medium</span></td>
+            <td>Map board calendars, review prior awards, and prepare district-specific positioning themes.</td>
+          </tr>
+          <tr>
+            <td>Municipal building portfolio</td>
+            <td><span class="score score-med">Medium</span></td>
+            <td><span class="score score-high">High</span></td>
+            <td><span class="score score-high">High</span></td>
+            <td>Track renewal approvals and identify whether amendments suggest scope stress or incumbent stretch.</td>
+          </tr>
+          <tr>
+            <td>Healthcare support environment</td>
+            <td><span class="score score-low">Low</span></td>
+            <td><span class="score score-med">Medium</span></td>
+            <td><span class="score score-med">Medium</span></td>
+            <td>Keep on watch only; do not absorb near-term pursuit effort without stronger contract-clock evidence.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="starter-system">
+    <span class="tag">Section 06</span>
+    <h2>A 30-day starter system</h2>
+    <p>The first month should stay narrow. The goal is not to watch everything. The goal is to prove that a practical process can surface better opportunities earlier in one lane that matters right now.</p>
+    <div class="step-grid">
+      <article class="step-card">
+        <div class="step-num">1</div>
+        <strong>Define the lane</strong>
+        <p>Choose one geography, one buyer segment, and one service profile. Narrow scope makes the signal environment manageable.</p>
+      </article>
+      <article class="step-card">
+        <div class="step-num">2</div>
+        <strong>Map the signals</strong>
+        <p>Identify the agendas, budgets, award histories, contract records, and planning channels that consistently matter for that lane.</p>
+      </article>
+      <article class="step-card">
+        <div class="step-num">3</div>
+        <strong>Build the watchlist</strong>
+        <p>Pull together named accounts, recent signals, timing hypotheses, and a confidence level for each target.</p>
+      </article>
+      <article class="step-card">
+        <div class="step-num">4</div>
+        <strong>Choose the next actions</strong>
+        <p>Decide which accounts deserve more research, positioning prep, or quiet observation and remove weak-fit distractions.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <span class="tag tag-alert">Section 07</span>
+    <h2>Where most teams go wrong</h2>
+    <div class="grid-2">
+      <article class="card">
+        <strong>Activity without insight</strong>
+        <p>Collecting links, notices, and account names does not help if no one translates them into a view of what matters now.</p>
+      </article>
+      <article class="card">
+        <strong>Overreliance on rumor</strong>
+        <p>Informal chatter can be directionally useful, but it should not drive a pursuit decision without evidence and confidence framing.</p>
+      </article>
+      <article class="card">
+        <strong>Chasing too many accounts</strong>
+        <p>Without prioritization rules, teams exhaust themselves on possibility instead of concentrating on the few targets that may actually move.</p>
+      </article>
+      <article class="card">
+        <strong>Waiting for proposal mode</strong>
+        <p>If a company starts thinking seriously only when the solicitation lands, it is asking the proposal to solve problems that earlier positioning should have solved.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="support">
+    <span class="tag">Section 08</span>
+    <h2>What changes with a better system, and where outside support helps</h2>
+    <div class="summary-grid">
+      <article class="summary-card">
+        <strong>What improves</strong>
+        <ul>
+          <li>Leadership gets a cleaner view of which opportunities may matter next</li>
+          <li>Business development conversations become less speculative</li>
+          <li>Capture choices improve because timing and pressure are clearer earlier</li>
+          <li>Proposal effort becomes more selective and less frantic</li>
+        </ul>
+      </article>
+      <article class="summary-card">
+        <strong>When support is useful</strong>
+        <ul>
+          <li>Entering a new geography or buyer segment</li>
+          <li>Facing a cluster of likely rebids</li>
+          <li>Trying to become more selective about what gets chased</li>
+          <li>Needing a signal digest and watchlist before building a larger in-house effort</li>
+        </ul>
+      </article>
+    </div>
+    <div class="cta-grid" style="margin-top:14px;">
+      <article class="cta-card">
+        <span class="tag">Start here</span>
+        <h3>Boss Key's Opportunity Foresight Sprint</h3>
+        <p>For firms that want to test this approach in a focused way, the easiest first step is a sprint. One lane. One watchlist. A clearer view of what deserves attention next.</p>
+        <div class="buttons">
+          <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+          <a class="btn btn-secondary" href="mailto:timmy@bosskeyops.com?subject=%5BBoss%20Key%5D%20Opportunity%20Foresight%20Inquiry">Email Boss Key</a>
+        </div>
+      </article>
+      <aside class="cta-visual">
+        <img src="../assets/stock/cleaning-entrance.jpg" alt="Clean institutional entrance and lobby area">
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">&copy; 2026 Boss Key</div></footer>
+
+<script>
+(function () {
+  const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  document.querySelectorAll(".schedule-cta").forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+})();
+</script>
+</body>
+</html>
+

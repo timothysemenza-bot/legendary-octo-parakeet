@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facilities Diagnostic Scorecard | Boss Key LLC</title>
+  <meta name="description" content="Printable one-page facilities diagnostic scorecard for janitorial, EVS, day porter, and maintenance contractors.">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
+  <style>
+    :root {
+      --ink: #172631;
+      --soft: #50626d;
+      --line: #c7d2d8;
+      --paper: #ffffff;
+      --signal: #227967;
+      --signal-soft: #e2f8f1;
+      --accent: #a66832;
+      --accent-soft: #faecdf;
+      --max: 1080px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: #eef2f4;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.44;
+    }
+    .wrap { width: min(var(--max), 96vw); margin: 0 auto; padding: 18px 0 30px; }
+    .sheet {
+      background: var(--paper);
+      border: 1px solid rgba(23, 38, 49, 0.1);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 30px rgba(23, 38, 49, 0.08);
+    }
+    .hero {
+      padding: 20px 22px 18px;
+      background:
+        linear-gradient(130deg, rgba(34, 121, 103, 0.1) 0%, rgba(34, 121, 103, 0) 36%),
+        linear-gradient(155deg, #1c2934 0%, #111921 100%);
+      color: #ffffff;
+      border-bottom: 5px solid var(--accent);
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+    .brand img { width: 28px; height: 28px; display: block; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      line-height: 1.12;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+      max-width: 760px;
+    }
+    h2 {
+      color: var(--ink);
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+    h3 {
+      color: var(--ink);
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+    .hero p {
+      max-width: 830px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 0.96rem;
+    }
+    .body {
+      display: grid;
+      grid-template-columns: 1.22fr 0.78fr;
+      gap: 0;
+    }
+    .section {
+      padding: 18px 22px;
+    }
+    .section + .section {
+      border-left: 1px solid var(--line);
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .field {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-height: 58px;
+      background: #fbfcfd;
+    }
+    .field strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.74rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      vertical-align: top;
+      padding: 8px;
+    }
+    th {
+      background: #f3f6f7;
+      color: var(--ink);
+      text-align: left;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    td small { color: var(--soft); display: block; }
+    .score {
+      text-align: center;
+      width: 52px;
+      font-weight: 700;
+      color: var(--signal);
+      background: #fbfdfd;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fbfcfd;
+      margin-bottom: 12px;
+    }
+    .panel.signal {
+      border-color: rgba(34, 121, 103, 0.2);
+      background: var(--signal-soft);
+    }
+    .panel.accent {
+      border-color: rgba(166, 104, 50, 0.18);
+      background: var(--accent-soft);
+    }
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    li { margin: 5px 0; }
+    .footer {
+      padding: 14px 22px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--soft);
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 980px) {
+      .body, .meta { grid-template-columns: 1fr; }
+      .section + .section { border-left: 0; border-top: 1px solid var(--line); }
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { width: 100%; padding: 0; }
+      .sheet { border-radius: 0; box-shadow: none; border: 0; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/boss-key-doc-shell.css">
+</head>
+<body>
+<header class="site-shell-header">
+  <div class="shell-wrap site-shell-nav">
+    <a class="site-shell-brand" href="./index.html" aria-label="Boss Key homepage"><img src="./assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="site-shell-links" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a class="current" href="./facilities.html">Facilities</a>
+      <a href="./insights/index.html">Insights</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="site-shell-btn schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+  <div class="wrap">
+    <article class="sheet">
+      <header class="hero">
+        <div class="hero-top">
+          <div class="brand">
+            <img src="./assets/logos/brand/boss-key-logo-refined.svg" alt="">
+            <span>Boss Key LLC</span>
+          </div>
+          <div class="tag">Facilities Diagnostic</div>
+        </div>
+        <h1>One-page scorecard for facilities bids and rebids</h1>
+        <p>Use this after a call or in an internal review. Score each area from 1 to 4, then choose the next step based on timing and control.</p>
+      </header>
+
+      <div class="body">
+        <section class="section">
+          <div class="meta">
+            <div class="field"><strong>Company</strong></div>
+            <div class="field"><strong>Date</strong></div>
+            <div class="field"><strong>Primary geography</strong></div>
+            <div class="field"><strong>Service mix</strong></div>
+          </div>
+
+          <h2>Score the control points</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th class="score">1</th>
+                <th class="score">2</th>
+                <th class="score">3</th>
+                <th class="score">4</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Rebid visibility</strong><small>How early are likely renewals, anniversaries, and board calendars visible?</small></td>
+                <td class="score">Posted bids only</td>
+                <td class="score">Some hints, mostly late</td>
+                <td class="score">Usable early watch</td>
+                <td class="score">Clear recurring view</td>
+              </tr>
+              <tr>
+                <td><strong>Incumbent and buyer knowledge</strong><small>How well do you understand the operating reality behind the target account?</small></td>
+                <td class="score">Minimal</td>
+                <td class="score">Weak</td>
+                <td class="score">Partial</td>
+                <td class="score">Strong</td>
+              </tr>
+              <tr>
+                <td><strong>Bid or no-bid discipline</strong><small>How cleanly does leadership screen what is worth pursuing?</small></td>
+                <td class="score">Reactive</td>
+                <td class="score">Ad hoc</td>
+                <td class="score">Mostly structured</td>
+                <td class="score">Structured</td>
+              </tr>
+              <tr>
+                <td><strong>Pricing and staffing handoff</strong><small>Do ops inputs arrive in time and in a usable form?</small></td>
+                <td class="score">Fragile</td>
+                <td class="score">Messy</td>
+                <td class="score">Manageable</td>
+                <td class="score">Clean</td>
+              </tr>
+              <tr>
+                <td><strong>Compliance ownership</strong><small>Who actually holds requirement tracking and response structure?</small></td>
+                <td class="score">Unclear</td>
+                <td class="score">Blurred</td>
+                <td class="score">Mostly clear</td>
+                <td class="score">Clear</td>
+              </tr>
+              <tr>
+                <td><strong>Review cadence</strong><small>When does serious review really start?</small></td>
+                <td class="score">Last-minute</td>
+                <td class="score">Compressed</td>
+                <td class="score">Partly planned</td>
+                <td class="score">Planned</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section">
+          <div class="panel signal">
+            <h3>Route 1: Briefing first</h3>
+            <ul>
+              <li>Use this when the problem is still broad or reactive.</li>
+              <li>Typical pattern: several 1s and 2s, no defined target, too much guesswork.</li>
+            </ul>
+          </div>
+
+          <div class="panel accent">
+            <h3>Route 2: Focused market sprint</h3>
+            <ul>
+              <li>Use this when one likely rebid or one focused market needs fast definition.</li>
+              <li>Typical pattern: a visible target plus two or more weak control points.</li>
+            </ul>
+          </div>
+
+          <div class="panel signal">
+            <h3>Route 3: Recurring market watch</h3>
+            <ul>
+              <li>Use this when several named accounts need a recurring watchlist.</li>
+              <li>Typical pattern: timing is the constraint more than basic internal readiness.</li>
+            </ul>
+          </div>
+
+          <div class="panel accent">
+            <h3>Route 4: Live bid support</h3>
+            <ul>
+              <li>Use this when an RFP, site walk, addendum cycle, or submission calendar is already active.</li>
+              <li>At that point, timing risk outruns the value of a broader strategy phase.</li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h3>Timing note</h3>
+            <p>Timing overrules the average score. A live procurement still needs live support even if the internal maturity score is strong.</p>
+          </div>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <div>Book a facilities briefing: bosskeyops.com/facilities.html</div>
+        <div>Email: timmy@bosskeyops.com</div>
+      </footer>
+    </article>
+  </div>
+<footer class="site-shell-footer"><div class="shell-wrap">&copy; 2026 Boss Key</div></footer>
+  <script src="./assets/js/boss-key-schedule.js"></script>
+</body>
+</html>
+
+

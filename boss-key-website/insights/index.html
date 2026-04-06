@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insights | Boss Key LLC</title>
+  <meta name="description" content="Practical Boss Key insight for janitorial growth teams on market signals, rebid timing, and pursuit strategy.">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f5f6f8;
+      --paper: #0b1018;
+      --line: #253344;
+      --soft: #c6cfdb;
+      --muted: #97a4b5;
+      --signal: #0f8b7c;
+      --accent: #d4a35f;
+      --max: 1080px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(15, 139, 124, 0.2) 0%, rgba(15, 139, 124, 0) 32%),
+        linear-gradient(155deg, #111925 0%, #061018 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 16px 0;
+      background: rgba(11, 16, 24, 0.84);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #1c2732;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+    .brand img { width: 32px; height: 32px; display: block; }
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      border: 1px solid #304153;
+      border-radius: 999px;
+      padding: 6px 11px;
+      background: #121b25;
+      color: var(--soft);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 15px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--signal), #0a6f63);
+      color: #f7fffe;
+    }
+    .btn-secondary {
+      background: #131c27;
+      color: #ebf0f6;
+      border-color: #304153;
+    }
+    main { padding: 26px 0 42px; }
+    section {
+      margin: 14px 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(165deg, rgba(17, 25, 36, 0.98), rgba(10, 15, 22, 0.98));
+    }
+    h1, h2 {
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin: 0 0 12px;
+    }
+    h1 { font-size: clamp(2.3rem, 4.8vw, 4rem); }
+    h2 { font-size: clamp(1.35rem, 2.7vw, 2rem); }
+    p { margin: 0 0 12px; color: var(--soft); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 139, 124, 0.34);
+      background: rgba(15, 139, 124, 0.12);
+      color: #ddfff9;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid #304152;
+      border-radius: 16px;
+      background: #101822;
+      padding: 18px;
+    }
+    .card h2 a { color: #fff; }
+    .meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #9eadbc;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .actions .btn { width: 100%; }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/css/boss-key-brand.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../index.html" aria-label="Boss Key homepage"><img src="../assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="../index.html">Home</a>
+      <a href="../services.html">Services</a>
+      <a href="../facilities.html">Facilities</a>
+      <a class="current" href="./index.html">Insights</a>
+      <a href="../about.html">About</a>
+      <a href="../proof.html">Proof</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+<main class="wrap">
+  <section>
+    <span class="eyebrow">Boss Key Insights Hub</span>
+    <h1>Practical insight for janitorial growth teams.</h1>
+    <p>Boss Key shares market notes, strategic guides, and field-tested thinking for janitorial and commercial cleaning companies pursuing more deliberate growth.</p>
+    <div class="actions">
+      <a class="btn btn-primary schedule-cta" href="#">Book briefing</a>
+      <a class="btn btn-secondary" href="./feed.xml">Subscribe via RSS</a>
+      <a class="btn btn-secondary" href="../contact.html">Contact Boss Key</a>
+    </div>
+  </section>
+  <section>
+    <h2>Latest articles</h2>
+    <div class="grid">
+      <article class="card">
+        <span class="eyebrow">monthly flagship</span>
+        <h2><a href="./mid-atlantic-facilities-rebid-radar-2026-03.html" data-existing-path="boss-key-website/insights/mid-atlantic-facilities-rebid-radar-2026-03.html">Mid-Atlantic Facilities Rebid Radar</a></h2>
+        <p>A practical market radar on likely rebids, institutional renewal timing, and where janitorial teams may want to focus first.</p>
+        <div class="meta">
+          <span>March 1, 2026</span>
+          <span>Market radar</span>
+        </div>
+      </article>
+      <article class="card">
+        <span class="eyebrow">practical guide</span>
+        <h2><a href="./ethical-opportunity-foresight-janitorial-contractors.html">Ethical Opportunity Foresight for Janitorial Contractors</a></h2>
+        <p>A practical guide to building an ethical opportunity foresight system before the RFP drops.</p>
+        <div class="meta">
+          <span>April 6, 2026</span>
+          <span>Longform guide</span>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">&copy; 2026 Boss Key</div></footer>
+<script>
+(function(){
+  const scheduleFallback='https://calendar.app.google/XXQaukj4evMTLq4E7';
+  const calendarScheduleUrl=window.BOSSKEY_SCHEDULE_URL||scheduleFallback;
+  document.querySelectorAll('.schedule-cta').forEach(function(link){
+    link.href=calendarScheduleUrl;
+    link.target='_blank';
+    link.rel='noopener noreferrer';
+  });
+})();
+</script>
+</body>
+</html>
+

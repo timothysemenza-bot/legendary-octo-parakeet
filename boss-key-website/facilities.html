@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facilities Growth Support | Boss Key LLC</title>
+  <meta name="description" content="Boss Key helps facilities contractors spot likely rebids earlier, focus on the right targets, and bring more order to live bids.">
+  <link rel="icon" type="image/svg+xml" href="./assets/logos/brand/boss-key-logo-refined.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f4f3ef;
+      --paper: #081017;
+      --line: #27404a;
+      --soft: #c0ccd1;
+      --muted: #90a3aa;
+      --signal: #3fb89d;
+      --signal-soft: #d8fff3;
+      --metal: #8ab1bd;
+      --copper: #cb8f4f;
+      --panel: #101a22;
+      --panel-2: #0d141b;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(63, 184, 157, 0.18) 0%, rgba(63, 184, 157, 0) 30%),
+        radial-gradient(circle at 88% 8%, rgba(138, 177, 189, 0.18) 0%, rgba(138, 177, 189, 0) 22%),
+        linear-gradient(145deg, #101922 0%, #071016 100%);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 16px 0;
+      border-bottom: 1px solid #1c2d35;
+      background: rgba(8, 16, 23, 0.84);
+      backdrop-filter: blur(10px);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .brand img { width: 32px; height: 32px; display: block; }
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      padding: 6px 11px;
+      border: 1px solid #32505a;
+      border-radius: 999px;
+      background: #12202a;
+      color: var(--soft);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    .links a.current {
+      border-color: rgba(63, 184, 157, 0.46);
+      background: rgba(63, 184, 157, 0.14);
+      color: var(--signal-soft);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 15px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(145deg, var(--signal), #24866f);
+      color: #071512;
+      box-shadow: 0 14px 30px rgba(63, 184, 157, 0.26);
+    }
+    .btn-secondary {
+      background: #14222c;
+      color: #e2eef1;
+      border-color: #32505a;
+    }
+    .btn-tertiary {
+      background: rgba(203, 143, 79, 0.12);
+      color: #ffd9b4;
+      border-color: rgba(203, 143, 79, 0.3);
+    }
+    main { padding: 24px 0 42px; }
+    section {
+      margin: 14px 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(165deg, rgba(16, 26, 34, 0.98), rgba(10, 16, 23, 0.98));
+    }
+    h1, h2 {
+      margin: 0 0 12px;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.3rem, 5vw, 4.1rem); }
+    h2 { font-size: clamp(1.45rem, 2.8vw, 2.25rem); }
+    h3 { margin: 0 0 8px; font-size: 1.03rem; }
+    p { margin: 0 0 10px; color: var(--soft); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(63, 184, 157, 0.34);
+      background: rgba(63, 184, 157, 0.1);
+      color: var(--signal-soft);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      margin-top: -50px;
+      margin-left: calc(100% - 260px);
+      background: radial-gradient(circle, rgba(63, 184, 157, 0.16) 0%, rgba(63, 184, 157, 0) 72%);
+      pointer-events: none;
+    }
+    .hero-copy { position: relative; z-index: 1; }
+    .panel, .card {
+      border: 1px solid #31505a;
+      border-radius: 16px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(19, 32, 41, 0.98), rgba(12, 19, 26, 0.98));
+    }
+    .stack { display: grid; gap: 12px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .metric {
+      border: 1px solid #304d56;
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(10, 16, 22, 0.66);
+    }
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #ffffff;
+      font-size: 1.04rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: 12px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .label {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(138, 177, 189, 0.1);
+      border: 1px solid rgba(138, 177, 189, 0.28);
+      color: #dcedf1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .label.copper {
+      background: rgba(203, 143, 79, 0.12);
+      border-color: rgba(203, 143, 79, 0.26);
+      color: #ffd9b4;
+    }
+    .flow {
+      display: grid;
+      gap: 12px;
+    }
+    .flow-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #31505a;
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(11, 18, 25, 0.76);
+    }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(145deg, var(--signal), #24866f);
+      color: #071512;
+      font-weight: 800;
+    }
+    .small { color: var(--muted); font-size: 0.9rem; }
+    .bullet-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .bullet {
+      border-left: 3px solid var(--signal);
+      padding-left: 12px;
+      color: #dbe9eb;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: #98aab1;
+      font-size: 0.88rem;
+      padding: 16px 0 26px;
+    }
+    @media (max-width: 940px) {
+      .hero, .grid-2, .grid-3, .grid-4, .hero-grid { grid-template-columns: 1fr; }
+      .buttons .btn { width: 100%; }
+      .flow-step { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="./assets/css/boss-key-brand.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./index.html" aria-label="Boss Key homepage"><img src="./assets/logos/brand/boss-key-wordmark-refined.svg" alt="Boss Key"></a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a class="current" href="./facilities.html">Facilities</a>
+      <a href="./insights/index.html">Insights</a>
+      <a href="./about.html">About</a>
+      <a href="./proof.html">Proof</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary schedule-cta" href="#">Book an opportunity briefing</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <article class="hero-copy">
+      <span class="eyebrow">Facilities growth support</span>
+      <h1>Find better facilities rebids sooner and handle them with less chaos.</h1>
+      <p>Boss Key helps janitorial, EVS, day porter, and maintenance teams see likely buying events earlier, choose the right targets, and steady the bid once it turns live.</p>
+      <div class="buttons">
+        <a class="btn btn-primary schedule-cta" href="#">Book a facilities briefing</a>
+        <a class="btn btn-secondary" href="./facilities-diagnostic.html">Run the diagnostic</a>
+        <a class="btn btn-tertiary" href="./facilities-proof-pack.html">Open proof pack</a>
+      </div>
+      <div class="hero-grid">
+        <div class="metric"><strong>See rebids sooner</strong><span>Track likely buying events before the posting does all the work.</span></div>
+        <div class="metric"><strong>Choose better targets</strong><span>Spend less time on low-fit opportunities.</span></div>
+        <div class="metric"><strong>Stronger handoffs</strong><span>Bring sales, ops, pricing, and proposal work together earlier.</span></div>
+        <div class="metric"><strong>Calmer live bids</strong><span>Keep real submissions from turning into deadline chaos.</span></div>
+      </div>
+    </article>
+    <aside class="stack">
+      <article class="panel">
+        <span class="label">What better looks like</span>
+        <div class="bullet-list">
+          <div class="bullet"><strong>Leadership is not carrying every target by memory.</strong> The team has a usable view of what may be coming next.</div>
+          <div class="bullet"><strong>Account learning starts earlier.</strong> Buyer context and incumbent reality are clearer before the RFP drops.</div>
+          <div class="bullet"><strong>Ops and pricing enter sooner.</strong> The proposal has better raw material before the review window disappears.</div>
+        </div>
+      </article>
+      <article class="panel">
+        <span class="label copper">Best first step</span>
+        <div class="bullet-list">
+          <div class="bullet"><strong>Run the diagnostic</strong> if you want a quick read on where the process is weak.</div>
+          <div class="bullet"><strong>Book a facilities briefing</strong> if you want to talk through one target, one market, or one live bid.</div>
+          <div class="bullet"><strong>Open the janitorial intelligence page</strong> if earlier visibility and competitor context are the main issue.</div>
+          <div class="bullet"><strong>Start small</strong> with one geography, one account list, or one active submission.</div>
+        </div>
+      </article>
+    </aside>
+  </section>
+
+  <section>
+    <h2>When facilities teams call Boss Key</h2>
+    <div class="grid-4">
+      <article class="card">
+        <span class="label">Situation 1</span>
+        <h3>Likely rebids keep showing up late.</h3>
+        <p>The team has a good delivery story, but too many real opportunities arrive only after the public posting.</p>
+      </article>
+      <article class="card">
+        <span class="label copper">Situation 2</span>
+        <h3>Too much gets chased.</h3>
+        <p>Without a cleaner screen, urgent work keeps crowding out the right work.</p>
+      </article>
+      <article class="card">
+        <span class="label">Situation 3</span>
+        <h3>Pricing and ops come in late.</h3>
+        <p>The proposal starts moving before staffing, service model, and review decisions are really settled.</p>
+      </article>
+      <article class="card">
+        <span class="label copper">Situation 4</span>
+        <h3>One leader is holding the whole process together.</h3>
+        <p>The business can win work, but the pursuit rhythm still depends too heavily on one person.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>How support usually starts</h2>
+    <div class="flow">
+      <article class="flow-step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Book a facilities briefing</h3>
+          <p>Bring one real problem, one target account, or one live pursuit. The goal is to narrow the next move quickly, not create a giant strategy deck.</p>
+        </div>
+      </article>
+      <article class="flow-step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Pick the smallest useful scope</h3>
+          <p>That might be a diagnostic, a focused watch on one target, a recurring market watch, or direct help on a live bid.</p>
+        </div>
+      </article>
+      <article class="flow-step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Build only if it proves useful</h3>
+          <p>The work expands only when the first step helps the team make better choices with less friction.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>What changes on a real pursuit</h2>
+    <div class="grid-2">
+      <article class="panel">
+        <span class="label copper">Without support</span>
+        <h3>The bid starts late and stays noisy.</h3>
+        <p>Teams chase what is visible, rebuild context under pressure, and rely on last-minute coordination to close gaps.</p>
+      </article>
+      <article class="panel">
+        <span class="label">With support</span>
+        <h3>The pursuit gets earlier, cleaner, and easier to manage.</h3>
+        <p>There is better account context, clearer ownership, stronger handoffs, and more usable review control before the deadline tightens.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why facilities is the clearest lane</h2>
+    <div class="grid-3">
+      <article class="panel">
+        <span class="label">SBM</span>
+        <h3>High-volume proposal work</h3>
+        <p>Real facilities proposal experience in an environment where repeatability and review control mattered every time.</p>
+      </article>
+      <article class="panel">
+        <span class="label copper">The Facilities Group</span>
+        <h3>Operating-model cleanup</h3>
+        <p>Proof that multi-brand facilities growth often breaks at the process level before it breaks at the talent level.</p>
+      </article>
+      <article class="panel">
+        <span class="label">Regulated work</span>
+        <h3>Compliance discipline</h3>
+        <p>Useful habits from adjacent service environments where weak documentation and late reviews created real problems.</p>
+      </article>
+    </div>
+    <div class="buttons">
+      <a class="btn btn-secondary" href="./proof.html">See proof</a>
+      <a class="btn btn-tertiary" href="./facilities-proof-pack.html">Open proof pack</a>
+      <a class="btn btn-secondary" href="./assets/downloads/facilities-proof-pack.pdf">Download PDF</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Start with one real facilities problem.</h2>
+    <p>One account, one geography, one watchlist, or one live bid is enough to see whether the work is useful.</p>
+    <div class="buttons">
+      <a class="btn btn-primary schedule-cta" href="#">Book a facilities briefing</a>
+      <a class="btn btn-tertiary" href="./janitorial-intelligence.html">Open janitorial intelligence page</a>
+      <a class="btn btn-secondary" href="./contact.html?offering=facilities-diagnostic">Send an inquiry</a>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">&copy; 2026 Boss Key</div></footer>
+
+<script>
+(function () {
+  const scheduleFallback = "https://calendar.app.google/XXQaukj4evMTLq4E7";
+  const calendarScheduleUrl = window.BOSSKEY_SCHEDULE_URL || scheduleFallback;
+  document.querySelectorAll(".schedule-cta").forEach(function (link) {
+    link.href = calendarScheduleUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+})();
+</script>
+</body>
+</html>
+
