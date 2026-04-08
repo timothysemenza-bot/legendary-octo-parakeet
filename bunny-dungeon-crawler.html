@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Bunny Dungeon Crawler</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    body {
+      font-family: "Trebuchet MS", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #2f2d47, #131022 60%);
+      color: #f7f6ff;
+      display: grid;
+      place-items: center;
+      padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+    }
+    .card {
+      width: min(100%, 740px);
+      border: 2px solid #7d76cc;
+      border-radius: 16px;
+      background: rgba(14, 10, 28, 0.92);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      padding: 0.8rem;
+    }
+    h1 { margin: 0 0 0.5rem; font-size: clamp(1.2rem, 6vw, 1.8rem); }
+    p { margin: 0.3rem 0; opacity: 0.9; font-size: clamp(0.82rem, 3.8vw, 1rem); }
+    #hud { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.65rem 0; }
+    .pill { background: #2a2252; border: 1px solid #4a4190; padding: 0.3rem 0.55rem; border-radius: 999px; font-size: clamp(0.8rem, 3.6vw, 1rem); }
+    #board {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #4a4190;
+      overflow: hidden;
+      border-radius: 12px;
+      table-layout: fixed;
+    }
+    td {
+      width: calc(100% / 12);
+      text-align: center;
+      font-size: clamp(1rem, 6.2vw, 1.7rem);
+      border: 1px solid rgba(115, 105, 191, 0.35);
+      background: #201b3f;
+      height: clamp(24px, 6.8vw, 44px);
+      line-height: 1;
+      padding: 0;
+    }
+    .wall { background: #0f0c1e; }
+    .floor { background: #282149; }
+    .message { margin-top: 0.65rem; font-weight: bold; color: #ffd8a8; min-height: 1.3em; font-size: clamp(0.84rem, 3.8vw, 1rem); }
+
+    .touch-controls {
+      margin-top: 0.8rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(56px, 72px));
+      gap: 0.35rem;
+      justify-content: center;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .touch-btn {
+      appearance: none;
+      border: 1px solid #6f66be;
+      background: linear-gradient(#3a3270, #2a2357);
+      color: #ffffff;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      line-height: 1;
+      height: 56px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .touch-btn:active { transform: scale(0.98); }
+    .touch-up { grid-column: 2; }
+    .touch-left { grid-column: 1; grid-row: 2; }
+    .touch-down { grid-column: 2; grid-row: 2; }
+    .touch-right { grid-column: 3; grid-row: 2; }
+
+    @media (min-width: 850px) {
+      body { overflow: auto; }
+      .touch-controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>🐇 Bunny Dungeon Crawler</h1>
+    <p>Collect 3 carrots, grab the key, then hop to the door.</p>
+    <p>Use arrow keys/WASD on desktop, swipe or tap controls on iPhone.</p>
+    <div id="hud">
+      <span class="pill" id="carrots">Carrots: 0/3</span>
+      <span class="pill" id="hp">HP: 3</span>
+      <span class="pill" id="key">Key: ❌</span>
+    </div>
+    <table id="board" aria-label="Dungeon board"></table>
+    <div class="message" id="message"></div>
+
+    <div class="touch-controls" aria-label="Touch controls">
+      <button class="touch-btn touch-up" data-dir="up" aria-label="Move up">⬆️</button>
+      <button class="touch-btn touch-left" data-dir="left" aria-label="Move left">⬅️</button>
+      <button class="touch-btn touch-down" data-dir="down" aria-label="Move down">⬇️</button>
+      <button class="touch-btn touch-right" data-dir="right" aria-label="Move right">➡️</button>
+    </div>
+  </main>
+
+  <script>
+    const rawMap = [
+      "############",
+      "#@..c....s.#",
+      "#.####.##..#",
+      "#..c..#....#",
+      "#.##..#..k.#",
+      "#....s..#..#",
+      "#.####..#d.#",
+      "#..c.......#",
+      "############"
+    ];
+
+    const state = {
+      map: rawMap.map((r) => r.split("")),
+      player: { x: 1, y: 1, hp: 3, carrots: 0, hasKey: false },
+      enemies: [],
+      gameOver: false
+    };
+
+    const board = document.getElementById("board");
+    const hud = {
+      carrots: document.getElementById("carrots"),
+      hp: document.getElementById("hp"),
+      key: document.getElementById("key"),
+      msg: document.getElementById("message")
+    };
+
+    for (let y = 0; y < state.map.length; y++) {
+      for (let x = 0; x < state.map[y].length; x++) {
+        if (state.map[y][x] === "s") state.enemies.push({ x, y, dir: 1 });
+      }
+    }
+
+    function setMessage(text) { hud.msg.textContent = text; }
+
+    function draw() {
+      board.innerHTML = "";
+      state.map.forEach((row, y) => {
+        const tr = document.createElement("tr");
+        row.forEach((cell, x) => {
+          const td = document.createElement("td");
+          td.className = cell === "#" ? "wall" : "floor";
+          let glyph = "";
+          if (state.player.x === x && state.player.y === y) glyph = "🐇";
+          else if (state.enemies.some((e) => e.x === x && e.y === y)) glyph = "👾";
+          else if (cell === "c") glyph = "🥕";
+          else if (cell === "k") glyph = "🗝️";
+          else if (cell === "d") glyph = "🚪";
+          td.textContent = glyph;
+          tr.appendChild(td);
+        });
+        board.appendChild(tr);
+      });
+
+      hud.carrots.textContent = `Carrots: ${state.player.carrots}/3`;
+      hud.hp.textContent = `HP: ${state.player.hp}`;
+      hud.key.textContent = `Key: ${state.player.hasKey ? "✅" : "❌"}`;
+    }
+
+    function hurt() {
+      state.player.hp -= 1;
+      setMessage("A slime bonked you! -1 HP");
+      if (state.player.hp <= 0) {
+        state.gameOver = true;
+        setMessage("Game over. Refresh to try again!");
+      }
+    }
+
+    function moveEnemies() {
+      state.enemies.forEach((e) => {
+        const nextX = e.x + e.dir;
+        if (state.map[e.y][nextX] === "#") e.dir *= -1;
+        else e.x = nextX;
+        if (e.x === state.player.x && e.y === state.player.y) hurt();
+      });
+    }
+
+    function tryMove(dx, dy) {
+      if (state.gameOver) return;
+      const nx = state.player.x + dx;
+      const ny = state.player.y + dy;
+      const tile = state.map[ny]?.[nx];
+      if (!tile || tile === "#") return;
+
+      state.player.x = nx;
+      state.player.y = ny;
+      if (tile === "c") {
+        state.player.carrots += 1;
+        state.map[ny][nx] = ".";
+        setMessage("Carrot acquired!");
+      }
+      if (tile === "k") {
+        state.player.hasKey = true;
+        state.map[ny][nx] = ".";
+        setMessage("You found the key!");
+      }
+      if (tile === "d") {
+        if (state.player.hasKey && state.player.carrots >= 3) {
+          state.gameOver = true;
+          setMessage("You escaped the dungeon. Victory! 🎉");
+        } else {
+          setMessage("Door is sealed. You need 3 carrots + key.");
+        }
+      }
+
+      if (state.enemies.some((e) => e.x === nx && e.y === ny)) hurt();
+      moveEnemies();
+      draw();
+    }
+
+    function moveByName(name) {
+      if (name === "up") tryMove(0, -1);
+      if (name === "down") tryMove(0, 1);
+      if (name === "left") tryMove(-1, 0);
+      if (name === "right") tryMove(1, 0);
+    }
+
+    addEventListener("keydown", (event) => {
+      const key = event.key.toLowerCase();
+      if (["arrowup", "w"].includes(key)) moveByName("up");
+      if (["arrowdown", "s"].includes(key)) moveByName("down");
+      if (["arrowleft", "a"].includes(key)) moveByName("left");
+      if (["arrowright", "d"].includes(key)) moveByName("right");
+    });
+
+    document.querySelectorAll(".touch-btn").forEach((btn) => {
+      const dir = btn.dataset.dir;
+      const run = (event) => {
+        event.preventDefault();
+        moveByName(dir);
+      };
+      btn.addEventListener("touchstart", run, { passive: false });
+      btn.addEventListener("click", run);
+    });
+
+    let startX = 0;
+    let startY = 0;
+    board.addEventListener("touchstart", (event) => {
+      const touch = event.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+    }, { passive: true });
+
+    board.addEventListener("touchend", (event) => {
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+      const threshold = 24;
+      if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return;
+      if (Math.abs(dx) > Math.abs(dy)) moveByName(dx > 0 ? "right" : "left");
+      else moveByName(dy > 0 ? "down" : "up");
+    }, { passive: true });
+
+    draw();
+    setMessage("Hop to it, hero bunny.");
+  </script>
+</body>
+</html>
